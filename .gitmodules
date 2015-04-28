@@ -1,0 +1,3 @@
+[submodule "LMS"]
+	path = LMS
+	url = https://github.com/Phibedy/LMS
