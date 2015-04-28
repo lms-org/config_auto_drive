@@ -1,0 +1,4 @@
+#if LIBRARIES is set, only the given directories will be compiled 
+#set(LIBRARIES )
+#if N_LIBRARIES is set, all directories except
+#set(N_LIBRARIES )
