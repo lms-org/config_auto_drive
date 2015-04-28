@@ -12,6 +12,13 @@ MACRO(SUBDIRLIST result curdir)
   SET(${result} ${dirlist})
 ENDMACRO()
 
+
+#set defines
+#set external-directory
+add_definitions(-DEXTERNAL_DIR="\\"${CMAKE_CURRENT_LIST_DIR}/configs\\"")
+#set config-directory
+add_definitions(-DCONFIGS_DIR="\\"${CMAKE_CURRENT_LIST_DIR}/configs\\"")
+
 #set compiler flags
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -std=c++0x -Wall -Wextra -pedantic -O0 ")
 #compile core
