@@ -1,3 +1,15 @@
 [submodule "LMS"]
 	path = LMS
 	url = https://github.com/Phibedy/LMS
+[submodule "external/modules/camera_renderer"]
+	path = external/modules/camera_renderer
+	url = https://github.com/Phibedy/camera_renderer.git
+[submodule "external/modules/ogre_window_manager"]
+	path = external/modules/ogre_window_manager
+	url = https://github.com/Phibedy/ogre_window_manager.git
+[submodule "external/libraries/ogre_binding"]
+	path = external/libraries/ogre_binding
+	url = https://github.com/Phibedy/ogre_binding.git
+[submodule "external/libraries/imaging"]
+	path = external/libraries/imaging
+	url = https://github.com/syxolk/imaging.git
