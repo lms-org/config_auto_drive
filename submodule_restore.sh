@@ -20,10 +20,10 @@ done
 ########################################
 
 #(re)-init git if wanted
-if [ "$initGit" = true ]; then
-    rm -rf .git
-    git init
-fi
+#if [ "$initGit" = true ]; then
+rm -rf .git
+git init
+#fi
 
 #TODO why is a tempfile is needed?
 git config -f .gitmodules --get-regexp '^submodule\..*\.path$' > tempfile
