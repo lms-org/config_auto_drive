@@ -9,10 +9,10 @@ initGit=false
 while getopts ":cp" opt; do :
     case $opt in
 #TODO f doesn't work?!
-      c )
-       force=true
-      i )
-       initGit=true
+      c)
+       force=true;;
+#      i)
+#       initGit=true;;
     esac
 done
 ########################################
@@ -20,7 +20,7 @@ done
 ########################################
 
 #(re)-init git if wanted
-if [ "$initGit" = true]; then
+if [ "$initGit" = true ]; then
     rm -rf .git
     git init
 fi
@@ -36,12 +36,15 @@ do
     if [ "$force" = false ];then
             read -p "Are you sure you want to delete $path and re-initialize as a new submodule? " yn
     case $yn in
+	[Yy]* );;
         [Nn]* ) continue;;
         * ) echo "Please answer yes or no."
+#TODO doesn't repeat loop
         continue;;
     esac
     fi
     #create submodule
+    #TODO it terminates if submodule has been added before
     rm -rf $path
     git submodule add $url $path
     echo "$path has been initialized"
