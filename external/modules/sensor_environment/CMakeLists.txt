@@ -5,8 +5,8 @@ set ( SOURCES
 )
 
 set (HEADERS 
-	"include/socket_environment/sensor_environment.h"
-	"include/socket_environment/test.h"
+	"include/sensor_environment/sensor_environment.h"
+	"include/sensor_environment/test.h"
 )
 
 include_directories("include")

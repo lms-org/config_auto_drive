@@ -13,3 +13,6 @@
 [submodule "external/libraries/imaging"]
 	path = external/libraries/imaging
 	url = https://github.com/syxolk/imaging.git
+[submodule "external/libraries/sense_link"]
+	path = external/libraries/sense_link
+	url = https://github.com/Bitfroest/sense_link.git
