@@ -1,0 +1,21 @@
+<framework>
+	<execution>
+		<maxThreadCount> 1 </maxThreadCount>
+		<clock enabled="true" unit="hz">100</clock>
+	</execution>
+	<modulesToLoad>
+		<module logLevel="WARN">ogre_window_manager</module>
+		<module>sensor_environment_test</module>
+		<module logLevel="WARN">camera_renderer</module>
+		<!--module>sensorboard_converter</module!-->
+	</modulesToLoad>
+	<module>
+		<name>ogre_window_manager</name>
+	</module>
+	<module>
+		<name>camera_renderer</name>
+	</module>
+	<module>
+		<name>sensor_environment_test</name>
+	</module>
+</framework>

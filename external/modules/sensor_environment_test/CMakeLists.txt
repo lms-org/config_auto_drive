@@ -12,4 +12,4 @@ set (HEADERS
 include_directories("include")
 
 add_library ( sensor_environment_test MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(sensor_environment_test PRIVATE lms)
+target_link_libraries(sensor_environment_test PRIVATE lms imaging)

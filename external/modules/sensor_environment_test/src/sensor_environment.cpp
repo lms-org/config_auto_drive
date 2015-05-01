@@ -1,8 +1,10 @@
 #include <sensor_environment/sensor_environment.h>
 #include <cmath>
-
+#include <iostream>
 LinedDepthEnvironment::LinedDepthEnvironment(float stepLength, float sensivity):
-    m_stepLength(stepLength),m_sensivity(sensivity),m_minY(-INFINITY), m_maxY(INFINITY){
+    xBuffer(0),m_stepLength(stepLength),m_sensivity(sensivity),m_minY(-INFINITY), m_maxY(INFINITY){
+    unsigned int k = 0;
+    std::cout << "##############" << (0 +1< k -1) << "###########" <<std::endl;
 }
 
 bool LinedDepthEnvironment::add(float deltaX,float y){
@@ -29,13 +31,16 @@ bool LinedDepthEnvironment::add(float deltaX,float y){
  * @param distanceInPixel how many meters one pixel is
  */
 void LinedDepthEnvironment::draw(lms::imaging::Graphics *graphics,float distanceInPixel){
+    std::cout << "draw START" << std::endl;
     float mul = distanceInPixel*m_stepLength;
     int xPadding = 20;
     graphics->setColor(lms::imaging::black);
     //draw all points
-    for(int i = 0; i < m_distances.size()-1; i++){
+    for(int i = 0; i < ((int)m_distances.size())-1; i++){
         graphics->drawLine(xPadding+m_distances[i]*mul,i*mul,xPadding+m_distances[i+1]*mul,(i+1)*mul);
     }
+
+    std::cout << "draw DAZWISCHEN" <<std::endl;
     //draw found parts
     //might be disturbing that the x-axis of the part is the y-axis of the image :)
     graphics->setColor(lms::imaging::blue);
@@ -60,6 +65,8 @@ void LinedDepthEnvironment::validate(){
         if(abs(m_distances[i]-startY) > m_sensivity){
             //found new part
             parts.push_back(LineDepthSegment(startSearch,i,startSearch*m_stepLength, i*m_stepLength,startY));
+            startSearch = i;
+            startY = m_distances[i];
         }
     }
 }

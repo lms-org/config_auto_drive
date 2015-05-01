@@ -1,0 +1,4 @@
+#Default ps2 camera values
+width = 400
+height = 400
+moveable = 0
