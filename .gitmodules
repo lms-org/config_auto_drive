@@ -13,6 +13,9 @@
 [submodule "external/libraries/imaging"]
 	path = external/libraries/imaging
 	url = https://github.com/syxolk/imaging.git
-[submodule "external/libraries/sense_link"]
-	path = external/libraries/sense_link
-	url = https://github.com/Bitfroest/sense_link.git
+[submodule "external/modules/camera_importer"]
+	path = external/modules/camera_importer
+	url = https://github.com/Phibedy/camera_importer.git
+[submodule "external/modules/image_converter"]
+	path = external/modules/image_converter
+	url = https://github.com/syxolk/image_converter.git

@@ -5,9 +5,8 @@
 	</execution>
 	<modulesToLoad>
 		<module logLevel="WARN">ogre_window_manager</module>
-		<module>sensor_environment_test</module>
+		<module>image_detection_test</module>
 		<module logLevel="WARN">camera_renderer</module>
-		<!--module>sensorboard_converter</module!-->
 	</modulesToLoad>
 	<module>
 		<name>ogre_window_manager</name>
@@ -16,6 +15,14 @@
 		<name>camera_renderer</name>
 	</module>
 	<module>
-		<name>sensor_environment_test</name>
+		<name>image_detection_test</name>
+	</module>
+	<module>
+		<name>image_converter</name>
+	<config>
+		<input_channel>CAMERA_IMAGE</input_channel>
+		<output_channel>GREY_IMAGE</output_channel>
+		<output_format>GREY</output_format>
+	</config>
 	</module>
 </framework>

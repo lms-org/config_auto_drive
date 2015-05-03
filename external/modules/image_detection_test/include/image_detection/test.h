@@ -2,10 +2,7 @@
 #define ENV_TEST_H
 
 #include <lms/module.h>
-#include <sensor_environment/sensor_environment.h>
-class EnvTest:public lms::Module{
-    LinedDepthEnvironment *lde;
-
+class ImageDetectionTest:public lms::Module{
 public:
     bool initialize();
     bool deinitialize();
