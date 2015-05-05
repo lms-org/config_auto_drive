@@ -8,38 +8,32 @@
 		<module logLevel="WARN">ogre_window_manager</module>
 		<module>image_hint_worker</module>
 		<module>image_converter</module>
-		<module logLevel="DEBUG">image_renderer</module>
-		<module logLevel="DEBUG">image_renderer_debug</module>
-		<!--module logLevel="WARN">image_renderer_debug2</module!-->
+		
+		<module logLevel="DEBUG">image_renderer_b</module>
+		<module logLevel="DEBUG">image_renderer_a</module>
 	</modulesToEnable>
 	<module>
 		<name>ogre_window_manager</name>
 	</module>
 	
 	<module>
-		<name>image_renderer_debug</name>
+		<name>image_renderer_a</name>
 		<writePriority>10</writePriority>
 		<libname>image_renderer</libname>
 		<libpath>image_renderer</libpath>
 		<channelMapping from="IMAGE" to="DEBUG_IMAGE"/>
 	</module>
-
+	
 	<module>
-		<name>image_renderer</name>
-		<writePriority>1</writePriority>
-		<channelMapping from="IMAGE" to="GREY_IMAGE"/>
-	</module>
-
-
-	<module>
-		<name>image_renderer_debug2</name>
+		<name>image_renderer_b</name>
+		<writePriority>10</writePriority>
 		<libname>image_renderer</libname>
 		<libpath>image_renderer</libpath>
-		<channelMapping from="IMAGE" to="DEBUG_IMAGE"/>
-		<config>
-		    <window>DEBUG_IMAGE_WINDOW</window>
-		</config>
+		<channelMapping from="IMAGE" to="GREY_IMAGE"/>
 	</module>
+	
+
+
 	<module>
 		<name>image_converter</name>
 	<config>
