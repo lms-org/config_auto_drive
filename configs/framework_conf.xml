@@ -8,26 +8,26 @@
 		<module logLevel="WARN">ogre_window_manager</module>
 		<module>image_hint_worker</module>
 		<module>image_converter</module>
-		<module logLevel="DEBUG">image_renderer_debug</module>
 		<module logLevel="DEBUG">image_renderer</module>
+		<module logLevel="DEBUG">image_renderer_debug</module>
 		<!--module logLevel="WARN">image_renderer_debug2</module!-->
 	</modulesToEnable>
 	<module>
 		<name>ogre_window_manager</name>
 	</module>
-
-	<module>
-		<name>image_renderer</name>
-		<writePriority>800</writePriority>
-		<channelMapping from="IMAGE" to="GREY_IMAGE"/>
-	</module>
-
+	
 	<module>
 		<name>image_renderer_debug</name>
-		<writePriority>100</writePriority>
+		<writePriority>10</writePriority>
 		<libname>image_renderer</libname>
 		<libpath>image_renderer</libpath>
 		<channelMapping from="IMAGE" to="DEBUG_IMAGE"/>
+	</module>
+
+	<module>
+		<name>image_renderer</name>
+		<writePriority>1</writePriority>
+		<channelMapping from="IMAGE" to="GREY_IMAGE"/>
 	</module>
 
 
