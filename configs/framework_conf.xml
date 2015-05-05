@@ -4,29 +4,36 @@
 		<clock enabled="true" unit="hz">100</clock>
 	</execution>
 	<modulesToEnable>
-		<module>camera_importer</module>
+		<module logLevel="WARN">camera_importer</module>
 		<module logLevel="WARN">ogre_window_manager</module>
 		<module>image_detection_test</module>
-		<module logLevel="WARN">camera_renderer</module>
 		<module>image_hint_worker</module>
 		<module>image_converter</module>
-		<module>camera_renderer_debug</module>
+		<module logLevel="WARN">image_renderer_debug</module>
+		<module logLevel="WARN">image_renderer_debug2</module>
+		<module logLevel="WARN">image_renderer</module>
 	</modulesToEnable>
 	<module>
 		<name>ogre_window_manager</name>
 	</module>
 	<module>
-		<name>camera_renderer</name>
+		<name>image_renderer</name>
 		<channelMapping from="IMAGE" to="GREY_IMAGE"/>
 	</module>
 		<module>
-		<name>camera_renderer_debug</name>
-		<libname>camera_renderer</libname>
-		<libpath>camera_renderer</libpath>
+		<name>image_renderer_debug</name>
+		<libname>image_renderer</libname>
+		<libpath>image_renderer</libpath>
 		<channelMapping from="IMAGE" to="DEBUG_IMAGE"/>
-		<!--config>
+	</module>
+	<module>
+		<name>image_renderer_debug2</name>
+		<libname>image_renderer</libname>
+		<libpath>image_renderer</libpath>
+		<channelMapping from="IMAGE" to="DEBUG_IMAGE"/>
+		<config>
 		    <window>DEBUG_IMAGE_WINDOW</window>
-		</config!-->
+		</config>
 	</module>
 	<module>
 		<name>image_detection_test</name>
