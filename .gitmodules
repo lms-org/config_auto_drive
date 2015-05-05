@@ -18,6 +18,7 @@
 	url = https://github.com/syxolk/image_converter.git
 [submodule "external/modules/image_renderer"]
 	path = external/modules/image_renderer
+	url = https://github.com/Phibedy/image_renderer.git
 [submodule "external/modules/image_hint_worker"]
 	path = external/modules/image_hint_worker
 	url = https://github.com/Phibedy/image_hint_worker.git
