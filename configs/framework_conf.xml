@@ -9,8 +9,8 @@
 		<module>image_hint_worker</module>
 		<module>image_converter</module>
 		
-		<module logLevel="DEBUG">image_renderer_b</module>
 		<module logLevel="DEBUG">image_renderer_a</module>
+		<module logLevel="DEBUG">image_renderer_b</module>
 	</modulesToEnable>
 	<module>
 		<name>ogre_window_manager</name>
