@@ -20,7 +20,7 @@ add_definitions(-DEXTERNAL_DIR="${CMAKE_CURRENT_BINARY_DIR}/external")
 add_definitions(-DCONFIGS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/configs")
 
 #set compiler flags
-if(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang") OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"))
+if((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU"))
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -std=c++0x -Wall -Wextra -pedantic -O0 ")
 endif()
 
