@@ -24,6 +24,11 @@ if((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STRE
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -std=c++0x -Wall -Wextra -pedantic -O0 ")
 endif()
 
+# show config files in QtCreator
+file(GLOB_RECURSE CONFIG_FILES_LCONF "**/*.lconf")
+file(GLOB_RECURSE CONFIG_FILES_XML "**/*.xml")
+add_executable(stub stub.cpp ${CONFIG_FILES_LCONF} ${CONFIG_FILES_XML})
+
 #compile core
 add_subdirectory(LMS/lms)
 #Add shared headers
