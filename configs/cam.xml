@@ -1,7 +1,7 @@
 <framework>
 	<execution>
 		<maxThreadCount> 1 </maxThreadCount>
-		<clock enabled="true" unit="ms">1000</clock>
+		<clock enabled="true" unit="hz">100</clock>
 	</execution>
 	<modulesToEnable>
 		<module logLevel="WARN">camera_importer</module>
@@ -10,14 +10,14 @@
 		<module logLevel="WARN">image_converter</module>
 		<module logLevel="WARN">image_renderer_grey</module>
 		<module logLevel="WARN">image_renderer_debug</module>
-		<module logLevel="WARN">image_renderer_debug2</module>
+		<!--module logLevel="WARN">image_renderer_debug2</module>
 		<module logLevel="WARN">image_renderer_gauss</module>
 		<module logLevel="WARN">image_renderer_sobelX</module>
 		<module logLevel="WARN">image_renderer_sobelY</module>
 		<module logLevel="WARN">image_converter_gauss</module>
 		<module logLevel="WARN">image_converter_sobelX</module>
 		<module logLevel="WARN">image_converter_sobelY</module>
-		<module logLevel="WARN">image_logger</module>
+		<module logLevel="DEBUG">image_logger</module-->
 	</modulesToEnable>
 	<module>
 		<name>image_logger</name>
@@ -42,9 +42,9 @@
 		<libname>image_renderer</libname>
 		<libpath>image_renderer</libpath>
 		<channelMapping from="IMAGE" to="DEBUG_IMAGE"/>
-		<config>
+		<!--config>
 		    <WINDOW>SOBELX_IMAGE_W</WINDOW>
-		</config>
+		</config-->
 	</module>
 	<module>
 		<name>image_renderer_debug2</name>
