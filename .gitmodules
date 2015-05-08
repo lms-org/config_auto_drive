@@ -22,3 +22,9 @@
 [submodule "external/modules/image_hint_worker"]
 	path = external/modules/image_hint_worker
 	url = https://github.com/Phibedy/image_hint_worker.git
+[submodule "external/modules/image_loader"]
+	path = external/modules/image_loader
+	url = https://github.com/syxolk/image_loader.git
+[submodule "external/modules/image_logger"]
+	path = external/modules/image_logger
+	url = https://github.com/syxolk/image_logger.git
