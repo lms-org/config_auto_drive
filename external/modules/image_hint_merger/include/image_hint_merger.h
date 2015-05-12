@@ -12,6 +12,9 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
+    void transform(const Environment::RoadLane &fromLane,
+                                      Environment::RoadLane &toLane, int sign);
+
     const Environment *input;
     Environment *output;
 };
