@@ -23,7 +23,6 @@ bool ImageObjectRenderer::cycle() {
             drawRoadLane(lane);
         }
     }
-
     return true;
 }
 
