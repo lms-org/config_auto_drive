@@ -1,9 +1,8 @@
-#include "image_hint_transformer.h"
+#include "image_hint_merger.h"
 
 extern "C" {
 
 void* getInstance() {
-    return new ImageHintTransformer();
+    return new ImageObjectMerger();
 }
-
 }
