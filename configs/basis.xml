@@ -1,0 +1,119 @@
+<framework>
+	<execution>
+		<maxThreadCount> 1 </maxThreadCount>
+		<clock enabled="true" unit="hz">100</clock>
+	    <configMonitor>true</configMonitor>
+	</execution>
+	<modulesToEnable>
+		<!--module logLevel="WARN">camera_importer</module-->
+		<module logLevel="WARN">ogre_window_manager</module>
+		<module>image_hint_worker</module>
+		<!--module logLevel="WARN">image_converter</module-->
+		<module logLevel="WARN">image_renderer_grey</module>
+		<module logLevel="WARN">image_renderer_debug</module>
+		<module>image_hint_transformer</module>
+		<module>image_object_renderer</module>
+		<module>image_renderer_image_object</module>
+		<module logLevel="WARN">image_converter_trans</module>
+	    <module>image_renderer_trans</module>
+	    <module>image_renderer_image_object2</module>
+		<module>image_object_renderer_merge</module>
+		<module logLevel="WARN">image_hint_merger</module>
+		<module>image_logger</module>
+	</modulesToEnable>
+	<module>
+	    <name>image_hint_merger</name>
+		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD"/>
+		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MERGED"/>
+	</module>
+	<module>
+		<name>image_hint_transformer</name>
+		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD"/>
+	</module>
+	<module>
+		<name>image_object_renderer</name>
+		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD"/>
+		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
+	</module>
+	<module>
+		<name>image_object_renderer_merge</name>
+		<realName>image_object_renderer</realName>
+		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_MERGED"/>
+		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE_2"/>
+	</module>
+	<!--module>
+		<name>image_logger</name>
+		<config>
+		    <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images</directory>
+		    <create_subfolder_with_current_date>true</create_subfolder_with_current_date>
+		    <filepattern>%04i</filepattern>
+		</config>
+		<channelMapping from="IMAGE" to="GREY_IMAGE"/>
+	</module-->
+	<module>
+		<name>ogre_window_manager</name>
+	</module>
+	<module>
+		<name>image_renderer_grey</name>
+		<realName>image_renderer</realName>
+		<channelMapping from="IMAGE" to="GREY_IMAGE"/>
+	</module>
+	<module>
+		<name>image_renderer_debug</name>
+		<writePriority>2</writePriority>
+		<realName>image_renderer</realName>
+		<channelMapping from="IMAGE" to="DEBUG_IMAGE"/>
+	</module>
+	<module>
+	    <name>image_renderer_trans</name>
+		<writePriority>1</writePriority>
+		<realName>image_renderer</realName>
+		<channelMapping from="IMAGE" to="TRANS_IMAGE"/>
+		<config>
+		    <WINDOW>TRANSLATED</WINDOW>
+		</config>
+	</module>
+	<module>
+		<name>image_renderer_image_object</name>
+		<writePriority>2</writePriority>
+		<realName>image_renderer</realName>
+		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
+		<config>
+		    <WINDOW>TRANSLATED</WINDOW>
+		</config>
+	</module>
+	<module>
+		<name>image_renderer_image_object2</name>
+		<writePriority>2</writePriority>
+		<realName>image_renderer</realName>
+		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE_2"/>
+		<config>
+		    <WINDOW>TRANSLATED</WINDOW>
+		</config>
+	</module>
+	<module>
+	    <name>image_hint_worker</name>
+	</module>
+	<module>
+		<name>camera_importer</name>
+		<config src="camera_importer.lconf"/>
+	</module>
+	<module>
+		<name>image_converter</name>
+	    <channelMapping from="INPUT_IMAGE" to="IMAGE"/>
+	    <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE"/>
+	    <config>
+		    <output_format>GREY</output_format>
+	    </config>
+	</module>
+	<module>
+		<name>image_converter_trans</name>
+		<realName>image_converter</realName>	
+	    <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
+	    <channelMapping from="OUTPUT_IMAGE" to="TRANS_IMAGE"/>
+	    <config>
+		    <output_format>GREY</output_format>
+		    <filter>imageV2C</filter>
+	    </config>
+	</module>	
+</framework>
