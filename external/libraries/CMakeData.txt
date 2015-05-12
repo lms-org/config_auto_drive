@@ -2,3 +2,5 @@
 #set(LIBRARIES )
 #if N_LIBRARIES is set, all directories except
 #set(N_LIBRARIES )
+#if COMPILE_AT_FIRST compiles those libs at first
+#set(COMPILE_AT_FIRST )
