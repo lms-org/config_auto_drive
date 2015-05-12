@@ -28,3 +28,9 @@
 [submodule "external/modules/image_logger"]
 	path = external/modules/image_logger
 	url = https://github.com/syxolk/image_logger.git
+[submodule "external/modules/image_hint_transformer"]
+	path = external/modules/image_hint_transformer
+	url = https://github.com/syxolk/image_hint_transformer.git
+[submodule "external/libraries/math_lib"]
+	path = external/libraries/math_lib
+	url = https://github.com/syxolk/math_lib.git
