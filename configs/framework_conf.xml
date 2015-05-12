@@ -15,7 +15,13 @@
 		<module>image_renderer_image_object</module>
 		<module logLevel="WARN">image_converter_trans</module>
 	    <module>image_renderer_trans</module>
+		<module>image_object_renderer_merge</module>
 	</modulesToEnable>
+	<module>
+	    <name>image_hint_merger</name>
+		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD"/>
+		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_MERGED"/>
+	</module>
 	<module>
 		<name>image_hint_transformer</name>
 		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD"/>
@@ -23,6 +29,12 @@
 	<module>
 		<name>image_object_renderer</name>
 		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD"/>
+		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
+	</module>
+		<module>
+		<name>image_object_renderer_merge</name>
+		<realName>image_object_renderer</realName>
+		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_MERGED"/>
 		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
 	</module>
 	<module>
@@ -80,10 +92,9 @@
 		    <output_format>GREY</output_format>
 	    </config>
 	</module>
-		<module>
+	<module>
 		<name>image_converter_trans</name>
-		<realName>image_converter</realName>
-		
+		<realName>image_converter</realName>	
 	    <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
 	    <channelMapping from="OUTPUT_IMAGE" to="TRANS_IMAGE"/>
 	    <config>

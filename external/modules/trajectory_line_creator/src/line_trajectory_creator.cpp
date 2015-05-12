@@ -13,6 +13,11 @@ bool TrajectoryLineCreator::deinitialize() {
 }
 
 bool TrajectoryLineCreator::cycle() {
+    /*
+    for(int i = 0; i < raw_line->points().size(); i++){
+    }
+    */
+    line->points()=raw_line->points();
     return true;
 }
 
