@@ -17,7 +17,7 @@
 	    <module>image_renderer_image_object2</module>
 		<module>image_object_renderer_merge</module>
 		<module logLevel="WARN">image_hint_merger</module>
-		<module>ogre_input</module>
+		<module logLevel="WARN">ogre_input</module>
 	</modulesToEnable>
 	<module>
 	    <name>image_hint_merger</name>
