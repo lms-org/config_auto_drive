@@ -6,11 +6,11 @@
 	    <name>image_loader</name>
 	    <config>
 	        <format>pgm</format>
-	        <loadSingleFile>false</loadSingleFile>
+	        <loadSingleFile>true</loadSingleFile>
 	        <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images/20150512-181426</directory>
 	        <filePattern>%04i.pgm</filePattern>
 	        <maxCounter>-1</maxCounter>
-	        <singleFile>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images/20150512-181426/0600.pgm</singleFile>
+	        <singleFile>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images/20150512-181426/0050.pgm</singleFile>
 	    </config>
 		<channelMapping from="IMAGE" to="GREY_IMAGE"/>
 	</module>

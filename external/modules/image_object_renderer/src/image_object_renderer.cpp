@@ -30,16 +30,14 @@ void ImageObjectRenderer::drawRoadLane(const Environment::RoadLane &lane){
     lms::imaging::BGRAImageGraphics g(*image);
     int xOld = 0;
     int yOld = 0;
-    //logger.error() << lane.points.size();
+    lms::imaging::ARGBColor color=lms::imaging::ARGBColor(getConfig()->get<int>("lColorR"),getConfig()->get<int>("lColorG"),getConfig()->get<int>("lColorB"));
     for(uint i = 0; i < lane.points().size(); i++){
         lms::math::vertex2f v = lane.points()[i];
-        g.setColor(lms::imaging::ARGBColor(255,0,0));
+        g.setColor(color);
         int y = -v.y()*image->width()/5+image->width()/2;
         int x = v.x()*image->height()/5;
         g.drawCross(x,y,5);
-
         if(i != 0){
-            g.setColor(lms::imaging::ARGBColor(255,255,0));
             g.drawLine(x,y,xOld,yOld);
         }
         xOld = x;

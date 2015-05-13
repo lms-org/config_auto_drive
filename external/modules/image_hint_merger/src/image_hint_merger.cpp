@@ -37,11 +37,50 @@ bool ImageObjectMerger::cycle() {
               [](vertex2f p1, vertex2f p2) {
         return p1.x() < p2.x();
     });
-
     output->lanes.clear();
+    prepareLane(middleLane,true,true);
     output->lanes.push_back(middleLane);
 
     return true;
+}
+
+void ImageObjectMerger::prepareLane(Environment::RoadLane &lane, bool checkAngle, bool checkDistance){
+    using lms::math::vertex2f;
+    lane.sort([](const vertex2f &p1,const vertex2f &p2) {
+        return p1.x() < p2.x();
+    });
+
+    if(checkAngle){
+        float lastAngle = INFINITY;
+        float lastAngleChange = INFINITY;
+        //TODO we could work with the change of the angle
+        //TODO we could also use the length of between those points!
+        lane.reduce([&lastAngle](const vertex2f& p1,const vertex2f& p2){
+            //TODO 0.1 should be moved to config
+            float currentAngle = p2.angle(p1);
+            bool remove = false;
+            if(lastAngle != INFINITY){
+                //we are looking for the smaller angle
+                float deltaAngle = abs(lastAngle-currentAngle);
+                if(deltaAngle > M_PI){
+                    deltaAngle = M_PI_2-deltaAngle;
+                }
+                //TODO 30 should be moved into a config
+                remove = (deltaAngle > 10.0/180.0*M_PI);
+            }
+            lastAngle = currentAngle;
+
+            return remove;
+        });
+    }
+    if(checkDistance){
+        lane.reduce([](const vertex2f& p1,const vertex2f& p2){
+            //TODO 0.1 should be moved to config
+            bool remove = p1.distance(p2) < 0.1;
+            return remove;
+        });
+    }
+
 }
 
 void ImageObjectMerger::transform(const Environment::RoadLane &fromLane,
@@ -49,10 +88,8 @@ void ImageObjectMerger::transform(const Environment::RoadLane &fromLane,
     using lms::math::vertex2f;
     //sort x-values
     Environment::RoadLane toSort = fromLane;
-    std::sort(toSort.points().begin(), toSort.points().end(),
-              [](vertex2f p1, vertex2f p2) {
-        return p1.x() < p2.x();
-    });
+    prepareLane(toSort,true,false);
+
 
     for(size_t i = 1; i < toSort.points().size(); i++) {
         vertex2f p1 = toSort.points()[i - 1];

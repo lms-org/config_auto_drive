@@ -34,10 +34,20 @@
 		<name>image_object_renderer</name>
 		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD"/>
 		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
+		<config>
+		    <lColorR>255</lColorR>
+		    <lColorG>255</lColorG>
+		    <lColorB></lColorB>
+		</config>
 	</module>
 	<module>
 		<name>image_object_renderer_merge</name>
 		<realName>image_object_renderer</realName>
+		<config>
+		    <lColorR>0</lColorR>
+		    <lColorG>0</lColorG>
+		    <lColorB>255</lColorB>
+		</config>
 		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_MERGED"/>
 		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE_2"/>
 	</module>
