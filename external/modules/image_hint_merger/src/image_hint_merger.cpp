@@ -42,7 +42,7 @@ bool ImageObjectMerger::cycle() {
         return p1.x() < p2.x();
     });
     output->lanes.clear();
-    outprint = true;
+    //outprint = true;
     prepareLane(middleLane,true,true);
     outprint = false;
     output->lanes.push_back(middleLane);
