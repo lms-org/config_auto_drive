@@ -34,3 +34,6 @@
 [submodule "external/libraries/math_lib"]
 	path = external/libraries/math_lib
 	url = https://github.com/syxolk/math_lib.git
+[submodule "external/modules/ogre_input"]
+	path = external/modules/ogre_input
+	url = https://github.com/syxolk/ogre_input.git

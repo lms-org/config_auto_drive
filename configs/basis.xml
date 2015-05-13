@@ -17,6 +17,7 @@
 	    <module>image_renderer_image_object2</module>
 		<module>image_object_renderer_merge</module>
 		<module logLevel="WARN">image_hint_merger</module>
+		<module>ogre_input</module>
 	</modulesToEnable>
 	<module>
 	    <name>image_hint_merger</name>
@@ -122,5 +123,19 @@
 		    <output_format>GREY</output_format>
 		    <filter>imageV2C</filter>
 	    </config>
-	</module>	
+	</module>
+	<module>
+		<name>ogre_input</name>
+		<config>
+			<WINDOW>TRANSLATED</WINDOW>
+			<key.down.Left.command>image_loader</key.down.Left.command>
+			<key.down.Left.content>previous</key.down.Left.content>
+			
+			<key.down.Right.command>image_loader</key.down.Right.command>
+			<key.down.Right.content>next</key.down.Right.content>
+			
+			<key.down.space.command>image_loader</key.down.space.command>
+			<key.down.space.content>manual</key.down.space.content>
+		</config>
+	</module>
 </framework>
