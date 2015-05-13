@@ -6,7 +6,7 @@
 	    <name>image_loader</name>
 	    <config>
 	        <format>pgm</format>
-	        <loadSingleFile>true</loadSingleFile>
+	        <loadSingleFile>false</loadSingleFile>
 	        <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images/20150512-181426</directory>
 	        <filePattern>%04i.pgm</filePattern>
 	        <maxCounter>-1</maxCounter>

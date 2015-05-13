@@ -1,6 +1,7 @@
 #include "image_hint_merger.h"
 #include "lms/imaging/find/line.h"
 #include "lms/imaging/warp.h"
+#include <cmath>
 
 #include <algorithm>
 
@@ -11,10 +12,13 @@ bool ImageObjectMerger::initialize() {
     return true;
 }
 
+
 bool ImageObjectMerger::deinitialize() {
     return true;
 }
 
+
+bool outprint = false; //TODO
 bool ImageObjectMerger::cycle() {
     using lms::math::vertex2f;
 
@@ -38,7 +42,9 @@ bool ImageObjectMerger::cycle() {
         return p1.x() < p2.x();
     });
     output->lanes.clear();
+    outprint = true;
     prepareLane(middleLane,true,true);
+    outprint = false;
     output->lanes.push_back(middleLane);
 
     return true;
@@ -46,12 +52,24 @@ bool ImageObjectMerger::cycle() {
 
 void ImageObjectMerger::prepareLane(Environment::RoadLane &lane, bool checkAngle, bool checkDistance){
     using lms::math::vertex2f;
+    if(outprint){
+        std::cout << "#################################" <<std::endl;
+    }
     lane.sort([](const vertex2f &p1,const vertex2f &p2) {
         return p1.x() < p2.x();
     });
+    if(checkDistance){
+        lane.reduce([](const vertex2f& p1,const vertex2f& p2){
+            //TODO 0.1 should be moved to config
+            bool remove = p1.distance(p2) < 0.1;
+            return remove;
+        });
+    }
 
     if(checkAngle){
         float lastAngle = INFINITY;
+        /*
+        //Reduce with two points
         float lastAngleChange = INFINITY;
         //TODO we could work with the change of the angle
         //TODO we could also use the length of between those points!
@@ -61,24 +79,51 @@ void ImageObjectMerger::prepareLane(Environment::RoadLane &lane, bool checkAngle
             bool remove = false;
             if(lastAngle != INFINITY){
                 //we are looking for the smaller angle
-                float deltaAngle = abs(lastAngle-currentAngle);
+                float deltaAngle = fabs(lastAngle-currentAngle);
                 if(deltaAngle > M_PI){
                     deltaAngle = M_PI_2-deltaAngle;
                 }
                 //TODO 30 should be moved into a config
-                remove = (deltaAngle > 10.0/180.0*M_PI);
+                remove = (deltaAngle > 30.0/180.0*M_PI);
+                if(outprint){
+                    std::cout<<"lastAngle: "<<lastAngle<< " currentAngle: "<<currentAngle << " delta_Angle" << deltaAngle << " remove: "<<remove<<std::endl;
+                }
             }
-            lastAngle = currentAngle;
+            if(!remove)
+                lastAngle = currentAngle;
 
             return remove;
         });
-    }
-    if(checkDistance){
-        lane.reduce([](const vertex2f& p1,const vertex2f& p2){
+        */
+        //use 3 points (just for testing
+        lane.reduce([&lastAngle](const vertex2f& p1,const vertex2f& p2,const vertex2f& p3){
             //TODO 0.1 should be moved to config
-            bool remove = p1.distance(p2) < 0.1;
+            float currentAngle1 = p1.angle(p2);
+            float currentAngle2 = p1.angle(p3);
+            bool remove = false;
+            if(lastAngle != INFINITY){
+                //we are looking for the smaller angle
+                float deltaAngle1 = fabs(lastAngle-currentAngle1);
+                if(deltaAngle1 > M_PI){
+                    deltaAngle1 = M_PI_2-deltaAngle1;
+                }
+                float deltaAngle2 = fabs(lastAngle-currentAngle2);
+                if(deltaAngle2 > M_PI){
+                    deltaAngle2 = M_PI_2-deltaAngle2;
+                }
+                //TODO 30 should be moved into a config
+                remove = (fabs(deltaAngle2-deltaAngle1) > 10.0/180.0*M_PI);
+                if(outprint){
+                    std::cout<<"lastAngle: "<<lastAngle<< " currentAngle: "<<currentAngle1 << " delta_Angle" << deltaAngle1 << ","<<deltaAngle2 << " remove: "<<remove<<std::endl;
+                }
+            }
+            if(!remove)
+                lastAngle = currentAngle1;
+
             return remove;
         });
+
+        //Reduce with 3 points
     }
 
 }
