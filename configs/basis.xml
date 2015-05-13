@@ -5,10 +5,8 @@
 	    <configMonitor>true</configMonitor>
 	</execution>
 	<modulesToEnable>
-		<!--module logLevel="WARN">camera_importer</module-->
 		<module logLevel="WARN">ogre_window_manager</module>
 		<module>image_hint_worker</module>
-		<!--module logLevel="WARN">image_converter</module-->
 		<module logLevel="WARN">image_renderer_grey</module>
 		<module logLevel="WARN">image_renderer_debug</module>
 		<module>image_hint_transformer</module>

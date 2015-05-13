@@ -43,7 +43,7 @@ bool ImageObjectMerger::cycle() {
     });
     output->lanes.clear();
     //outprint = true;
-    prepareLane(middleLane,true,true);
+    prepareLane(middleLane,false,true);
     outprint = false;
     output->lanes.push_back(middleLane);
 
@@ -58,17 +58,10 @@ void ImageObjectMerger::prepareLane(Environment::RoadLane &lane, bool checkAngle
     lane.sort([](const vertex2f &p1,const vertex2f &p2) {
         return p1.x() < p2.x();
     });
-    if(checkDistance){
-        lane.reduce([](const vertex2f& p1,const vertex2f& p2){
-            //TODO 0.1 should be moved to config
-            bool remove = p1.distance(p2) < 0.1;
-            return remove;
-        });
-    }
 
     if(checkAngle){
         float lastAngle = INFINITY;
-        /*
+
         //Reduce with two points
         float lastAngleChange = INFINITY;
         //TODO we could work with the change of the angle
@@ -94,8 +87,11 @@ void ImageObjectMerger::prepareLane(Environment::RoadLane &lane, bool checkAngle
 
             return remove;
         });
-        */
-        //use 3 points (just for testing
+
+
+
+        //use 3 points with angle (just for testing)
+        lastAngle = INFINITY;
         lane.reduce([&lastAngle](const vertex2f& p1,const vertex2f& p2,const vertex2f& p3){
             //TODO 0.1 should be moved to config
             float currentAngle1 = p1.angle(p2);
@@ -112,7 +108,7 @@ void ImageObjectMerger::prepareLane(Environment::RoadLane &lane, bool checkAngle
                     deltaAngle2 = M_PI_2-deltaAngle2;
                 }
                 //TODO 30 should be moved into a config
-                remove = (fabs(deltaAngle2-deltaAngle1) > 10.0/180.0*M_PI);
+                remove = (fabs(deltaAngle2-deltaAngle1) > 30.0/180.0*M_PI);
                 if(outprint){
                     std::cout<<"lastAngle: "<<lastAngle<< " currentAngle: "<<currentAngle1 << " delta_Angle" << deltaAngle1 << ","<<deltaAngle2 << " remove: "<<remove<<std::endl;
                 }
@@ -124,6 +120,21 @@ void ImageObjectMerger::prepareLane(Environment::RoadLane &lane, bool checkAngle
         });
 
         //Reduce with 3 points
+    }
+
+    if(checkDistance){
+
+        lane.reduce([](const vertex2f& p1,const vertex2f& p2,const vertex2f& p3){
+            bool remove =  p1.distance(p2) > p1.distance(p3);
+            return remove;
+        });
+
+
+        lane.reduce([](const vertex2f& p1,const vertex2f& p2){
+            //TODO 0.1 should be moved to config
+            bool remove = p1.distance(p2) < 0.1;
+            return remove;
+        });
     }
 
 }
@@ -139,7 +150,8 @@ void ImageObjectMerger::transform(const Environment::RoadLane &fromLane,
     for(size_t i = 1; i < toSort.points().size(); i++) {
         vertex2f p1 = toSort.points()[i - 1];
         vertex2f p2 = toSort.points()[i];
-
+        if(p1 == p2)
+            continue;
         logger.debug() <<"########################";
         logger.debug() << "P1: " <<p1.x() << " " << p1.y();
         logger.debug() << "P2: " <<p2.x() << " " << p2.y();
