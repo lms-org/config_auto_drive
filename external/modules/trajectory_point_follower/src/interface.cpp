@@ -1,4 +1,4 @@
-#include "line_trajectory_follower.h"
+#include "trajectory_point_follower.h"
 
 extern "C" {
 

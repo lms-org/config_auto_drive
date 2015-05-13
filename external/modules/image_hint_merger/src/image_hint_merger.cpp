@@ -63,7 +63,7 @@ void ImageObjectMerger::prepareLane(Environment::RoadLane &lane, bool checkAngle
         float lastAngle = INFINITY;
 
         //Reduce with two points
-        float lastAngleChange = INFINITY;
+        //float lastAngleChange = INFINITY;
         //TODO we could work with the change of the angle
         //TODO we could also use the length of between those points!
         lane.reduce([&lastAngle](const vertex2f& p1,const vertex2f& p2){

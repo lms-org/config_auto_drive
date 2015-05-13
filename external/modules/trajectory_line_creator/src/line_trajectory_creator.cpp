@@ -4,7 +4,7 @@
 
 bool TrajectoryLineCreator::initialize() {
     raw_line = datamanager()->readChannel<Environment::RoadLane>(this,"LANE_MERGED");
-    line = datamanager()->writeChannel<lms::math::PolyLine<lms::math::vertex2f>>(this,"CONTROLL_LINE");
+    line = datamanager()->writeChannel<lms::math::polyLine2f>(this,"CONTROLL_LINE");
    return true;
 }
 
@@ -13,11 +13,9 @@ bool TrajectoryLineCreator::deinitialize() {
 }
 
 bool TrajectoryLineCreator::cycle() {
-    /*
-    for(int i = 0; i < raw_line->points().size(); i++){
-    }
-    */
     line->points()=raw_line->points();
+    //move to line
+    line->move(lms::math::vertex2f(0,20));
     return true;
 }
 

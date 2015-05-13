@@ -13,7 +13,7 @@ public:
     bool cycle() override;
 private:
     const Environment::RoadLane *raw_line;
-    lms::math::PolyLine<lms::math::vertex2f> *line;
+    lms::math::polyLine2f *line;
 
 
 };
