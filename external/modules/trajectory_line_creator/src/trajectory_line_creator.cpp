@@ -1,5 +1,6 @@
 #include "trajectory_line_creator.h"
 #include "lms/datamanager.h"
+#include "lms/math/math.h"
 
 bool TrajectoryLineCreator::initialize() {
     environment = datamanager()->readChannel<Environment>(this,"ENVIRONMENT");
@@ -12,19 +13,36 @@ bool TrajectoryLineCreator::deinitialize() {
 }
 
 bool TrajectoryLineCreator::cycle() {
+    using lms::math::vertex2f;
     if(environment->lanes.size() ==  0){
         logger.debug("cycle") << "no valid environment given";
         return true;
     }
-    line->points() = environment->lanes[0].points();
+    line->points().clear();
+    //line->points() = environment->lanes[0].points();
     //move to line
     //reove points that are smaller than 0
+
+    //TODO write method for that
+    for(size_t i = 1; i < environment->lanes[0].points().size(); i++) {
+        vertex2f p1 = environment->lanes[0].points()[i - 1];
+        vertex2f p2 = environment->lanes[0].points()[i];
+        if(p1 == p2)
+            continue;
+
+        vertex2f along = p2 - p1;
+        vertex2f mid((p1.x() + p2.x()) / 2., (p1.y() + p2.y()) / 2.);
+        vertex2f normAlong = along / along.length();
+        vertex2f orthogonal(normAlong.y(), -normAlong.x());
+        orthogonal = orthogonal/5;
+        vertex2f result = mid + orthogonal;
+        line->points().push_back(result);
+    }
 
     line->reduce([](const lms::math::vertex2f& p1){
         return p1.x() < 0;
     });
 
-    line->move(lms::math::vertex2f(0,-0.2));
     return true;
 }
 
