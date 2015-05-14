@@ -1,12 +1,9 @@
 #include "trajectory_point_creator.h"
-#include "image_objects/environment.h"
-#include "lms/math/polyline.h"
-#include "lms/math/math.h"
-#include "lms/math/interpolation.h"
+#include "lms/datamanager.h"
 
 bool TrajectoryPointCreator::initialize() {
    toFollow = datamanager()->readChannel<lms::math::polyLine2f>(this,"LINE");
-   trajectoryPoint = datamanager()->writeChannel<lms::math::vertex<4,float>>(this,"TRAJECTORY_POINT");
+   trajectoryPoint = datamanager()->writeChannel<lms::math::vertex<4,float>>(this,"POINT");
    return true;
 }
 
@@ -15,15 +12,19 @@ bool TrajectoryPointCreator::deinitialize() {
 }
 
 bool TrajectoryPointCreator::cycle() {
+    //logger.debug("cycle") << "#######START#######";
     for(int i = 1; i < (int)toFollow->points().size();i++){
         //TODO put 0.2 in config
         float length = toFollow->points()[i].length();
-        if(length > 0.2){
+        float distanceSearched = 0.50;
+        //logger.debug("cycle") << "pos: " << toFollow->points()[i].x() << " " << toFollow->points()[i].y();
+        if(length > distanceSearched){
+            //logger.debug("cycle") << "FOUND: pos: " << toFollow->points()[i].x() << " " << toFollow->points()[i].y();
             float angle = toFollow->points()[i].angle();
             //x-Pos
-            (*trajectoryPoint)[0] = 0.2*cos(angle);
+            (*trajectoryPoint)[0] = distanceSearched*cos(angle);
             //y-Pos
-            (*trajectoryPoint)[1] = 0.2*sin(angle);
+            (*trajectoryPoint)[1] = distanceSearched*sin(angle);
             float dirAngle = toFollow->points()[i].angle(toFollow->points()[i-1]);
             if(i+1 < (int)toFollow->points().size()){
                 dirAngle = lms::math::limitAngle_0_2PI(dirAngle)+lms::math::limitAngle_0_2PI(toFollow->points()[i].angle(toFollow->points()[i+1]));
@@ -34,6 +35,7 @@ bool TrajectoryPointCreator::cycle() {
             (*trajectoryPoint)[2] = cos(dirAngle);
             //y-Dir
             (*trajectoryPoint)[3] = sin(dirAngle);
+            break;
         }
     }
     return true;

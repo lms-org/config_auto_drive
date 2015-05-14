@@ -2,10 +2,8 @@
 #define LMS_TRAJECTORY_POINT_CREATOR_H
 
 #include "lms/module.h"
-#include "lms/datamanager.h"
-#include "lms/imaging/find/image_hint.h"
-#include "image_objects/environment.h"
 #include "lms/math/polyline.h"
+#include "lms/math/math.h"
 
 class TrajectoryPointCreator : public lms::Module {
 public:

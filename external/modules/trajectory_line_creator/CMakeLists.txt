@@ -1,12 +1,12 @@
 set ( SOURCES 
-	"src/line_trajectory_creator.cpp"
+        "src/trajectory_line_creator.cpp"
 	"src/interface.cpp"
 )
 
 set (HEADERS
-	"include/line_trajectory_creator.h"
+        "include/trajectory_line_creator.h"
 )
 include_directories("include")
 
-add_library (line_trajectory_creator MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(line_trajectory_creator PRIVATE lms)
+add_library (trajectory_line_creator MODULE ${SOURCES} ${HEADERS})
+target_link_libraries(trajectory_line_creator PRIVATE lms math_lib)

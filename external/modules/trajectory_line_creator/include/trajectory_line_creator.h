@@ -2,8 +2,7 @@
 #define IMAGE_HINT_TRANSFORMER_H
 
 #include "lms/module.h"
-#include "lms/datamanager.h"
-#include "lms/imaging/find/image_hint.h"
+#include "lms/math/polyline.h"
 #include "image_objects/environment.h"
 
 class TrajectoryLineCreator : public lms::Module {
@@ -12,7 +11,7 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    const Environment::RoadLane *raw_line;
+    const Environment *environment;
     lms::math::polyLine2f *line;
 
 
