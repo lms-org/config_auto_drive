@@ -12,7 +12,14 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
+
+    std::vector<std::string> environments;
+    std::vector<std::string> polylines;
+    std::vector<std::string> vertex2f;
+    std::vector<std::string> vertex4f;
+
     lms::imaging::Image *image;
+    lms::imaging::BGRAImageGraphics *graphics;
     std::vector<const Environment*> toDrawEnv;
     std::vector<const lms::math::polyLine2f*> toDrawPolyLines;
     std::vector<const lms::math::vertex2f*> toDrawVertex2f;
@@ -20,6 +27,9 @@ private:
     void drawPolyLine(const lms::math::polyLine2f &lane);
     void drawVertex2f(const lms::math::vertex2f &v);
     void drawVertex4f(const lms::math::vertex<4,float> &v);
+
+    void setColor(std::string toDrawName);
+
 };
 
 #endif /* IMAGE_HINT_TRANSFORMER_H */

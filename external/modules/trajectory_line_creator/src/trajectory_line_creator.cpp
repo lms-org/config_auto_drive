@@ -19,9 +19,11 @@ bool TrajectoryLineCreator::cycle() {
     line->points() = environment->lanes[0].points();
     //move to line
     //reove points that are smaller than 0
+
     line->reduce([](const lms::math::vertex2f& p1){
         return p1.x() < 0;
     });
+
     line->move(lms::math::vertex2f(0,-0.2));
     return true;
 }
