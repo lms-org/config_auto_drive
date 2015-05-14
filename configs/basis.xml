@@ -144,10 +144,12 @@
 			<WINDOW>TRANSLATED</WINDOW>
 			<key.down.Left.command>image_loader</key.down.Left.command>
 			<key.down.Left.content>previous</key.down.Left.content>
+			<key.down.Left.repeat>true</key.down.Left.repeat>
 			
 			<key.down.Right.command>image_loader</key.down.Right.command>
 			<key.down.Right.content>next</key.down.Right.content>
-			
+			<key.down.Right.repeat>true</key.down.Right.repeat>
+
 			<key.down.space.command>image_loader</key.down.space.command>
 			<key.down.space.content>manual</key.down.space.content>
 		</config>
