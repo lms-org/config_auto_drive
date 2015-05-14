@@ -18,7 +18,14 @@
 		<module logLevel="WARN">ogre_input</module>
 		<module>trajectory_line_creator</module>
 		<module>trajectory_point_creator</module>
+		<module>image_hint_generator</module>
 	</modulesToEnable>
+	<module>
+	    <name>image_hint_generator</name>
+		<writePriority>10</writePriority>
+		<channelMapping from="HINTS" to="HINTS"/>
+		<channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
+	</module>
 	<module>
 	    <name>trajectory_point_creator</name>
 		<channelMapping from="LINE" to="LINE"/>
@@ -72,15 +79,6 @@
 		    <colorB>0</colorB>
 		</config>
 	</module>
-	<!--module>
-		<name>image_logger</name>
-		<config>
-		    <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images</directory>
-		    <create_subfolder_with_current_date>true</create_subfolder_with_current_date>
-		    <filepattern>%04i</filepattern>
-		</config>
-		<channelMapping from="IMAGE" to="GREY_IMAGE"/>
-	</module-->
 	<module>
 		<name>ogre_window_manager</name>
 	</module>

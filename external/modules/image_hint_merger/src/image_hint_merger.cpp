@@ -144,7 +144,7 @@ void ImageObjectMerger::transform(const Environment::RoadLane &fromLane,
     using lms::math::vertex2f;
     //sort x-values
     Environment::RoadLane toSort = fromLane;
-    prepareLane(toSort,true,false);
+    prepareLane(toSort,false,true);
 
 
     for(size_t i = 1; i < toSort.points().size(); i++) {
