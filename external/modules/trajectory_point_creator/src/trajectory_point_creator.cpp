@@ -4,6 +4,7 @@
 bool TrajectoryPointCreator::initialize() {
    toFollow = datamanager()->readChannel<lms::math::polyLine2f>(this,"LINE");
    trajectoryPoint = datamanager()->writeChannel<lms::math::vertex<4,float>>(this,"POINT");
+   config = getConfig();
    return true;
 }
 
@@ -12,6 +13,8 @@ bool TrajectoryPointCreator::deinitialize() {
 }
 
 bool TrajectoryPointCreator::cycle() {
+    const float distanceSearched = config->get<float>("distanceSearched", 0.50);
+
     //logger.debug("cycle") << "#######START#######";
     bool found = false;
     float distanceSearched = 0.50;

@@ -13,7 +13,7 @@ public:
 private:
     const Environment *environment;
     lms::math::polyLine2f *line;
-
+    const lms::type::ModuleConfig *config;
 
 };
 

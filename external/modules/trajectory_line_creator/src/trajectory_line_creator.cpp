@@ -5,7 +5,8 @@
 bool TrajectoryLineCreator::initialize() {
     environment = datamanager()->readChannel<Environment>(this,"ENVIRONMENT");
     line = datamanager()->writeChannel<lms::math::polyLine2f>(this,"LINE");
-   return true;
+    config = getConfig();
+    return true;
 }
 
 bool TrajectoryLineCreator::deinitialize() {
@@ -13,6 +14,9 @@ bool TrajectoryLineCreator::deinitialize() {
 }
 
 bool TrajectoryLineCreator::cycle() {
+    // translate the middle lane to the right with a quarter of the street width
+    const float translation = 4.0f / config->get<float>("street.width", 0.8);
+
     using lms::math::vertex2f;
     if(environment->lanes.size() ==  0){
         logger.debug("cycle") << "no valid environment given";
@@ -34,7 +38,7 @@ bool TrajectoryLineCreator::cycle() {
         vertex2f mid((p1.x() + p2.x()) / 2., (p1.y() + p2.y()) / 2.);
         vertex2f normAlong = along / along.length();
         vertex2f orthogonal(normAlong.y(), -normAlong.x());
-        orthogonal = orthogonal/5;
+        orthogonal = orthogonal / translation;
         vertex2f result = mid + orthogonal;
         line->points().push_back(result);
     }

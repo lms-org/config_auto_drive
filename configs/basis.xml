@@ -30,11 +30,15 @@
 	    <name>trajectory_point_creator</name>
 		<channelMapping from="LINE" to="LINE"/>
 		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
+		<config>
+			<distanceSearched> 0.5 </distanceSearched>
+		</config>
 	</module>
 	<module>
 	    <name>trajectory_line_creator</name>
 		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_MERGED"/>
 		<channelMapping from="LINE" to="LINE"/>
+		<config src="environment.lconf" />
 	</module>
 	<module>
 	    <name>image_hint_merger</name>
