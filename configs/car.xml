@@ -1,0 +1,15 @@
+<framework>
+	<execution>
+	</execution>
+
+	<modulesToEnable>
+		<module>importer_senseboard2015</module>
+	</modulesToEnable>
+
+	<module>
+		<name>importer_senseboard2015</name>
+		<writePriority>1000</writePriority>
+	</module>
+
+	<include src="cam.xml" />
+</framework>
