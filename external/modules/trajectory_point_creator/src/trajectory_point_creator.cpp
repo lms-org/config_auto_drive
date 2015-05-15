@@ -28,17 +28,26 @@ bool TrajectoryPointCreator::cycle() {
             (*trajectoryPoint)[0] = distanceSearched*cos(angle);
             //y-Pos
             (*trajectoryPoint)[1] = distanceSearched*sin(angle);
-            float dirAngle = toFollow->points()[i].angle(toFollow->points()[i-1]);
+
+            //trying to reduce the error...
+            float dirAngle = lms::math::limitAngle_0_2PI(toFollow->points()[i-1].angle(toFollow->points()[i]));
+
+            /*
             if(i+1 < (int)toFollow->points().size()){
-                dirAngle = lms::math::limitAngle_0_2PI(dirAngle)+lms::math::limitAngle_0_2PI(toFollow->points()[i].angle(toFollow->points()[i+1]));
+                float dirAngle2 = lms::math::limitAngle_0_2PI(toFollow->points()[i].angle(toFollow->points()[i+1]));
+
+                //logger.error("dirAngle: ")<<dirAngle<<" dirAngle2: " <<dirAngle2;
+                dirAngle = dirAngle+dirAngle2;
                 dirAngle = lms::math::limitAngle_0_2PI(dirAngle);
                 dirAngle *= 0.5;
             }
+            */
             //x-Dir
             (*trajectoryPoint)[2] = cos(dirAngle);
             //y-Dir
             (*trajectoryPoint)[3] = sin(dirAngle);
             found = true;
+            //logger.error("trajecPoint") <<(*trajectoryPoint)[0]<< " " << (*trajectoryPoint)[1] << " "<< (*trajectoryPoint)[2] <<" "<<(*trajectoryPoint)[3];
             break;
         }
     }

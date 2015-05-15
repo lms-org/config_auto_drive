@@ -3,8 +3,6 @@
 
 #include "lms/module.h"
 #include "lms/datamanager.h"
-#include "lms/imaging/find/image_hint.h"
-#include "image_objects/environment.h"
 #include "lms/math/vertex.h"
 
 #include "comm/senseboard.h"
@@ -16,6 +14,7 @@ public:
     bool cycle() override;
 private:
     std::pair<float, float> TobisRegler(double x_s_n, double y_s_n, double phi_s, double v);
+    std::pair<float,float> smartRegler(float x, float y, float phi);
 
     Comm::SensorBoard::ControlData *controlData;
     const lms::math::vertex<4,float> *trajectoryPoint;

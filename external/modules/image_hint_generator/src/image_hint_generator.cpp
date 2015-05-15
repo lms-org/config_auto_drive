@@ -1,5 +1,6 @@
 #include "image_hint_generator.h"
 #include "lms/imaging/find/line.h"
+#include "lms/imaging/find/line_point.h"
 #include "lms/imaging/find/image_hint.h"
 
 bool ImageHintGenerator::initialize() {
@@ -27,6 +28,12 @@ bool ImageHintGenerator::initialize() {
     hint->parameter.edge = false;
     hint->parameter.verify = true;
     hint->parameter.preferVerify = false;
+    hint->parameter.validPoint = [](lms::imaging::find::LinePoint &lp)->bool{
+        //logger.info("check") << x <<" "<< y;
+        bool result =  std::abs(160-lp.high_low.x())>50 || std::abs(lp.high_low.x())<140;
+        return result;
+    };
+    //hint->parameter.containing;
     //add it
     hintContainer->add(hint);
 
@@ -39,7 +46,7 @@ bool ImageHintGenerator::initialize() {
     hint->parameter.lineWidthMin = 0;
     hint->parameter.edge = false;
     hint->parameter.verify = true;
-    hintContainer->add(hint);
+    //hintContainer->add(hint);
 
     hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>(*hint);
     hint->name = "BOX";

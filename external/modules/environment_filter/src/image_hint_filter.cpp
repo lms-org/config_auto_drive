@@ -27,6 +27,15 @@ bool EnvironmentFilter::cycle() {
 
 void EnvironmentFilter::filterLane(Environment::RoadLane &lane, bool checkAngle, bool checkDistance){
     using lms::math::vertex2f;
+
+
+    //remove points that are inside the car
+    lane.reduce([this](const vertex2f& p1){
+        //TODO 0.1 should be moved to config
+        bool remove = std::abs(p1.x()) < 0.3 && std::abs(p1.y())<0.1;
+        return remove;
+    });
+
     lane.sort([](const vertex2f &p1,const vertex2f &p2) {
         return p1.x() < p2.x();
     });
