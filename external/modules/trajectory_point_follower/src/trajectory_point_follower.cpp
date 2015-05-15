@@ -12,10 +12,10 @@ bool TrajectoryLineFollower::deinitialize() {
 }
 
 bool TrajectoryLineFollower::cycle() {
-    /*
-    std::pair<float,float> steering = TobisRegler((*trajectoryPoint)[0], (*trajectoryPoint)[1],
-            atan2((*trajectoryPoint)[3], (*trajectoryPoint)[2]), 0.5);
-    */
+
+   /* std::pair<float,float> steering = TobisRegler_Simpel((*trajectoryPoint)[0], (*trajectoryPoint)[1],
+            atan2((*trajectoryPoint)[3], (*trajectoryPoint)[2]), 0.5);*/
+
 
     std::pair<float,float> steering = smartRegler((*trajectoryPoint)[0], (*trajectoryPoint)[1],
             atan2((*trajectoryPoint)[3], (*trajectoryPoint)[2]));
@@ -124,4 +124,466 @@ std::pair<float,float> TrajectoryLineFollower::TobisRegler(double x_s, double y_
             delta_v *=-1;
             logger.info("RESULT: ")<<"vorne: " << delta_v << " hinten: " <<delta_h;
     return std::make_pair((float)delta_v, (float)delta_h);
+}
+
+std::pair<float,float> TrajectoryLineFollower::TobisRegler_Simpel(double x_s, double y_s, double phi_s, double v) {
+    // Optimal model predictive controller; Herleitung in Matlab durch Tobias Brunner
+    double te = ((fabs(x_s) + fabs(y_s)) + sqrt(x_s * x_s + y_s * y_s)) / (2.0 * v);
+    double delta_h = ((0.0858 * exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v
+        * v))) * (((((((((4.98 * phi_s * (v * v) * exp(te * sqrt(14.2 * (v * v))) +
+                          0.0865 * phi_s * exp(te * sqrt(14.2 * (v * v))) * sqrt
+                          (3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 4.98 * phi_s *
+                         (v * v) * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te *
+        sqrt(3.13 * (v * v)))) - 2.02 * v * y_s * exp(te * sqrt(3.13 * (v * v))) *
+                        sqrt(3.13 * (v * v))) + 1.01 * v * y_s * exp(te * sqrt(14.2 *
+                           (v * v))) * sqrt(3.13 * (v * v))) + 0.0549 * v * y_s *
+                      exp(te * sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) - 0.173
+                     * phi_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v))
+                     * sqrt(14.2 * (v * v))) - 0.0549 * v * y_s * exp(te * sqrt(14.2
+        * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(14.2 * (v * v))) +
+                   0.0865 * phi_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te *
+        sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 1.01 *
+                  v * y_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt
+        (3.13 * (v * v))) * sqrt(3.13 * (v * v))) / ((((((((5.05 * (v * v) * exp(te *
+        sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v))) + 5.05 * (v * v)
+        * exp(te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 * (v * v)))) -
+        5.05 * (v * v) * exp(3.0 * te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt
+        (14.2 * (v * v)))) - 5.05 * (v * v) * exp(te * sqrt(3.13 * (v * v))) * exp
+        (te * sqrt(14.2 * (v * v)))) + 0.173 * exp(te * sqrt(3.13 * (v * v))) * exp
+        (3.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v *
+        v))) + 0.173 * exp(te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 *
+        (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 0.692 * exp(2.0 *
+        te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt
+        (3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(3.0 * te * sqrt(3.13 *
+                       (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 *
+                      (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(te * sqrt(3.13 *
+                      (v * v))) * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v *
+        v)) * sqrt(14.2 * (v * v))) - 1.58 * (((((((((0.0667 * phi_s * (v * v) * exp
+                            (te * sqrt(3.13 * (v * v))) - 0.0667 * phi_s * (v * v) *
+        exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v)))) -
+        1.01 * v * y_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v))) +
+        0.0549 * v * y_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(14.2 * (v * v))) -
+        0.0865 * phi_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) *
+        sqrt(14.2 * (v * v))) + 0.0549 * v * y_s * exp(te * sqrt(3.13 * (v * v))) *
+        exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) - 0.11 * v *
+        y_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) *
+        sqrt(14.2 * (v * v))) - 0.0865 * phi_s * exp(te * sqrt(3.13 * (v * v))) *
+        exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v
+        * v))) + 0.173 * phi_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te *
+        sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 1.01 *
+        v * y_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v)))
+        * sqrt(3.13 * (v * v))) / ((((((((0.173 * sqrt(3.13 * (v * v)) * sqrt(14.2 *
+                            (v * v)) + 5.05 * (v * v) * exp(2.0 * te * sqrt(3.13 *
+        (v * v)))) + 5.05 * (v * v) * exp(2.0 * te * sqrt(14.2 * (v * v)))) - 5.05 *
+                         (v * v)) - 5.05 * (v * v) * exp(2.0 * te * sqrt(3.13 * (v *
+        v))) * exp(2.0 * te * sqrt(14.2 * (v * v)))) + 0.173 * exp(2.0 * te * sqrt
+        (3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 *
+        exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v
+        * v))) + 0.173 * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt
+        (14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 0.692 *
+        exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 *
+                     (v * v)) * sqrt(14.2 * (v * v)))) + 1.58 * exp(te * sqrt(3.13 *
+                    (v * v))) * exp(te * sqrt(14.2 * (v * v))) * (((((((((0.0667 *
+        phi_s * (v * v) * exp(te * sqrt(3.13 * (v * v))) - 0.173 * phi_s * exp(te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) -
+        0.0667 * phi_s * (v * v) * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te *
+        sqrt(14.2 * (v * v)))) + 1.01 * v * y_s * exp(te * sqrt(3.13 * (v * v))) *
+        sqrt(3.13 * (v * v))) + 0.0549 * v * y_s * exp(te * sqrt(3.13 * (v * v))) *
+        sqrt(14.2 * (v * v))) - 0.11 * v * y_s * exp(te * sqrt(14.2 * (v * v))) *
+        sqrt(14.2 * (v * v))) + 0.0865 * phi_s * exp(te * sqrt(3.13 * (v * v))) *
+        sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.0549 * v * y_s * exp(te *
+        sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(14.2 *
+        (v * v))) + 0.0865 * phi_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 1.01 *
+        v * y_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v)))
+        * sqrt(3.13 * (v * v))) / ((((((((5.05 * (v * v) * exp(te * sqrt(3.13 * (v *
+        v))) * exp(3.0 * te * sqrt(14.2 * (v * v))) + 5.05 * (v * v) * exp(te * sqrt
+                           (14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 * (v * v))))
+        - 5.05 * (v * v) * exp(3.0 * te * sqrt(3.13 * (v * v))) * exp(3.0 * te *
+        sqrt(14.2 * (v * v)))) - 5.05 * (v * v) * exp(te * sqrt(3.13 * (v * v))) *
+        exp(te * sqrt(14.2 * (v * v)))) + 0.173 * exp(te * sqrt(3.13 * (v * v))) *
+        exp(3.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v
+        * v))) + 0.173 * exp(te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 *
+                        (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) -
+        0.692 * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v
+        * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(3.0 * te
+        * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 *
+                     (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(te * sqrt(3.13 *
+                     (v * v))) * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v))
+        * sqrt(14.2 * (v * v)))) - 0.0858 * exp(te * sqrt(3.13 * (v * v))) * exp(te *
+        sqrt(14.2 * (v * v))) * (((((((((4.98 * phi_s * (v * v) * exp(te * sqrt(14.2
+        * (v * v))) - 0.0865 * phi_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 *
+                                          (v * v)) * sqrt(14.2 * (v * v))) - 4.98 *
+        phi_s * (v * v) * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 *
+                                          (v * v)))) + 1.01 * v * y_s * exp(te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v))) - 0.0549 * v * y_s * exp(te *
+        sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) + 0.0549 * v * y_s * exp(te *
+        sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(14.2 *
+        (v * v))) + 0.173 * phi_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) -
+        0.0865 * phi_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 *
+                                     (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 *
+                                    (v * v))) - 2.02 * v * y_s * exp(te * sqrt(3.13 *
+                                    (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v)))
+        * sqrt(3.13 * (v * v))) + 1.01 * v * y_s * exp(te * sqrt(14.2 * (v * v))) *
+        exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v))) / ((((((((5.05 *
+        (v * v) * exp(te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v)))
+        + 5.05 * (v * v) * exp(te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13
+        * (v * v)))) - 5.05 * (v * v) * exp(3.0 * te * sqrt(3.13 * (v * v))) * exp
+        (3.0 * te * sqrt(14.2 * (v * v)))) - 5.05 * (v * v) * exp(te * sqrt(3.13 *
+        (v * v))) * exp(te * sqrt(14.2 * (v * v)))) + 0.173 * exp(te * sqrt(3.13 *
+        (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) *
+        sqrt(14.2 * (v * v))) + 0.173 * exp(te * sqrt(14.2 * (v * v))) * exp(3.0 *
+        te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) -
+        0.692 * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v
+        * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(3.0 * te
+        * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 *
+        (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(te * sqrt(3.13 * (v * v))) *
+        exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)));
+
+      double delta_v = -atan((sin(((1.58 * (((((((((0.0667 * phi_s * (v * v) * exp(te *
+        sqrt(3.13 * (v * v))) - 0.0667 * phi_s * (v * v) * exp(te * sqrt(3.13 * (v *
+        v))) * exp(2.0 * te * sqrt(14.2 * (v * v)))) - 1.01 * v * y_s * exp(te *
+        sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v))) + 0.0549 * v * y_s * exp(te *
+        sqrt(3.13 * (v * v))) * sqrt(14.2 * (v * v))) - 0.0865 * phi_s * exp(te *
+        sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) +
+        0.0549 * v * y_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2
+        * (v * v))) * sqrt(14.2 * (v * v))) - 0.11 * v * y_s * exp(te * sqrt(14.2 *
+                                 (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) *
+        sqrt(14.2 * (v * v))) - 0.0865 * phi_s * exp(te * sqrt(3.13 * (v * v))) *
+        exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v
+        * v))) + 0.173 * phi_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te *
+        sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 1.01 *
+        v * y_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v)))
+        * sqrt(3.13 * (v * v))) / ((((((((0.173 * sqrt(3.13 * (v * v)) * sqrt(14.2 *
+                                    (v * v)) + 5.05 * (v * v) * exp(2.0 * te * sqrt
+        (3.13 * (v * v)))) + 5.05 * (v * v) * exp(2.0 * te * sqrt(14.2 * (v * v))))
+        - 5.05 * (v * v)) - 5.05 * (v * v) * exp(2.0 * te * sqrt(3.13 * (v * v))) *
+        exp(2.0 * te * sqrt(14.2 * (v * v)))) + 0.173 * exp(2.0 * te * sqrt(3.13 *
+        (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(2.0 *
+        te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) +
+        0.173 * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v
+        * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 0.692 * exp(te *
+        sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v))
+        * sqrt(14.2 * (v * v))) - 0.0858 * exp(te * sqrt(3.13 * (v * v))) * exp(te *
+        sqrt(14.2 * (v * v))) * (((((((((4.98 * phi_s * (v * v) * exp(te * sqrt(14.2
+        * (v * v))) + 0.0865 * phi_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 *
+                                     (v * v)) * sqrt(14.2 * (v * v))) - 4.98 * phi_s
+        * (v * v) * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v *
+        v)))) - 2.02 * v * y_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)))
+        + 1.01 * v * y_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v))) +
+        0.0549 * v * y_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) -
+        0.173 * phi_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt
+                               (14.2 * (v * v))) - 0.0549 * v * y_s * exp(te * sqrt
+        (14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(14.2 * (v *
+        v))) + 0.0865 * phi_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt
+                              (3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 *
+                              (v * v))) + 1.01 * v * y_s * exp(te * sqrt(14.2 * (v *
+        v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v))) /
+                           ((((((((5.05 * (v * v) * exp(te * sqrt(3.13 * (v * v))) *
+        exp(3.0 * te * sqrt(14.2 * (v * v))) + 5.05 * (v * v) * exp(te * sqrt(14.2 *
+                                     (v * v))) * exp(3.0 * te * sqrt(3.13 * (v * v))))
+        - 5.05 * (v * v) * exp(3.0 * te * sqrt(3.13 * (v * v))) * exp(3.0 * te *
+        sqrt(14.2 * (v * v)))) - 5.05 * (v * v) * exp(te * sqrt(3.13 * (v * v))) *
+        exp(te * sqrt(14.2 * (v * v)))) + 0.173 * exp(te * sqrt(3.13 * (v * v))) *
+        exp(3.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v
+        * v))) + 0.173 * exp(te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 *
+                                 (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v *
+        v))) - 0.692 * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt
+        (14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 *
+        exp(3.0 * te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v))) *
+        sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(te * sqrt(3.13 *
+                              (v * v))) * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13
+        * (v * v)) * sqrt(14.2 * (v * v)))) - 1.58 * exp(te * sqrt(3.13 * (v * v))) *
+        exp(te * sqrt(14.2 * (v * v))) * (((((((((0.0667 * phi_s * (v * v) * exp(te *
+        sqrt(3.13 * (v * v))) - 0.173 * phi_s * exp(te * sqrt(14.2 * (v * v))) *
+        sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 0.0667 * phi_s * (v * v) *
+        exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v)))) +
+        1.01 * v * y_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v))) +
+        0.0549 * v * y_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(14.2 * (v * v))) -
+        0.11 * v * y_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) +
+        0.0865 * phi_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) *
+        sqrt(14.2 * (v * v))) + 0.0549 * v * y_s * exp(te * sqrt(3.13 * (v * v))) *
+        exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) + 0.0865 *
+        phi_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v)))
+        * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 1.01 * v * y_s * exp(te *
+        sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 *
+        (v * v))) / ((((((((5.05 * (v * v) * exp(te * sqrt(3.13 * (v * v))) * exp
+                            (3.0 * te * sqrt(14.2 * (v * v))) + 5.05 * (v * v) * exp
+                            (te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 *
+                                    (v * v)))) - 5.05 * (v * v) * exp(3.0 * te *
+        sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v)))) - 5.05 * (v *
+        v) * exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v)))) +
+                         0.173 * exp(te * sqrt(3.13 * (v * v))) * exp(3.0 * te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173
+                        * exp(te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 *
+                                (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v *
+        v))) - 0.692 * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt
+        (14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 *
+                      exp(3.0 * te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt
+        (14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 *
+                     exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v)))
+                     * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))) + 0.0858 * exp
+                            (te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v *
+        v))) * (((((((((4.98 * phi_s * (v * v) * exp(te * sqrt(14.2 * (v * v))) -
+                        0.0865 * phi_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 *
+                                   (v * v)) * sqrt(14.2 * (v * v))) - 4.98 * phi_s *
+                       (v * v) * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te *
+        sqrt(3.13 * (v * v)))) + 1.01 * v * y_s * exp(te * sqrt(14.2 * (v * v))) *
+                      sqrt(3.13 * (v * v))) - 0.0549 * v * y_s * exp(te * sqrt(14.2 *
+                                 (v * v))) * sqrt(14.2 * (v * v))) + 0.0549 * v *
+                    y_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 *
+                                (v * v))) * sqrt(14.2 * (v * v))) + 0.173 * phi_s *
+                   exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v *
+        v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 0.0865 * phi_s * exp
+                  (te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v)))
+                  * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 2.02 * v * y_s *
+                 exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v)))
+                 * sqrt(3.13 * (v * v))) + 1.01 * v * y_s * exp(te * sqrt(14.2 * (v *
+        v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v))) /
+                            ((((((((5.05 * (v * v) * exp(te * sqrt(3.13 * (v * v))) *
+        exp(3.0 * te * sqrt(14.2 * (v * v))) + 5.05 * (v * v) * exp(te * sqrt(14.2 *
+                                   (v * v))) * exp(3.0 * te * sqrt(3.13 * (v * v))))
+        - 5.05 * (v * v) * exp(3.0 * te * sqrt(3.13 * (v * v))) * exp(3.0 * te *
+        sqrt(14.2 * (v * v)))) - 5.05 * (v * v) * exp(te * sqrt(3.13 * (v * v))) *
+        exp(te * sqrt(14.2 * (v * v)))) + 0.173 * exp(te * sqrt(3.13 * (v * v))) *
+        exp(3.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v
+        * v))) + 0.173 * exp(te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 *
+                               (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))
+        - 0.692 * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 *
+                              (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))
+        + 0.173 * exp(3.0 * te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 *
+                             (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))
+        + 0.173 * exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v))) *
+        sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))) - 0.52 * (((sqrt(3.13 * (v * v))
+        * (((((((((0.0667 * phi_s * (v * v) * exp(te * sqrt(3.13 * (v * v))) -
+                   0.0667 * phi_s * (v * v) * exp(te * sqrt(3.13 * (v * v))) * exp
+                   (2.0 * te * sqrt(14.2 * (v * v)))) - 1.01 * v * y_s * exp(te *
+        sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v))) + 0.0549 * v * y_s * exp(te *
+        sqrt(3.13 * (v * v))) * sqrt(14.2 * (v * v))) - 0.0865 * phi_s * exp(te *
+        sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) +
+               0.0549 * v * y_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te *
+        sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) - 0.11 * v * y_s * exp(te *
+        sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(14.2 *
+        (v * v))) - 0.0865 * phi_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173
+            * phi_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v
+        * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 1.01 * v * y_s * exp
+           (te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt
+           (3.13 * (v * v))) / ((((((((0.173 * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v
+        * v)) + 5.05 * (v * v) * exp(2.0 * te * sqrt(3.13 * (v * v)))) + 5.05 * (v *
+        v) * exp(2.0 * te * sqrt(14.2 * (v * v)))) - 5.05 * (v * v)) - 5.05 * (v * v)
+        * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v))))
+        + 0.173 * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt
+                               (14.2 * (v * v))) + 0.173 * exp(2.0 * te * sqrt(14.2 *
+                                (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v *
+        v))) + 0.173 * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt
+        (14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 0.692 *
+        exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 *
+                             (v * v)) * sqrt(14.2 * (v * v))) + exp(te * sqrt(3.13 *
+                             (v * v))) * exp(te * sqrt(14.2 * (v * v))) * sqrt(14.2 *
+                            (v * v)) * (((((((((4.98 * phi_s * (v * v) * exp(te *
+        sqrt(14.2 * (v * v))) + 0.0865 * phi_s * exp(te * sqrt(14.2 * (v * v))) *
+        sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 4.98 * phi_s * (v * v) * exp
+        (te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v)))) - 2.02 *
+        v * y_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v))) + 1.01 * v *
+        y_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v))) + 0.0549 * v *
+        y_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) - 0.173 * phi_s
+        * exp(te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))
+        - 0.0549 * v * y_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt
+        (3.13 * (v * v))) * sqrt(14.2 * (v * v))) + 0.0865 * phi_s * exp(te * sqrt
+        (14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v *
+        v)) * sqrt(14.2 * (v * v))) + 1.01 * v * y_s * exp(te * sqrt(14.2 * (v * v)))
+        * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v))) /
+        ((((((((5.05 * (v * v) * exp(te * sqrt(3.13 * (v * v))) * exp(3.0 * te *
+        sqrt(14.2 * (v * v))) + 5.05 * (v * v) * exp(te * sqrt(14.2 * (v * v))) *
+                exp(3.0 * te * sqrt(3.13 * (v * v)))) - 5.05 * (v * v) * exp(3.0 *
+        te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v)))) - 5.05 *
+              (v * v) * exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v))))
+             + 0.173 * exp(te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 *
+        (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(te *
+        sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 *
+        (v * v)) * sqrt(14.2 * (v * v))) - 0.692 * exp(2.0 * te * sqrt(3.13 * (v * v)))
+           * exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2
+        * (v * v))) + 0.173 * exp(3.0 * te * sqrt(3.13 * (v * v))) * exp(3.0 * te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173
+         * exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v))) * sqrt
+         (3.13 * (v * v)) * sqrt(14.2 * (v * v)))) + exp(te * sqrt(3.13 * (v * v))) *
+        exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * (((((((((0.0667 *
+        phi_s * (v * v) * exp(te * sqrt(3.13 * (v * v))) - 0.173 * phi_s * exp(te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) -
+        0.0667 * phi_s * (v * v) * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te *
+        sqrt(14.2 * (v * v)))) + 1.01 * v * y_s * exp(te * sqrt(3.13 * (v * v))) *
+        sqrt(3.13 * (v * v))) + 0.0549 * v * y_s * exp(te * sqrt(3.13 * (v * v))) *
+        sqrt(14.2 * (v * v))) - 0.11 * v * y_s * exp(te * sqrt(14.2 * (v * v))) *
+        sqrt(14.2 * (v * v))) + 0.0865 * phi_s * exp(te * sqrt(3.13 * (v * v))) *
+        sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.0549 * v * y_s * exp(te *
+        sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(14.2 *
+        (v * v))) + 0.0865 * phi_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 1.01 *
+        v * y_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v)))
+        * sqrt(3.13 * (v * v))) / ((((((((5.05 * (v * v) * exp(te * sqrt(3.13 * (v *
+        v))) * exp(3.0 * te * sqrt(14.2 * (v * v))) + 5.05 * (v * v) * exp(te * sqrt
+                                   (14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 * (v
+        * v)))) - 5.05 * (v * v) * exp(3.0 * te * sqrt(3.13 * (v * v))) * exp(3.0 *
+        te * sqrt(14.2 * (v * v)))) - 5.05 * (v * v) * exp(te * sqrt(3.13 * (v * v)))
+        * exp(te * sqrt(14.2 * (v * v)))) + 0.173 * exp(te * sqrt(3.13 * (v * v))) *
+        exp(3.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v
+        * v))) + 0.173 * exp(te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 *
+                                (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v *
+        v))) - 0.692 * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt
+        (14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 *
+        exp(3.0 * te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v))) *
+        sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(te * sqrt(3.13 *
+                             (v * v))) * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 *
+                            (v * v)) * sqrt(14.2 * (v * v)))) + exp(te * sqrt(3.13 *
+                           (v * v))) * exp(te * sqrt(14.2 * (v * v))) * sqrt(14.2 *
+                          (v * v)) * (((((((((4.98 * phi_s * (v * v) * exp(te * sqrt
+                                   (14.2 * (v * v))) - 0.0865 * phi_s * exp(te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 4.98 *
+        phi_s * (v * v) * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 *
+                                   (v * v)))) + 1.01 * v * y_s * exp(te * sqrt(14.2 *
+                                  (v * v))) * sqrt(3.13 * (v * v))) - 0.0549 * v *
+        y_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) + 0.0549 * v *
+        y_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) *
+        sqrt(14.2 * (v * v))) + 0.173 * phi_s * exp(te * sqrt(3.13 * (v * v))) * exp
+                             (2.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v))
+        * sqrt(14.2 * (v * v))) - 0.0865 * phi_s * exp(te * sqrt(14.2 * (v * v))) *
+        exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v
+        * v))) - 2.02 * v * y_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v))) + 1.01 * v * y_s * exp(te *
+        sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 *
+        (v * v))) / ((((((((5.05 * (v * v) * exp(te * sqrt(3.13 * (v * v))) * exp
+                            (3.0 * te * sqrt(14.2 * (v * v))) + 5.05 * (v * v) * exp
+                            (te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 *
+                                   (v * v)))) - 5.05 * (v * v) * exp(3.0 * te * sqrt
+                                 (3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v *
+        v)))) - 5.05 * (v * v) * exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2
+        * (v * v)))) + 0.173 * exp(te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt
+        (14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 *
+                        exp(te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 *
+                               (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))
+                       - 0.692 * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te
+        * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) +
+                      0.173 * exp(3.0 * te * sqrt(3.13 * (v * v))) * exp(3.0 * te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173
+                     * exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v)))
+                     * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))) / v) / cos
+                       (((1.58 * (((((((((0.0667 * phi_s * (v * v) * exp(te * sqrt
+        (3.13 * (v * v))) - 0.0667 * phi_s * (v * v) * exp(te * sqrt(3.13 * (v * v)))
+        * exp(2.0 * te * sqrt(14.2 * (v * v)))) - 1.01 * v * y_s * exp(te * sqrt
+        (3.13 * (v * v))) * sqrt(3.13 * (v * v))) + 0.0549 * v * y_s * exp(te * sqrt
+                                  (3.13 * (v * v))) * sqrt(14.2 * (v * v))) - 0.0865
+        * phi_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 *
+                                 (v * v))) + 0.0549 * v * y_s * exp(te * sqrt(3.13 *
+                                 (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v))) *
+        sqrt(14.2 * (v * v))) - 0.11 * v * y_s * exp(te * sqrt(14.2 * (v * v))) *
+        exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(14.2 * (v * v))) - 0.0865 *
+        phi_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v)))
+        * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * phi_s * exp(te *
+        sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 *
+        (v * v)) * sqrt(14.2 * (v * v))) + 1.01 * v * y_s * exp(te * sqrt(3.13 * (v *
+        v))) * exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v))) /
+                          ((((((((0.173 * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))
+        + 5.05 * (v * v) * exp(2.0 * te * sqrt(3.13 * (v * v)))) + 5.05 * (v * v) *
+        exp(2.0 * te * sqrt(14.2 * (v * v)))) - 5.05 * (v * v)) - 5.05 * (v * v) *
+        exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v))))
+        + 0.173 * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt
+                              (14.2 * (v * v))) + 0.173 * exp(2.0 * te * sqrt(14.2 *
+                               (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))
+                            + 0.173 * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0
+        * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))
+                           - 0.692 * exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt
+        (14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 0.0858 *
+                          exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v *
+        v))) * (((((((((4.98 * phi_s * (v * v) * exp(te * sqrt(14.2 * (v * v))) +
+                        0.0865 * phi_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(3.13 *
+                                    (v * v)) * sqrt(14.2 * (v * v))) - 4.98 * phi_s *
+                       (v * v) * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te *
+        sqrt(3.13 * (v * v)))) - 2.02 * v * y_s * exp(te * sqrt(3.13 * (v * v))) *
+                      sqrt(3.13 * (v * v))) + 1.01 * v * y_s * exp(te * sqrt(14.2 *
+                                  (v * v))) * sqrt(3.13 * (v * v))) + 0.0549 * v *
+                    y_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) -
+                   0.173 * phi_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v *
+        v)) * sqrt(14.2 * (v * v))) - 0.0549 * v * y_s * exp(te * sqrt(14.2 * (v * v)))
+                  * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(14.2 * (v * v))) +
+                 0.0865 * phi_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te *
+        sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 1.01 *
+                v * y_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 *
+                             (v * v))) * sqrt(3.13 * (v * v))) / ((((((((5.05 * (v *
+        v) * exp(te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v))) +
+        5.05 * (v * v) * exp(te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 *
+                                    (v * v)))) - 5.05 * (v * v) * exp(3.0 * te *
+        sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v)))) - 5.05 * (v *
+        v) * exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v)))) +
+        0.173 * exp(te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v)))
+        * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(te * sqrt(14.2 *
+                                (v * v))) * exp(3.0 * te * sqrt(3.13 * (v * v))) *
+        sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 0.692 * exp(2.0 * te * sqrt
+        (3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v *
+        v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(3.0 * te * sqrt(3.13 * (v * v))) *
+        exp(3.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v
+        * v))) + 0.173 * exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v *
+        v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))) - 1.58 * exp(te * sqrt
+        (3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v))) * (((((((((0.0667 * phi_s
+        * (v * v) * exp(te * sqrt(3.13 * (v * v))) - 0.173 * phi_s * exp(te * sqrt
+        (14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 0.0667 *
+        phi_s * (v * v) * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 *
+                                   (v * v)))) + 1.01 * v * y_s * exp(te * sqrt(3.13 *
+                                  (v * v))) * sqrt(3.13 * (v * v))) + 0.0549 * v *
+        y_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(14.2 * (v * v))) - 0.11 * v *
+        y_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) + 0.0865 *
+        phi_s * exp(te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 *
+                              (v * v))) + 0.0549 * v * y_s * exp(te * sqrt(3.13 * (v
+        * v))) * exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) +
+        0.0865 * phi_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 *
+                             (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))
+        - 1.01 * v * y_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2
+        * (v * v))) * sqrt(3.13 * (v * v))) / ((((((((5.05 * (v * v) * exp(te * sqrt
+                                  (3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v *
+        v))) + 5.05 * (v * v) * exp(te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt
+                                  (3.13 * (v * v)))) - 5.05 * (v * v) * exp(3.0 * te
+        * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v)))) - 5.05 * (v *
+        v) * exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v)))) +
+        0.173 * exp(te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v)))
+        * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(te * sqrt(14.2 *
+                               (v * v))) * exp(3.0 * te * sqrt(3.13 * (v * v))) *
+        sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 0.692 * exp(2.0 * te * sqrt
+        (3.13 * (v * v))) * exp(2.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v *
+        v)) * sqrt(14.2 * (v * v))) + 0.173 * exp(3.0 * te * sqrt(3.13 * (v * v))) *
+        exp(3.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v
+        * v))) + 0.173 * exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v *
+        v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))) + 0.0858 * exp(te *
+        sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v))) * (((((((((4.98 *
+        phi_s * (v * v) * exp(te * sqrt(14.2 * (v * v))) - 0.0865 * phi_s * exp(te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 4.98 *
+        phi_s * (v * v) * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 *
+                                  (v * v)))) + 1.01 * v * y_s * exp(te * sqrt(14.2 *
+                                 (v * v))) * sqrt(3.13 * (v * v))) - 0.0549 * v *
+        y_s * exp(te * sqrt(14.2 * (v * v))) * sqrt(14.2 * (v * v))) + 0.0549 * v *
+        y_s * exp(te * sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) *
+        sqrt(14.2 * (v * v))) + 0.173 * phi_s * exp(te * sqrt(3.13 * (v * v))) * exp
+                            (2.0 * te * sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v))
+        * sqrt(14.2 * (v * v))) - 0.0865 * phi_s * exp(te * sqrt(14.2 * (v * v))) *
+        exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v
+        * v))) - 2.02 * v * y_s * exp(te * sqrt(3.13 * (v * v))) * exp(2.0 * te *
+        sqrt(14.2 * (v * v))) * sqrt(3.13 * (v * v))) + 1.01 * v * y_s * exp(te *
+        sqrt(14.2 * (v * v))) * exp(2.0 * te * sqrt(3.13 * (v * v))) * sqrt(3.13 *
+        (v * v))) / ((((((((5.05 * (v * v) * exp(te * sqrt(3.13 * (v * v))) * exp
+                            (3.0 * te * sqrt(14.2 * (v * v))) + 5.05 * (v * v) * exp
+                            (te * sqrt(14.2 * (v * v))) * exp(3.0 * te * sqrt(3.13 *
+                                  (v * v)))) - 5.05 * (v * v) * exp(3.0 * te * sqrt
+        (3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 * (v * v)))) - 5.05 * (v * v) *
+                          exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v *
+        v)))) + 0.173 * exp(te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt(14.2 *
+                               (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))
+                        + 0.173 * exp(te * sqrt(14.2 * (v * v))) * exp(3.0 * te *
+        sqrt(3.13 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) - 0.692
+                       * exp(2.0 * te * sqrt(3.13 * (v * v))) * exp(2.0 * te * sqrt
+        (14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 *
+                      exp(3.0 * te * sqrt(3.13 * (v * v))) * exp(3.0 * te * sqrt
+        (14.2 * (v * v))) * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v))) + 0.173 *
+                     exp(te * sqrt(3.13 * (v * v))) * exp(te * sqrt(14.2 * (v * v)))
+                     * sqrt(3.13 * (v * v)) * sqrt(14.2 * (v * v)))));
+      return std::make_pair(delta_v, delta_h);
 }

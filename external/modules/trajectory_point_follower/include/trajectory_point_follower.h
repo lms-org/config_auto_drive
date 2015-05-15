@@ -14,6 +14,7 @@ public:
     bool cycle() override;
 private:
     std::pair<float, float> TobisRegler(double x_s_n, double y_s_n, double phi_s, double v);
+    std::pair<float,float> TobisRegler_Simpel(double x_s, double y_s, double phi_s, double v);
     std::pair<float,float> smartRegler(float x, float y, float phi);
 
     Comm::SensorBoard::ControlData *controlData;
