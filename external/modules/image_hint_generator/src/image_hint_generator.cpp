@@ -30,7 +30,8 @@ bool ImageHintGenerator::initialize() {
     hint->parameter.preferVerify = false;
     hint->parameter.validPoint = [](lms::imaging::find::LinePoint &lp)->bool{
         //logger.info("check") << x <<" "<< y;
-        bool result =  std::abs(160-lp.high_low.x())>50 || std::abs(lp.high_low.x())<140;
+        bool result =  std::abs(160-lp.high_low.x())>50 || std::abs(lp.high_low.y())<140;
+        //result =
         return result;
     };
     //hint->parameter.containing;
