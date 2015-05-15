@@ -64,12 +64,15 @@ bool Senseboard2015::deinitialize() {
 int i = 0;
 bool Senseboard2015::cycle () {
     //TODO convert data to senseboard-data
+
     float val = 0.45*sin(i*0.1);
+    /*
     m_control_data->steering_front=val;
     m_control_data->steering_rear = val;
     m_control_data->control.velocity.velocity = val;
     i++;
     logger.debug("new val") << val;
+    */
     //get senseboard-data
     ///Prepare Down
     prepareDown();
@@ -104,7 +107,7 @@ bool Senseboard2015::cycle () {
     }
     //TODO convert received data to sense-link data
     //just for testing
-    logger.debug("cycle") <<"drivemode: " << m_sensor_data->drivemode << " " << m_sensor_data->encoder;
+    logger.debug("info") <<"drivemode: " << m_sensor_data->drivemode << " " << m_sensor_data->encoder;
 
 
 	return true;
@@ -204,9 +207,9 @@ bool Senseboard2015::tooMuchBytesAvailable() {
     //printf("bytes available %i \n", bytes_available);
     if(bytes_available > sizeof(up)) {
         tcflush(usb_fd, TCIFLUSH);
-        printf("\033[031m FLUSHED BUFFER, TOO MUCH BYTES AVAILABLE! \033[0m \n");
+        logger.warn("\033[031m FLUSHED BUFFER, TOO MUCH BYTES AVAILABLE! \033[0m \n");
         ioctl(usb_fd, FIONREAD, &bytes_available);
-        printf("\033[032m Bytes available %i \n \033[0m", bytes_available);
+        logger.warn("\033[032m Bytes available:") << bytes_available;
         usleep(10);
         return true;
     }

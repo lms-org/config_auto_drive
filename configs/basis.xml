@@ -10,7 +10,7 @@
 		<module>image_hint_worker</module>
 		<module logLevel="WARN">image_renderer_grey</module>
 		<module logLevel="WARN">image_renderer_debug</module>
-		<module>image_hint_transformer</module>
+		<module logLevel="ERROR">image_hint_transformer</module>
 		<module>image_object_renderer</module>
 		<module>image_renderer_image_object</module>
 		<module logLevel="WARN">image_converter_trans</module>
@@ -22,7 +22,12 @@
 		<module>trajectory_point_creator</module>
 		<module>image_hint_generator</module>
 		<module>environment_filter</module>
+		<module logLevel="ERROR">trajectory_point_follower</module>
 	</modulesToEnable>
+	<module>
+		<name>trajectory_point_follower</name>
+		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
+    </module>
 	<module>
 	    <name>image_hint_generator</name>
 		<writePriority>10</writePriority>
