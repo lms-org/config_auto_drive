@@ -17,7 +17,6 @@ bool TrajectoryPointCreator::cycle() {
 
     //logger.debug("cycle") << "#######START#######";
     bool found = false;
-    float distanceSearched = 0.50;
     for(int i = 1; i < (int)toFollow->points().size();i++){
         //TODO put 0.2 in config
         float length = toFollow->points()[i].length();
