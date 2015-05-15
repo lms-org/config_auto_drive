@@ -18,7 +18,7 @@
 	<config name="gyro" src="sensor/gyro.lconf" />
 	<config name="acc" src="sensor/acc.lconf" />
 	<config name="encoder" src="sensor/encoder.lconf" />
-	<config name="mode" src="sensor/mode_lconf" />
+	<config name="mode" src="sensor/mode.lconf" />
 	<config name="rc_poti" src="sensor/rc_poti.lconf" />
 	<config name="servo_front" src="sensor/servo_front.lconf" />
 	<config name="servo_rear" src="sensor/servo_rear.lconf" />
