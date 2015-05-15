@@ -3,6 +3,7 @@
 		<maxThreadCount> 1 </maxThreadCount>
 		<clock enabled="true" unit="hz">100</clock>
 	    <configMonitor>true</configMonitor>
+	    <profiling enabled="true" />
 	</execution>
 	<modulesToEnable>
 		<module logLevel="WARN">ogre_window_manager</module>
@@ -117,18 +118,6 @@
 	</module>
 	<module>
 	    <name>image_hint_worker</name>
-	</module>
-	<module>
-		<name>camera_importer</name>
-		<config src="camera_importer.lconf"/>
-	</module>
-	<module>
-		<name>image_converter</name>
-	    <channelMapping from="INPUT_IMAGE" to="IMAGE"/>
-	    <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE"/>
-	    <config>
-		    <output_format>GREY</output_format>
-	    </config>
 	</module>
 	<module>
 		<name>image_converter_trans</name>
