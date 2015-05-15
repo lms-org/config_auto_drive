@@ -14,19 +14,19 @@ bool ImageHintGenerator::initialize() {
     hint->parameter.maxLength = 300;
     hint->parameter.approxEdge = false;
     hint->parameter.lineWidthMax = 10;
-    hint->parameter.lineWidthMin = 2;
+    hint->parameter.lineWidthMin = 1;
     hint->parameter.searchAngle = 0;
     hint->parameter.searchLength = 100;
     hint->parameter.gaussBuffer = gaussBuffer;
     hint->parameter.x = 180;
-    hint->parameter.y = 100;
+    hint->parameter.y = 120;
     hint->parameter.sobelThreshold = 250;
     hint->parameter.stepLengthMin = 2;
     hint->parameter.stepLengthMax = 20;
     hint->parameter.lineWidthTransMultiplier = 1;
     hint->parameter.edge = false;
     hint->parameter.verify = true;
-    hint->parameter.preferVerify = true;
+    hint->parameter.preferVerify = false;
     //add it
     hintContainer->add(hint);
 
@@ -35,10 +35,11 @@ bool ImageHintGenerator::initialize() {
     hint->parameter.x = 80;
     hint->parameter.y = 100;
     hint->parameter.searchAngle = -M_PI;
-    hint->parameter.sobelThreshold = 100;
-    hint->parameter.lineWidthMin = 2;
+    hint->parameter.sobelThreshold = 250;
+    hint->parameter.lineWidthMin = 0;
     hint->parameter.edge = false;
-    //hintContainer->add(hint);
+    hint->parameter.verify = true;
+    hintContainer->add(hint);
 
     hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>(*hint);
     hint->name = "BOX";

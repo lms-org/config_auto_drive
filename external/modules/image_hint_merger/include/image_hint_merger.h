@@ -3,7 +3,6 @@
 
 #include "lms/module.h"
 #include "lms/datamanager.h"
-#include "lms/imaging/find/image_hint.h"
 #include "image_objects/environment.h"
 
 class ImageObjectMerger : public lms::Module {

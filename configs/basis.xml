@@ -19,6 +19,7 @@
 		<module>trajectory_line_creator</module>
 		<module>trajectory_point_creator</module>
 		<module>image_hint_generator</module>
+		<module>environment_filter</module>
 	</modulesToEnable>
 	<module>
 	    <name>image_hint_generator</name>
@@ -41,8 +42,13 @@
 		<config src="environment.lconf" />
 	</module>
 	<module>
-	    <name>image_hint_merger</name>
+	    <name>environment_filter</name>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD"/>
+		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
+	</module>
+	<module>
+	    <name>image_hint_merger</name>
+		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
 		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MERGED"/>
 	</module>
 	<module>
