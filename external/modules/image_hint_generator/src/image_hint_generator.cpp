@@ -18,32 +18,37 @@ bool ImageHintGenerator::initialize() {
     hint->parameter.searchAngle = 0;
     hint->parameter.searchLength = 100;
     hint->parameter.gaussBuffer = gaussBuffer;
-    hint->parameter.x = 240;
-    hint->parameter.y = 150;
+    hint->parameter.x = 180;
+    hint->parameter.y = 100;
     hint->parameter.sobelThreshold = 250;
     hint->parameter.stepLengthMin = 2;
     hint->parameter.stepLengthMax = 20;
     hint->parameter.lineWidthTransMultiplier = 1;
     hint->parameter.edge = false;
     hint->parameter.verify = true;
+    hint->parameter.preferVerify = true;
     //add it
     hintContainer->add(hint);
 
     hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>(*hint);
     hint->name = "LEFT_LANE";
     hint->parameter.x = 80;
+    hint->parameter.y = 100;
     hint->parameter.searchAngle = -M_PI;
-    hintContainer->add(hint);
+    hint->parameter.sobelThreshold = 100;
+    hint->parameter.lineWidthMin = 2;
+    hint->parameter.edge = false;
+    //hintContainer->add(hint);
 
     hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>(*hint);
     hint->name = "BOX";
     hint->parameter.x = 120;
-    hint->parameter.y = 100;
+    hint->parameter.y = 50;
     hint->parameter.searchAngle = -M_PI_2l*1.5;
     hint->parameter.stepLengthMax = 5;
     hint->parameter.lineWidthMax = 5;
     hint->parameter.maxLength = 20;
-    hint->parameter.edge = true;
+    hint->parameter.edge = false;
     //hintContainer->add(hint);
 
     return true;
@@ -63,6 +68,12 @@ bool ImageHintGenerator::deinitialize() {
 bool ImageHintGenerator::cycle() {
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
     gaussBuffer->fill(255);
+    for(lms::imaging::find::ImageHintBase *ihb : hintContainer->hints){
+        lms::imaging::find::ImageHint<lms::imaging::find::Line> *ih =(lms::imaging::find::ImageHint<lms::imaging::find::Line>*) ihb;
+        if(ih->imageObject.points().size() < 5){
+            ih->parameter.preferVerify = false;
+        }
+    }
     //TODO calc new good positions (atm will will just use verify in the line etc.)
     return true;
 }

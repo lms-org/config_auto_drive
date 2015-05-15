@@ -13,10 +13,11 @@ bool TrajectoryPointCreator::deinitialize() {
 
 bool TrajectoryPointCreator::cycle() {
     //logger.debug("cycle") << "#######START#######";
+    bool found = false;
+    float distanceSearched = 0.50;
     for(int i = 1; i < (int)toFollow->points().size();i++){
         //TODO put 0.2 in config
         float length = toFollow->points()[i].length();
-        float distanceSearched = 0.50;
         //logger.debug("cycle") << "pos: " << toFollow->points()[i].x() << " " << toFollow->points()[i].y();
         if(length > distanceSearched){
             //logger.debug("cycle") << "FOUND: pos: " << toFollow->points()[i].x() << " " << toFollow->points()[i].y();
@@ -35,8 +36,20 @@ bool TrajectoryPointCreator::cycle() {
             (*trajectoryPoint)[2] = cos(dirAngle);
             //y-Dir
             (*trajectoryPoint)[3] = sin(dirAngle);
+            found = true;
             break;
         }
+    }
+    if(!found){
+        //if we find nothing, we just want to drive forward
+        //x-Pos
+        (*trajectoryPoint)[0] = distanceSearched;
+        //y-Pos
+        (*trajectoryPoint)[1] = 0;
+        //x-Dir
+        (*trajectoryPoint)[2] = 1;
+        //y-Dir
+        (*trajectoryPoint)[3] = 0;
     }
     return true;
 }

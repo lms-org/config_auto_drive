@@ -29,5 +29,5 @@
 		    <output_format>GREY</output_format>
 	    </config>
 	</module>
-	<include stc="basis.xml" />
+	<include src="basis.xml" />
 </framework>

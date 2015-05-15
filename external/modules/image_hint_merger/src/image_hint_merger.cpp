@@ -43,7 +43,7 @@ bool ImageObjectMerger::cycle() {
     });
     output->lanes.clear();
     //outprint = true;
-    prepareLane(middleLane,false,true);
+    prepareLane(middleLane,true,true);
     outprint = false;
     output->lanes.push_back(middleLane);
 
@@ -125,7 +125,7 @@ void ImageObjectMerger::prepareLane(Environment::RoadLane &lane, bool checkAngle
     if(checkDistance){
 
         lane.reduce([](const vertex2f& p1,const vertex2f& p2,const vertex2f& p3){
-            bool remove =  p1.distance(p2) > p1.distance(p3);
+            bool remove =  p1.distance(p3)-p1.distance(p2) < 0.05;
             return remove;
         });
 
@@ -144,7 +144,7 @@ void ImageObjectMerger::transform(const Environment::RoadLane &fromLane,
     using lms::math::vertex2f;
     //sort x-values
     Environment::RoadLane toSort = fromLane;
-    prepareLane(toSort,false,true);
+    prepareLane(toSort,true,true);
 
     //TODO write method for that
     for(size_t i = 1; i < toSort.points().size(); i++) {
