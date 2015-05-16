@@ -28,7 +28,7 @@ bool TrajectoryLineFollower::cycle() {
 }
 
 std::pair<float,float> TrajectoryLineFollower::smartRegler(float x, float y, float phi){
-
+    (void)x;
     logger.info("input_data: ") << y << " " << phi;
     float delta_v = 3*y;
     float delta_h = phi;

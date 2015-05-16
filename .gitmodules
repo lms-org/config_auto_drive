@@ -37,3 +37,6 @@
 [submodule "external/modules/ogre_input"]
 	path = external/modules/ogre_input
 	url = https://github.com/syxolk/ogre_input.git
+[submodule "external/libraries/imaging_detection"]
+	path = external/libraries/imaging_detection
+	url = https://github.com/Phibedy/imaging_detection.git

@@ -3,7 +3,7 @@
 
 #include "lms/module.h"
 #include "lms/datamanager.h"
-#include "lms/imaging/find/image_hint.h"
+#include "lms/imaging_detection/image_hint.h"
 #include "image_objects/environment.h"
 #include <vector>
 
