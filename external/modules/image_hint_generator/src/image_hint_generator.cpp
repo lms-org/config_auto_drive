@@ -28,7 +28,8 @@ bool ImageHintGenerator::initialize() {
     hint->parameter.edge = false;
     hint->parameter.verify = true;
     hint->parameter.preferVerify = false;
-    hint->parameter.validPoint = [](lms::imaging::find::LinePoint &lp)->bool{
+    hint->parameter.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM)->bool{
+        (void)DRAWDEBUG_ARG_N;
         //logger.info("check") << x <<" "<< y;
         bool result =  std::abs(160-lp.high_low.x())>50 || std::abs(lp.high_low.y())<140;
         //result =
@@ -57,7 +58,14 @@ bool ImageHintGenerator::initialize() {
     hint->parameter.stepLengthMax = 5;
     hint->parameter.lineWidthMax = 5;
     hint->parameter.maxLength = 20;
-    hint->parameter.edge = false;
+    hint->parameter.edge = true;
+    hint->parameter.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM)->bool{
+        //logger.info("check") << x <<" "<< y;
+        lms::imaging::find::EdgePoint::EdgePointParam param = lp.param();
+        param.searchLength = 20;
+        lms::imaging::find::EdgePoint ep;
+        return !ep.find(param DRAWDEBUG_ARG);
+    };
     //hintContainer->add(hint);
 
     return true;
