@@ -35,16 +35,16 @@ bool TrajectoryLineCreator::cycle() {
             continue;
 
         vertex2f along = p2 - p1;
-        vertex2f mid((p1.x() + p2.x()) / 2., (p1.y() + p2.y()) / 2.);
+        vertex2f mid((p1.x + p2.x) / 2., (p1.y + p2.y) / 2.);
         vertex2f normAlong = along / along.length();
-        vertex2f orthogonal(normAlong.y(), -normAlong.x());
+        vertex2f orthogonal(normAlong.y, -normAlong.x);
         orthogonal = orthogonal / translation;
         vertex2f result = mid + orthogonal;
         line->points().push_back(result);
     }
 
     line->reduce([](const lms::math::vertex2f& p1){
-        return p1.x() < 0;
+        return p1.x < 0;
     });
 
     return true;

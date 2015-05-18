@@ -2,7 +2,7 @@
 #include <cmath>
 bool TrajectoryLineFollower::initialize() {
     controlData = datamanager()->writeChannel<Comm::SensorBoard::ControlData>(this,"CONTROL_DATA");
-    trajectoryPoint = datamanager()->writeChannel<lms::math::vertex<4,float>>(this,"POINT");
+    trajectoryPoint = datamanager()->writeChannel<std::pair<lms::math::vertex2f,lms::math::vertex2f>>(this,"POINT");
 
     return true;
 }
@@ -13,8 +13,8 @@ bool TrajectoryLineFollower::deinitialize() {
 
 bool TrajectoryLineFollower::cycle() {
 
-    std::pair<float,float> steering = TobisRegler_Simpel((*trajectoryPoint)[0], (*trajectoryPoint)[1],
-            atan2((*trajectoryPoint)[3], (*trajectoryPoint)[2]), 0.5);
+    std::pair<float,float> steering = TobisRegler_Simpel(trajectoryPoint->first.x, trajectoryPoint->first.y,
+            atan2(trajectoryPoint->second.y, trajectoryPoint->second.x), 0.5);
 
     controlData->vel_mode = Comm::SensorBoard::ControlData::MODE_VELOCITY;
     controlData->steering_front = steering.first;// * 180. / M_PI;

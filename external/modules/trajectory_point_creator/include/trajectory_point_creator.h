@@ -13,7 +13,7 @@ public:
 private:
     const lms::type::ModuleConfig *config;
     const lms::math::polyLine2f *toFollow;
-    lms::math::vertex<4,float> *trajectoryPoint;
+    std::pair<lms::math::vertex2f, lms::math::vertex2f> *trajectoryPoint;
 
 
 };

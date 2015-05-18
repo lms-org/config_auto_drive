@@ -32,13 +32,13 @@ void EnvironmentFilter::filterLane(Environment::RoadLane &lane){
     //remove points that are inside the car
     lane.reduce([this](const vertex2f& p1){
         //TODO 0.1 should be moved to config
-        bool remove = std::abs(p1.x()) < 0.3 && std::abs(p1.y())<0.1;
+        bool remove = std::abs(p1.x) < 0.3 && std::abs(p1.y)<0.1;
         remove = remove || p1.length() > 1.5;
         return remove;
     });
     //sort points (not sure if that is smart)
     lane.sort([](const vertex2f &p1,const vertex2f &p2) {
-        return p1.x() < p2.x();
+        return p1.x < p2.x;
     });
     //remove triangles
     lane.reduce([](const vertex2f& p1,const vertex2f& p2,const vertex2f& p3){

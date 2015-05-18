@@ -32,7 +32,7 @@ bool ImageHintGenerator::initialize() {
     hint->parameter.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM)->bool{
         (void)DRAWDEBUG_ARG_N;
         //logger.info("check") << x <<" "<< y;
-        bool result =  std::abs(160-lp.high_low.x())>50 || std::abs(lp.high_low.y())<140;
+        bool result =  std::abs(160-lp.high_low.x)>50 || std::abs(lp.high_low.y)<140;
         //result =
         return result;
     };
@@ -64,7 +64,7 @@ bool ImageHintGenerator::initialize() {
     hintSplit->parameter.lineMaxLength = 40;
     hintSplit->parameter.validPoint = [this](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM){
         (void)DRAWDEBUG_ARG_N;
-        bool result =  std::abs(160-lp.high_low.x())>50 || std::abs(lp.high_low.y())<140;
+        bool result =  std::abs(160-lp.high_low.x>50) || std::abs(lp.high_low.y)<140;
         float angle = lms::math::limitAngle_nPI_PI(lp.param().searchAngle);
         result = result && (fabs(angle) < M_PI_2l*0.5);
         return result;
