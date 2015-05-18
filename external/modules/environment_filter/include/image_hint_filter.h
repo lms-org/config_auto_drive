@@ -10,7 +10,7 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    void filterLane(Environment::RoadLane &lane, bool checkAngle, bool checkDistance);
+    void filterLane(Environment::RoadLane &lane);
     const Environment *input;
     Environment *output;
 };

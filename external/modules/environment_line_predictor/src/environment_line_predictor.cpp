@@ -40,11 +40,11 @@ void EnvironmentLinePredictor::predict(const Environment::RoadLane &input,
         vertex2f along = output.points()[output.points().size() - 1] -
                 output.points()[output.points().size() - 2];
 
-        logger.info("PREDICT") << along.length();
+        //logger.info("PREDICT") << along.length();
 
         along = along / (along.length() / 1);
 
-         logger.info("PREDICT AFTER") << along.x() << " " << along.y();
+         //logger.info("PREDICT AFTER") << along.x() << " " << along.y();
 
         vertex2f predictedPoint = output.points()[output.points().size() - 1] +
                 along;

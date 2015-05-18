@@ -14,7 +14,7 @@ private:
     void transform(const Environment::RoadLane &fromLane,
                                       Environment::RoadLane &toLane, int sign);
 
-    void prepareLane(Environment::RoadLane &lane, bool checkAngle, bool checkDistance);
+    void prepareLane(Environment::RoadLane &lane);
     const Environment *input;
     Environment *output;
 };

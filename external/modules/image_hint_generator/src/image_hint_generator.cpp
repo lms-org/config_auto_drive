@@ -59,9 +59,10 @@ bool ImageHintGenerator::initialize() {
     hint->parameter.lineWidthMax = 5;
     hint->parameter.maxLength = 20;
     hint->parameter.edge = true;
-    hint->parameter.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM)->bool{
+    hint->parameter.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM){
         //logger.info("check") << x <<" "<< y;
         lms::imaging::find::EdgePoint::EdgePointParam param = lp.param();
+        param.searchType = lms::imaging::find::EdgePoint::EdgeType::HIGH_LOW;
         param.searchLength = 20;
         lms::imaging::find::EdgePoint ep;
         return !ep.find(param DRAWDEBUG_ARG);

@@ -71,7 +71,7 @@
 		<name>image_object_renderer</name>
 		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
 		<config>
-		    <environments>ENVIRONMENT_ROAD,ENVIRONMENT_MERGED</environments>
+		    <environments>ENVIRONMENT_ROAD,ENVIRONMENT_MERGED,ENVIRONMENT_ROAD_FILTERED</environments>
 		    <polylines>LINE</polylines>
 		    <vertex2f></vertex2f>
 		    <vertex4f>TRAJECTORY_POINT</vertex4f>
@@ -83,12 +83,17 @@
 		<config name="ENVIRONMENT_ROAD">
 		    <colorR>255</colorR>
 		    <colorG>123</colorG>
-		    <colorB>0</colorB>
+		    <colorB>120</colorB>
 		</config>
 		<config name="ENVIRONMENT_ROAD_MERGED">
 		    <colorR>255</colorR>
 		    <colorG>255</colorG>
 		    <colorB>0</colorB>
+		</config>
+		<config name="ENVIRONMENT_ROAD_FILTERED">
+		    <colorR>0</colorR>
+		    <colorG>0</colorG>
+		    <colorB>255</colorB>
 		</config>
 		<config name="LINE">
 		    <colorR>255</colorR>

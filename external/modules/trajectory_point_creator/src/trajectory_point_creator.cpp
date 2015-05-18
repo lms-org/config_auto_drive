@@ -15,19 +15,30 @@ bool TrajectoryPointCreator::deinitialize() {
 bool TrajectoryPointCreator::cycle() {
     const float distanceSearched = config->get<float>("distanceSearched", 0.50);
 
-    //logger.debug("cycle") << "#######START#######";
     bool found = false;
     for(int i = 1; i < (int)toFollow->points().size();i++){
         //TODO put 0.2 in config
-        float length = toFollow->points()[i].length();
+        lms::math::vertex2f top = toFollow->points()[i];
+        float length = top.length();
         //logger.debug("cycle") << "pos: " << toFollow->points()[i].x() << " " << toFollow->points()[i].y();
         if(length > distanceSearched){
-            //logger.debug("cycle") << "FOUND: pos: " << toFollow->points()[i].x() << " " << toFollow->points()[i].y();
-            float angle = toFollow->points()[i].angle();
+            //TODO has to be tested
+            //We start at the bottom-point
+            lms::math::vertex2f bot = toFollow->points()[i-1];
+            float diffLength = distanceSearched-bot.length();
+            if(diffLength  < 0){
+                diffLength = 0;
+                bot.x() = distanceSearched*cos(bot.angle());
+                bot.y() = distanceSearched*sin(bot.angle());
+            }
+
+            float angle = top.angle();
+            //we to the bot-coords the length, that is still to go in absolute direction to 0,0
+            //TODO point isn't on the trajectory but I think it could be fine
             //x-Pos
-            (*trajectoryPoint)[0] = distanceSearched*cos(angle);
+            (*trajectoryPoint)[0] = bot.x() + diffLength*cos(angle);
             //y-Pos
-            (*trajectoryPoint)[1] = distanceSearched*sin(angle);
+            (*trajectoryPoint)[1] = bot.y() + diffLength*sin(angle);
 
             //trying to reduce the error...
             float dirAngle = lms::math::limitAngle_0_2PI(toFollow->points()[i-1].angle(toFollow->points()[i]));

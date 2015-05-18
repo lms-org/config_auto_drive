@@ -1,0 +1,30 @@
+#ifndef IMAGE_HINT_FILTER_H
+#define IMAGE_HINT_FILTER_H
+
+#include "lms/module.h"
+#include "image_objects/environment.h"
+#include "lms/extra/time.h"
+#include "lms/type/framework_info.h"
+
+class LinePersistent : public lms::Module {
+public:
+    struct LaneStore{
+        lms::math::polyLine2f lane;
+        lms::extra::PrecisionTime created;
+        int cycleCreated;
+    };
+
+    bool initialize() override;
+    bool deinitialize() override;
+    bool cycle() override;
+private:
+    std::vector<LaneStore> lanes;
+    const lms::math::polyLine2f *input;
+    lms::math::polyLine2f *output;
+    const lms::type::FrameworkInfo *frameworkInfo;
+    void addLine(const lms::math::polyLine2f &line);
+    void validateLines();
+    void createOutput();
+};
+
+#endif /* IMAGE_HINT_FILTER_H */
