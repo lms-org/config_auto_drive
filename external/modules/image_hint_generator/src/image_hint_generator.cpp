@@ -46,27 +46,27 @@ bool ImageHintGenerator::initialize() {
     hintSplit->parameter.maxLength = 300;
     hintSplit->parameter.approxEdge = false;
     hintSplit->parameter.lineWidthMax = 10;
-    hintSplit->parameter.lineWidthMin = 1;
+    hintSplit->parameter.lineWidthMin = 5;
     hintSplit->parameter.searchAngle = 0;
-    hintSplit->parameter.searchLength = 30;
+    hintSplit->parameter.searchLength = 50;
     hintSplit->parameter.gaussBuffer = gaussBuffer;
-    hintSplit->parameter.x = 60;
-    hintSplit->parameter.y = 120;
+    hintSplit->parameter.x = 40;
+    hintSplit->parameter.y = 210;
     hintSplit->parameter.sobelThreshold = 250;
-    hintSplit->parameter.stepLengthMin = 1;
-    hintSplit->parameter.stepLengthMax = 5;
+    hintSplit->parameter.stepLengthMin = 5;
+    hintSplit->parameter.stepLengthMax = 10;
     hintSplit->parameter.lineWidthTransMultiplier = 1;
     hintSplit->parameter.edge = false;
     hintSplit->parameter.verify = true;
     hintSplit->parameter.preferVerify = false;
     hintSplit->parameter.distanceBetween = 40;
     hintSplit->parameter.lineMinLength = 10;
-    hintSplit->parameter.lineMaxLength = 40;
+    hintSplit->parameter.lineMaxLength = 80;
     hintSplit->parameter.validPoint = [this](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM){
         (void)DRAWDEBUG_ARG_N;
-        bool result =  std::abs(160-lp.high_low.x>50) || std::abs(lp.high_low.y)<140;
+        bool result =  std::abs(160-lp.low_high.x)>50 || std::abs(lp.low_high.y)<140;
         float angle = lms::math::limitAngle_nPI_PI(lp.param().searchAngle);
-        result = result && (fabs(angle) < M_PI_2l*0.5);
+        result = result && (fabs(angle) < M_PI_2l*0.5) &&!(lp.low_high.y < 50);
         return result;
     };
     //add it
