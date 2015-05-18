@@ -2,7 +2,8 @@
 #include "lms/imaging_detection/line.h"
 #include "lms/imaging_detection/line_point.h"
 #include "lms/imaging_detection/image_hint.h"
-
+#include "lms/imaging_detection/splitted_line.h"
+#include "lms/math/math.h"
 bool ImageHintGenerator::initialize() {
     hintContainer = datamanager()->
             writeChannel<lms::imaging::find::HintContainer>(this,"HINTS");
@@ -37,18 +38,41 @@ bool ImageHintGenerator::initialize() {
     };
     //hint->parameter.containing;
     //add it
-    hintContainer->add(hint);
-
-    hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>(*hint);
-    hint->name = "LEFT_LANE";
-    hint->parameter.x = 80;
-    hint->parameter.y = 100;
-    hint->parameter.searchAngle = -M_PI;
-    hint->parameter.sobelThreshold = 250;
-    hint->parameter.lineWidthMin = 0;
-    hint->parameter.edge = false;
-    hint->parameter.verify = true;
     //hintContainer->add(hint);
+
+    lms::imaging::find::ImageHint<lms::imaging::find::SplittedLine> *hintSplit = new lms::imaging::find::ImageHint<lms::imaging::find::SplittedLine>();
+    hintSplit->name = "MIDDLE_LANE";
+    hintSplit->parameter.target =target;
+    hintSplit->parameter.maxLength = 300;
+    hintSplit->parameter.approxEdge = false;
+    hintSplit->parameter.lineWidthMax = 10;
+    hintSplit->parameter.lineWidthMin = 1;
+    hintSplit->parameter.searchAngle = 0;
+    hintSplit->parameter.searchLength = 30;
+    hintSplit->parameter.gaussBuffer = gaussBuffer;
+    hintSplit->parameter.x = 60;
+    hintSplit->parameter.y = 120;
+    hintSplit->parameter.sobelThreshold = 250;
+    hintSplit->parameter.stepLengthMin = 1;
+    hintSplit->parameter.stepLengthMax = 5;
+    hintSplit->parameter.lineWidthTransMultiplier = 1;
+    hintSplit->parameter.edge = false;
+    hintSplit->parameter.verify = true;
+    hintSplit->parameter.preferVerify = false;
+    hintSplit->parameter.distanceBetween = 40;
+    hintSplit->parameter.lineMinLength = 10;
+    hintSplit->parameter.lineMaxLength = 40;
+    hintSplit->parameter.validPoint = [this](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM){
+        (void)DRAWDEBUG_ARG_N;
+        bool result =  std::abs(160-lp.high_low.x>50) || std::abs(lp.high_low.y)<140;
+        float angle = lms::math::limitAngle_nPI_PI(lp.param().searchAngle);
+        result = result && (fabs(angle) < M_PI_2l*0.5);
+        return result;
+    };
+    //add it
+    hintContainer->add(hintSplit);
+
+
 
     hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>(*hint);
     hint->name = "BOX";

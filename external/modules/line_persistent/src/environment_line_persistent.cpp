@@ -29,6 +29,9 @@ bool LinePersistent::cycle() {
 
 void LinePersistent::addLine(const lms::math::polyLine2f &line){
     LaneStore ls;
+    if(line.points().size() < getConfig()->get<uint>("minPointCount",1)){
+        return;
+    }
     ls.lane = line;
     ls.created = lms::extra::PrecisionTime::now();
     ls.cycleCreated =frameworkInfo->cycleIteration();
@@ -38,7 +41,7 @@ void LinePersistent::addLine(const lms::math::polyLine2f &line){
 void LinePersistent::validateLines(){
     for(uint i = 0; i < lanes.size();){
         LaneStore &ls = lanes[i];
-        if(frameworkInfo->cycleIteration()-ls.cycleCreated > 5){
+        if(lanes.size() > 2 && frameworkInfo->cycleIteration()-ls.cycleCreated > 5){
             lanes.erase(lanes.begin() + i);
         }else{
             i++;

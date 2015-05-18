@@ -33,6 +33,7 @@ void EnvironmentFilter::filterLane(Environment::RoadLane &lane){
     lane.reduce([this](const vertex2f& p1){
         //TODO 0.1 should be moved to config
         bool remove = std::abs(p1.x) < 0.3 && std::abs(p1.y)<0.1;
+        remove = remove || p1.length() > 1.5;
         return remove;
     });
     //sort points (not sure if that is smart)
@@ -74,13 +75,13 @@ void EnvironmentFilter::filterLane(Environment::RoadLane &lane){
             if(deltaAngle > M_PI){
                 deltaAngle = deltaAngle-M_PI;
             }
-            if(deltaAngle > 45.0/180.0*M_PI){
+            if(deltaAngle > 60.0/180.0*M_PI){
                 logger.info("...") <<lastAngle << " " << currentAngle;
                 logger.info("remove all") <<deltaAngle;
                 removeAll = true;
             }
             //TODO 30 should be moved into a config
-            remove = (deltaAngle > 10.0/180.0*M_PI);
+            remove = (deltaAngle > 20.0/180.0*M_PI);
         }
         if(!remove)
             lastAngle = currentAngle;

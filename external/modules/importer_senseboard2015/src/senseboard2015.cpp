@@ -21,7 +21,6 @@ bool Senseboard2015::initialize() {
     m_sensor_data = datamanager()->writeChannel<Comm::SensorBoard::SensorData>(this,"SENSOR_DATA");
     m_control_data = datamanager()->writeChannel<Comm::SensorBoard::ControlData>(this,"CONTROL_DATA");
 
-
     convert_ir_front.config(getConfig("ir_front"));
     convert_ir_rear.config(getConfig("ir_rear"));
     convert_ir_r_front.config(getConfig("ir_r_front"));
@@ -63,9 +62,10 @@ bool Senseboard2015::deinitialize() {
 
 int i = 0;
 bool Senseboard2015::cycle () {
+    m_control_data->control.velocity.velocity = 0.5;
     //TODO convert data to senseboard-data
-
-    float val = 0.45*sin(i*0.1);
+    //m_control_data->control.velocity.velocity = 0.01;
+    //float val = 0.45*sin(i*0.1);
     /*
     m_control_data->steering_front=val;
     m_control_data->steering_rear = val;
@@ -108,7 +108,6 @@ bool Senseboard2015::cycle () {
     //TODO convert received data to sense-link data
     //just for testing
     logger.debug("info") <<"drivemode: " << m_sensor_data->drivemode << " " << m_sensor_data->encoder;
-
 
 	return true;
 }

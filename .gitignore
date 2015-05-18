@@ -16,4 +16,5 @@ config/
 *.md~
 .metadata
 *.autosave
+test_images/
 CMakeLists.txt.user
