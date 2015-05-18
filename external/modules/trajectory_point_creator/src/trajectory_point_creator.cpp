@@ -41,7 +41,7 @@ bool TrajectoryPointCreator::cycle() {
             trajectoryPoint->first.y = bot.y + diffLength*sin(angle);
 
             //trying to reduce the error...
-            float dirAngle = lms::math::limitAngle_0_2PI(toFollow->points()[i-1].angle(toFollow->points()[i]));
+            float dirAngle = lms::math::limitAngle_0_2PI((toFollow->points()[i] - toFollow->points()[i - 1]).angle());
 
             /*
             if(i+1 < (int)toFollow->points().size()){

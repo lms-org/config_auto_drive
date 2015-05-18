@@ -67,7 +67,7 @@ void EnvironmentFilter::filterLane(Environment::RoadLane &lane){
             return true;
         }
         //TODO 0.1 should be moved to config
-        float currentAngle = p1.angle(p2);
+        float currentAngle = (p2 - p1).angle();
         bool remove = false;
         if(lastAngle != INFINITY){
             //we are looking for the smaller angle
@@ -95,8 +95,8 @@ void EnvironmentFilter::filterLane(Environment::RoadLane &lane){
     lastAngle = INFINITY;
     lane.reduce([&lastAngle](const vertex2f& p1,const vertex2f& p2,const vertex2f& p3){
         //TODO 0.1 should be moved to config
-        float currentAngle1 = p1.angle(p2);
-        float currentAngle2 = p1.angle(p3);
+        float currentAngle1 = (p2 - p1).angle();
+        float currentAngle2 = (p3 - p1).angle();
         bool remove = false;
         if(lastAngle != INFINITY){
             //we are looking for the smaller angle
