@@ -23,7 +23,13 @@
 		<module>image_hint_generator</module>
 		<module>environment_filter</module>
 		<module logLevel="ERROR">trajectory_point_follower</module>
+		<module>line_persistent</module>
 	</modulesToEnable>
+	<module>
+	    <name>line_persistent</name>
+		<channelMapping from="POLYLINE_INPUT" to="LINE"/>
+		<channelMapping from="POLYLINE_OUTPUT" to="LINE_PERSISTENT"/>
+	</module>
 	<module>
 		<name>trajectory_point_follower</name>
 		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
@@ -36,7 +42,7 @@
 	</module>
 	<module>
 	    <name>trajectory_point_creator</name>
-		<channelMapping from="LINE" to="LINE"/>
+		<channelMapping from="LINE" to="LINE_PERSISTENT"/>
 		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
 		<config>
 			<distanceSearched> 0.5 </distanceSearched>

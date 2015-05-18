@@ -9,5 +9,5 @@ set (HEADERS
 
 include_directories("include")
 
-add_library (environment_line_persistent MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(environment_line_persistent PRIVATE lms math_lib)
+add_library (line_persistent MODULE ${SOURCES} ${HEADERS})
+target_link_libraries(line_persistent PRIVATE lms math_lib)

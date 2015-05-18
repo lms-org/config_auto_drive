@@ -16,10 +16,6 @@ bool TrajectoryLineFollower::cycle() {
     std::pair<float,float> steering = TobisRegler_Simpel((*trajectoryPoint)[0], (*trajectoryPoint)[1],
             atan2((*trajectoryPoint)[3], (*trajectoryPoint)[2]), 0.5);
 
-
-    //std::pair<float,float> steering = smartRegler((*trajectoryPoint)[0], (*trajectoryPoint)[1],
-      //      atan2((*trajectoryPoint)[3], (*trajectoryPoint)[2]));
-
     controlData->vel_mode = Comm::SensorBoard::ControlData::MODE_VELOCITY;
     controlData->steering_front = steering.first;// * 180. / M_PI;
     controlData->steering_rear = steering.second;// * 180. / M_PI;
