@@ -39,7 +39,7 @@ bool ImageObjectMerger::cycle() {
 
     std::sort(middleLane.points().begin(), middleLane.points().end(),
               [](vertex2f p1, vertex2f p2) {
-        return p1.x() < p2.x();
+        return p1.x < p2.x;
     });
     output->lanes.clear();
     //outprint = true;
@@ -56,7 +56,7 @@ void ImageObjectMerger::prepareLane(Environment::RoadLane &lane){
         std::cout << "#################################" <<std::endl;
     }
     lane.sort([](const vertex2f &p1,const vertex2f &p2) {
-        return p1.x() < p2.x();
+        return p1.x < p2.x;
     });
     return;
 
@@ -90,9 +90,9 @@ void ImageObjectMerger::transform(const Environment::RoadLane &fromLane,
             continue;
 
         vertex2f along = p2 - p1;
-        vertex2f mid((p1.x() + p2.x()) / 2., (p1.y() + p2.y()) / 2.);
+        vertex2f mid((p1.x + p2.x) / 2., (p1.y + p2.y) / 2.);
         vertex2f normAlong = along / along.length();
-        vertex2f orthogonal(sign * (-1) * normAlong.y(), sign * normAlong.x());
+        vertex2f orthogonal(sign * (-1) * normAlong.y, sign * normAlong.x);
         orthogonal = orthogonal / 2.5;
         vertex2f result = mid + orthogonal;
         toLane.points().push_back(result);

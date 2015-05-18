@@ -22,7 +22,7 @@ bool ImageObjectRenderer::initialize() {
         toDrawVertex2f.push_back(datamanager()->readChannel<lms::math::vertex2f>(this,v));
     }
     for(std::string v : vertex4f){
-        toDrawVertex4f.push_back(datamanager()->readChannel<lms::math::vertex<4,float>>(this,v));
+        toDrawVertex4f.push_back(datamanager()->readChannel<std::pair<lms::math::vertex2f,lms::math::vertex2f>>(this,v));
     }
     return true;
 }
@@ -55,13 +55,13 @@ bool ImageObjectRenderer::cycle() {
 }
 
 void ImageObjectRenderer::drawVertex2f(const lms::math::vertex2f &v){
-    int y = -v.y()*image->width()/5+image->width()/2;
-    int x = v.x()*image->height()/5;
+    int y = -v.y*image->width()/5+image->width()/2;
+    int x = v.x*image->height()/5;
     graphics->drawCross(x,y,5);
 }
 
-void ImageObjectRenderer::drawVertex4f(const lms::math::vertex<4,float> &v){
-    drawVertex2f(lms::math::vertex2f(v[0],v[1]));
+void ImageObjectRenderer::drawVertex4f(const std::pair<lms::math::vertex2f,lms::math::vertex2f> &v){
+    drawVertex2f(lms::math::vertex2f(v.first.x,v.first.y));
 }
 
 void ImageObjectRenderer::drawPolyLine(const lms::math::polyLine2f &lane){
@@ -71,8 +71,8 @@ void ImageObjectRenderer::drawPolyLine(const lms::math::polyLine2f &lane){
     for(uint i = 0; i < lane.points().size(); i++){
         lms::math::vertex2f v = lane.points()[i];
         //TODO add some translate method to the config...
-        int y = -v.y()*image->width()/5+image->width()/2;
-        int x = v.x()*image->height()/5;
+        int y = -v.y*image->width()/5+image->width()/2;
+        int x = v.x*image->height()/5;
         graphics->drawCross(x,y,5);
         if(i != 0){
             graphics->drawLine(x,y,xOld,yOld);

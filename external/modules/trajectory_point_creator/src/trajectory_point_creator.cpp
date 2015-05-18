@@ -3,7 +3,7 @@
 
 bool TrajectoryPointCreator::initialize() {
    toFollow = datamanager()->readChannel<lms::math::polyLine2f>(this,"LINE");
-   trajectoryPoint = datamanager()->writeChannel<lms::math::vertex<4,float>>(this,"POINT");
+   trajectoryPoint = datamanager()->writeChannel<std::pair<lms::math::vertex2f,lms::math::vertex2f>>(this,"POINT");
    config = getConfig();
    return true;
 }
@@ -28,17 +28,17 @@ bool TrajectoryPointCreator::cycle() {
             float diffLength = distanceSearched-bot.length();
             if(diffLength  < 0){
                 diffLength = 0;
-                bot.x() = distanceSearched*cos(bot.angle());
-                bot.y() = distanceSearched*sin(bot.angle());
+                bot.x = distanceSearched*cos(bot.angle());
+                bot.y = distanceSearched*sin(bot.angle());
             }
 
             float angle = top.angle();
             //we to the bot-coords the length, that is still to go in absolute direction to 0,0
             //TODO point isn't on the trajectory but I think it could be fine
             //x-Pos
-            (*trajectoryPoint)[0] = bot.x() + diffLength*cos(angle);
+            trajectoryPoint->first.x = bot.x + diffLength*cos(angle);
             //y-Pos
-            (*trajectoryPoint)[1] = bot.y() + diffLength*sin(angle);
+            trajectoryPoint->first.y = bot.y + diffLength*sin(angle);
 
             //trying to reduce the error...
             float dirAngle = lms::math::limitAngle_0_2PI(toFollow->points()[i-1].angle(toFollow->points()[i]));
@@ -54,9 +54,9 @@ bool TrajectoryPointCreator::cycle() {
             }
             */
             //x-Dir
-            (*trajectoryPoint)[2] = cos(dirAngle);
+            trajectoryPoint->second.x = cos(dirAngle);
             //y-Dir
-            (*trajectoryPoint)[3] = sin(dirAngle);
+            trajectoryPoint->second.y = sin(dirAngle);
             found = true;
             //logger.error("trajecPoint") <<(*trajectoryPoint)[0]<< " " << (*trajectoryPoint)[1] << " "<< (*trajectoryPoint)[2] <<" "<<(*trajectoryPoint)[3];
             break;
@@ -65,13 +65,13 @@ bool TrajectoryPointCreator::cycle() {
     if(!found){
         //if we find nothing, we just want to drive forward
         //x-Pos
-        (*trajectoryPoint)[0] = distanceSearched;
+        trajectoryPoint->first.x = distanceSearched;
         //y-Pos
-        (*trajectoryPoint)[1] = 0;
+        trajectoryPoint->first.y = 0;
         //x-Dir
-        (*trajectoryPoint)[2] = 1;
+        trajectoryPoint->second.x = 1;
         //y-Dir
-        (*trajectoryPoint)[3] = 0;
+        trajectoryPoint->second.y = 0;
     }
     return true;
 }

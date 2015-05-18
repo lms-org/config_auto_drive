@@ -52,6 +52,6 @@ void LinePersistent::createOutput(){
         (*output)+= ls.lane;
     }
     output->sort([](const lms::math::vertex2f p1,const lms::math::vertex2f p2){
-        return p1.x() < p2.x();
+        return p1.x < p2.x;
     });
 }

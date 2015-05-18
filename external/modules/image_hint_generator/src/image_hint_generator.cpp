@@ -31,7 +31,7 @@ bool ImageHintGenerator::initialize() {
     hint->parameter.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM)->bool{
         (void)DRAWDEBUG_ARG_N;
         //logger.info("check") << x <<" "<< y;
-        bool result =  std::abs(160-lp.high_low.x())>50 || std::abs(lp.high_low.y())<140;
+        bool result =  std::abs(160-lp.high_low.x)>50 || std::abs(lp.high_low.y)<140;
         //result =
         return result;
     };

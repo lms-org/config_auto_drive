@@ -23,10 +23,10 @@ private:
     std::vector<const Environment*> toDrawEnv;
     std::vector<const lms::math::polyLine2f*> toDrawPolyLines;
     std::vector<const lms::math::vertex2f*> toDrawVertex2f;
-    std::vector<const lms::math::vertex<4,float>*> toDrawVertex4f;
+    std::vector<const std::pair<lms::math::vertex2f,lms::math::vertex2f>*> toDrawVertex4f;
     void drawPolyLine(const lms::math::polyLine2f &lane);
     void drawVertex2f(const lms::math::vertex2f &v);
-    void drawVertex4f(const lms::math::vertex<4,float> &v);
+    void drawVertex4f(const std::pair<lms::math::vertex2f,lms::math::vertex2f> &v);
 
     void setColor(std::string toDrawName);
 

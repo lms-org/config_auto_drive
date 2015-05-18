@@ -18,7 +18,7 @@ private:
     std::pair<float,float> smartRegler(float x, float y, float phi);
 
     Comm::SensorBoard::ControlData *controlData;
-    const lms::math::vertex<4,float> *trajectoryPoint;
+    const std::pair<lms::math::vertex2f, lms::math::vertex2f> *trajectoryPoint;
 };
 
 #endif /* IMAGE_HINT_TRANSFORMER_H */
