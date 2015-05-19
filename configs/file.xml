@@ -19,6 +19,10 @@
 	    	<directory>/home/hans/workspace/config_auto_drive/test_images/20150515-165305</directory>
 	    	<singleFile>/home/hans/workspace/config_auto_drive/test_images/20150512-181426/0050.pgm</singleFile>
 	    </config>
+	    <config user="tobi">
+	    	<directory>/home/tobi/phoenix_code/repos/config_auto_drive/test_images/20150515-165305</directory>
+	    	<singleFile>/home/tobi/phoenix_code/repos/config_auto_drive/test_images/20150512-181426/0050.pgm</singleFile>
+	    </config>
 		<channelMapping from="IMAGE" to="GREY_IMAGE_PRE"/>
 	</module>
 	

@@ -23,7 +23,7 @@
 		<module>trajectory_point_creator</module>
 		<module>image_hint_generator</module>
 		<module>environment_filter</module>
-		<module logLevel="ERROR">trajectory_point_follower</module>
+		<module logLevel="DEBUG">trajectory_point_follower</module>
 		<module>line_persistent</module>
 		<module>image_persistent</module>
 	</modulesToEnable>

@@ -13,9 +13,12 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    std::pair<float, float> TobisRegler(double x_s_n, double y_s_n, double phi_s, double v);
-    std::pair<float,float> TobisRegler_Simpel(double x_s, double y_s, double phi_s, double v);
-    std::pair<float,float> smartRegler(float x, float y, float phi);
+
+    //std::pair<float,float> smartRegler(float x, float y, float phi);
+    //double delta_h(double phi_s, double te, double v, double y_s);
+    //double delta_v(double phi_s, double te, double v, double y_s, double dh);
+    double delta_h(double y_s, double phi_s, double te);
+    double delta_v(double y_s, double phi_s, double te, double dh);
 
     Comm::SensorBoard::ControlData *controlData;
     const std::pair<lms::math::vertex2f, lms::math::vertex2f> *trajectoryPoint;
