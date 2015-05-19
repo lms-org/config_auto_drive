@@ -24,7 +24,7 @@
 		<module>image_hint_generator</module>
 		<module logLevel="ERROR">environment_filter</module>
 		<module logLevel="ERROR">environment_filter_merged</module>
-		<module logLevel="DEBUG">trajectory_point_follower</module>
+		<module logLevel="DEBUG">trajectory_point_controller</module>
 		<module>line_persistent</module>
 		<module>image_persistent</module>
 	</modulesToEnable>
@@ -34,7 +34,7 @@
 		<channelMapping from="POLYLINE_OUTPUT" to="LINE_PERSISTENT"/>
 	</module>
 	<module>
-		<name>trajectory_point_follower</name>
+		<name>trajectory_point_controller</name>
 		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
     </module>
 	<module>

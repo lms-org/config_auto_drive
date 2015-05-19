@@ -63,16 +63,6 @@ bool Senseboard2015::deinitialize() {
 int i = 0;
 bool Senseboard2015::cycle () {
     m_control_data->control.velocity.velocity = 0.5;
-    //TODO convert data to senseboard-data
-    //m_control_data->control.velocity.velocity = 0.01;
-    //float val = 0.45*sin(i*0.1);
-    /*
-    m_control_data->steering_front=val;
-    m_control_data->steering_rear = val;
-    m_control_data->control.velocity.velocity = val;
-    i++;
-    logger.debug("new val") << val;
-    */
     //get senseboard-data
     ///Prepare Down
     prepareDown();
@@ -167,7 +157,8 @@ void Senseboard2015::prepareDown() {
         }
         break;
     }
-
+    logger.error()<<m_control_data->steering_front;
+    logger.error()<<m_control_data->steering_rear;
     down.servo_f = convert_servo_front.convert<float, int16_t>(-m_control_data->steering_front); // minus wegen neuen servos
     down.servo_r = convert_servo_rear.convert<float, int16_t>(m_control_data->steering_rear);   // minus wegen neuen servos
     down.v_mode = DOWN_MODE_VELOCITY_CONTROL;

@@ -3,7 +3,7 @@
 		<clock enabled="true" unit="hz">100</clock>
 	</execution>
 	<modulesToEnable>
-		<module logLevel="ERROR">importer_senseboard2015</module>
+		<module logLevel="DEBUG">importer_senseboard2015</module>
 	</modulesToEnable>	
 	<module>
 		<name>importer_senseboard2015</name>
