@@ -14,7 +14,6 @@ bool EnvironmentLinePredictor::deinitialize() {
 
 bool EnvironmentLinePredictor::cycle() {
     output->lanes.clear();
-
     for(const Environment::RoadLane &lane : input->lanes) {
         if(lane.type() == Environment::RoadLaneType::MIDDLE) {
             Environment::RoadLane outputLane;
@@ -40,12 +39,8 @@ void EnvironmentLinePredictor::predict(const Environment::RoadLane &input,
         vertex2f along = output.points()[output.points().size() - 1] -
                 output.points()[output.points().size() - 2];
 
-        //logger.info("PREDICT") << along.length();
-
         // TODO put 1 in config file
         along = along.normalize() * 1;
-
-         //logger.info("PREDICT AFTER") << along.x() << " " << along.y();
 
         vertex2f predictedPoint = output.points()[output.points().size() - 1] +
                 along;

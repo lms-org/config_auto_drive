@@ -26,6 +26,7 @@ bool ImageObjectMerger::cycle() {
     // what ImageObjects of what ENVIRONMENT should be merged
 
     Environment::RoadLane middleLane;
+    //TODO middle doesn't work because of shitty environment_
     middleLane.type(Environment::RoadLaneType::MIDDLE);
 
     // move rigth and left lane points to middle lane
@@ -34,6 +35,8 @@ bool ImageObjectMerger::cycle() {
             transform(lane, middleLane, -1);
         } else if(lane.type() == Environment::RoadLaneType::RIGHT) {
             transform(lane, middleLane, +1);
+        } else if(lane.type() == Environment::RoadLaneType::MIDDLE) {
+            //TODO
         }
     }
 
@@ -46,7 +49,6 @@ bool ImageObjectMerger::cycle() {
     prepareLane(middleLane);
     outprint = false;
     output->lanes.push_back(middleLane);
-
     return true;
 }
 
@@ -61,7 +63,7 @@ void ImageObjectMerger::prepareLane(Environment::RoadLane &lane){
     return;
 
     lane.reduce([](const vertex2f& p1,const vertex2f& p2,const vertex2f& p3){
-        bool remove =  p1.distance(p3)-p1.distance(p2) < 0.05;
+        bool remove =  p1.distance(p3)-p1.distance(p2);
         return remove;
     });
 
