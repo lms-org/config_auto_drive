@@ -42,7 +42,8 @@ void EnvironmentLinePredictor::predict(const Environment::RoadLane &input,
 
         //logger.info("PREDICT") << along.length();
 
-        along = along / (along.length() / 1);
+        // TODO put 1 in config file
+        along = along.normalize() * 1;
 
          //logger.info("PREDICT AFTER") << along.x() << " " << along.y();
 
