@@ -49,7 +49,6 @@ bool ImageObjectMerger::cycle() {
     prepareLane(middleLane);
     outprint = false;
     output->lanes.push_back(middleLane);
-    logger.error("END output: ") << output->lanes.size();
     return true;
 }
 

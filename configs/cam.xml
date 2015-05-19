@@ -24,7 +24,7 @@
 	<module>
 		<name>image_converter</name>
 	    <channelMapping from="INPUT_IMAGE" to="IMAGE"/>
-	    <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE"/>
+	    <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE_PRE"/>
 	    <config>
 		    <output_format>GREY</output_format>
 	    </config>

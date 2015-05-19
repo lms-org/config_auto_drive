@@ -40,3 +40,9 @@
 [submodule "external/libraries/imaging_detection"]
 	path = external/libraries/imaging_detection
 	url = https://github.com/Phibedy/imaging_detection.git
+[submodule "external/libraries/googletest_lib"]
+	path = external/libraries/googletest_lib
+	url = https://github.com/syxolk/googletest_lib.git
+[submodule "external/modules/image_persistent"]
+	path = external/modules/image_persistent
+	url = https://github.com/syxolk/image_persistent.git
