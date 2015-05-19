@@ -19,6 +19,7 @@ bool EnvironmentFilter::cycle() {
     Environment::RoadLane filtered;
     for(Environment::RoadLane lane : input->lanes){
         filtered = lane;
+        //if(lane.type() != Environment::RoadLaneType::MIDDLE)
         filterLane(filtered);
         output->lanes.push_back(filtered);
     }

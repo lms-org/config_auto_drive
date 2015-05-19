@@ -36,9 +36,15 @@ bool ImageHintGenerator::initialize() {
         //result =
         return result;
     };
+    hintContainer->add(hint);
     //hint->parameter.containing;
     //add it
-    //hintContainer->add(hint);
+    hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>(*hint);
+    hint->name = "LEFT_LANE";
+    hint->parameter.x = 40;
+    hint->parameter.y = 100;
+    hint->parameter.searchAngle = M_PI;
+    hintContainer->add(hint);
 
     lms::imaging::find::ImageHint<lms::imaging::find::SplittedLine> *hintSplit = new lms::imaging::find::ImageHint<lms::imaging::find::SplittedLine>();
     hintSplit->name = "MIDDLE_LANE";

@@ -14,7 +14,7 @@ bool EnvironmentLinePredictor::deinitialize() {
 
 bool EnvironmentLinePredictor::cycle() {
     output->lanes.clear();
-
+    logger.error("CYCLE: ") << input->lanes.size();
     for(const Environment::RoadLane &lane : input->lanes) {
         if(lane.type() == Environment::RoadLaneType::MIDDLE) {
             Environment::RoadLane outputLane;

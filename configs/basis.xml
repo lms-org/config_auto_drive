@@ -22,6 +22,7 @@
 		<module>trajectory_point_creator</module>
 		<module>image_hint_generator</module>
 		<module>environment_filter</module>
+		<module>environment_filter_merged</module>
 		<module logLevel="ERROR">trajectory_point_follower</module>
 		<module>line_persistent</module>
 	</modulesToEnable>
@@ -62,6 +63,13 @@
 	<module>
 	    <name>image_hint_merger</name>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
+		<!--channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MERGED_BEFORE_PREDICT"/-->
+		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MERGED_MID"/>
+	</module>
+	<module>
+	    <name>environment_filter_merged</name>
+	    <realName>environment_filter</realName>
+		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_MERGED_MID"/>
 		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MERGED_BEFORE_PREDICT"/>
 	</module>
 	<module>
