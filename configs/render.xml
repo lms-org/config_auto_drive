@@ -1,0 +1,136 @@
+<framework>
+	<modulesToEnable>
+		<module logLevel="WARN">ogre_window_manager</module>
+		<module logLevel="WARN">image_renderer_grey</module>
+		<module logLevel="WARN">image_renderer_debug</module>
+		<!--module logLevel="ERROR">image_hint_transformer</module-->
+		<module>image_object_renderer</module>
+		<module>image_renderer_image_object</module>
+		<module logLevel="WARN">image_converter_trans</module>
+	    <module>image_renderer_trans</module>
+		<module logLevel="WARN">ogre_input</module>
+		<module logLevel="WARN">ogre_input_WINDOW</module>
+		<module>image_persistent</module>
+	</modulesToEnable>
+	<module>
+		<name>image_object_renderer</name>
+		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
+		<config>
+		    <environments>ENVIRONMENT_ROAD,ENVIRONMENT_MERGED,ENVIRONMENT_ROAD_FILTERED</environments>
+		    <polylines>LINE</polylines>
+		    <vertex2f></vertex2f>
+		    <vertex4f>TRAJECTORY_POINT</vertex4f>
+		    <!--The default Color, TODO add colors for points, lines etc -->
+		    <colorR>255</colorR>
+		    <colorG>255</colorG>
+		    <colorB>0</colorB>
+		</config>
+		<config name="ENVIRONMENT_ROAD">
+		    <colorR>255</colorR>
+		    <colorG>123</colorG>
+		    <colorB>120</colorB>
+		</config>
+		<config name="ENVIRONMENT_ROAD_MERGED">
+		    <colorR>255</colorR>
+		    <colorG>255</colorG>
+		    <colorB>0</colorB>
+		</config>
+		<config name="ENVIRONMENT_ROAD_FILTERED">
+		    <colorR>0</colorR>
+		    <colorG>0</colorG>
+		    <colorB>255</colorB>
+		</config>
+		<config name="LINE">
+		    <colorR>255</colorR>
+		    <colorG>255</colorG>
+		    <colorB>0</colorB>
+		</config>
+		<config name="TRAJECTORY_POINT">
+		    <colorR>255</colorR>
+		    <colorG>0</colorG>
+		    <colorB>0</colorB>
+		</config>
+	</module>
+	<module>
+		<name>ogre_window_manager</name>
+		<executionType>ONLY_MAIN_THREAD</executionType>
+	</module>
+	<module>
+		<name>image_renderer_grey</name>
+		<executionType>ONLY_MAIN_THREAD</executionType>
+		<realName>image_renderer</realName>
+		<channelMapping from="IMAGE" to="GREY_IMAGE"/>
+	</module>
+	<module>
+		<name>image_renderer_debug</name>
+		<executionType>ONLY_MAIN_THREAD</executionType>
+		<writePriority>2</writePriority>
+		<realName>image_renderer</realName>
+		<channelMapping from="IMAGE" to="DEBUG_IMAGE"/>
+	</module>
+	<module>
+	    <name>image_renderer_trans</name>
+		<executionType>ONLY_MAIN_THREAD</executionType>
+		<writePriority>1</writePriority>
+		<realName>image_renderer</realName>
+		<channelMapping from="IMAGE" to="TRANS_IMAGE"/>
+		<config>
+		    <WINDOW>TRANSLATED</WINDOW>
+		</config>
+	</module>
+	<module>
+		<name>image_renderer_image_object</name>
+		<executionType>ONLY_MAIN_THREAD</executionType>
+		<writePriority>2</writePriority>
+		<realName>image_renderer</realName>
+		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
+		<config>
+		    <WINDOW>TRANSLATED</WINDOW>
+		</config>
+	</module>
+	<module>
+		<name>ogre_input</name>
+		<executionType>ONLY_MAIN_THREAD</executionType>
+		<config>
+			<WINDOW>TRANSLATED</WINDOW>
+			<key>
+				<down>
+					<Left>
+						<command>image_loader</command>
+						<content>previous</content>
+						<repeat>true</repeat>
+					</Left>
+					<Right>
+						<command>image_loader</command>
+						<content>next</content>
+						<repeat>true</repeat>
+					</Right>
+					<space>
+						<command>image_loader</command>
+						<content>manual</content>
+					</space>
+				</down>
+			</key>
+		</config>
+	</module>
+	<module>
+		<name>ogre_input_WINDOW</name>
+		<realName>ogre_input</realName>
+		<config>
+			<WINDOW>WINDOW</WINDOW>
+			<key>
+				<down>
+					<space>
+						<command>image_persistent</command>
+						<content>toggle</content>
+					</space>
+				</down>
+			</key>
+		</config>
+	</module>
+	<module>
+		<name>image_persistent</name>
+		<channelMapping from="INPUT_IMAGE" to="GREY_IMAGE_PRE" />
+		<channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE" />
+	</module>
+</framework>
