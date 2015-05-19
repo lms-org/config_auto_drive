@@ -1,12 +1,8 @@
 <framework>
-	<execution>
-		<maxThreadCount> 1 </maxThreadCount>
-		<clock enabled="true" unit="hz">100</clock>
-	</execution>
 	<modulesToEnable>
 		<module logLevel="WARN">camera_importer</module>
 		<module logLevel="WARN">image_converter</module>
-		<module logLevel="WARN">image_logger</module>
+		<!--module logLevel="WARN">image_logger</module-->
 	</modulesToEnable>
 	<module>
 		<name>image_logger</name>
