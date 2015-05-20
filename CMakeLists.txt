@@ -19,6 +19,18 @@ add_definitions(-DEXTERNAL_DIR="${CMAKE_CURRENT_BINARY_DIR}/external")
 #set config-directory
 add_definitions(-DCONFIGS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/configs")
 
+if(POLICY CMP0042)
+    # Set old MACOSX_RPATH policy on OS X
+    cmake_policy(SET CMP0042 OLD)
+endif()
+
+if(APPLE)
+    # OS X tries to resolve symbols upon link-time by default (in contrast to linux),
+    # thus we need to specify to resolve symbols dynamically.
+    # See http://stackoverflow.com/questions/3695234/what-is-the-deal-with-undefined-symbols-in-a-shared-library-or-dylib
+    SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -undefined dynamic_lookup")
+endif()
+
 #set compiler flags
 if((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU"))
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -std=c++0x -Wall -Wextra -pedantic -O0 ")
