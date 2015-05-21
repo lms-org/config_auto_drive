@@ -32,6 +32,6 @@
 	    </config>
 		<channelMapping from="IMAGE" to="GREY_IMAGE_PRE"/>
 	</module>
-	<!--include src="render.xml"/-->
+	<include src="render.xml"/>
 	<include src="basis.xml"/>
 </framework>

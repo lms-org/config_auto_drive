@@ -1,0 +1,42 @@
+#########
+##Lustig:
+global and local private tag in broadcasting messages
+
+Parken:
+- IR-sensor rechts dran bauen
+- Parklücken vermessen
+
+audio-input/ouput
+audio-logging
+
+udp-broadcasting / eigenen hotspot aufmachen
+
+xbox-controller verbessern
+-rumble-function
+
+
+#########
+##Unlustig:
+
+Umfeldmodell schicken
+Bilder schicken
+
+image-loader/logger (proxy)
+
+Schleifen in der loop durch datenkanäle
+
+prioritäten für datenkanäle anstelle für das ganze modul (Am besten beides)
+Man könnte bei datenkanälen write before read deaktivieren und nur nach prioritäten sortieren
+
+name-tags in configs (z.B. modulesToEnable)
+
+lms_lib und main-methode als executable
+
+Datengetriggerter execution-manager
+
+matlab anbindung
+
+hints dynamisch setzten (Auf umfeldmodell warten)
+-sensor-visualisierung
+kinect
+

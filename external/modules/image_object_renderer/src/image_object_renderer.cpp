@@ -32,25 +32,37 @@ bool ImageObjectRenderer::deinitialize() {
 }
 
 bool ImageObjectRenderer::cycle() {
+    logger.time("TOTAL");
+    logger.time("FILL");
     image->fill(0);
+    logger.timeEnd("FILL");
+    logger.time("ENV");
    for(uint i = 0; i < toDrawEnv.size(); i++){
         setColor(environments[i]);
         for(const Environment::RoadLane &lane : toDrawEnv[i]->lanes){
             drawPolyLine(lane);
         }
     }
+   logger.timeEnd("ENV");
+   logger.time("POLYLINES");
     for(uint i = 0; i < toDrawPolyLines.size(); i++){
         setColor(polylines[i]);
         drawPolyLine(*toDrawPolyLines[i]);
     }
+    logger.timeEnd("POLYLINES");
+    logger.time("VERTEX2F");
     for(uint i = 0; i < toDrawVertex2f.size(); i++){
         setColor(vertex2f[i]);
         drawVertex2f(*toDrawVertex2f[i]);
     }
+    logger.timeEnd("VERTEX2F");
+    logger.time("VERTEX4F");
     for(uint i = 0; i < toDrawVertex4f.size(); i++){
         setColor(vertex4f[i]);
         drawVertex4f(*toDrawVertex4f[i]);
     }
+    logger.timeEnd("VERTEX4F");
+    logger.timeEnd("TOTAL");
     return true;
 }
 
