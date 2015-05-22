@@ -49,3 +49,6 @@
 [submodule "external/modules/trajectory_point_controller"]
 	path = external/modules/trajectory_point_controller
 	url = https://github.com/Corni33/trajectory_point_controller.git
+[submodule "external/modules/importer_senseboard2015"]
+	path = external/modules/importer_senseboard2015
+	url = https://github.com/Phibedy/importer_senseboard2015.git
