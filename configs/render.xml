@@ -16,7 +16,7 @@
 		<name>image_object_renderer</name>
 		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
 		<config>
-		    <environments>ENVIRONMENT_ROAD,ENVIRONMENT_MERGED,ENVIRONMENT_ROAD_FILTERED</environments>
+            <environments>ENVIRONMENT_ROAD,ENVIRONMENT_MERGED,ENVIRONMENT_ROAD_FILTERED</environments>
 		    <polylines>LINE</polylines>
 		    <vertex2f></vertex2f>
 		    <vertex4f>TRAJECTORY_POINT</vertex4f>

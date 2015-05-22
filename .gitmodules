@@ -52,3 +52,6 @@
 [submodule "external/modules/image_proxy"]
 	path = external/modules/image_proxy
 	url = https://github.com/syxolk/image_proxy.git
+[submodule "external/modules/importer_senseboard2015"]
+	path = external/modules/importer_senseboard2015
+	url = https://github.com/Phibedy/importer_senseboard2015.git
