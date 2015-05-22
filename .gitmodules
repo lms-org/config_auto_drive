@@ -49,3 +49,6 @@
 [submodule "external/modules/trajectory_point_controller"]
 	path = external/modules/trajectory_point_controller
 	url = https://github.com/Corni33/trajectory_point_controller.git
+[submodule "external/modules/image_proxy"]
+	path = external/modules/image_proxy
+	url = https://github.com/syxolk/image_proxy.git

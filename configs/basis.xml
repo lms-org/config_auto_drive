@@ -11,7 +11,7 @@
 		<module logLevel="ERROR">environment_filter_merged</module>
 		<module logLevel="ERROR">trajectory_point_controller</module>
 		<module>line_persistent</module>
-		<module>image_persistent</module>
+        <module>image_proxy</module>
 		<!--module>environment_logger</module-->
 		<!--module>image_logger_t</module-->
 	</modulesToEnable>
@@ -107,9 +107,21 @@
 		    <filter>imageV2C</filter>
 	    </config>
 	</module>
-	<module>
-		<name>image_persistent</name>
-		<channelMapping from="INPUT_IMAGE" to="GREY_IMAGE_PRE" />
-		<channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE" />
-	</module>
+    <module>
+        <name>image_proxy</name>
+        <config user="phibedy">
+            <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images/20150519-164907</directory>
+            <singleFile>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images/20150512-181426/0250.pgm</singleFile>
+        </config>
+        <config user="hans">
+            <directory>/home/hans/workspace/config_auto_drive/test_images/20150519-164907</directory>
+            <singleFile>/home/hans/workspace/config_auto_drive/test_images/20150519-164907/0050.pgm</singleFile>
+        </config>
+        <config user="tobi">
+            <directory>/home/tobi/phoenix_code/repos/config_auto_drive/test_images/20150519-164907</directory>
+            <singleFile>/home/tobi/phoenix_code/repos/config_auto_drive/test_images/20150512-181426/0050.pgm</singleFile>
+        </config>
+        <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE_PRE" />
+        <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE"/>
+    </module>
 </framework>
