@@ -26,4 +26,5 @@
 	    </config>
 	</module>
 	<include src="basis.xml" />
+	<include src="render.xml" />
 </framework>

@@ -97,7 +97,7 @@ bool Senseboard2015::cycle () {
     }
     //TODO convert received data to sense-link data
     //just for testing
-    logger.debug("info") <<"drivemode: " << m_sensor_data->drivemode << " " << m_sensor_data->encoder;
+    logger.debug("info") <<"drivemode: " << m_sensor_data->drivemode << " " << m_sensor_data->encoder <<" ir: " << m_sensor_data->ir[m_sensor_data->IR_SIDE_REAR];
 
 	return true;
 }
@@ -157,8 +157,6 @@ void Senseboard2015::prepareDown() {
         }
         break;
     }
-    logger.error()<<m_control_data->steering_front;
-    logger.error()<<m_control_data->steering_rear;
     down.servo_f = convert_servo_front.convert<float, int16_t>(-m_control_data->steering_front); // minus wegen neuen servos
     down.servo_r = convert_servo_rear.convert<float, int16_t>(m_control_data->steering_rear);   // minus wegen neuen servos
     down.v_mode = DOWN_MODE_VELOCITY_CONTROL;
