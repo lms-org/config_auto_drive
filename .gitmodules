@@ -55,3 +55,6 @@
 [submodule "external/modules/importer_senseboard2015"]
 	path = external/modules/importer_senseboard2015
 	url = https://github.com/Phibedy/importer_senseboard2015.git
+[submodule "external/libraries/sensor_utils"]
+	path = external/libraries/sensor_utils
+	url = https://github.com/Phibedy/sensor_utils.git

@@ -1,0 +1,24 @@
+#ifndef SENSOR_TRACKER_H
+#define SENSOR_TRACKER_H
+
+#include "lms/module.h"
+#include "lms/math/polyline.h"
+#include "image_objects/environment.h"
+#include "comm/senseboard.h"
+#include "sensor_utils/line_depth_environment.h"
+
+class SensorTracker : public lms::Module {
+public:
+    bool initialize() override;
+    bool deinitialize() override;
+    bool cycle() override;
+private:
+    Comm::SensorBoard::SensorData *sensorData;
+    Comm::SensorBoard::ControlData *controlData;
+    LinedDepthEnvironment *lde;
+    lms::extra::PrecisionTime last;
+    bool fristRun;
+
+};
+
+#endif /* SENSOR_TRACKER_H */
