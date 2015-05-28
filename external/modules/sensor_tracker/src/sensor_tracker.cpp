@@ -6,8 +6,7 @@
 bool SensorTracker::initialize() {
     sensorData = datamanager()->readChannel<Comm::SensorBoard::SensorData>(this,"SENSOR_DATA");
     controlData = datamanager()->readChannel<Comm::SensorBoard::ControlData>(this,"CONTROL_DATA");
-    lde = datamanager()->readChannel<LinedDepthEnvironment>(this,"SENSOR_ENV");
-    last = nullptr;
+    //lde = datamanager()->writeChannel<LinedDepthEnvironment>(this,"SENSOR_ENV");
     return true;
 }
 
@@ -16,13 +15,14 @@ bool SensorTracker::deinitialize() {
 }
 
 bool SensorTracker::cycle() {
+    /*
     //get the speed of the car
     if(last == nullptr){
         last = &lms::extra::PrecisionTime.now();
     }
     lms::extra::PrecisionTime delta = current - last;
     float velocity = controlData->control.velocity.velocity;
-
+    */
     return true;
 }
 

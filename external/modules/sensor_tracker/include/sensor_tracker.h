@@ -13,8 +13,8 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    Comm::SensorBoard::SensorData *sensorData;
-    Comm::SensorBoard::ControlData *controlData;
+    const Comm::SensorBoard::SensorData *sensorData;
+    const Comm::SensorBoard::ControlData *controlData;
     LinedDepthEnvironment *lde;
     lms::extra::PrecisionTime last;
     bool fristRun;

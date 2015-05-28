@@ -2,7 +2,7 @@
  * File: messmatrix_new.h
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 27-May-2015 19:40:39
+ * C/C++ source code generated on  : 28-May-2015 15:37:30
  */
 
 #ifndef __MESSMATRIX_NEW_H__
@@ -19,7 +19,7 @@
 
 /* Function Declarations */
 extern void messmatrix_new(const double P[30], const double r[10], double delta,
-  const double ind[10], const double lambda[10], double H[200]);
+  const emxArray_real_T *ind, const emxArray_real_T *lambda, emxArray_real_T *H);
 
 #endif
 

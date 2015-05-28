@@ -2,7 +2,7 @@
  * File: projectPoints.h
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 27-May-2015 19:40:39
+ * C/C++ source code generated on  : 28-May-2015 15:37:30
  */
 
 #ifndef __PROJECTPOINTS_H__
@@ -19,7 +19,7 @@
 
 /* Function Declarations */
 extern void projectPoints(const double r[10], double delta, double dist, double
-  xp[10], double yp[10]);
+  xp[10], double yp[10], double phi[10]);
 
 #endif
 

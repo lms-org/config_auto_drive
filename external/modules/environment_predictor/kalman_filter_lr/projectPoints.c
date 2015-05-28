@@ -2,7 +2,7 @@
  * File: projectPoints.c
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 27-May-2015 19:40:39
+ * C/C++ source code generated on  : 28-May-2015 15:37:30
  */
 
 /* Include Files */
@@ -13,19 +13,21 @@
 /* Function Definitions */
 
 /*
+ * Koordinaten der Punkte für die mittlere Spur berechnen
  * Arguments    : const double r[10]
  *                double delta
  *                double dist
  *                double xp[10]
  *                double yp[10]
+ *                double phi[10]
  * Return Type  : void
  */
 void projectPoints(const double r[10], double delta, double dist, double xp[10],
-                   double yp[10])
+                   double yp[10], double phi[10])
 {
   double P[30];
-  double phi;
-  int i;
+  double b_phi;
+  int s;
   double vy;
   double betr;
   double b_r;
@@ -33,80 +35,79 @@ void projectPoints(const double r[10], double delta, double dist, double xp[10],
   memset(&P[0], 0, 30U * sizeof(double));
 
   /* x, y, phi */
-  phi = r[1];
-  for (i = 0; i < 10; i++) {
-    if (1 + i == 1) {
-      P[i] = 0.0;
-      P[10 + i] = r[0];
-      P[20 + i] = phi;
-    } else if (1 + i == 2) {
-      P[i] = P[i - 1] + delta * cos(r[1]);
-      P[10 + i] = P[i + 9] + delta * sin(r[1]);
-      P[20 + i] = phi;
-    } else {
-      phi = (phi - 2.0 * acos(delta * r[i] / 2.0)) - 3.1415926535897931;
+  b_phi = r[1];
 
-      /*  -dw wegen VZ-Definition der Krümmung */
-      P[i] = P[i - 1] + delta * cos(phi);
-      P[10 + i] = P[i + 9] + delta * sin(phi);
-      P[20 + i] = phi;
-    }
+  /* erster Punkt  */
+  P[0] = 0.0;
+  P[10] = r[0];
+  P[20] = r[1];
+
+  /* zweiter Punkt */
+  P[1] = delta * cos(r[1]);
+  P[11] = r[0] + delta * sin(r[1]);
+  P[21] = r[1];
+  for (s = 0; s < 8; s++) {
+    b_phi = (b_phi - 2.0 * acos(delta * r[s + 2] / 2.0)) - 3.1415926535897931;
+
+    /*  -dw wegen VZ-Definition der Krümmung */
+    P[s + 2] = P[1 + s] + delta * cos(b_phi);
+    P[s + 12] = P[s + 11] + delta * sin(b_phi);
+    P[s + 22] = b_phi;
   }
 
-  for (i = 0; i < 10; i++) {
-    xp[i] = 0.0;
-    yp[i] = 0.0;
-  }
+  memcpy(&phi[0], &P[20], 10U * sizeof(double));
 
-  for (i = 0; i < 10; i++) {
-    if (1 + i == 1) {
-      phi = -(P[11] - P[10]);
-      vy = P[1] - P[0];
-      betr = sqrt(phi * phi + vy * vy);
-      xp[0] = P[0] + 1.0 / betr * dist * phi;
-      yp[0] = P[10] + 1.0 / betr * dist * vy;
-    } else if (1 + i == 10) {
-      phi = -(P[10 + i] - P[i + 9]);
-      vy = P[i] - P[i - 1];
-      betr = sqrt(phi * phi + vy * vy);
-      xp[i] = P[i] + 1.0 / betr * dist * phi;
-      yp[i] = P[10 + i] + 1.0 / betr * dist * vy;
+  /* % Projektion  */
+  /*  erster Punkt */
+  b_phi = -(P[11] - P[10]);
+  vy = P[1] - P[0];
+  betr = sqrt(b_phi * b_phi + vy * vy);
+  xp[0] = P[0] + 1.0 / betr * dist * b_phi;
+  yp[0] = P[10] + 1.0 / betr * dist * vy;
+
+  /* innere Punkte */
+  for (s = 0; s < 8; s++) {
+    b_phi = (P[s + 1] - P[s]) - 0.5 * (P[2 + s] - P[s]);
+    vy = (P[s + 11] - P[10 + s]) - 0.5 * (P[s + 12] - P[10 + s]);
+    betr = sqrt(b_phi * b_phi + vy * vy);
+    if (betr < 0.0001) {
+      b_phi = -(P[s + 11] - P[10 + s]);
+      vy = P[s + 1] - P[s];
+      betr = sqrt(b_phi * b_phi + vy * vy);
+      xp[s + 1] = P[s + 1] + 1.0 / betr * dist * b_phi;
+      yp[s + 1] = P[s + 11] + 1.0 / betr * dist * vy;
     } else {
-      phi = (P[i] - P[i - 1]) - 0.5 * (P[i + 1] - P[i - 1]);
-      vy = (P[10 + i] - P[i + 9]) - 0.5 * (P[i + 11] - P[i + 9]);
-      betr = sqrt(phi * phi + vy * vy);
-      if (betr < 0.0001) {
-        phi = -(P[10 + i] - P[i + 9]);
-        vy = P[i] - P[i - 1];
-        betr = sqrt(phi * phi + vy * vy);
-        xp[i] = P[i] + 1.0 / betr * dist * phi;
-        yp[i] = P[10 + i] + 1.0 / betr * dist * vy;
+      if (r[2 + s] < 0.0) {
+        b_r = -1.0;
+      } else if (r[2 + s] > 0.0) {
+        b_r = 1.0;
+      } else if (r[2 + s] == 0.0) {
+        b_r = 0.0;
       } else {
-        if (r[1 + i] < 0.0) {
-          b_r = -1.0;
-        } else if (r[1 + i] > 0.0) {
-          b_r = 1.0;
-        } else if (r[1 + i] == 0.0) {
-          b_r = 0.0;
-        } else {
-          b_r = r[1 + i];
-        }
-
-        xp[i] = P[i] - b_r / betr * dist * phi;
-        if (r[1 + i] < 0.0) {
-          c_r = -1.0;
-        } else if (r[1 + i] > 0.0) {
-          c_r = 1.0;
-        } else if (r[1 + i] == 0.0) {
-          c_r = 0.0;
-        } else {
-          c_r = r[1 + i];
-        }
-
-        yp[i] = P[10 + i] - c_r / betr * dist * vy;
+        b_r = r[2 + s];
       }
+
+      xp[s + 1] = P[s + 1] - b_r / betr * dist * b_phi;
+      if (r[2 + s] < 0.0) {
+        c_r = -1.0;
+      } else if (r[2 + s] > 0.0) {
+        c_r = 1.0;
+      } else if (r[2 + s] == 0.0) {
+        c_r = 0.0;
+      } else {
+        c_r = r[2 + s];
+      }
+
+      yp[s + 1] = P[s + 11] - c_r / betr * dist * vy;
     }
   }
+
+  /* letzter Punkt */
+  b_phi = -(P[19] - P[18]);
+  vy = P[9] - P[8];
+  betr = sqrt(b_phi * b_phi + vy * vy);
+  xp[9] = P[9] + 1.0 / betr * dist * b_phi;
+  yp[9] = P[19] + 1.0 / betr * dist * vy;
 }
 
 /*

@@ -2,15 +2,16 @@
 	<modulesToEnable>
 		<module>image_hint_worker</module>
 		<module logLevel="ERROR">image_hint_transformer</module>
-		<module logLevel="WARN">image_hint_merger</module>
-		<module>environment_line_predictor</module>
+		<!--module logLevel="WARN">image_hint_merger</module-->
+		<module>environment_predictor</module>
+		<!--module>environment_line_predictor</module-->
 		<module>trajectory_line_creator</module>
 		<module>trajectory_point_creator</module>
 		<module>image_hint_generator</module>
 		<module logLevel="ERROR">environment_filter</module>
-		<module logLevel="ERROR">environment_filter_merged</module>
+		<!--module logLevel="ERROR">environment_filter_merged</module-->
 		<module logLevel="ERROR">trajectory_point_controller</module>
-		<module>line_persistent</module>
+		<!--module>line_persistent</module-->
         <module>image_proxy</module>
 		<!--module>environment_logger</module-->
 		<!--module>image_logger_t</module-->
@@ -30,18 +31,6 @@
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD"/>
 		<config>
 		    <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/logging_data</directory>
-		</config>
-	</module>
-	<module>
-	    <name>line_persistent</name>
-		<channelMapping from="POLYLINE_INPUT" to="LINE"/>
-		<channelMapping from="POLYLINE_OUTPUT" to="LINE_PERSISTENT"/>
-	</module>
-	<module>
-	    <name>line_persistent</name>
-		<channelMapping from="ENVIRONMENT_INPUT" to="LINE"/>
-		<config>
-		    <directory></directory>
 		</config>
 	</module>
 	<module>
@@ -70,30 +59,18 @@
 	</module>
 	<module>
 	    <name>environment_filter</name>
-		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD"/>
+		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_RAW"/>
 		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
 	</module>
 	<module>
-	    <name>image_hint_merger</name>
+	    <name>environment_predictor</name>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
-		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MERGED_MID"/>
-	</module>
-	<module>
-	    <name>environment_filter_merged</name>
-	    <realName>environment_filter</realName>
-		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_MERGED_MID"/>
-		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MERGED_BEFORE_PREDICT"/>
-	</module>
-	<module>
-		<name>environment_line_predictor</name>
-		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_MERGED_BEFORE_PREDICT" />
-		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MERGED" />
+		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_MERGED"/>
 	</module>
 	<module>
 		<name>image_hint_transformer</name>
-		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD"/>
+		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
 	</module>
-	
 	<module>
 	    <name>image_hint_worker</name>
 	</module>
@@ -110,8 +87,8 @@
     <module>
         <name>image_proxy</name>
         <config user="phibedy">
-            <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images/20150519-164907</directory>
-            <singleFile>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images/20150512-181426/0250.pgm</singleFile>
+            <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150519-164907</directory>
+            <singleFile>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150519-164907/0000.pgm</singleFile>
         </config>
         <config user="hans">
             <directory>/home/hans/workspace/config_auto_drive/test_images/20150519-164907</directory>

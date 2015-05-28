@@ -1,9 +1,9 @@
-#include "trajectory_line_creator.h"
+#include "sensor_tracker.h"
 
 extern "C" {
 
 void* getInstance() {
-    return new TrajectoryLineCreator();
+    return new SensorTracker();
 }
 
 }

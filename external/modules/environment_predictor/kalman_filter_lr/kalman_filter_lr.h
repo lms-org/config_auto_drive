@@ -2,7 +2,7 @@
  * File: kalman_filter_lr.h
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 27-May-2015 19:40:39
+ * C/C++ source code generated on  : 28-May-2015 15:37:30
  */
 
 #ifndef __KALMAN_FILTER_LR_H__
@@ -18,9 +18,10 @@
 #include "kalman_filter_lr_types.h"
 
 /* Function Declarations */
-extern void kalman_filter_lr(double r[10], const double A[100], double Pk[100],
-  const double Q[100], double R_fakt, double delta, const double xl[10], const
-  double yl[10], const double xr[10], const double yr[10]);
+extern void kalman_filter_lr(double r[10], const emxArray_real_T *A,
+  emxArray_real_T *Pk, const emxArray_real_T *Q, double R_fakt, double delta,
+  emxArray_real_T *xl, emxArray_real_T *yl, emxArray_real_T *xr, emxArray_real_T
+  *yr);
 
 #endif
 
