@@ -2,7 +2,7 @@
  * File: eye.h
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 28-May-2015 15:37:30
+ * C/C++ source code generated on  : 28-May-2015 16:02:10
  */
 
 #ifndef __EYE_H__
@@ -18,7 +18,6 @@
 #include "kalman_filter_lr_types.h"
 
 /* Function Declarations */
-extern void b_eye(double I[100]);
 extern void eye(double varargin_1, emxArray_real_T *I);
 
 #endif

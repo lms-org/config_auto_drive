@@ -16,11 +16,11 @@ bool EnvironmentPredictor::initialize() {
 
     n = 10;
     delta = 0.2;
+    r_fakt=20;
     zustandsVector = emxCreate_real_T(n,1);
     for(int i = 0; i < 10; i++){
         r[i]=0;
     }
-    //logger.info("SIZES: ") << zustandsVector->size[0] <<" "<<zustandsVector->size[1];
     clearMatrix(zustandsVector);
 
     stateTransitionMatrix = emxCreate_real_T(n,n);
@@ -35,11 +35,6 @@ bool EnvironmentPredictor::initialize() {
             kovarianzMatrixDesZustandUebergangs->data[y*n+x]=15*(1-pow(0.2,1/fabs(x-y)));
         }
     }
-    printMat(zustandsVector);
-    printMat(stateTransitionMatrix);
-    printMat(kovarianzMatrixDesZustandes);
-    printMat(kovarianzMatrixDesZustandUebergangs);
-    r_fakt = 1; //messgenauigkeit
     return true;
 }
 
@@ -48,6 +43,7 @@ bool EnvironmentPredictor::deinitialize() {
 }
 
 bool EnvironmentPredictor::cycle() {
+    logger.time("kalman");
     //länge der später zu berechnenden Abschnitten
     //convert data to lines
     emxArray_real_T *rx;
@@ -56,15 +52,14 @@ bool EnvironmentPredictor::cycle() {
     emxArray_real_T *ly;
     for(const Environment::RoadLane &rl :envInput->lanes){
         if(rl.type() == Environment::RoadLaneType::LEFT){
-            logger.debug("cycle") << "found left lane: " << rl.points().size();
+            //logger.debug("cycle") << "found left lane: " << rl.points().size();
             convertToKalmanArray(rl,&lx,&ly);
         }else if(rl.type() == Environment::RoadLaneType::RIGHT){
-            logger.debug("cycle") << "found right lane: " << rl.points().size();
+            //logger.debug("cycle") << "found right lane: " << rl.points().size();
             convertToKalmanArray(rl,&rx,&ry);
         }
     }
     //kalman everything
-    //printMat(zustandsVector);
     /*
     kalman_filter_lr(r,stateTransitionMatrix,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
@@ -73,15 +68,13 @@ bool EnvironmentPredictor::cycle() {
     kalman_filter_lr(zustandsVector,stateTransitionMatrix,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      r_fakt,delta,lx,ly,rx,ry);
-
-    std::cout <<"Zustand danach: ";
-    //printMat(zustandsVector);
     createOutput();
     //destroy stuff
     emxDestroyArray_real_T(rx);
     emxDestroyArray_real_T(ry);
     emxDestroyArray_real_T(lx);
     emxDestroyArray_real_T(ly);
+    logger.timeEnd("kalman");
     return true;
 }
 

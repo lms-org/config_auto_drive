@@ -2,7 +2,7 @@
  * File: messmatrix_new.c
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 28-May-2015 15:37:30
+ * C/C++ source code generated on  : 28-May-2015 16:02:10
  */
 
 /* Include Files */
@@ -14,103 +14,156 @@
 /* Function Definitions */
 
 /*
- * Arguments    : const double P[30]
- *                const double r[10]
+ * Arguments    : const emxArray_real_T *P
+ *                const emxArray_real_T *r
  *                double delta
  *                const emxArray_real_T *ind
  *                const emxArray_real_T *lambda
  *                emxArray_real_T *H
  * Return Type  : void
  */
-void messmatrix_new(const double P[30], const double r[10], double delta, const
-                    emxArray_real_T *ind, const emxArray_real_T *lambda,
-                    emxArray_real_T *H)
+void messmatrix_new(const emxArray_real_T *P, const emxArray_real_T *r, double
+                    delta, const emxArray_real_T *ind, const emxArray_real_T
+                    *lambda, emxArray_real_T *H)
 {
-  double d_phi0[20];
-  int p;
-  double d_c_x[100];
-  double d_c_y[100];
+  emxArray_real_T *d_phi0;
+  int num_points;
+  int r_idx_0;
   int c;
+  emxArray_real_T *d_c_x;
+  emxArray_real_T *d_c_y;
   unsigned int count;
+  b_emxInit_real_T(&d_phi0, 2);
+  num_points = r->size[0] - 3;
 
   /* Ableitungen nach phi0 */
-  memset(&d_phi0[0], 0, 20U * sizeof(double));
-  for (p = 0; p < 9; p++) {
-    d_phi0[p + 1] = d_phi0[p] - delta * sin(P[p + 21]);
+  r_idx_0 = r->size[0];
+  c = d_phi0->size[0] * d_phi0->size[1];
+  d_phi0->size[0] = r_idx_0;
+  d_phi0->size[1] = 2;
+  emxEnsureCapacity((emxArray__common *)d_phi0, c, (int)sizeof(double));
+  r_idx_0 = r->size[0] << 1;
+  for (c = 0; c < r_idx_0; c++) {
+    d_phi0->data[c] = 0.0;
+  }
+
+  for (r_idx_0 = 1; r_idx_0 - 1 <= num_points + 1; r_idx_0++) {
+    d_phi0->data[r_idx_0] = d_phi0->data[r_idx_0 - 1] - delta * sin(P->
+      data[r_idx_0 + (P->size[0] << 1)]);
 
     /* x-Komponenten */
-    d_phi0[p + 11] = d_phi0[10 + p] + delta * cos(P[p + 21]);
+    d_phi0->data[r_idx_0 + d_phi0->size[0]] = d_phi0->data[(r_idx_0 +
+      d_phi0->size[0]) - 1] + delta * cos(P->data[r_idx_0 + (P->size[0] << 1)]);
 
     /* y-Komponenten */
   }
 
-  /* Ableitungen nach den Krümmungen c_i */
-  for (c = 0; c < 100; c++) {
-    d_c_x[c] = 0.0;
+  b_emxInit_real_T(&d_c_x, 2);
 
-    /* x-Komponenten */
-    d_c_y[c] = 0.0;
+  /* Ableitungen nach den Krümmungen c_i */
+  r_idx_0 = r->size[0];
+  c = d_c_x->size[0] * d_c_x->size[1];
+  d_c_x->size[0] = r_idx_0;
+  emxEnsureCapacity((emxArray__common *)d_c_x, c, (int)sizeof(double));
+  r_idx_0 = r->size[0];
+  c = d_c_x->size[0] * d_c_x->size[1];
+  d_c_x->size[1] = r_idx_0;
+  emxEnsureCapacity((emxArray__common *)d_c_x, c, (int)sizeof(double));
+  r_idx_0 = r->size[0] * r->size[0];
+  for (c = 0; c < r_idx_0; c++) {
+    d_c_x->data[c] = 0.0;
+  }
+
+  b_emxInit_real_T(&d_c_y, 2);
+
+  /* x-Komponenten */
+  r_idx_0 = r->size[0];
+  c = d_c_y->size[0] * d_c_y->size[1];
+  d_c_y->size[0] = r_idx_0;
+  emxEnsureCapacity((emxArray__common *)d_c_y, c, (int)sizeof(double));
+  r_idx_0 = r->size[0];
+  c = d_c_y->size[0] * d_c_y->size[1];
+  d_c_y->size[1] = r_idx_0;
+  emxEnsureCapacity((emxArray__common *)d_c_y, c, (int)sizeof(double));
+  r_idx_0 = r->size[0] * r->size[0];
+  for (c = 0; c < r_idx_0; c++) {
+    d_c_y->data[c] = 0.0;
   }
 
   /* y-Komponenten */
-  for (p = 0; p < 8; p++) {
-    for (c = 0; c < 8; c++) {
-      if (3 + p > 2 + c) {
-        d_c_x[(p + 10 * (c + 1)) + 2] = d_c_x[(p + 10 * (c + 1)) + 1] - delta *
-          delta * sin(P[p + 22]) / sqrt(1.0 - delta * delta * (r[2 + c] * r[2 +
-          c]) / 4.0);
-        d_c_y[(p + 10 * (c + 1)) + 2] = d_c_y[(p + 10 * (c + 1)) + 1] + delta *
-          delta * cos(P[p + 22]) / sqrt(1.0 - delta * delta * (r[2 + c] * r[2 +
-          c]) / 4.0);
+  for (r_idx_0 = 2; r_idx_0 - 2 <= num_points; r_idx_0++) {
+    for (c = 2; c - 2 <= num_points; c++) {
+      if (1 + r_idx_0 > c) {
+        d_c_x->data[r_idx_0 + d_c_x->size[0] * (c - 1)] = d_c_x->data[(r_idx_0 +
+          d_c_x->size[0] * (c - 1)) - 1] - delta * delta * sin(P->data[r_idx_0 +
+          (P->size[0] << 1)]) / sqrt(1.0 - delta * delta * (r->data[c] * r->
+          data[c]) / 4.0);
+        d_c_y->data[r_idx_0 + d_c_y->size[0] * (c - 1)] = d_c_y->data[(r_idx_0 +
+          d_c_y->size[0] * (c - 1)) - 1] + delta * delta * cos(P->data[r_idx_0 +
+          (P->size[0] << 1)]) / sqrt(1.0 - delta * delta * (r->data[c] * r->
+          data[c]) / 4.0);
       }
     }
   }
 
   /* Messmatrix zusammensetzen */
-  p = (int)(2.0 * (double)lambda->size[0]);
+  r_idx_0 = (int)(2.0 * (double)lambda->size[0]);
   c = H->size[0] * H->size[1];
-  H->size[0] = p;
-  H->size[1] = 10;
+  H->size[0] = r_idx_0;
   emxEnsureCapacity((emxArray__common *)H, c, (int)sizeof(double));
-  p = (int)(2.0 * (double)lambda->size[0]) * 10;
-  for (c = 0; c < p; c++) {
+  r_idx_0 = r->size[0];
+  c = H->size[0] * H->size[1];
+  H->size[1] = r_idx_0;
+  emxEnsureCapacity((emxArray__common *)H, c, (int)sizeof(double));
+  r_idx_0 = (int)(2.0 * (double)lambda->size[0]) * r->size[0];
+  for (c = 0; c < r_idx_0; c++) {
     H->data[c] = 0.0;
   }
 
   count = 2U;
-  for (p = 0; p < ind->size[0]; p++) {
+  for (r_idx_0 = 0; r_idx_0 < ind->size[0]; r_idx_0++) {
     /* alle Messpunkte iterieren */
     H->data[(int)count - 2] = 0.0;
 
     /* Ableitung nach y0 */
     H->data[(int)count - 1] = 1.0;
-    H->data[((int)count + H->size[0]) - 2] = d_phi0[(int)ind->data[p] - 1];
+    H->data[((int)count + H->size[0]) - 2] = d_phi0->data[(int)ind->data[r_idx_0]
+      - 1];
 
     /* Ableitung nach phi0 */
-    H->data[((int)count + H->size[0]) - 1] = d_phi0[(int)ind->data[p] + 9];
-    for (c = 0; c < (int)(ind->data[p] + -2.0); c++) {
+    H->data[((int)count + H->size[0]) - 1] = d_phi0->data[((int)ind->
+      data[r_idx_0] + d_phi0->size[0]) - 1];
+    for (c = 0; c < (int)(ind->data[r_idx_0] + -2.0); c++) {
       /* Ableitung nach Krümmungen c */
-      if (3.0 + (double)c == ind->data[p]) {
-        H->data[((int)count + H->size[0] * (c + 2)) - 2] = d_c_x[((int)
-          (ind->data[p] - 1.0) + 10 * ((int)((3.0 + (double)c) - 1.0) - 1)) - 1]
-          - lambda->data[p] * (delta * delta) * sin(P[(int)ind->data[p] + 19]) /
-          sqrt(1.0 - delta * delta * (r[(int)((3.0 + (double)c) - 1.0) - 1] * r
-                [(int)((3.0 + (double)c) - 1.0) - 1]) / 4.0);
-        H->data[((int)count + H->size[0] * (c + 2)) - 1] = d_c_y[((int)
-          (ind->data[p] - 1.0) + 10 * ((int)((3.0 + (double)c) - 1.0) - 1)) - 1]
-          + lambda->data[p] * (delta * delta) * cos(P[(int)ind->data[p] + 19]) /
-          sqrt(1.0 - delta * delta * (r[(int)((3.0 + (double)c) - 1.0) - 1] * r
-                [(int)((3.0 + (double)c) - 1.0) - 1]) / 4.0);
+      if (3.0 + (double)c == ind->data[r_idx_0]) {
+        H->data[((int)count + H->size[0] * (c + 2)) - 2] = d_c_x->data[((int)
+          (ind->data[r_idx_0] - 1.0) + d_c_x->size[0] * ((int)((3.0 + (double)c)
+          - 1.0) - 1)) - 1] - lambda->data[r_idx_0] * (delta * delta) * sin
+          (P->data[((int)ind->data[r_idx_0] + (P->size[0] << 1)) - 1]) / sqrt
+          (1.0 - delta * delta * (r->data[(int)((3.0 + (double)c) - 1.0) - 1] *
+            r->data[(int)((3.0 + (double)c) - 1.0) - 1]) / 4.0);
+        H->data[((int)count + H->size[0] * (c + 2)) - 1] = d_c_y->data[((int)
+          (ind->data[r_idx_0] - 1.0) + d_c_y->size[0] * ((int)((3.0 + (double)c)
+          - 1.0) - 1)) - 1] + lambda->data[r_idx_0] * (delta * delta) * cos
+          (P->data[((int)ind->data[r_idx_0] + (P->size[0] << 1)) - 1]) / sqrt
+          (1.0 - delta * delta * (r->data[(int)((3.0 + (double)c) - 1.0) - 1] *
+            r->data[(int)((3.0 + (double)c) - 1.0) - 1]) / 4.0);
       } else {
-        H->data[((int)count + H->size[0] * (c + 2)) - 2] = d_c_x[((int)ind->
-          data[p] + 10 * ((int)((3.0 + (double)c) - 1.0) - 1)) - 1];
-        H->data[((int)count + H->size[0] * (c + 2)) - 1] = d_c_y[((int)ind->
-          data[p] + 10 * ((int)((3.0 + (double)c) - 1.0) - 1)) - 1];
+        H->data[((int)count + H->size[0] * (c + 2)) - 2] = d_c_x->data[((int)
+          ind->data[r_idx_0] + d_c_x->size[0] * ((int)((3.0 + (double)c) - 1.0)
+          - 1)) - 1];
+        H->data[((int)count + H->size[0] * (c + 2)) - 1] = d_c_y->data[((int)
+          ind->data[r_idx_0] + d_c_y->size[0] * ((int)((3.0 + (double)c) - 1.0)
+          - 1)) - 1];
       }
     }
 
     count += 2U;
   }
+
+  emxFree_real_T(&d_c_y);
+  emxFree_real_T(&d_c_x);
+  emxFree_real_T(&d_phi0);
 }
 
 /*

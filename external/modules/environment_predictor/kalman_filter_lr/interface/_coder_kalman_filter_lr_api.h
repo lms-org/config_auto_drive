@@ -2,7 +2,7 @@
  * File: _coder_kalman_filter_lr_api.h 
  *  
  * MATLAB Coder version            : 2.7 
- * C/C++ source code generated on  : 28-May-2015 15:37:30 
+ * C/C++ source code generated on  : 28-May-2015 16:02:10 
  */
 
 #ifndef ___CODER_KALMAN_FILTER_LR_API_H__
@@ -39,7 +39,7 @@ extern void kalman_filter_lr_terminate(void);
 extern void kalman_filter_lr_atexit(void);
 extern void kalman_filter_lr_api(const mxArray *prhs[10], const mxArray *plhs[2]);
 extern void kalman_filter_lr_xil_terminate(void);
-extern void kalman_filter_lr(real_T r[10], emxArray_real_T *A, emxArray_real_T *Pk, emxArray_real_T *Q, real_T R_fakt, real_T delta, emxArray_real_T *xl, emxArray_real_T *yl, emxArray_real_T *xr, emxArray_real_T *yr);
+extern void kalman_filter_lr(emxArray_real_T *r, emxArray_real_T *A, emxArray_real_T *Pk, emxArray_real_T *Q, real_T R_fakt, real_T delta, emxArray_real_T *xl, emxArray_real_T *yl, emxArray_real_T *xr, emxArray_real_T *yr);
 
 #endif
 /* 

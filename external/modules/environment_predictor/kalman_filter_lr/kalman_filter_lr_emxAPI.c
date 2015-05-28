@@ -2,7 +2,7 @@
  * File: kalman_filter_lr_emxAPI.c
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 28-May-2015 15:37:30
+ * C/C++ source code generated on  : 28-May-2015 16:02:10
  */
 
 /* Include Files */
@@ -23,7 +23,7 @@ emxArray_real_T *emxCreateND_real_T(int numDimensions, int *size)
   emxArray_real_T *emx;
   int numEl;
   int i;
-  b_emxInit_real_T(&emx, numDimensions);
+  emxInit_real_T(&emx, numDimensions);
   numEl = 1;
   for (i = 0; i < numDimensions; i++) {
     numEl *= size[i];
@@ -48,7 +48,7 @@ emxArray_real_T *emxCreateWrapperND_real_T(double *data, int numDimensions, int 
   emxArray_real_T *emx;
   int numEl;
   int i;
-  b_emxInit_real_T(&emx, numDimensions);
+  emxInit_real_T(&emx, numDimensions);
   numEl = 1;
   for (i = 0; i < numDimensions; i++) {
     numEl *= size[i];
@@ -76,7 +76,7 @@ emxArray_real_T *emxCreateWrapper_real_T(double *data, int rows, int cols)
   int i;
   size[0] = rows;
   size[1] = cols;
-  b_emxInit_real_T(&emx, 2);
+  emxInit_real_T(&emx, 2);
   numEl = 1;
   for (i = 0; i < 2; i++) {
     numEl *= size[i];
@@ -103,7 +103,7 @@ emxArray_real_T *emxCreate_real_T(int rows, int cols)
   int i;
   size[0] = rows;
   size[1] = cols;
-  b_emxInit_real_T(&emx, 2);
+  emxInit_real_T(&emx, 2);
   numEl = 1;
   for (i = 0; i < 2; i++) {
     numEl *= size[i];

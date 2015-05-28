@@ -2,112 +2,204 @@
  * File: projectPoints.c
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 28-May-2015 15:37:30
+ * C/C++ source code generated on  : 28-May-2015 16:02:10
  */
 
 /* Include Files */
 #include "rt_nonfinite.h"
 #include "kalman_filter_lr.h"
 #include "projectPoints.h"
+#include "kalman_filter_lr_emxutil.h"
+#include "getPointsFromState.h"
 
 /* Function Definitions */
 
 /*
  * Koordinaten der Punkte für die mittlere Spur berechnen
- * Arguments    : const double r[10]
+ * Arguments    : const emxArray_real_T *r
  *                double delta
- *                double dist
- *                double xp[10]
- *                double yp[10]
- *                double phi[10]
+ *                emxArray_real_T *xp
+ *                emxArray_real_T *yp
+ *                emxArray_real_T *phi
  * Return Type  : void
  */
-void projectPoints(const double r[10], double delta, double dist, double xp[10],
-                   double yp[10], double phi[10])
+void b_projectPoints(const emxArray_real_T *r, double delta, emxArray_real_T *xp,
+                     emxArray_real_T *yp, emxArray_real_T *phi)
 {
-  double P[30];
-  double b_phi;
-  int s;
+  emxArray_real_T *x;
+  emxArray_real_T *y;
+  int z;
+  int loop_ub;
+  double vx;
   double vy;
   double betr;
-  double b_r;
-  double c_r;
-  memset(&P[0], 0, 30U * sizeof(double));
-
-  /* x, y, phi */
-  b_phi = r[1];
-
-  /* erster Punkt  */
-  P[0] = 0.0;
-  P[10] = r[0];
-  P[20] = r[1];
-
-  /* zweiter Punkt */
-  P[1] = delta * cos(r[1]);
-  P[11] = r[0] + delta * sin(r[1]);
-  P[21] = r[1];
-  for (s = 0; s < 8; s++) {
-    b_phi = (b_phi - 2.0 * acos(delta * r[s + 2] / 2.0)) - 3.1415926535897931;
-
-    /*  -dw wegen VZ-Definition der Krümmung */
-    P[s + 2] = P[1 + s] + delta * cos(b_phi);
-    P[s + 12] = P[s + 11] + delta * sin(b_phi);
-    P[s + 22] = b_phi;
+  double b_x;
+  emxInit_real_T(&x, 1);
+  emxInit_real_T(&y, 1);
+  getPointsFromState(r, delta, x, y, phi);
+  z = xp->size[0];
+  xp->size[0] = r->size[0];
+  emxEnsureCapacity((emxArray__common *)xp, z, (int)sizeof(double));
+  loop_ub = r->size[0];
+  for (z = 0; z < loop_ub; z++) {
+    xp->data[z] = 0.0;
   }
 
-  memcpy(&phi[0], &P[20], 10U * sizeof(double));
+  z = yp->size[0];
+  yp->size[0] = r->size[0];
+  emxEnsureCapacity((emxArray__common *)yp, z, (int)sizeof(double));
+  loop_ub = r->size[0];
+  for (z = 0; z < loop_ub; z++) {
+    yp->data[z] = 0.0;
+  }
 
   /* % Projektion  */
   /*  erster Punkt */
-  b_phi = -(P[11] - P[10]);
-  vy = P[1] - P[0];
-  betr = sqrt(b_phi * b_phi + vy * vy);
-  xp[0] = P[0] + 1.0 / betr * dist * b_phi;
-  yp[0] = P[10] + 1.0 / betr * dist * vy;
+  vx = -(y->data[1] - y->data[0]);
+  vy = x->data[1] - x->data[0];
+  betr = sqrt(vx * vx + vy * vy);
+  xp->data[0] = x->data[0] + 1.0 / betr * -0.38 * vx;
+  yp->data[0] = y->data[0] + 1.0 / betr * -0.38 * vy;
 
   /* innere Punkte */
-  for (s = 0; s < 8; s++) {
-    b_phi = (P[s + 1] - P[s]) - 0.5 * (P[2 + s] - P[s]);
-    vy = (P[s + 11] - P[10 + s]) - 0.5 * (P[s + 12] - P[10 + s]);
-    betr = sqrt(b_phi * b_phi + vy * vy);
+  for (z = 1; z - 1 <= x->size[0] - 3; z++) {
+    vx = (x->data[z] - x->data[z - 1]) - 0.5 * (x->data[z + 1] - x->data[z - 1]);
+    vy = (y->data[z] - y->data[z - 1]) - 0.5 * (y->data[z + 1] - y->data[z - 1]);
+    betr = sqrt(vx * vx + vy * vy);
     if (betr < 0.0001) {
-      b_phi = -(P[s + 11] - P[10 + s]);
-      vy = P[s + 1] - P[s];
-      betr = sqrt(b_phi * b_phi + vy * vy);
-      xp[s + 1] = P[s + 1] + 1.0 / betr * dist * b_phi;
-      yp[s + 1] = P[s + 11] + 1.0 / betr * dist * vy;
+      vx = -(y->data[z] - y->data[z - 1]);
+      vy = x->data[z] - x->data[z - 1];
+      betr = sqrt(vx * vx + vy * vy);
+      xp->data[z] = x->data[z] + 1.0 / betr * -0.38 * vx;
+      yp->data[z] = y->data[z] + 1.0 / betr * -0.38 * vy;
     } else {
-      if (r[2 + s] < 0.0) {
-        b_r = -1.0;
-      } else if (r[2 + s] > 0.0) {
-        b_r = 1.0;
-      } else if (r[2 + s] == 0.0) {
-        b_r = 0.0;
+      if (r->data[z + 1] < 0.0) {
+        b_x = -1.0;
+      } else if (r->data[z + 1] > 0.0) {
+        b_x = 1.0;
+      } else if (r->data[z + 1] == 0.0) {
+        b_x = 0.0;
       } else {
-        b_r = r[2 + s];
+        b_x = r->data[z + 1];
       }
 
-      xp[s + 1] = P[s + 1] - b_r / betr * dist * b_phi;
-      if (r[2 + s] < 0.0) {
-        c_r = -1.0;
-      } else if (r[2 + s] > 0.0) {
-        c_r = 1.0;
-      } else if (r[2 + s] == 0.0) {
-        c_r = 0.0;
+      xp->data[z] = x->data[z] - b_x / betr * -0.38 * vx;
+      if (r->data[z + 1] < 0.0) {
+        b_x = -1.0;
+      } else if (r->data[z + 1] > 0.0) {
+        b_x = 1.0;
+      } else if (r->data[z + 1] == 0.0) {
+        b_x = 0.0;
       } else {
-        c_r = r[2 + s];
+        b_x = r->data[z + 1];
       }
 
-      yp[s + 1] = P[s + 11] - c_r / betr * dist * vy;
+      yp->data[z] = y->data[z] - b_x / betr * -0.38 * vy;
     }
   }
 
   /* letzter Punkt */
-  b_phi = -(P[19] - P[18]);
-  vy = P[9] - P[8];
-  betr = sqrt(b_phi * b_phi + vy * vy);
-  xp[9] = P[9] + 1.0 / betr * dist * b_phi;
-  yp[9] = P[19] + 1.0 / betr * dist * vy;
+  vx = -(y->data[x->size[0] - 1] - y->data[x->size[0] - 2]);
+  vy = x->data[x->size[0] - 1] - x->data[x->size[0] - 2];
+  betr = sqrt(vx * vx + vy * vy);
+  xp->data[x->size[0] - 1] = x->data[x->size[0] - 1] + 1.0 / betr * -0.38 * vx;
+  yp->data[x->size[0] - 1] = y->data[x->size[0] - 1] + 1.0 / betr * -0.38 * vy;
+  emxFree_real_T(&y);
+  emxFree_real_T(&x);
+}
+
+/*
+ * Koordinaten der Punkte für die mittlere Spur berechnen
+ * Arguments    : const emxArray_real_T *r
+ *                double delta
+ *                emxArray_real_T *xp
+ *                emxArray_real_T *yp
+ *                emxArray_real_T *phi
+ * Return Type  : void
+ */
+void projectPoints(const emxArray_real_T *r, double delta, emxArray_real_T *xp,
+                   emxArray_real_T *yp, emxArray_real_T *phi)
+{
+  emxArray_real_T *x;
+  emxArray_real_T *y;
+  int z;
+  int loop_ub;
+  double vx;
+  double vy;
+  double betr;
+  double b_x;
+  emxInit_real_T(&x, 1);
+  emxInit_real_T(&y, 1);
+  getPointsFromState(r, delta, x, y, phi);
+  z = xp->size[0];
+  xp->size[0] = r->size[0];
+  emxEnsureCapacity((emxArray__common *)xp, z, (int)sizeof(double));
+  loop_ub = r->size[0];
+  for (z = 0; z < loop_ub; z++) {
+    xp->data[z] = 0.0;
+  }
+
+  z = yp->size[0];
+  yp->size[0] = r->size[0];
+  emxEnsureCapacity((emxArray__common *)yp, z, (int)sizeof(double));
+  loop_ub = r->size[0];
+  for (z = 0; z < loop_ub; z++) {
+    yp->data[z] = 0.0;
+  }
+
+  /* % Projektion  */
+  /*  erster Punkt */
+  vx = -(y->data[1] - y->data[0]);
+  vy = x->data[1] - x->data[0];
+  betr = sqrt(vx * vx + vy * vy);
+  xp->data[0] = x->data[0] + 1.0 / betr * 0.38 * vx;
+  yp->data[0] = y->data[0] + 1.0 / betr * 0.38 * vy;
+
+  /* innere Punkte */
+  for (z = 1; z - 1 <= x->size[0] - 3; z++) {
+    vx = (x->data[z] - x->data[z - 1]) - 0.5 * (x->data[z + 1] - x->data[z - 1]);
+    vy = (y->data[z] - y->data[z - 1]) - 0.5 * (y->data[z + 1] - y->data[z - 1]);
+    betr = sqrt(vx * vx + vy * vy);
+    if (betr < 0.0001) {
+      vx = -(y->data[z] - y->data[z - 1]);
+      vy = x->data[z] - x->data[z - 1];
+      betr = sqrt(vx * vx + vy * vy);
+      xp->data[z] = x->data[z] + 1.0 / betr * 0.38 * vx;
+      yp->data[z] = y->data[z] + 1.0 / betr * 0.38 * vy;
+    } else {
+      if (r->data[z + 1] < 0.0) {
+        b_x = -1.0;
+      } else if (r->data[z + 1] > 0.0) {
+        b_x = 1.0;
+      } else if (r->data[z + 1] == 0.0) {
+        b_x = 0.0;
+      } else {
+        b_x = r->data[z + 1];
+      }
+
+      xp->data[z] = x->data[z] - b_x / betr * 0.38 * vx;
+      if (r->data[z + 1] < 0.0) {
+        b_x = -1.0;
+      } else if (r->data[z + 1] > 0.0) {
+        b_x = 1.0;
+      } else if (r->data[z + 1] == 0.0) {
+        b_x = 0.0;
+      } else {
+        b_x = r->data[z + 1];
+      }
+
+      yp->data[z] = y->data[z] - b_x / betr * 0.38 * vy;
+    }
+  }
+
+  /* letzter Punkt */
+  vx = -(y->data[x->size[0] - 1] - y->data[x->size[0] - 2]);
+  vy = x->data[x->size[0] - 1] - x->data[x->size[0] - 2];
+  betr = sqrt(vx * vx + vy * vy);
+  xp->data[x->size[0] - 1] = x->data[x->size[0] - 1] + 1.0 / betr * 0.38 * vx;
+  yp->data[x->size[0] - 1] = y->data[x->size[0] - 1] + 1.0 / betr * 0.38 * vy;
+  emxFree_real_T(&y);
+  emxFree_real_T(&x);
 }
 
 /*

@@ -2,7 +2,7 @@
  * File: eye.c
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 28-May-2015 15:37:30
+ * C/C++ source code generated on  : 28-May-2015 16:02:10
  */
 
 /* Include Files */
@@ -12,19 +12,6 @@
 #include "kalman_filter_lr_emxutil.h"
 
 /* Function Definitions */
-
-/*
- * Arguments    : double I[100]
- * Return Type  : void
- */
-void b_eye(double I[100])
-{
-  int k;
-  memset(&I[0], 0, 100U * sizeof(double));
-  for (k = 0; k < 10; k++) {
-    I[k + 10 * k] = 1.0;
-  }
-}
 
 /*
  * Arguments    : double varargin_1

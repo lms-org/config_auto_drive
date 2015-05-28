@@ -14,7 +14,7 @@
 <a name="2"><font color="#888888 "><i>    2   </i></font></a><font color="#117755"><I> * File: kalman_filter_lr_emxAPI.c</i></font>
 <a name="3"><font color="#888888 "><i>    3   </i></font></a><font color="#117755"><I> *</i></font>
 <a name="4"><font color="#888888 "><i>    4   </i></font></a><font color="#117755"><I> * MATLAB Coder version            : 2.7</i></font>
-<a name="5"><font color="#888888 "><i>    5   </i></font></a><font color="#117755"><I> * C/C++ source code generated on  : 28-May-2015 15:37:30</i></font>
+<a name="5"><font color="#888888 "><i>    5   </i></font></a><font color="#117755"><I> * C/C++ source code generated on  : 28-May-2015 16:02:10</i></font>
 <a name="6"><font color="#888888 "><i>    6   </i></font></a><font color="#117755"><I> */</i></font>
 <a name="7"><font color="#888888 "><i>    7   </i></font></a>
 <a name="8"><font color="#888888 "><i>    8   </i></font></a><font color="#117755"><i>/* Include Files */</i></font>
@@ -35,7 +35,7 @@
 <a name="23"><font color="#888888 "><i>   23   </i></font></a>  <a href="kalman_filter_lr_types_h.html#type_emxArray_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_emxArray_real_T');" target="_self"><font color="#1122aa">emxArray_real_T</font></a> *emx;
 <a name="24"><font color="#888888 "><i>   24   </i></font></a>  <font color="#112266"><b>int</b></font> numEl;
 <a name="25"><font color="#888888 "><i>   25   </i></font></a>  <font color="#112266"><b>int</b></font> i;
-<a name="26"><font color="#888888 "><i>   26   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_b_emxInit_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_b_emxInit_real_T');" target="_self"><font color="#1122aa">b_emxInit_real_T</font></a>(&amp;emx, numDimensions);
+<a name="26"><font color="#888888 "><i>   26   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_emxInit_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxInit_real_T');" target="_self"><font color="#1122aa">emxInit_real_T</font></a>(&amp;emx, numDimensions);
 <a name="27"><font color="#888888 "><i>   27   </i></font></a>  numEl = 1;
 <a name="28"><font color="#888888 "><i>   28   </i></font></a>  <font color="#112266"><b>for</b></font> (i = 0; i &lt; numDimensions; i++) <b>{</b>
 <a name="29"><font color="#888888 "><i>   29   </i></font></a>    numEl *= size[i];
@@ -60,7 +60,7 @@
 <a name="48"><font color="#888888 "><i>   48   </i></font></a>  <a href="kalman_filter_lr_types_h.html#type_emxArray_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_emxArray_real_T');" target="_self"><font color="#1122aa">emxArray_real_T</font></a> *emx;
 <a name="49"><font color="#888888 "><i>   49   </i></font></a>  <font color="#112266"><b>int</b></font> numEl;
 <a name="50"><font color="#888888 "><i>   50   </i></font></a>  <font color="#112266"><b>int</b></font> i;
-<a name="51"><font color="#888888 "><i>   51   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_b_emxInit_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_b_emxInit_real_T');" target="_self"><font color="#1122aa">b_emxInit_real_T</font></a>(&amp;emx, numDimensions);
+<a name="51"><font color="#888888 "><i>   51   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_emxInit_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxInit_real_T');" target="_self"><font color="#1122aa">emxInit_real_T</font></a>(&amp;emx, numDimensions);
 <a name="52"><font color="#888888 "><i>   52   </i></font></a>  numEl = 1;
 <a name="53"><font color="#888888 "><i>   53   </i></font></a>  <font color="#112266"><b>for</b></font> (i = 0; i &lt; numDimensions; i++) <b>{</b>
 <a name="54"><font color="#888888 "><i>   54   </i></font></a>    numEl *= size[i];
@@ -88,7 +88,7 @@
 <a name="76"><font color="#888888 "><i>   76   </i></font></a>  <font color="#112266"><b>int</b></font> i;
 <a name="77"><font color="#888888 "><i>   77   </i></font></a>  size[0] = rows;
 <a name="78"><font color="#888888 "><i>   78   </i></font></a>  size[1] = cols;
-<a name="79"><font color="#888888 "><i>   79   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_b_emxInit_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_b_emxInit_real_T');" target="_self"><font color="#1122aa">b_emxInit_real_T</font></a>(&amp;emx, 2);
+<a name="79"><font color="#888888 "><i>   79   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_emxInit_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxInit_real_T');" target="_self"><font color="#1122aa">emxInit_real_T</font></a>(&amp;emx, 2);
 <a name="80"><font color="#888888 "><i>   80   </i></font></a>  numEl = 1;
 <a name="81"><font color="#888888 "><i>   81   </i></font></a>  <font color="#112266"><b>for</b></font> (i = 0; i &lt; 2; i++) <b>{</b>
 <a name="82"><font color="#888888 "><i>   82   </i></font></a>    numEl *= size[i];
@@ -115,7 +115,7 @@
 <a name="103"><font color="#888888 "><i>  103   </i></font></a>  <font color="#112266"><b>int</b></font> i;
 <a name="104"><font color="#888888 "><i>  104   </i></font></a>  size[0] = rows;
 <a name="105"><font color="#888888 "><i>  105   </i></font></a>  size[1] = cols;
-<a name="106"><font color="#888888 "><i>  106   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_b_emxInit_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_b_emxInit_real_T');" target="_self"><font color="#1122aa">b_emxInit_real_T</font></a>(&amp;emx, 2);
+<a name="106"><font color="#888888 "><i>  106   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_emxInit_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxInit_real_T');" target="_self"><font color="#1122aa">emxInit_real_T</font></a>(&amp;emx, 2);
 <a name="107"><font color="#888888 "><i>  107   </i></font></a>  numEl = 1;
 <a name="108"><font color="#888888 "><i>  108   </i></font></a>  <font color="#112266"><b>for</b></font> (i = 0; i &lt; 2; i++) <b>{</b>
 <a name="109"><font color="#888888 "><i>  109   </i></font></a>    numEl *= size[i];
