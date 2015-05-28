@@ -22,6 +22,7 @@ bool EnvironmentPredictor::initialize() {
     }
     //logger.info("SIZES: ") << zustandsVector->size[0] <<" "<<zustandsVector->size[1];
     clearMatrix(zustandsVector);
+
     stateTransitionMatrix = emxCreate_real_T(n,n);
     asEinheitsMatrix(stateTransitionMatrix);
     kovarianzMatrixDesZustandes = emxCreate_real_T(n,n);
@@ -64,8 +65,12 @@ bool EnvironmentPredictor::cycle() {
     }
     //kalman everything
     //printMat(zustandsVector);
-
+    /*
     kalman_filter_lr(r,stateTransitionMatrix,kovarianzMatrixDesZustandes,
+                     kovarianzMatrixDesZustandUebergangs,
+                     r_fakt,delta,lx,ly,rx,ry);
+    */
+    kalman_filter_lr(zustandsVector,stateTransitionMatrix,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      r_fakt,delta,lx,ly,rx,ry);
 
@@ -84,16 +89,21 @@ void EnvironmentPredictor::createOutput(){
     Environment::RoadLane middle;
     lms::math::vertex2f p1;
     p1.x = 0;
-    p1.y = r[0];//zustandsVector->data[0];
+    //p1.y = r[0];//zustandsVector->data[0];
+    p1.y = zustandsVector->data[0];
     lms::math::vertex2f p2;
-    p2.x = delta*cos(r[1]);//zustandsVector->data[1]);
-    p2.y = p1.y + delta*r[1];//sin(zustandsVector->data[1]);
-    double phi = r[1];//zustandsVector->data[2];
+    //p2.x = delta*cos(r[1]);
+    p2.x = delta*cos(zustandsVector->data[1]);
+   // p2.y = p1.y + delta*sin(r[1]);
+    p2.y = p1.y + delta*sin(zustandsVector->data[1]);
+    //double phi = r[1];
+    double phi = zustandsVector->data[1];
     middle.points().push_back(p1);
     middle.points().push_back(p2);
     for(int i = 2; i < n; i++){
         lms::math::vertex2f pi;
-        double dw = 2*acos(delta*r[i]/*zustandsVector->data[i]*//2);
+        //double dw = 2*acos(delta*r[i]/2);
+        double dw = 2*acos(delta*zustandsVector->data[i]/2);
         phi = phi -dw-M_PI;
         pi.x = middle.points()[i-1].x + delta*cos(phi);
         pi.y = middle.points()[i-1].y + delta*sin(phi);
