@@ -9,6 +9,7 @@
 #include "cmath"
 extern "C"{
 #include "kalman_filter_lr.h"
+#include "projectPoints.h"
 }
 bool EnvironmentPredictor::initialize() {
     envInput = datamanager()->readChannel<Environment>(this,"ENVIRONMENT_INPUT");
@@ -43,13 +44,12 @@ bool EnvironmentPredictor::deinitialize() {
 }
 
 bool EnvironmentPredictor::cycle() {
-    logger.time("kalman");
     //länge der später zu berechnenden Abschnitten
     //convert data to lines
-    emxArray_real_T *rx;
-    emxArray_real_T *ry;
-    emxArray_real_T *lx;
-    emxArray_real_T *ly;
+    emxArray_real_T *rx = nullptr;
+    emxArray_real_T *ry = nullptr;
+    emxArray_real_T *lx = nullptr;
+    emxArray_real_T *ly = nullptr;
     for(const Environment::RoadLane &rl :envInput->lanes){
         if(rl.type() == Environment::RoadLaneType::LEFT){
             //logger.debug("cycle") << "found left lane: " << rl.points().size();
@@ -57,14 +57,14 @@ bool EnvironmentPredictor::cycle() {
         }else if(rl.type() == Environment::RoadLaneType::RIGHT){
             //logger.debug("cycle") << "found right lane: " << rl.points().size();
             convertToKalmanArray(rl,&rx,&ry);
+        }else if(rl.type() == Environment::RoadLaneType::MIDDLE){
+            //TODO Kalman doesn't support middle-lane yet
         }
     }
-    //kalman everything
-    /*
-    kalman_filter_lr(r,stateTransitionMatrix,kovarianzMatrixDesZustandes,
-                     kovarianzMatrixDesZustandUebergangs,
-                     r_fakt,delta,lx,ly,rx,ry);
-    */
+    //TODO
+    if(rx == nullptr || lx == nullptr){
+        return true;
+    }
     kalman_filter_lr(zustandsVector,stateTransitionMatrix,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      r_fakt,delta,lx,ly,rx,ry);
@@ -74,36 +74,37 @@ bool EnvironmentPredictor::cycle() {
     emxDestroyArray_real_T(ry);
     emxDestroyArray_real_T(lx);
     emxDestroyArray_real_T(ly);
-    logger.timeEnd("kalman");
     return true;
 }
 
 void EnvironmentPredictor::createOutput(){
+    envOutput->lanes.clear();
+    //create middle
     Environment::RoadLane middle;
+    middle.type(Environment::RoadLaneType::MIDDLE);
+    convertZustandToLane(middle);
+    envOutput->lanes.push_back(middle);
+}
+
+void EnvironmentPredictor::convertZustandToLane(Environment::RoadLane &output){
     lms::math::vertex2f p1;
     p1.x = 0;
-    //p1.y = r[0];//zustandsVector->data[0];
     p1.y = zustandsVector->data[0];
     lms::math::vertex2f p2;
-    //p2.x = delta*cos(r[1]);
     p2.x = delta*cos(zustandsVector->data[1]);
-   // p2.y = p1.y + delta*sin(r[1]);
     p2.y = p1.y + delta*sin(zustandsVector->data[1]);
-    //double phi = r[1];
     double phi = zustandsVector->data[1];
-    middle.points().push_back(p1);
-    middle.points().push_back(p2);
+    //add points to lane
+    output.points().push_back(p1);
+    output.points().push_back(p2);
     for(int i = 2; i < n; i++){
         lms::math::vertex2f pi;
-        //double dw = 2*acos(delta*r[i]/2);
         double dw = 2*acos(delta*zustandsVector->data[i]/2);
         phi = phi -dw-M_PI;
-        pi.x = middle.points()[i-1].x + delta*cos(phi);
-        pi.y = middle.points()[i-1].y + delta*sin(phi);
-        middle.points().push_back(pi);
+        pi.x = output.points()[i-1].x + delta*cos(phi);
+        pi.y = output.points()[i-1].y + delta*sin(phi);
+        output.points().push_back(pi);
     }
-    envOutput->lanes.clear();
-    envOutput->lanes.push_back(middle);
 }
 
 void EnvironmentPredictor::clearMatrix(emxArray_real_T *mat){

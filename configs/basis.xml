@@ -42,6 +42,7 @@
 		<writePriority>10</writePriority>
 		<channelMapping from="HINTS" to="HINTS"/>
 		<channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
+		<channelMapping from="ENV_MID" to="ENVIRONMENT_ROAD_MERGED"/>
 	</module>
 	<module>
 	    <name>trajectory_point_creator</name>

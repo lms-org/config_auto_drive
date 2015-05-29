@@ -32,6 +32,8 @@ private:
     emxArray_real_T *kovarianzMatrixDesZustandUebergangs;
     double r_fakt; //messgenauigkeit
     void createOutput();
+    void convertZustandToLane(Environment::RoadLane &output);
+
     void printMat(emxArray_real_T *mat);
 };
 

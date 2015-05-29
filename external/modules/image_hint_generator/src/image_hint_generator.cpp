@@ -3,13 +3,115 @@
 #include "lms/imaging_detection/line_point.h"
 #include "lms/imaging_detection/image_hint.h"
 #include "lms/imaging_detection/splitted_line.h"
+#include "lms/imaging_detection/point_line.h"
 #include "lms/math/math.h"
+#include "lms/math/vertex.h"
+#include "lms/imaging/warp.h"
 bool ImageHintGenerator::initialize() {
+    gaussBuffer = new lms::imaging::Image();
+    middleEnv = datamanager()->writeChannel<Environment>(this,"ENV_MID");
     hintContainer = datamanager()->
             writeChannel<lms::imaging::find::HintContainer>(this,"HINTS");
     target = datamanager()->readChannel<lms::imaging::Image>(this,"TARGET_IMAGE");
 
-    gaussBuffer = new lms::imaging::Image();
+    defaultLinePointParameter.target =target;
+    defaultLinePointParameter.lineWidthMax = 10;
+    defaultLinePointParameter.lineWidthMin = 1;
+    defaultLinePointParameter.searchAngle = 0;
+    defaultLinePointParameter.searchLength = 30;
+    defaultLinePointParameter.gaussBuffer = gaussBuffer;
+    defaultLinePointParameter.x = 180;
+    defaultLinePointParameter.y = 120;
+    defaultLinePointParameter.sobelThreshold = 150;
+    defaultLinePointParameter.edge = false;
+    defaultLinePointParameter.verify = true;
+    defaultLinePointParameter.preferVerify = false;
+    return true;
+}
+
+const lms::imaging::Image* ImageHintGenerator::getTargetImage(std::string name){
+    if(targets.find(name) == targets.end()){
+        targets[name] = datamanager()->readChannel<lms::imaging::Image>(this,name);
+    }
+    return targets[name];
+
+}
+bool ImageHintGenerator::deinitialize() {
+    return false;
+}
+bool ImageHintGenerator::cycle() {
+    static bool fromMiddle = false;
+    hintContainer->clear();
+    //set the gaussbuffer
+    gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
+    //clear the gaussBuffer not necessary!
+    if(fromMiddle){
+        createHintsFromMiddleLane();
+    }else{
+        initialHints();
+        fromMiddle = true;
+    }
+    return true;
+}
+
+void ImageHintGenerator::createHintsFromMiddleLane(){
+    using lms::math::vertex2f;
+    using lms::math::vertex2i;
+    if(middleEnv->lanes.size() != 1){
+        logger.error("createHintsFromMiddleLane")<<"no valid evironment for middle-lane";
+        return;
+    }
+    const Environment::RoadLane &middle = middleEnv->lanes[0];
+    if(middle.type() != Environment::RoadLaneType::MIDDLE){
+        logger.error("createHintsFromMiddleLane") << "middle is no middle lane!";
+        return;
+    }
+    float lineDistance = 0.3;
+    lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintLeft = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
+    hintLeft->name = "LEFT_LANE";
+    lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintRight = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
+    hintRight->name = "RIGHT_LANE";
+    for(int i = 1; i < (int)middle.points().size(); i++){
+        vertex2f bot = middle.points()[i-1];
+        vertex2f top = middle.points()[i];
+        vertex2f distance = top-bot;
+        distance = distance.normalize();
+        float tmpX = distance.x;
+        distance.x = -distance.y;
+        distance.y = tmpX;
+        distance *= lineDistance;
+        vertex2f left = top+distance;
+        vertex2f right = top-distance;
+
+        vertex2i leftI;
+        vertex2i rightI;
+        vertex2i topI;
+
+        lms::imaging::V2C(&left,&leftI);
+        lms::imaging::V2C(&right,&rightI);
+        lms::imaging::V2C(&top,&topI);
+
+        float angleLeft = (leftI-topI).angle();
+
+        //add hints
+        //add left
+        defaultLinePointParameter.x = leftI.x;
+        defaultLinePointParameter.y = leftI.y;
+        defaultLinePointParameter.searchAngle = angleLeft;
+        hintLeft->parameter.addParam(defaultLinePointParameter);
+
+        //add right
+        defaultLinePointParameter.x = rightI.x;
+        defaultLinePointParameter.y = rightI.y;
+        defaultLinePointParameter.searchAngle = angleLeft+M_PI;
+        hintRight->parameter.addParam(defaultLinePointParameter);
+
+    }
+    hintContainer->add(hintLeft);
+    hintContainer->add(hintRight);
+}
+
+void ImageHintGenerator::initialHints(){
     lms::imaging::find::ImageHint<lms::imaging::find::Line> *hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>();
     hint->name = "RIGHT_LANE";
     hint->parameter.target =target;
@@ -98,30 +200,4 @@ bool ImageHintGenerator::initialize() {
         return !ep.find(param DRAWDEBUG_ARG);
     };
     //hintContainer->add(hint);
-
-    return true;
-}
-
-const lms::imaging::Image* ImageHintGenerator::getTargetImage(std::string name){
-    if(targets.find(name) == targets.end()){
-        targets[name] = datamanager()->readChannel<lms::imaging::Image>(this,name);
-    }
-    return targets[name];
-
-}
-bool ImageHintGenerator::deinitialize() {
-    return false;
-}
-
-bool ImageHintGenerator::cycle() {
-    gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
-    gaussBuffer->fill(255);
-    for(lms::imaging::find::ImageHintBase *ihb : hintContainer->hints){
-        lms::imaging::find::ImageHint<lms::imaging::find::Line> *ih =(lms::imaging::find::ImageHint<lms::imaging::find::Line>*) ihb;
-        if(ih->imageObject.points().size() < 5){
-            ih->parameter.preferVerify = false;
-        }
-    }
-    //TODO calc new good positions (atm will will just use verify in the line etc.)
-    return true;
 }
