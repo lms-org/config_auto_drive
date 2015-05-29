@@ -84,7 +84,7 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
         distance *= lineDistance;
         vertex2f left = top+distance;
         vertex2f right = top-distance;
-        vertex2f middle = top-distance*0.3;
+        vertex2f middle = top-distance*0.1;
 
         vertex2i leftI;
         vertex2i rightI;
@@ -188,8 +188,8 @@ void ImageHintGenerator::initialHints(){
         result = result && (fabs(angle) < M_PI_2l*0.5) &&!(lp.low_high.y < 50);
         return result;
     };
-    //add it
-    hintContainer->add(hintSplit);
+    //TODO atm we can't search for the middle-lane that way (transformer fails)
+    //hintContainer->add(hintSplit);
 
 
 
