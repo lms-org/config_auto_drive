@@ -71,6 +71,8 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
     hintLeft->name = "LEFT_LANE";
     lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintRight = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
     hintRight->name = "RIGHT_LANE";
+    lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintMiddle = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
+    hintMiddle->name = "MIDDLE_LANE";
     for(int i = 1; i < (int)middle.points().size(); i++){
         vertex2f bot = middle.points()[i-1];
         vertex2f top = middle.points()[i];
@@ -82,13 +84,16 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
         distance *= lineDistance;
         vertex2f left = top+distance;
         vertex2f right = top-distance;
+        vertex2f middle = top-distance*0.3;
 
         vertex2i leftI;
         vertex2i rightI;
+        vertex2i middleI;
         vertex2i topI;
 
         lms::imaging::V2C(&left,&leftI);
         lms::imaging::V2C(&right,&rightI);
+        lms::imaging::V2C(&middle,&middleI);
         lms::imaging::V2C(&top,&topI);
 
         float angleLeft = (leftI-topI).angle();
@@ -106,9 +111,15 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
         defaultLinePointParameter.searchAngle = angleLeft+M_PI;
         hintRight->parameter.addParam(defaultLinePointParameter);
 
+        //add middle
+        defaultLinePointParameter.x = middleI.x;
+        defaultLinePointParameter.y = middleI.y;
+        defaultLinePointParameter.searchAngle = angleLeft;
+        hintMiddle->parameter.addParam(defaultLinePointParameter);
     }
     hintContainer->add(hintLeft);
     hintContainer->add(hintRight);
+    hintContainer->add(hintMiddle);
 }
 
 void ImageHintGenerator::initialHints(){

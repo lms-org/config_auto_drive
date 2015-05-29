@@ -10,7 +10,7 @@
 		<module>image_hint_generator</module>
 		<module logLevel="ERROR">environment_filter</module>
 		<!--module logLevel="ERROR">environment_filter_merged</module-->
-		<module logLevel="ERROR">trajectory_point_controller</module>
+		<!--module logLevel="ERROR">trajectory_point_controller</module-->
 		<!--module>line_persistent</module-->
         <module>image_proxy</module>
 		<!--module>environment_logger</module-->
