@@ -54,7 +54,7 @@
 	</module>
 	<module>
 	    <name>trajectory_line_creator</name>
-		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_MERGED"/>
+		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_MERGED"/>
 		<channelMapping from="LINE" to="LINE"/>
 		<config src="environment.lconf" />
 	</module>
