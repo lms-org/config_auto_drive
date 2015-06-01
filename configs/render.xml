@@ -17,7 +17,7 @@
 		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
 		<config>
             <environments>ENVIRONMENT_ROAD_MERGED,ENVIRONMENT_ROAD_FILTERED</environments>
-		    <polylines>LINE</polylines>
+		    <polylines>TRAJECTORY_LINE</polylines>
 		    <vertex2f></vertex2f>
 		    <vertex4f>TRAJECTORY_POINT</vertex4f>
 		    <!--The default Color, TODO add colors for points, lines etc -->
@@ -35,7 +35,7 @@
 		    <colorG>0</colorG>
 		    <colorB>255</colorB>
 		</config>
-		<config name="LINE">
+		<config name="TRAJECTORY_LINE">
 		    <colorR>255</colorR>
 		    <colorG>255</colorG>
 		    <colorB>0</colorB>

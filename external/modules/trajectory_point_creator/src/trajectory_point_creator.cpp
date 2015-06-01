@@ -16,6 +16,9 @@ bool TrajectoryPointCreator::cycle() {
     const float distanceSearched = config->get<float>("distanceSearched", 0.50);
 
     bool found = false;
+    if(toFollow->points().size() < 1){
+        logger.warn("cycle") <<"Can't follow anything";
+    }
     for(int i = 1; i < (int)toFollow->points().size();i++){
         //TODO put 0.2 in config
         lms::math::vertex2f top = toFollow->points()[i];

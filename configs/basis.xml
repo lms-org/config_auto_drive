@@ -10,7 +10,7 @@
 		<module>image_hint_generator</module>
 		<module logLevel="ERROR">environment_filter</module>
 		<!--module logLevel="ERROR">environment_filter_merged</module-->
-		<!--module logLevel="ERROR">trajectory_point_controller</module-->
+		<module logLevel="ERROR">trajectory_point_controller</module>
 		<!--module>line_persistent</module-->
         <module>image_proxy</module>
 		<!--module>environment_logger</module-->
@@ -46,7 +46,7 @@
 	</module>
 	<module>
 	    <name>trajectory_point_creator</name>
-		<channelMapping from="LINE" to="LINE_PERSISTENT"/>
+		<channelMapping from="LINE" to="TRAJECTORY_LINE"/>
 		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
 		<config>
 			<distanceSearched> 0.5 </distanceSearched>
@@ -55,7 +55,7 @@
 	<module>
 	    <name>trajectory_line_creator</name>
 		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_MERGED"/>
-		<channelMapping from="LINE" to="LINE"/>
+		<channelMapping from="LINE" to="TRAJECTORY_LINE"/>
 		<config src="environment.lconf" />
 	</module>
 	<module>
