@@ -2,16 +2,13 @@
 	<modulesToEnable>
 		<module>image_hint_worker</module>
 		<module logLevel="ERROR">image_hint_transformer</module>
-		<!--module logLevel="WARN">image_hint_merger</module-->
 		<module>environment_predictor</module>
-		<!--module>environment_line_predictor</module-->
 		<module>trajectory_line_creator</module>
 		<module>trajectory_point_creator</module>
 		<module>image_hint_generator</module>
 		<module logLevel="ERROR">environment_filter</module>
-		<!--module logLevel="ERROR">environment_filter_merged</module-->
 		<module logLevel="ERROR">trajectory_point_controller</module>
-		<!--module>line_persistent</module-->
+		<module>sensor_tracker</module>
         <module>image_proxy</module>
 		<!--module>environment_logger</module-->
 		<!--module>image_logger_t</module-->
@@ -43,6 +40,9 @@
 		<channelMapping from="HINTS" to="HINTS"/>
 		<channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
 		<channelMapping from="ENV_MID" to="ENVIRONMENT_ROAD_MERGED"/>
+	</module>
+	<module>
+	    <name>sensor_tracker</name>
 	</module>
 	<module>
 	    <name>trajectory_point_creator</name>
@@ -87,6 +87,9 @@
 	</module>
     <module>
         <name>image_proxy</name>
+        <config>
+            <displayMode>IMAGE_CHANNEL</displayMode>
+        </config>
         <config user="phibedy">
             <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150519-164907</directory>
             <singleFile>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150519-164907/0000.pgm</singleFile>

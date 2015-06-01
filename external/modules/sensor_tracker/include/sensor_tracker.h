@@ -3,6 +3,7 @@
 
 #include "lms/module.h"
 #include "lms/math/polyline.h"
+#include "lms/math/polyline.h"
 #include "image_objects/environment.h"
 #include "comm/senseboard.h"
 #include "sensor_utils/line_depth_environment.h"
@@ -16,6 +17,7 @@ private:
     const Comm::SensorBoard::SensorData *sensorData;
     const Comm::SensorBoard::ControlData *controlData;
     LinedDepthEnvironment *lde;
+    lms::math::polyLine2f* currentSensor;
     lms::extra::PrecisionTime last;
     bool fristRun;
 
