@@ -2,7 +2,7 @@
  * File: _coder_kalman_filter_lr_api.c
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 28-May-2015 16:02:10
+ * C/C++ source code generated on  : 01-Jun-2015 15:11:47
  */
 
 /* Include Files */
@@ -82,11 +82,11 @@ void kalman_filter_lr_atexit(void)
 }
 
 /*
- * Arguments    : const mxArray *prhs[10]
+ * Arguments    : const mxArray *prhs[12]
  *                const mxArray *plhs[2]
  * Return Type  : void
  */
-void kalman_filter_lr_api(const mxArray *prhs[10], const mxArray *plhs[2])
+void kalman_filter_lr_api(const mxArray *prhs[12], const mxArray *plhs[2])
 {
   emxArray_real_T *r;
   emxArray_real_T *A;
@@ -96,6 +96,8 @@ void kalman_filter_lr_api(const mxArray *prhs[10], const mxArray *plhs[2])
   emxArray_real_T *yl;
   emxArray_real_T *xr;
   emxArray_real_T *yr;
+  emxArray_real_T *xm;
+  emxArray_real_T *ym;
   real_T R_fakt;
   real_T delta;
   emlrtStack st = { NULL, NULL, NULL };
@@ -110,6 +112,8 @@ void kalman_filter_lr_api(const mxArray *prhs[10], const mxArray *plhs[2])
   emxInit_real_T(&st, &yl, 1, true);
   emxInit_real_T(&st, &xr, 1, true);
   emxInit_real_T(&st, &yr, 1, true);
+  emxInit_real_T(&st, &xm, 1, true);
+  emxInit_real_T(&st, &ym, 1, true);
   prhs[0] = emlrtProtectR2012b(prhs[0], 0, true, -1);
   prhs[1] = emlrtProtectR2012b(prhs[1], 1, false, -1);
   prhs[2] = emlrtProtectR2012b(prhs[2], 2, true, -1);
@@ -118,6 +122,8 @@ void kalman_filter_lr_api(const mxArray *prhs[10], const mxArray *plhs[2])
   prhs[7] = emlrtProtectR2012b(prhs[7], 7, false, -1);
   prhs[8] = emlrtProtectR2012b(prhs[8], 8, false, -1);
   prhs[9] = emlrtProtectR2012b(prhs[9], 9, false, -1);
+  prhs[10] = emlrtProtectR2012b(prhs[10], 10, false, -1);
+  prhs[11] = emlrtProtectR2012b(prhs[11], 11, false, -1);
 
   /* Marshall function inputs */
   emlrt_marshallIn(&st, emlrtAlias(prhs[0]), "r", r);
@@ -130,15 +136,21 @@ void kalman_filter_lr_api(const mxArray *prhs[10], const mxArray *plhs[2])
   emlrt_marshallIn(&st, emlrtAlias(prhs[7]), "yl", yl);
   emlrt_marshallIn(&st, emlrtAlias(prhs[8]), "xr", xr);
   emlrt_marshallIn(&st, emlrtAlias(prhs[9]), "yr", yr);
+  emlrt_marshallIn(&st, emlrtAlias(prhs[10]), "xm", xm);
+  emlrt_marshallIn(&st, emlrtAlias(prhs[11]), "ym", ym);
 
   /* Invoke the target function */
-  kalman_filter_lr(r, A, Pk, Q, R_fakt, delta, xl, yl, xr, yr);
+  kalman_filter_lr(r, A, Pk, Q, R_fakt, delta, xl, yl, xr, yr, xm, ym);
 
   /* Marshall function outputs */
   emlrt_marshallOut(r, prhs[0]);
   plhs[0] = prhs[0];
   b_emlrt_marshallOut(Pk, prhs[2]);
   plhs[1] = prhs[2];
+  ym->canFreeData = false;
+  emxFree_real_T(&ym);
+  xm->canFreeData = false;
+  emxFree_real_T(&xm);
   yr->canFreeData = false;
   emxFree_real_T(&yr);
   xr->canFreeData = false;

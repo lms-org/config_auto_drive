@@ -2,7 +2,7 @@
  * File: eye.h
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 28-May-2015 16:02:10
+ * C/C++ source code generated on  : 01-Jun-2015 15:11:47
  */
 
 #ifndef __EYE_H__

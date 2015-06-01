@@ -50,30 +50,50 @@ bool EnvironmentPredictor::cycle() {
     emxArray_real_T *ry = nullptr;
     emxArray_real_T *lx = nullptr;
     emxArray_real_T *ly = nullptr;
+    emxArray_real_T *mx = nullptr;
+    emxArray_real_T *my = nullptr;
     for(const Environment::RoadLane &rl :envInput->lanes){
+        if(rl.points().size() == 0)
+            continue;
         if(rl.type() == Environment::RoadLaneType::LEFT){
-            //logger.debug("cycle") << "found left lane: " << rl.points().size();
+            logger.debug("cycle") << "found left lane: " << rl.points().size();
             convertToKalmanArray(rl,&lx,&ly);
         }else if(rl.type() == Environment::RoadLaneType::RIGHT){
-            //logger.debug("cycle") << "found right lane: " << rl.points().size();
+            logger.debug("cycle") << "found right lane: " << rl.points().size();
             convertToKalmanArray(rl,&rx,&ry);
         }else if(rl.type() == Environment::RoadLaneType::MIDDLE){
-            //TODO Kalman doesn't support middle-lane yet
+            logger.debug("cycle") << "found middle lane: " << rl.points().size();
+            convertToKalmanArray(rl,&mx,&my);
         }
     }
-    //TODO
-    if(rx == nullptr || lx == nullptr){
-        return true;
+    if(rx == nullptr){
+        logger.debug("right has zero points");
+        rx = emxCreate_real_T(0,0);
+        ry = emxCreate_real_T(0,0);
     }
+    if(lx == nullptr){
+        logger.debug("left has zero points");
+        lx = emxCreate_real_T(0,0);
+        ly = emxCreate_real_T(0,0);
+    }
+    if(mx == nullptr){
+        logger.debug("middle has zero points");
+        mx = emxCreate_real_T(0,0);
+        my = emxCreate_real_T(0,0);
+    }
+    //Kalman with middle-lane
     kalman_filter_lr(zustandsVector,stateTransitionMatrix,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
-                     r_fakt,delta,lx,ly,rx,ry);
+                     r_fakt,delta,lx,ly,rx,ry,mx,my);
+
     createOutput();
     //destroy stuff
     emxDestroyArray_real_T(rx);
     emxDestroyArray_real_T(ry);
     emxDestroyArray_real_T(lx);
     emxDestroyArray_real_T(ly);
+    emxDestroyArray_real_T(mx);
+    emxDestroyArray_real_T(my);
     return true;
 }
 

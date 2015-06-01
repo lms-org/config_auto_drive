@@ -20,7 +20,7 @@ void *emlrtRootTLSGlobal = NULL;
 static void kalman_filter_lr_mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
   const mxArray *outputs[2];
-  const mxArray *inputs[10];
+  const mxArray *inputs[12];
   int n = 0;
   int nOutputs = (nlhs < 1 ? 1 : nlhs);
   int nInputs = nrhs;
@@ -29,8 +29,8 @@ static void kalman_filter_lr_mexFunction(int nlhs, mxArray *plhs[], int nrhs, co
   kalman_filter_lr_initialize(&emlrtContextGlobal);
   st.tls = emlrtRootTLSGlobal;
   /* Check for proper number of arguments. */
-  if (nrhs != 10) {
-    emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:WrongNumberOfInputs", 5, mxINT32_CLASS, 10, mxCHAR_CLASS, 16, "kalman_filter_lr");
+  if (nrhs != 12) {
+    emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:WrongNumberOfInputs", 5, mxINT32_CLASS, 12, mxCHAR_CLASS, 16, "kalman_filter_lr");
   } else if (nlhs > 2) {
     emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:TooManyOutputArguments", 3, mxCHAR_CLASS, 16, "kalman_filter_lr");
   }
