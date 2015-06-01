@@ -10,8 +10,6 @@
 		<module logLevel="DEBUG">trajectory_point_controller</module>
 		<module>sensor_tracker</module>
         <module>image_proxy</module>
-		<!--module>environment_logger</module-->
-		<!--module>image_logger_t</module-->
 	</modulesToEnable>
 	<module>
 		<name>image_logger_t</name>
@@ -33,6 +31,9 @@
 	<module>
 		<name>trajectory_point_controller</name>
 		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
+		<config>
+		    <maxSpeed>1</maxSpeed>
+		</config>
     </module>
 	<module>
 	    <name>image_hint_generator</name>
