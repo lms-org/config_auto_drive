@@ -22,6 +22,7 @@ bool EnvironmentPredictor::initialize() {
     for(int i = 0; i < 10; i++){
         r[i]=0;
     }
+    r[0] = 0.2;
     clearMatrix(zustandsVector);
 
     stateTransitionMatrix = emxCreate_real_T(n,n);
