@@ -1,6 +1,10 @@
 <framework>
+    <execution>
+        <!--profiling enabled="true" /-->
+    </execution>
 	<modulesToEnable>
-        <module logLevel="WARN">camera_importer</module>
+        <!--module logLevel="WARN">camera_importer</module-->
+        <module logLevel="DEBUG">ueye_importer</module>
 		<module logLevel="WARN">image_converter</module>
 		<!--module logLevel="WARN">image_logger</module-->
 	</modulesToEnable>
@@ -17,6 +21,11 @@
 		<name>camera_importer</name>
 		<config src="camera_importer.lconf"/>
 	</module>
+    <module>
+        <name>ueye_importer</name>
+        <config src="ueye_importer.lconf" />
+        <channelMapping from="CAMERA_IMAGE" to="IMAGE" />
+    </module>
 	<module>
 		<name>image_converter</name>
 	    <channelMapping from="INPUT_IMAGE" to="IMAGE"/>
