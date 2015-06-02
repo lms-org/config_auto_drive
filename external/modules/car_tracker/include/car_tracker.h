@@ -26,6 +26,7 @@ private:
     void getFromVehicle(DeltaState &d);
     void getFromTrajectory(DeltaState &d);
     void getFromMouseSensors(DeltaState &d);
+    void getFromImu(DeltaState &d);
     float delta;
     lms::extra::PrecisionTime last;
     bool firstRun;
