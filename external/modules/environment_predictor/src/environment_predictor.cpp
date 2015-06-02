@@ -14,15 +14,16 @@ extern "C"{
 bool EnvironmentPredictor::initialize() {
     envInput = datamanager()->readChannel<Environment>(this,"ENVIRONMENT_INPUT");
     envOutput = datamanager()->writeChannel<Environment>(this,"ENVIRONMENT_OUTPUT");
+    config = getConfig();
 
-    n = 10;
-    delta = 0.2;
-    r_fakt=20;
+    n = config->get<int>("elementCount",10);
+    delta = config->get<float>("elementLength",0.2);
+    r_fakt=config->get<double>("r_fakt",20);
     zustandsVector = emxCreate_real_T(n,1);
     for(int i = 0; i < 10; i++){
         r[i]=0;
     }
-    r[0] = 0.2;
+    r[0] = getConfig()->get<float>("distanceToMiddle",0.2);
     clearMatrix(zustandsVector);
 
     stateTransitionMatrix = emxCreate_real_T(n,n);

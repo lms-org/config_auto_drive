@@ -1,5 +1,5 @@
 #Default ps2 camera values
-device = /dev/video1
+device = /dev/video0
 width = 320
 height = 240
 format = YUYV

@@ -5,6 +5,7 @@
 #include "lms/imaging/image.h"
 #include "lms/imaging/format.h"
 #include "image_objects/environment.h"
+#include "lms/type/module_config.h"
 extern "C"{
 #include "kalman_filter_lr_emxAPI.h"
 }
@@ -17,6 +18,7 @@ public:
 private:
     const Environment *envInput;
     Environment *envOutput;
+    lms::type::ModuleConfig *config;
     void convertToKalmanArray(const Environment::RoadLane &lane,emxArray_real_T **x,emxArray_real_T **y);
     void asEinheitsMatrix(emxArray_real_T *mat);
     void clearMatrix(emxArray_real_T *mat);
