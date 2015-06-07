@@ -16,26 +16,23 @@ bool EnvironmentPredictor::initialize() {
     envOutput = datamanager()->writeChannel<Environment>(this,"ENVIRONMENT_OUTPUT");
     config = getConfig();
 
-    n = config->get<int>("elementCount",10);
-    delta = config->get<float>("elementLength",0.2);
+    partCount = config->get<int>("elementCount",10);
+    partLength = config->get<float>("elementLength",0.2);
     r_fakt=config->get<double>("r_fakt",20);
-    zustandsVector = emxCreate_real_T(n,1);
-    for(int i = 0; i < 10; i++){
-        r[i]=0;
-    }
-    r[0] = getConfig()->get<float>("distanceToMiddle",0.2);
+    zustandsVector = emxCreate_real_T(partCount,1);
     clearMatrix(zustandsVector);
+    zustandsVector->data[0] = getConfig()->get<float>("distanceToMiddle",0.2);
 
-    stateTransitionMatrix = emxCreate_real_T(n,n);
+    stateTransitionMatrix = emxCreate_real_T(partCount,partCount);
     asEinheitsMatrix(stateTransitionMatrix);
-    kovarianzMatrixDesZustandes = emxCreate_real_T(n,n);
+    kovarianzMatrixDesZustandes = emxCreate_real_T(partCount,partCount);
     asEinheitsMatrix(kovarianzMatrixDesZustandes);
-    kovarianzMatrixDesZustandUebergangs = emxCreate_real_T(n,n);
+    kovarianzMatrixDesZustandUebergangs = emxCreate_real_T(partCount,partCount);
     clearMatrix(kovarianzMatrixDesZustandUebergangs);
 
-    for(int x = 0; x < n; x++){
-        for(int y = 0; y < n; y++){
-            kovarianzMatrixDesZustandUebergangs->data[y*n+x]=15*(1-pow(0.2,1/fabs(x-y)));
+    for(int x = 0; x < partCount; x++){
+        for(int y = 0; y < partCount; y++){
+            kovarianzMatrixDesZustandUebergangs->data[y*partCount+x]=15*(1-pow(0.2,1/fabs(x-y)));
         }
     }
     return true;
@@ -86,7 +83,7 @@ bool EnvironmentPredictor::cycle() {
     //Kalman with middle-lane
     kalman_filter_lr(zustandsVector,stateTransitionMatrix,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
-                     r_fakt,delta,lx,ly,rx,ry,mx,my);
+                     r_fakt,partLength,lx,ly,rx,ry,mx,my);
 
     createOutput();
     //destroy stuff
@@ -113,20 +110,23 @@ void EnvironmentPredictor::convertZustandToLane(Environment::RoadLane &output){
     p1.x = 0;
     p1.y = zustandsVector->data[0];
     lms::math::vertex2f p2;
-    p2.x = delta*cos(zustandsVector->data[1]);
-    p2.y = p1.y + delta*sin(zustandsVector->data[1]);
+    p2.x = partLength*cos(zustandsVector->data[1]);
+    p2.y = p1.y + partLength*sin(zustandsVector->data[1]);
     double phi = zustandsVector->data[1];
     //add points to lane
     output.points().push_back(p1);
     output.points().push_back(p2);
-    for(int i = 2; i < n; i++){
+    output.polarPartLength = partLength;
+    for(int i = 2; i < partCount; i++){
         lms::math::vertex2f pi;
-        double dw = 2*acos(delta*zustandsVector->data[i]/2);
+        double dw = 2*acos(partLength*zustandsVector->data[i]/2);
         phi = phi -dw-M_PI;
-        pi.x = output.points()[i-1].x + delta*cos(phi);
-        pi.y = output.points()[i-1].y + delta*sin(phi);
+        pi.x = output.points()[i-1].x + partLength*cos(phi);
+        pi.y = output.points()[i-1].y + partLength*sin(phi);
         output.points().push_back(pi);
+        output.polarDarstellung.push_back(zustandsVector->data[i]);
     }
+
 }
 
 void EnvironmentPredictor::clearMatrix(emxArray_real_T *mat){

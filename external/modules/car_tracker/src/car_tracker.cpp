@@ -19,7 +19,7 @@ bool CarTracker::cycle() {
         last = lms::extra::PrecisionTime::now();
         return true;
     }
-    delta = lms::extra::PrecisionTime::since(last).toFloat;
+    delta = lms::extra::PrecisionTime::since(last).toFloat<std::milli>()/1000;
     DeltaState deltaTra;
     DeltaState deltaVeh;
     DeltaState deltaMouse;

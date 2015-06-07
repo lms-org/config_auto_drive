@@ -11,6 +11,7 @@ extern "C"{
 }
 
 class EnvironmentPredictor : public lms::Module {
+
 public:
     bool initialize() override;
     bool deinitialize() override;
@@ -18,16 +19,14 @@ public:
 private:
     const Environment *envInput;
     Environment *envOutput;
-    lms::type::ModuleConfig *config;
+
+    emxArray_real_T *zustandsVector;
+    int partCount;
+    double partLength;
+    const lms::type::ModuleConfig *config;
     void convertToKalmanArray(const Environment::RoadLane &lane,emxArray_real_T **x,emxArray_real_T **y);
     void asEinheitsMatrix(emxArray_real_T *mat);
     void clearMatrix(emxArray_real_T *mat);
-
-
-    int n;
-    double delta;
-    emxArray_real_T *zustandsVector;
-    double r[10];
     emxArray_real_T *stateTransitionMatrix;
 
     emxArray_real_T *kovarianzMatrixDesZustandes;
