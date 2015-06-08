@@ -34,7 +34,7 @@
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_MERGED"/>
 		<config>
 		    <maxSpeed>3</maxSpeed>
-		    <minCurveSpeed>1.5</minCurveSpeed>
+		    <minCurveSpeed>1.0</minCurveSpeed>
 		    <!--maxCurvationInRad>1</maxCurvationInRad-->
 		    <forcastLength>1.2</forcastLength>
 		    <maxDeltaTInMs>15</maxDeltaTInMs>
