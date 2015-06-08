@@ -8,6 +8,7 @@
 		<module>image_hint_generator</module>
 		<module logLevel="ERROR">environment_filter</module>
 		<module logLevel="DEBUG">trajectory_point_controller</module>
+		<module logLevel="DEBUG">velocity_controller</module>
 		<module>sensor_tracker</module>
         <module>image_proxy</module>
 	</modulesToEnable>
@@ -28,6 +29,19 @@
 		    <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/logging_data</directory>
 		</config>
 	</module>
+	<module>
+		<name>velocity_controller</name>
+		<channelMapping from="MIDDLE_LANE" to="MIDDLE_LANE"/>
+		<config>
+		    <maxSpeed>3</maxSpeed>
+		    <minCurveSpeed>1.5</minCurveSpeed>
+		    <!--maxCurvationInRad>1</maxCurvationInRad-->
+		    <forcastLength>1.2</forcastLength>
+		    <maxDeltaTInMs>15</maxDeltaTInMs>
+		    <maxAcc>4</maxAcc>
+		    <minAcc>-6</minAcc>
+		</config>
+    </module>
 	<module>
 		<name>trajectory_point_controller</name>
 		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>

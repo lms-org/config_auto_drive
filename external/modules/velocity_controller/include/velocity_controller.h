@@ -16,6 +16,15 @@ private:
     const Environment::RoadLane *middle;
     const lms::type::ModuleConfig *config;
     Comm::SensorBoard::ControlData *controlData;
+    lms::extra::PrecisionTime lastCall;
+    /**
+     * @brief launchControll
+     * @param newVeolocity
+     * @param currentVelocity
+     * @return true if launchControll is active, false if not
+     */
+    bool launchControll(float newVeolocity,float currentVelocity);
+    bool defaultDrive();
 
 };
 
