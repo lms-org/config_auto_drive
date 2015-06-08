@@ -6,12 +6,12 @@ offset_y = 0
 
 pixelclock = 40
 framerate = 100.10
-exposure = 5
+exposure = 9.91
 
 hardware_gamma = 41
 gamma = 1.0
 
-gain = 41
+gain = 60
 gain_boost = 0
 gain_auto = 1
 

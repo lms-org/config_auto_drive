@@ -1,7 +1,6 @@
 <framework>
     <execution>
-        <!--profiling enabled="true" /-->
-        <clock enabled="true" value="1" unit = "hz"/>
+        <profiling enabled="true"/>
     </execution>
 	<modulesToEnable>
         <!--module logLevel="WARN">camera_importer</module-->
