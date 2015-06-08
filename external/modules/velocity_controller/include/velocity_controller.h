@@ -13,7 +13,7 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    const Environment::RoadLane *middle;
+    const Environment *envInput;
     const lms::type::ModuleConfig *config;
     Comm::SensorBoard::ControlData *controlData;
     lms::extra::PrecisionTime lastCall;

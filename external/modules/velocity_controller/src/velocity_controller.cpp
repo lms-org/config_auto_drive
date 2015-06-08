@@ -2,7 +2,7 @@
 #include "lms/datamanager.h"
 
 bool VelocityController::initialize() {
-    middle = datamanager()->readChannel<Environment::RoadLane>(this,"MIDDLE_LANE");
+    envInput = datamanager()->readChannel<Environment>(this,"ENVIRONMENT_INPUT");
     controlData = datamanager()->writeChannel<Comm::SensorBoard::ControlData>(this,"CONTROL_DATA");
     config = getConfig();
     lastCall = lms::extra::PrecisionTime::now()-lms::extra::PrecisionTime::fromMillis(config->get<float>("maxDeltaTInMs")*10);
@@ -14,6 +14,7 @@ bool VelocityController::deinitialize() {
 }
 
 bool VelocityController::cycle() {
+    return true;
     float currentVelocity = controlData->control.velocity.velocity;
     if(!defaultDrive())
         return true;
@@ -23,13 +24,18 @@ bool VelocityController::cycle() {
 }
 
 bool VelocityController::defaultDrive(){
+    if(envInput->lanes.size() != 1){
+        logger.warn("defaultDrive") << "no valid lane given, laneCount: "<<envInput->lanes.size();
+        return false;
+    }
+    const Environment::RoadLane &middle = envInput->lanes[0];
     float maxSpeed = config->get<float>("maxSpeed",1);
     float minCurveSpeed = config->get<float>("minCurveSpeed",maxSpeed/2);
     float maxCurvation = config->get<float>("maxCurvation",1);
-    int partsNeeded = config->get<float>("forcastLength",1)/middle->polarPartLength;
-    if(partsNeeded > (int)middle->polarDarstellung.size()-2){
+    int partsNeeded = config->get<float>("forcastLength",1)/middle.polarPartLength;
+    if(partsNeeded > (int)middle.polarDarstellung.size()-2){
         logger.warn("cycle")<<"not enough parts available: " << partsNeeded;
-        partsNeeded = (int)middle->points().size()-2;
+        partsNeeded = (int)middle.points().size()-2;
 
     }
     if(partsNeeded == 0 || partsNeeded == INFINITY || partsNeeded == NAN){
@@ -41,7 +47,7 @@ bool VelocityController::defaultDrive(){
     //TODO der ansatz ist prinzipiell bei S-Kurven schlecht!
     float middleCurvation = 0;
     for(int i = 0; i < partsNeeded; i++){
-        middleCurvation += middle->polarDarstellung[i+2];
+        middleCurvation += middle.polarDarstellung[i+2];
     }
     middleCurvation = fabs(middleCurvation)/partsNeeded;
     float velocity = (minCurveSpeed-maxSpeed)/(maxCurvation)*(middleCurvation)+maxSpeed;

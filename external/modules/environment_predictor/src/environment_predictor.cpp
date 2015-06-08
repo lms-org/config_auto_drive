@@ -13,6 +13,7 @@ extern "C"{
 }
 bool EnvironmentPredictor::initialize() {
     envInput = datamanager()->readChannel<Environment>(this,"ENVIRONMENT_INPUT");
+
     envOutput = datamanager()->writeChannel<Environment>(this,"ENVIRONMENT_OUTPUT");
     config = getConfig();
 

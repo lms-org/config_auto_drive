@@ -31,7 +31,7 @@
 	</module>
 	<module>
 		<name>velocity_controller</name>
-		<channelMapping from="MIDDLE_LANE" to="MIDDLE_LANE"/>
+		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_MERGED"/>
 		<config>
 		    <maxSpeed>3</maxSpeed>
 		    <minCurveSpeed>1.5</minCurveSpeed>
