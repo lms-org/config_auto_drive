@@ -57,7 +57,8 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
         logger.error("createHintsFromMiddleLane") << "middle is no middle lane!";
         return;
     }
-    float lineDistance = 0.3;
+    //line Distance with search offset :)
+    float lineDistance = 0.35;
     lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintLeft = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
     hintLeft->name = "LEFT_LANE";
     lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintRight = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
@@ -82,12 +83,15 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
         vertex2i middleI;
         vertex2i topI;
 
+
         lms::imaging::V2C(&left,&leftI);
         lms::imaging::V2C(&right,&rightI);
         lms::imaging::V2C(&middle,&middleI);
         lms::imaging::V2C(&top,&topI);
 
         float angleLeft = (leftI-topI).angle();
+
+        float searchLength = (middle-left).length()/searchLength*0.1;
 
         //add hints
         //add left

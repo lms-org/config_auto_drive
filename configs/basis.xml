@@ -83,6 +83,9 @@
 	</module>
 	<module>
 	    <name>environment_predictor</name>
+	    <config>
+	    <elementCount>10</elementCount>
+	    </config>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
 		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_MERGED"/>
 	</module>
