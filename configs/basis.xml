@@ -36,7 +36,7 @@
 		    <maxSpeed>1.5</maxSpeed>
 		    <minCurveSpeed>0.5</minCurveSpeed>
 		    <!--maxCurvationInRad>1</maxCurvationInRad-->
-		    <forcastLength>1.2</forcastLength>
+		    <forcastLength>0.5</forcastLength>
 		    <maxDeltaTInMs>15</maxDeltaTInMs>
 		    <maxAcc>4</maxAcc>
 		    <minAcc>-6</minAcc>
