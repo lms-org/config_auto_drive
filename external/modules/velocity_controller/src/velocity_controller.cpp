@@ -18,7 +18,8 @@ bool VelocityController::cycle() {
     if(!defaultDrive())
         return true;
     float newVeolocity = controlData->control.velocity.velocity;
-    launchControll(newVeolocity,currentVelocity);
+    //launchControll(newVeolocity,currentVelocity);
+    controlData->control.velocity.velocity = 1;
     return true;
 }
 
