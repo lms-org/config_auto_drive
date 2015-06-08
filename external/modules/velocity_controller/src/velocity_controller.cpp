@@ -14,7 +14,6 @@ bool VelocityController::deinitialize() {
 }
 
 bool VelocityController::cycle() {
-    return true;
     float currentVelocity = controlData->control.velocity.velocity;
     if(!defaultDrive())
         return true;
