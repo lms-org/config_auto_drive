@@ -13,19 +13,9 @@ bool ImageHintGenerator::initialize() {
     hintContainer = datamanager()->
             writeChannel<lms::imaging::find::HintContainer>(this,"HINTS");
     target = datamanager()->readChannel<lms::imaging::Image>(this,"TARGET_IMAGE");
-
+    defaultLinePointParameter.fromConfig(getConfig("defaultLPParameter"));
     defaultLinePointParameter.target =target;
-    defaultLinePointParameter.lineWidthMax = 10;
-    defaultLinePointParameter.lineWidthMin = 1;
-    defaultLinePointParameter.searchAngle = 0;
-    defaultLinePointParameter.searchLength = 30;
     defaultLinePointParameter.gaussBuffer = gaussBuffer;
-    defaultLinePointParameter.x = 180;
-    defaultLinePointParameter.y = 120;
-    defaultLinePointParameter.sobelThreshold = 150;
-    defaultLinePointParameter.edge = false;
-    defaultLinePointParameter.verify = true;
-    defaultLinePointParameter.preferVerify = false;
     return true;
 }
 
@@ -40,7 +30,8 @@ bool ImageHintGenerator::deinitialize() {
     return false;
 }
 bool ImageHintGenerator::cycle() {
-    static bool fromMiddle = false;
+    //TODO
+    static bool fromMiddle = true;
     hintContainer->clear();
     //set the gaussbuffer
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);

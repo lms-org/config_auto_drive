@@ -55,6 +55,9 @@
 		<channelMapping from="HINTS" to="HINTS"/>
 		<channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
 		<channelMapping from="ENV_MID" to="ENVIRONMENT_ROAD_MERGED"/>
+		<config name="defaultLPParameter" src="imaging/defaultEdgePointParam.lconf"/>
+	    <config name="defaultLPParameter" src="imaging/defaultLinePointParam.lconf"/>
+	    <config name="defaultLPParameter" src="imaging/defaultLineParam.lconf"/>
 	</module>
 	<module>
 	    <name>sensor_tracker</name>

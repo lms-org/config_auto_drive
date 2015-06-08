@@ -3,6 +3,7 @@
 
 bool VelocityController::initialize() {
     middle = datamanager()->readChannel<Environment::RoadLane>(this,"MIDDLE_LANE");
+    controlData = datamanager()->writeChannel<Comm::SensorBoard::ControlData>(this,"CONTROL_DATA");
     config = getConfig();
     lastCall = lms::extra::PrecisionTime::now()-lms::extra::PrecisionTime::fromMillis(config->get<float>("maxDeltaTInMs")*10);
     return true;
