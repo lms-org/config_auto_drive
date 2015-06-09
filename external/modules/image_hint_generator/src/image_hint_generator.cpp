@@ -58,7 +58,8 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
         return;
     }
     //line Distance with search offset :)
-    float lineDistance = 0.35;
+    float lineOffset = 0.1;
+    float lineDistance = 0.4-lineOffset;
     lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintLeft = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
     hintLeft->name = "LEFT_LANE";
     lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintRight = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
@@ -74,10 +75,12 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
         distance.x = -distance.y;
         distance.y = tmpX;
         distance *= lineDistance;
+        //such-start-punkte in Auto-Koordinaten
         vertex2f left = top+distance;
         vertex2f right = top-distance;
-        vertex2f middle = top-distance*0.1;
+        vertex2f middle = top-distance*lineOffset;
 
+        //such-start-punkte in Bild-Koordinaten
         vertex2i leftI;
         vertex2i rightI;
         vertex2i middleI;
@@ -91,26 +94,43 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
 
         float angleLeft = (leftI-topI).angle();
 
-        float searchLength = (middle-left).length()/searchLength*0.1;
+        float searchLength = (leftI-topI).length();
+        logger.debug("cycle") <<"searchLength pix: "<<searchLength <<" "<< leftI.x << " "<< leftI.y;
+        searchLength = searchLength/lineDistance*lineOffset*2;
+        logger.debug("cycle")<<"angleLeft: " <<angleLeft << " length: "<<searchLength;
 
+        defaultLinePointParameter.searchLength = searchLength;
         //add hints
         //add left
-        defaultLinePointParameter.x = leftI.x;
-        defaultLinePointParameter.y = leftI.y;
-        defaultLinePointParameter.searchAngle = angleLeft;
-        hintLeft->parameter.addParam(defaultLinePointParameter);
+
+        if(defaultLinePointParameter.target->inside(leftI.x , leftI.y)){
+            defaultLinePointParameter.x = leftI.x;
+            defaultLinePointParameter.y = leftI.y;
+            defaultLinePointParameter.searchAngle = angleLeft;
+            hintLeft->parameter.addParam(defaultLinePointParameter);
+        }else{
+            logger.debug("cycle")<<"NOT INSIDE - LEFT";
+        }
 
         //add right
-        defaultLinePointParameter.x = rightI.x;
-        defaultLinePointParameter.y = rightI.y;
-        defaultLinePointParameter.searchAngle = angleLeft+M_PI;
-        hintRight->parameter.addParam(defaultLinePointParameter);
+        if(defaultLinePointParameter.target->inside(rightI.x , rightI.y)){
+            defaultLinePointParameter.x = rightI.x;
+            defaultLinePointParameter.y = rightI.y;
+            defaultLinePointParameter.searchAngle = angleLeft+M_PI;
+            hintRight->parameter.addParam(defaultLinePointParameter);
+        }else{
+            logger.debug("cycle")<<"NOT INSIDE - RIGHT";
+        }
 
         //add middle
-        defaultLinePointParameter.x = middleI.x;
-        defaultLinePointParameter.y = middleI.y;
-        defaultLinePointParameter.searchAngle = angleLeft;
-        hintMiddle->parameter.addParam(defaultLinePointParameter);
+        if(defaultLinePointParameter.target->inside(middleI.x , middleI.y)){
+            defaultLinePointParameter.x = middleI.x;
+            defaultLinePointParameter.y = middleI.y;
+            defaultLinePointParameter.searchAngle = angleLeft;
+            hintMiddle->parameter.addParam(defaultLinePointParameter);
+        }else{
+            logger.debug("cycle")<<"NOT INSIDE - MIDDLE";
+        }
     }
     hintContainer->add(hintLeft);
     hintContainer->add(hintRight);

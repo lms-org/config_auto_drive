@@ -18,8 +18,11 @@ bool VelocityController::cycle() {
     if(!defaultDrive())
         return true;
     float newVeolocity = controlData->control.velocity.velocity;
-    //launchControll(newVeolocity,currentVelocity);
-    controlData->control.velocity.velocity = 1;
+    logger.debug("cycle") << "defaultDrive-velocity: " << newVeolocity;
+    launchControll(newVeolocity,currentVelocity);
+    controlData->control.velocity.velocity = newVeolocity;
+
+    logger.debug("cycle") << "end-velocity: " << newVeolocity;
     return true;
 }
 
@@ -38,6 +41,7 @@ bool VelocityController::defaultDrive(){
         partsNeeded = (int)middle.points().size()-2;
 
     }
+    logger.debug("defaultDrive") << "parts needed: " << partsNeeded;
     if(partsNeeded == 0 || partsNeeded == INFINITY || partsNeeded == NAN){
         logger.warn("cycle")<<"parsNeeded not valid: " << partsNeeded;
         return false;
@@ -46,10 +50,14 @@ bool VelocityController::defaultDrive(){
     //TODO gewichteter mittelwert!
     //TODO der ansatz ist prinzipiell bei S-Kurven schlecht!
     float middleCurvation = 0;
+    std::string s;
     for(int i = 0; i < partsNeeded; i++){
         middleCurvation += middle.polarDarstellung[i+2];
+        s += std::to_string(middle.polarDarstellung[i+2])+ " ; ";
     }
     middleCurvation = fabs(middleCurvation)/partsNeeded;
+    logger.debug("defaultDrive")<<"curvations: " << s;
+    logger.debug("defaultDrive") <<"middle-curcation: " << middleCurvation;
     float velocity = (minCurveSpeed-maxSpeed)/(maxCurvation)*(middleCurvation)+maxSpeed;
     controlData->control.velocity.velocity = velocity;
     return true;
