@@ -8,6 +8,7 @@
 	</execution>
 	<modulesToEnable>
 		<module logLevel="DEBUG">importer_senseboard2015</module>
+	    <module logLevel="DEBUG">car_to_senseboard2015</module>
 	</modulesToEnable>	
 	<module>
 		<name>importer_senseboard2015</name>
@@ -27,6 +28,9 @@
 	    <config name="servo_front" src="sensor/servo_front.lconf" />
 	    <config name="servo_rear" src="sensor/servo_rear.lconf" />
 	    <config name="velocity" src="sensor/velocity.lconf" />
+	</module>
+	<module>
+	    <name>car_to_senseboard2015</name>
 	</module>
 	<include src="cam.xml"/>
 </framework>

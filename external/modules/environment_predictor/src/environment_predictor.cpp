@@ -83,7 +83,8 @@ bool EnvironmentPredictor::cycle() {
         my = emxCreate_real_T(0,0);
     }
     //Kalman with middle-lane
-    kalman_filter_lr(zustandsVector,stateTransitionMatrix,kovarianzMatrixDesZustandes,
+    double deltaX = 0;
+    kalman_filter_lr(zustandsVector,/*stateTransitionMatrix*/deltaX,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      r_fakt,partLength,lx,ly,rx,ry,mx,my);
 

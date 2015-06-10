@@ -3,8 +3,7 @@
 
 bool VelocityController::initialize() {
     envInput = datamanager()->readChannel<street_environment::Environment>(this,"ENVIRONMENT_INPUT");
-    controlData = datamanager()->writeChannel<Comm::SensorBoard::ControlData>(this,"CONTROL_DATA");
-    config = getConfig();
+    car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");config = getConfig();
     lastCall = lms::extra::PrecisionTime::now()-lms::extra::PrecisionTime::fromMillis(config->get<float>("maxDeltaTInMs")*10);
     return true;
 }
@@ -14,15 +13,11 @@ bool VelocityController::deinitialize() {
 }
 
 bool VelocityController::cycle() {
-    float currentVelocity = controlData->control.velocity.velocity;
     if(!defaultDrive())
         return true;
-    float newVeolocity = controlData->control.velocity.velocity;
-    logger.debug("cycle") << "defaultDrive-velocity: " << newVeolocity;
-    launchControll(newVeolocity,currentVelocity);
-    controlData->control.velocity.velocity = newVeolocity;
-
-    logger.debug("cycle") << "end-velocity: " << newVeolocity;
+    logger.debug("cycle") << "defaultDrive-velocity: " << car->targetSpeed;
+    launchControll(car->targetSpeed,car->velocity);
+    logger.debug("cycle") << "end-velocity: " << car->targetSpeed;
     return true;
 }
 
@@ -59,7 +54,7 @@ bool VelocityController::defaultDrive(){
     logger.debug("defaultDrive")<<"curvations: " << s;
     logger.debug("defaultDrive") <<"middle-curcation: " << middleCurvation;
     float velocity = (minCurveSpeed-maxSpeed)/(maxCurvation)*(middleCurvation)+maxSpeed;
-    controlData->control.velocity.velocity = velocity;
+    car->targetSpeed = velocity;
     return true;
 }
 
@@ -78,7 +73,7 @@ bool VelocityController::launchControll(float newVelocity,float currentVelocity)
     }else{
         return false;
     }
-    controlData->control.velocity.velocity = velocityLimited;
+    car->targetSpeed = velocityLimited;
     return true;
 }
 

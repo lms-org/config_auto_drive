@@ -31,7 +31,7 @@ bool ImageHintGenerator::deinitialize() {
 }
 bool ImageHintGenerator::cycle() {
     //TODO
-    static bool fromMiddle = false;
+    static bool fromMiddle = true;
     hintContainer->clear();
     //set the gaussbuffer
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
@@ -40,17 +40,7 @@ bool ImageHintGenerator::cycle() {
         createHintsFromMiddleLane();
     }else{
         initialHints();
-        //TODO
-        fromMiddle = false;
-    }
-
-    for(lms::imaging::find::ImageHintBase *b : hintContainer->hints){
-        if(b->getTarget() == nullptr){
-            logger.error("TARGET IS NULL!!!!!");
-        }else{
-            logger.error("TARGET IS NOT NULL!!!!!");
-
-        }
+        fromMiddle = true;
     }
     return true;
 }

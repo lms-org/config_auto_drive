@@ -5,6 +5,7 @@
 #include "lms/math/polyline.h"
 #include "lms/math/math.h"
 #include "street_environment/road.h"
+#include "sensor_utils/car.h"
 
 #include "senseboard2015.h"
 
@@ -16,7 +17,8 @@ public:
 private:
     const street_environment::Environment *envInput;
     const lms::type::ModuleConfig *config;
-    Comm::SensorBoard::ControlData *controlData;
+    sensor_utils::Car *car;
+
     lms::extra::PrecisionTime lastCall;
     /**
      * @brief launchControll
