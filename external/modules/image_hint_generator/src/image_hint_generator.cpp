@@ -9,7 +9,7 @@
 #include "lms/imaging/warp.h"
 bool ImageHintGenerator::initialize() {
     gaussBuffer = new lms::imaging::Image();
-    middleEnv = datamanager()->writeChannel<Environment>(this,"ENV_MID");
+    middleEnv = datamanager()->writeChannel<street_environment::Environment>(this,"ENV_MID");
     hintContainer = datamanager()->
             writeChannel<lms::imaging::find::HintContainer>(this,"HINTS");
     target = datamanager()->readChannel<lms::imaging::Image>(this,"TARGET_IMAGE");
@@ -31,7 +31,7 @@ bool ImageHintGenerator::deinitialize() {
 }
 bool ImageHintGenerator::cycle() {
     //TODO
-    static bool fromMiddle = true;
+    static bool fromMiddle = false;
     hintContainer->clear();
     //set the gaussbuffer
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
@@ -40,7 +40,17 @@ bool ImageHintGenerator::cycle() {
         createHintsFromMiddleLane();
     }else{
         initialHints();
-        fromMiddle = true;
+        //TODO
+        fromMiddle = false;
+    }
+
+    for(lms::imaging::find::ImageHintBase *b : hintContainer->hints){
+        if(b->getTarget() == nullptr){
+            logger.error("TARGET IS NULL!!!!!");
+        }else{
+            logger.error("TARGET IS NOT NULL!!!!!");
+
+        }
     }
     return true;
 }
@@ -48,12 +58,12 @@ bool ImageHintGenerator::cycle() {
 void ImageHintGenerator::createHintsFromMiddleLane(){
     using lms::math::vertex2f;
     using lms::math::vertex2i;
-    if(middleEnv->lanes.size() != 1){
+    if(middleEnv->objects.size() != 1){
         logger.error("createHintsFromMiddleLane")<<"no valid evironment for middle-lane";
         return;
     }
-    const Environment::RoadLane &middle = middleEnv->lanes[0];
-    if(middle.type() != Environment::RoadLaneType::MIDDLE){
+    const street_environment::RoadLane &middle = middleEnv->objects[0]->getAsReference<const street_environment::RoadLane>();
+    if(middle.type() != street_environment::RoadLaneType::MIDDLE){
         logger.error("createHintsFromMiddleLane") << "middle is no middle lane!";
         return;
     }
@@ -132,9 +142,12 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
             logger.debug("cycle")<<"NOT INSIDE - MIDDLE";
         }
     }
-    hintContainer->add(hintLeft);
-    hintContainer->add(hintRight);
-    hintContainer->add(hintMiddle);
+    if(hintLeft->getTarget() != nullptr)
+        hintContainer->add(hintLeft);
+    if(hintRight->getTarget() != nullptr)
+        hintContainer->add(hintRight);
+    if(hintMiddle->getTarget() != nullptr)
+        hintContainer->add(hintMiddle);
 }
 
 void ImageHintGenerator::initialHints(){

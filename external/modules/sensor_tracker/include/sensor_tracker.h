@@ -4,7 +4,7 @@
 #include "lms/module.h"
 #include "lms/math/polyline.h"
 #include "lms/math/polyline.h"
-#include "image_objects/environment.h"
+#include "street_environment/road.h"
 #include "comm/senseboard.h"
 #include "sensor_utils/line_depth_environment.h"
 

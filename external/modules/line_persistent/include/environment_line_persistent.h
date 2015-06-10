@@ -2,7 +2,7 @@
 #define IMAGE_HINT_FILTER_H
 
 #include "lms/module.h"
-#include "image_objects/environment.h"
+#include "street_environment/road.h"
 #include "lms/extra/time.h"
 #include "lms/type/framework_info.h"
 

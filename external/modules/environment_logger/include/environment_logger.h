@@ -2,7 +2,7 @@
 #define ENVIRONMENT_LOGGER_H
 
 #include "lms/module.h"
-#include "image_objects/environment.h"
+#include "street_environment/road.h"
 
 class EnvironmentLogger : public lms::Module {
 public:
@@ -10,7 +10,7 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    const Environment *input;
+    const street_environment::Environment *input;
     int count;
     std::string directory;
 };

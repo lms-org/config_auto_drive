@@ -3,7 +3,7 @@
 
 #include "lms/module.h"
 #include "lms/math/polyline.h"
-#include "image_objects/environment.h"
+#include "street_environment/road.h"
 
 class TrajectoryLineCreator : public lms::Module {
 public:
@@ -11,7 +11,7 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    const Environment *environment;
+    const street_environment::Environment *environment;
     lms::math::polyLine2f *line;
     const lms::type::ModuleConfig *config;
 

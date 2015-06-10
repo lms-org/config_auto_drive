@@ -13,7 +13,7 @@ bool ImageObjectRenderer::initialize() {
     image->resize(512,512,lms::imaging::Format::BGRA);
     graphics = new lms::imaging::BGRAImageGraphics(*image);
     for(std::string ev : environments){
-        toDrawEnv.push_back(datamanager()->readChannel<Environment>(this,ev));
+        toDrawEnv.push_back(datamanager()->readChannel<street_environment::Environment>(this,ev));
     }
     for(std::string pl : polylines){
         toDrawPolyLines.push_back(datamanager()->readChannel<lms::math::polyLine2f>(this,pl));
@@ -39,7 +39,9 @@ bool ImageObjectRenderer::cycle() {
     logger.time("ENV");
    for(uint i = 0; i < toDrawEnv.size(); i++){
         setColor(environments[i]);
-        for(const Environment::RoadLane &lane : toDrawEnv[i]->lanes){
+        for(const std::shared_ptr<const street_environment::EnvironmentObject> &obj : toDrawEnv[i]->objects){
+            //TODO validate
+            const street_environment::RoadLane &lane = obj->getAsReference<const street_environment::RoadLane>();
             drawPolyLine(lane);
         }
     }

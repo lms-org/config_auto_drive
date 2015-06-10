@@ -5,16 +5,16 @@
 #include "lms/imaging/converter.h"
 #include <lms/imaging/image_factory.h>
 #include "lms/imaging/warp.h"
-#include "image_objects/environment.h"
+#include "street_environment/road.h"
 #include "cmath"
 extern "C"{
 #include "kalman_filter_lr.h"
 #include "projectPoints.h"
 }
 bool EnvironmentPredictor::initialize() {
-    envInput = datamanager()->readChannel<Environment>(this,"ENVIRONMENT_INPUT");
+    envInput = datamanager()->readChannel<street_environment::Environment>(this,"ENVIRONMENT_INPUT");
 
-    envOutput = datamanager()->writeChannel<Environment>(this,"ENVIRONMENT_OUTPUT");
+    envOutput = datamanager()->writeChannel<street_environment::Environment>(this,"ENVIRONMENT_OUTPUT");
     config = getConfig();
 
     partCount = config->get<int>("elementCount",10);
@@ -52,16 +52,17 @@ bool EnvironmentPredictor::cycle() {
     emxArray_real_T *ly = nullptr;
     emxArray_real_T *mx = nullptr;
     emxArray_real_T *my = nullptr;
-    for(const Environment::RoadLane &rl :envInput->lanes){
+    for(const std::shared_ptr<const street_environment::EnvironmentObject> obj :envInput->objects){
+        const street_environment::RoadLane &rl = obj->getAsReference<const street_environment::RoadLane>();
         if(rl.points().size() == 0)
             continue;
-        if(rl.type() == Environment::RoadLaneType::LEFT){
+        if(rl.type() == street_environment::RoadLaneType::LEFT){
             logger.debug("cycle") << "found left lane: " << rl.points().size();
             convertToKalmanArray(rl,&lx,&ly);
-        }else if(rl.type() == Environment::RoadLaneType::RIGHT){
+        }else if(rl.type() == street_environment::RoadLaneType::RIGHT){
             logger.debug("cycle") << "found right lane: " << rl.points().size();
             convertToKalmanArray(rl,&rx,&ry);
-        }else if(rl.type() == Environment::RoadLaneType::MIDDLE){
+        }else if(rl.type() == street_environment::RoadLaneType::MIDDLE){
             logger.debug("cycle") << "found middle lane: " << rl.points().size();
             convertToKalmanArray(rl,&mx,&my);
         }
@@ -98,15 +99,15 @@ bool EnvironmentPredictor::cycle() {
 }
 
 void EnvironmentPredictor::createOutput(){
-    envOutput->lanes.clear();
+    envOutput->objects.clear();
     //create middle
-    Environment::RoadLane middle;
-    middle.type(Environment::RoadLaneType::MIDDLE);
-    convertZustandToLane(middle);
-    envOutput->lanes.push_back(middle);
+    street_environment::RoadLanePtr middle(new street_environment::RoadLane());
+    middle->type(street_environment::RoadLaneType::MIDDLE);
+    convertZustandToLane(*middle);
+    envOutput->objects.push_back(middle);
 }
 
-void EnvironmentPredictor::convertZustandToLane(Environment::RoadLane &output){
+void EnvironmentPredictor::convertZustandToLane(street_environment::RoadLane &output){
     lms::math::vertex2f p1;
     p1.x = 0;
     p1.y = zustandsVector->data[0];
@@ -142,7 +143,7 @@ void EnvironmentPredictor::asEinheitsMatrix(emxArray_real_T *mat){
     }
 }
 
-void EnvironmentPredictor::convertToKalmanArray(const Environment::RoadLane &lane,emxArray_real_T **x,emxArray_real_T **y){
+void EnvironmentPredictor::convertToKalmanArray(const street_environment::RoadLane &lane,emxArray_real_T **x,emxArray_real_T **y){
     int dim = lane.points().size();
     emxArray_real_T *vx = emxCreate_real_T(dim,1);
     emxArray_real_T *vy = emxCreate_real_T(dim,1);

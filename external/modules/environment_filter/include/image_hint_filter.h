@@ -2,7 +2,8 @@
 #define IMAGE_HINT_FILTER_H
 
 #include "lms/module.h"
-#include "image_objects/environment.h"
+#include "street_environment/road.h"
+#include "street_environment/street_environment.h"
 
 class EnvironmentFilter : public lms::Module {
 public:
@@ -10,9 +11,9 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    void filterLane(Environment::RoadLane &lane);
-    const Environment *input;
-    Environment *output;
+    void filterLane(street_environment::RoadLane &lane);
+    const street_environment::Environment *input;
+    street_environment::Environment *output;
 };
 
 #endif /* IMAGE_HINT_FILTER_H */

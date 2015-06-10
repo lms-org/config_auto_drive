@@ -2,7 +2,7 @@
 #include "lms/datamanager.h"
 
 bool VelocityController::initialize() {
-    envInput = datamanager()->readChannel<Environment>(this,"ENVIRONMENT_INPUT");
+    envInput = datamanager()->readChannel<street_environment::Environment>(this,"ENVIRONMENT_INPUT");
     controlData = datamanager()->writeChannel<Comm::SensorBoard::ControlData>(this,"CONTROL_DATA");
     config = getConfig();
     lastCall = lms::extra::PrecisionTime::now()-lms::extra::PrecisionTime::fromMillis(config->get<float>("maxDeltaTInMs")*10);
@@ -27,11 +27,11 @@ bool VelocityController::cycle() {
 }
 
 bool VelocityController::defaultDrive(){
-    if(envInput->lanes.size() != 1){
-        logger.warn("defaultDrive") << "no valid lane given, laneCount: "<<envInput->lanes.size();
+    if(envInput->objects.size() != 1){
+        logger.warn("defaultDrive") << "no valid lane given, laneCount: "<<envInput->objects.size();
         return false;
     }
-    const Environment::RoadLane &middle = envInput->lanes[0];
+    const street_environment::RoadLane &middle = envInput->objects[0]->getAsReference<const street_environment::RoadLane>();
     float maxSpeed = config->get<float>("maxSpeed",1);
     float minCurveSpeed = config->get<float>("minCurveSpeed",maxSpeed/2);
     float maxCurvation = config->get<float>("maxCurvation",1);

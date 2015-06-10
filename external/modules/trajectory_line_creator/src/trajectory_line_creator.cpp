@@ -3,7 +3,7 @@
 #include "lms/math/math.h"
 
 bool TrajectoryLineCreator::initialize() {
-    environment = datamanager()->readChannel<Environment>(this,"ENVIRONMENT");
+    environment = datamanager()->readChannel<street_environment::Environment>(this,"ENVIRONMENT");
     line = datamanager()->writeChannel<lms::math::polyLine2f>(this,"LINE");
     config = getConfig();
     return true;
@@ -18,7 +18,7 @@ bool TrajectoryLineCreator::cycle() {
     const float translation = 4.0f / config->get<float>("street.width", 0.8);
 
     using lms::math::vertex2f;
-    if(environment->lanes.size() ==  0){
+    if(environment->objects.size() ==  0){
         logger.debug("cycle") << "no valid environment given";
         return true;
     }
@@ -28,9 +28,10 @@ bool TrajectoryLineCreator::cycle() {
     //reove points that are smaller than 0
 
     //TODO write method for that
-    for(size_t i = 1; i < environment->lanes[0].points().size(); i++) {
-        vertex2f p1 = environment->lanes[0].points()[i - 1];
-        vertex2f p2 = environment->lanes[0].points()[i];
+    const street_environment::RoadLane &middle = environment->objects[0]->getAsReference<const street_environment::RoadLane>();
+    for(size_t i = 1; i < middle.points().size(); i++) {
+        vertex2f p1 = middle.points()[i - 1];
+        vertex2f p2 = middle.points()[i];
         if(p1 == p2)
             continue;
 
