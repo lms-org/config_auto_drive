@@ -1,6 +1,6 @@
 <framework>
     <execution>
-        <!--profiling enabled="true" /-->
+        <profiling enabled="false" />
         <!--clock enabled="true" value="1" unit = "hz"/-->
     </execution>
 	<modulesToEnable>
