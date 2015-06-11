@@ -1,11 +1,12 @@
 <framework>
 	<execution>
-		<maxThreadCount> 1 </maxThreadCount>
-		<clock enabled="true" unit="hz">100</clock>
-		<maxThreadCount>1</maxThreadCount>
-	    <configMonitor>true</configMonitor>
+        <multithreading enabled="false" threads="auto" />
+        <clock enabled="true" unit="hz" value="100" />
+        <configMonitor enabled="true" />
         <profiling enabled="false" />
 	</execution>
-	<include src="render.xml"/>
-	<include src="basis.xml"/>
+    <if anyOf="render">
+        <include src="render.xml"/>
+    </if>
+    <include src="basis.xml"/>
 </framework>
