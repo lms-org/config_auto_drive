@@ -1,7 +1,7 @@
 <framework>
     <execution>
         <!--profiling enabled="true" /-->
-        <if anyOf="1hz">
+        <if set="1hz">
             <clock enabled="true" unit="hz" value="1" />
         </if>
     </execution>
@@ -9,7 +9,7 @@
         <!--module logLevel="WARN">camera_importer</module-->
         <module logLevel="DEBUG">ueye_importer</module>
 		<module logLevel="WARN">image_converter</module>
-        <if anyOf="image_logger">
+        <if set="image_logger">
             <module logLevel="WARN">image_logger</module>
         </if>
     </modulesToEnable>
@@ -44,7 +44,7 @@
 		    <output_format>GREY</output_format>
 	    </config>
 	</module>
-    <if anyOf="render">
+    <if notSet="norender">
         <include src="render.xml"/>
     </if>
     <include src="basis.xml" />

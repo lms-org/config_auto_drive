@@ -5,7 +5,7 @@
         <configMonitor enabled="true" />
         <profiling enabled="false" />
 	</execution>
-    <if anyOf="render">
+    <if notSet="norender">
         <include src="render.xml"/>
     </if>
     <include src="basis.xml"/>
