@@ -1,7 +1,7 @@
 <framework>
 	<modulesToEnable>
 		<module>image_hint_worker</module>
-		<module logLevel="DEBUG">image_hint_transformer</module>
+		<module logLevel="ERROR">image_hint_transformer</module>
 		<module logLevel="WARN">environment_predictor</module>
 		<module>trajectory_line_creator</module>
 		<module>trajectory_point_creator</module>

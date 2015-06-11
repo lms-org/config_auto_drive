@@ -133,13 +133,13 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
         }
     }
     if(hintLeft->getTarget() != nullptr){
-        //hintContainer->add(hintLeft);
+        hintContainer->add(hintLeft);
     }
     if(hintRight->getTarget() != nullptr){
         hintContainer->add(hintRight);
     }
     if(hintMiddle->getTarget() != nullptr){
-        //hintContainer->add(hintMiddle);
+        hintContainer->add(hintMiddle);
     }
 }
 

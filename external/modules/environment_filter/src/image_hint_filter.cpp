@@ -28,14 +28,6 @@ bool EnvironmentFilter::cycle() {
 
 void EnvironmentFilter::filterLane(street_environment::RoadLane &lane){
     using lms::math::vertex2f;
-
-    if(lane.type() == street_environment::RoadLaneType::RIGHT){
-        logger.error("FOUND RIGHT LANE!");
-        for(vertex2f &p:lane.points()){
-            std::cout << p.x << " ; " << p.y<<std::endl;
-        }
-    }
-
     //remove points that are inside the car
     lane.reduce([this](const vertex2f& p1){
         //TODO 0.1 should be moved to config

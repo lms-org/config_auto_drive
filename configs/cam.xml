@@ -10,7 +10,7 @@
         <module logLevel="DEBUG">ueye_importer</module>
 		<module logLevel="WARN">image_converter</module>
         <if set="image_logger">
-            <module logLevel="WARN">image_logger</module>
+            <module logLevel="DEBUG">image_logger</module>
         </if>
     </modulesToEnable>
 	<module>
@@ -19,7 +19,7 @@
             <directory>/home/hans/workspace/config_auto_drive/test_images</directory>
         </config>
         <config user="phibedy">
-            <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images</directory>
+            <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images</directory>
         </config>
 		<config>
 		    <create_subfolder_with_current_date>true</create_subfolder_with_current_date>
