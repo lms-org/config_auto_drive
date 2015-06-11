@@ -1,27 +1,17 @@
 <framework>
 	<modulesToEnable>
 		<module>image_hint_worker</module>
-		<module logLevel="ERROR">image_hint_transformer</module>
+		<module logLevel="DEBUG">image_hint_transformer</module>
 		<module logLevel="WARN">environment_predictor</module>
 		<module>trajectory_line_creator</module>
 		<module>trajectory_point_creator</module>
 		<module logLevel="WARN">image_hint_generator</module>
-		<module logLevel="ERROR">environment_filter</module>
+		<module logLevel="WARN">environment_filter</module>
 		<module logLevel="WARN">trajectory_point_controller</module>
-		<module logLevel="DEBUG">velocity_controller</module>
+		<module logLevel="WARN">velocity_controller</module>
 		<module logLevel="WARN">sensor_tracker</module>
         <module>image_proxy</module>
 	</modulesToEnable>
-	<module>
-		<name>image_logger_t</name>
-		<realName>image_logger</realName>
-		<config>
-		    <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/logging_data/img/</directory>
-		    <create_subfolder_with_current_date>true</create_subfolder_with_current_date>
-		    <filepattern>%04i</filepattern>
-		</config>
-		<channelMapping from="IMAGE" to="TRANS_IMAGE"/>
-	</module>
 	<module>
 	    <name>environment_logger</name>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD"/>
@@ -35,7 +25,6 @@
 		<config>
 		    <maxSpeed>1.5</maxSpeed>
 		    <minCurveSpeed>0.5</minCurveSpeed>
-		    <!--maxCurvationInRad>1</maxCurvationInRad-->
 		    <forcastLength>0.5</forcastLength>
 		    <maxDeltaTInMs>15</maxDeltaTInMs>
 		    <maxAcc>4</maxAcc>
@@ -85,7 +74,8 @@
 	<module>
 	    <name>environment_predictor</name>
 	    <config>
-	    <elementCount>10</elementCount>
+	        <elementCount>10</elementCount>
+	        <r_fakt>1000</r_fakt>
 	    </config>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
 		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_MERGED"/>
@@ -110,7 +100,7 @@
     <module>
         <name>image_proxy</name>
         <config>
-            <displayMode>DIRECTORY</displayMode>
+            <displayMode>IMAGE_CHANNEL</displayMode>
         </config>
         <config user="phibedy">
             <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150519-164907</directory>

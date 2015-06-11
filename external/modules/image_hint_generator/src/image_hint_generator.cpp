@@ -132,12 +132,15 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
             logger.debug("cycle")<<"NOT INSIDE - MIDDLE";
         }
     }
-    if(hintLeft->getTarget() != nullptr)
-        hintContainer->add(hintLeft);
-    if(hintRight->getTarget() != nullptr)
+    if(hintLeft->getTarget() != nullptr){
+        //hintContainer->add(hintLeft);
+    }
+    if(hintRight->getTarget() != nullptr){
         hintContainer->add(hintRight);
-    if(hintMiddle->getTarget() != nullptr)
-        hintContainer->add(hintMiddle);
+    }
+    if(hintMiddle->getTarget() != nullptr){
+        //hintContainer->add(hintMiddle);
+    }
 }
 
 void ImageHintGenerator::initialHints(){

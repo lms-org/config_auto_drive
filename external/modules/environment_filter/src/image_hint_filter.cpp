@@ -20,8 +20,6 @@ bool EnvironmentFilter::cycle() {
     //street_environment::RoadLane filtered;
     for(const std::shared_ptr<street_environment::EnvironmentObject> &obj : input->objects){
         std::shared_ptr<street_environment::RoadLane> lane = obj->getCopyAsPtr<street_environment::RoadLane>();
-        //filtered = lane;
-        //if(lane.type() != Environment::RoadLaneType::MIDDLE)
         filterLane(*lane.get());
         output->objects.push_back(lane);
     }
@@ -31,6 +29,12 @@ bool EnvironmentFilter::cycle() {
 void EnvironmentFilter::filterLane(street_environment::RoadLane &lane){
     using lms::math::vertex2f;
 
+    if(lane.type() == street_environment::RoadLaneType::RIGHT){
+        logger.error("FOUND RIGHT LANE!");
+        for(vertex2f &p:lane.points()){
+            std::cout << p.x << " ; " << p.y<<std::endl;
+        }
+    }
 
     //remove points that are inside the car
     lane.reduce([this](const vertex2f& p1){

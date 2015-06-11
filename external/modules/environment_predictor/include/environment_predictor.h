@@ -6,6 +6,7 @@
 #include "lms/imaging/format.h"
 #include "street_environment/road.h"
 #include "lms/type/module_config.h"
+#include "sensor_utils/car.h"
 extern "C"{
 #include "kalman_filter_lr_emxAPI.h"
 }
@@ -19,6 +20,7 @@ public:
 private:
     const street_environment::Environment *envInput;
     street_environment::Environment *envOutput;
+    const sensor_utils::Car *car;
 
     emxArray_real_T *zustandsVector;
     int partCount;

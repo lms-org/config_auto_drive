@@ -15,6 +15,7 @@ bool EnvironmentPredictor::initialize() {
     envInput = datamanager()->readChannel<street_environment::Environment>(this,"ENVIRONMENT_INPUT");
 
     envOutput = datamanager()->writeChannel<street_environment::Environment>(this,"ENVIRONMENT_OUTPUT");
+    car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
     config = getConfig();
 
     partCount = config->get<int>("elementCount",10);
@@ -83,7 +84,8 @@ bool EnvironmentPredictor::cycle() {
         my = emxCreate_real_T(0,0);
     }
     //Kalman with middle-lane
-    double deltaX = 0;
+    //TODO später mit der richtigen positionsänderung arbeiten
+    double deltaX = car->velocity*0.01;
     kalman_filter_lr(zustandsVector,/*stateTransitionMatrix*/deltaX,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      r_fakt,partLength,lx,ly,rx,ry,mx,my);

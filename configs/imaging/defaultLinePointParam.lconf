@@ -1,4 +1,4 @@
-lineWidthMax = 10
-lineWidthMin = 1
+lineWidthMax = 50
+lineWidthMin = 3
 edge = false;
 useSobel = false
