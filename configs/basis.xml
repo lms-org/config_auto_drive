@@ -100,7 +100,7 @@
     <module>
         <name>image_proxy</name>
         <config>
-            <displayMode>IMAGE_CHANNEL</displayMode>
+            <displayMode>DIRECTORY</displayMode>
         </config>
         <config user="phibedy">
             <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150519-164907</directory>
