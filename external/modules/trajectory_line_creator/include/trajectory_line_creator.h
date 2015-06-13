@@ -11,6 +11,7 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
+    const street_environment::Environment *environmentMiddle;
     const street_environment::Environment *environment;
     lms::math::polyLine2f *line;
     const lms::type::ModuleConfig *config;

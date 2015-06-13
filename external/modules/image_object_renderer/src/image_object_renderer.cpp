@@ -32,17 +32,16 @@ bool ImageObjectRenderer::deinitialize() {
 }
 
 bool ImageObjectRenderer::cycle() {
-    logger.time("TOTAL");
-    logger.time("FILL");
-    image->fill(0);
-    logger.timeEnd("FILL");
-    logger.time("ENV");
+   image->fill(0);
    for(uint i = 0; i < toDrawEnv.size(); i++){
         setColor(environments[i]);
         for(const std::shared_ptr<const street_environment::EnvironmentObject> &obj : toDrawEnv[i]->objects){
-            //TODO validate
-            const street_environment::RoadLane &lane = obj->getAsReference<const street_environment::RoadLane>();
-            drawPolyLine(lane);
+            if(obj->name().find("LANE") != std::string::npos){
+                const street_environment::RoadLane &lane = obj->getAsReference<const street_environment::RoadLane>();
+                drawPolyLine(lane);
+            }else if(obj->name().find("OBSTACLE") != std::string::npos){
+                //TODO
+            }
         }
     }
    logger.timeEnd("ENV");

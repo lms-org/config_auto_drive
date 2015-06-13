@@ -37,7 +37,19 @@ bool ImageHintGenerator::cycle() {
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
     //clear the gaussBuffer not necessary!
     if(fromMiddle){
-        createHintsFromMiddleLane();
+        if(middleEnv->objects.size() != 1){
+            logger.error("createHintsFromMiddleLane")<<"no valid evironment for middle-lane";
+            return true;
+        }
+        const street_environment::RoadLane &middle = middleEnv->objects[0]->getAsReference<const street_environment::RoadLane>();
+        if(middle.type() != street_environment::RoadLaneType::MIDDLE){
+            logger.error("createHintsFromMiddleLane") << "middle is no middle lane!";
+            return true;
+        }
+
+        createHintsFromMiddleLane(middle);
+        createHintForObstacleUsingSinglePoints(middle);
+        createHintForCrossingUsingSinglePoints(middle);
     }else{
         initialHints();
         fromMiddle = true;
@@ -45,18 +57,187 @@ bool ImageHintGenerator::cycle() {
     return true;
 }
 
-void ImageHintGenerator::createHintsFromMiddleLane(){
+void ImageHintGenerator::createHintForCrossingUsingSinglePoints(const street_environment::RoadLane &middle ){
     using lms::math::vertex2f;
     using lms::math::vertex2i;
-    if(middleEnv->objects.size() != 1){
-        logger.error("createHintsFromMiddleLane")<<"no valid evironment for middle-lane";
-        return;
+    (void)middle;
+
+}
+
+void ImageHintGenerator::createHintForObstacleUsingOneLineSequence(const street_environment::RoadLane &middle ){
+    using lms::math::vertex2f;
+    using lms::math::vertex2i;
+
+    lms::imaging::find::Line::LineParam lineParam; //TODO geht sowas?= defaultLinePointParameter;
+    lineParam.fromConfig(getConfig("defaultLPParameter"));
+    lineParam.target =target;
+    lineParam.gaussBuffer = gaussBuffer;
+    lineParam.fixedSearchAngle = true;
+    lineParam.edge = true;
+    //lineWidthMax muss man nur setzen, um die punktverschiebung anzupassen bei der extend menthode der line
+    lineParam.lineWidthMax = 10;
+    lineParam.lineWidthTransMultiplier = 1;
+    lineParam.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM)->bool{
+        lms::imaging::find::EdgePoint check = lp.low_high;
+        check.searchParam().x = check.x;
+        check.searchParam().y = check.y;
+        //20 noch in eine Config packen oder irgendwas anderes tolles tun
+        check.searchParam().searchLength = 20;
+        check.searchParam().searchType = lms::imaging::find::EdgePoint::EdgeType::HIGH_LOW;
+        return !check.find(DRAWDEBUG_ARG_N);
+    };
+
+    float streetWidth = 0.4;
+    //Abstand zum Auto
+    float startSearchDistance = 0.4;
+    //suchlänge
+    float searchLength = 2;
+
+    bool foundStart = false;
+    vertex2f startMiddle;
+    vertex2f endMiddle;
+    for(int i = 1; i < (int)middle.points().size(); i++){
+        //TODO ziehmlich schlecht so ;D
+        vertex2f bot = middle.points()[i-1];
+        vertex2f top = middle.points()[i];
+        vertex2f distance = top-bot;
+        distance = distance.normalize();
+        float tmpX = distance.x;
+        distance.x = -distance.y;
+        distance.y = tmpX;
+        distance *= streetWidth/2;
+        if(top.length() > 0.4 && !foundStart){
+            //such-start-punkte in Auto-Koordinaten
+            startMiddle = top-distance;
+            foundStart = true;
+        }else if(top.length() > startSearchDistance+searchLength){
+            break;
+        }else if(top.length() > 0.4){
+            endMiddle = top-distance;
+
+            //convert to image-pixel-value
+            vertex2i startMiddleI;
+            vertex2i endMiddleI;
+            lms::imaging::V2C(&startMiddle,&startMiddleI);
+            lms::imaging::V2C(&endMiddle,&endMiddleI);
+            //create hint
+            float imageSearchDistance = (endMiddleI-startMiddleI).length();
+            float searchAngle = (endMiddleI-startMiddleI).angle();
+
+            lineParam.searchAngle = searchAngle;
+            lineParam.searchLength = imageSearchDistance;
+            lineParam.x = startMiddleI.x;
+            lineParam.y = startMiddleI.y;
+            lineParam.fixedSearchAngle = true;
+            //TODO für die 200 noch eine umrechnung nutzen falls nötig!
+            lineParam.maxLength =  200;
+            lineParam.preferVerify = false;
+            lineParam.verify = false;
+            lineParam.stepLengthMax = 30;
+            lineParam.stepLengthMin = 2;
+
+            /*
+             * Besonderheit, die auftreten könnte:
+             * Hinderniss wird in zwei Suchen Gefunden, wenn endPunkt und startPunkt der nächsten Linie genau auf der Kante liegen
+             */
+            lms::imaging::find::ImageHint<lms::imaging::find::Line> *obstHint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>();
+            obstHint->name = "OBSTACLE_"+i;
+            obstHint->parameter = lineParam;
+            hintContainer->add(obstHint);
+
+            //alter endPunkt wird neuer Startpunkt:
+            startMiddle = endMiddle;
+        }
     }
-    const street_environment::RoadLane &middle = middleEnv->objects[0]->getAsReference<const street_environment::RoadLane>();
-    if(middle.type() != street_environment::RoadLaneType::MIDDLE){
-        logger.error("createHintsFromMiddleLane") << "middle is no middle lane!";
-        return;
+
+}
+
+void ImageHintGenerator::createHintForObstacleUsingSinglePoints(const street_environment::RoadLane &middle ){
+    using lms::math::vertex2f;
+    using lms::math::vertex2i;
+
+    //TODO der code ist schon sehr redundant, da sollte man sich was tolles überlegen!
+
+    float streetWidth = 0.4;
+    //float startSearchDistance = 0.4;
+    int numberOfSearchPoints = 3;
+    //vertex2f startPoints[numberOfSearchPoints];
+    //+1 damit man nicht auf der Linie sucht
+    float distanceBetweenSearchPoints = streetWidth/(numberOfSearchPoints+1);
+
+    //Abstand zum Auto
+    float startSearchDistance = 0.4;
+    //suchlänge
+    float searchLength = 2;
+
+    bool foundStart = false;
+    //aufpunkt auf der linie
+    vertex2f *middlePoints = new vertex2f[numberOfSearchPoints];
+    for(int i = 1; i < (int)middle.points().size(); i++){
+        //TODO ziehmlich schlecht so ;D
+        vertex2f top = middle.points()[i];
+        vertex2f bot = middle.points()[i-1];
+        vertex2f distance = top-bot;
+        distance = distance.normalize();
+        float tmpX = distance.x;
+        distance.x = -distance.y;
+        distance.y = tmpX;
+
+        if(top.length() > 0.4 && !foundStart){
+            for(int k = 0; k < numberOfSearchPoints; k++){
+                //TODO auch noch sehr mieser Code
+                //such-start-punkte in Auto-Koordinaten
+                middlePoints[k] = top-distance*distanceBetweenSearchPoints*(k+1);
+
+                foundStart = true;
+            }
+        }else if(top.length() > startSearchDistance+searchLength){
+            break;
+        }else if(top.length() > 0.4){
+            lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *line = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
+            line->name = "OBSTACLE_"+std::to_string(i);
+            line->parameter.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM)->bool{
+                lms::imaging::find::EdgePoint check = lp.low_high;
+                check.searchParam().x = check.x;
+                check.searchParam().y = check.y;
+                //20 noch in eine Config packen oder irgendwas anderes tolles tun
+                check.searchParam().searchLength = 20;
+                check.searchParam().searchType = lms::imaging::find::EdgePoint::EdgeType::HIGH_LOW;
+                bool found = check.find(DRAWDEBUG_ARG_N);
+                std::cout << "VALIDATE POINT: " << !found<<std::endl;
+                return !found;
+            };
+            for(int k = 0; k < numberOfSearchPoints; k++){
+                vertex2f endMiddle = top-distance*distanceBetweenSearchPoints*(k+1);
+
+                //convert to image-pixel-value
+                vertex2i startMiddleI;
+                vertex2i endMiddleI;
+                lms::imaging::V2C(&middlePoints[k],&startMiddleI);
+                lms::imaging::V2C(&endMiddle,&endMiddleI);
+                //create hint
+                float imageSearchDistance = (endMiddleI-startMiddleI).length();
+                float searchAngle = (endMiddleI-startMiddleI).angle();
+
+                lms::imaging::find::LinePoint::LinePointParam lpp = defaultLinePointParameter;
+                lpp.x = startMiddleI.x;
+                lpp.y = startMiddleI.y;
+                lpp.edge = true;
+                lpp.searchAngle = searchAngle;
+                lpp.searchLength = imageSearchDistance;
+                line->parameter.addParam(lpp);
+                //alter endPunkt wird neuer Startpunkt:
+                middlePoints[k] = endMiddle;
+            }
+            hintContainer->add(line);
+        }
     }
+    delete[] middlePoints;
+}
+
+void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::RoadLane &middle){
+    using lms::math::vertex2f;
+    using lms::math::vertex2i;
     //line Distance with search offset :)
     float lineOffset = 0.1;
     float lineDistance = 0.4-lineOffset;
@@ -78,7 +259,8 @@ void ImageHintGenerator::createHintsFromMiddleLane(){
         //such-start-punkte in Auto-Koordinaten
         vertex2f left = top+distance;
         vertex2f right = top-distance;
-        vertex2f middle = top-distance*lineOffset;
+        //TODO wenn es nicht mehr geht, dann wegen /lineDistance
+        vertex2f middle = top-distance/lineDistance*lineOffset;
 
         //such-start-punkte in Bild-Koordinaten
         vertex2i leftI;

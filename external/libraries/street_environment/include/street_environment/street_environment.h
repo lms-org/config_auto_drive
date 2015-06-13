@@ -18,7 +18,7 @@ public:
         return *static_cast<T*>(this);
     }
 
-    std::string name(){
+    std::string name() const{
         return m_name;
     }
     void name(std::string name){
@@ -30,16 +30,16 @@ public:
 
 class Environment{
 
-    std::shared_ptr<EnvironmentObject> getObjectByName(std::string name){
-        for(std::shared_ptr<EnvironmentObject> &o: objects){
+
+public:
+    const std::shared_ptr<EnvironmentObject> getObjectByName(std::string name) const{
+        for(const std::shared_ptr<EnvironmentObject> &o: objects){
             if(o->name() == name){
                 return o;
             }
         }
         return nullptr;
     }
-
-public:
     std::vector<std::shared_ptr<EnvironmentObject>> objects;
 };
 }

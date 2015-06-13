@@ -54,6 +54,10 @@ bool EnvironmentPredictor::cycle() {
     emxArray_real_T *mx = nullptr;
     emxArray_real_T *my = nullptr;
     for(const std::shared_ptr<const street_environment::EnvironmentObject> obj :envInput->objects){
+        if(obj->name().find("LANE") == std::string::npos){
+            //no valid lane, some other env object!
+            continue;
+        }
         const street_environment::RoadLane &rl = obj->getAsReference<const street_environment::RoadLane>();
         if(rl.points().size() == 0)
             continue;
@@ -107,6 +111,7 @@ void EnvironmentPredictor::createOutput(){
     street_environment::RoadLanePtr middle(new street_environment::RoadLane());
     middle->type(street_environment::RoadLaneType::MIDDLE);
     convertZustandToLane(*middle);
+    middle->name("MIDDLE_LANE");
     envOutput->objects.push_back(middle);
 }
 

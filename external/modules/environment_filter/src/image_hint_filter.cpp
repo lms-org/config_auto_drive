@@ -19,9 +19,14 @@ bool EnvironmentFilter::cycle() {
     output->objects.clear();
     //street_environment::RoadLane filtered;
     for(const std::shared_ptr<street_environment::EnvironmentObject> &obj : input->objects){
-        std::shared_ptr<street_environment::RoadLane> lane = obj->getCopyAsPtr<street_environment::RoadLane>();
-        filterLane(*lane.get());
-        output->objects.push_back(lane);
+        if(obj->name().find("LANE") != std::string::npos){
+            std::shared_ptr<street_environment::RoadLane> lane = obj->getCopyAsPtr<street_environment::RoadLane>();
+            filterLane(*lane.get());
+            output->objects.push_back(lane);
+        }else if(obj->name().find("OBSTACLE")!= std::string::npos){
+            //TODO
+            output->objects.push_back(obj);
+        }
     }
     return true;
 }

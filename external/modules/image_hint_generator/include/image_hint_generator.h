@@ -15,7 +15,10 @@ public:
     bool cycle() override;
 private:
     void initialHints();
-    void createHintsFromMiddleLane();
+    void createHintsFromMiddleLane(const street_environment::RoadLane &middle );
+    void createHintForObstacleUsingSinglePoints(const street_environment::RoadLane &middle );
+    void createHintForCrossingUsingSinglePoints(const street_environment::RoadLane &middle );
+    void createHintForObstacleUsingOneLineSequence(const street_environment::RoadLane &middle );
     const street_environment::Environment *middleEnv;
     lms::imaging::find::HintContainer *hintContainer;
     lms::imaging::find::HintContainer *hintContainer_Left;

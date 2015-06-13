@@ -2,12 +2,15 @@
 #define DYNAMIC_ENTITY_H
 
 #include "lms/math/vertex.h"
+#include "street_environment.h"
 
+namespace street_environment{
 /**
  * @brief A dynamic entity can be the vehicle itself but also every other
  * moving obstacle.
  */
-struct Obstacle {
+struct Obstacle:public EnvironmentObject {
+    //TODO die Delta-Werte passen beim 1. Aufrufen nicht!
     /**
      * @brief Global position of the entity. x and y are given in meters.
      */
@@ -72,5 +75,6 @@ struct Obstacle {
      */
     float deltaVelocity() const;
 };
+} //street_environment
 
 #endif /* DYNAMIC_ENTITY_H */

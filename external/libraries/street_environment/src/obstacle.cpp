@@ -1,5 +1,6 @@
 #include "street_environment/obstacle.h"
 
+namespace street_environment{
 Obstacle::Obstacle() : position(0, 0), viewDirection(1, 0),
     velocity(0), moveDirection(1, 0), lastPositon(0, 0), lastVelocity(0) {}
 
@@ -24,3 +25,4 @@ float Obstacle::movedDistance() const {
 float Obstacle::deltaVelocity() const {
     return this->velocity - this->lastVelocity;
 }
+} //street_environment
