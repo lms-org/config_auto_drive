@@ -10,4 +10,4 @@ set (HEADERS
 include_directories("include")
 
 add_library (car_tracker MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(car_tracker PRIVATE lms math_lib)
+target_link_libraries(car_tracker PRIVATE lms math_lib sensor_utils)

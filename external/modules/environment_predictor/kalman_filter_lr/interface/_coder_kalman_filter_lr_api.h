@@ -2,7 +2,7 @@
  * File: _coder_kalman_filter_lr_api.h 
  *  
  * MATLAB Coder version            : 2.7 
- * C/C++ source code generated on  : 01-Jun-2015 15:11:47 
+ * C/C++ source code generated on  : 15-Jun-2015 13:18:28 
  */
 
 #ifndef ___CODER_KALMAN_FILTER_LR_API_H__
@@ -37,9 +37,9 @@ typedef struct emxArray_real_T emxArray_real_T;
 extern void kalman_filter_lr_initialize(emlrtContext *aContext);
 extern void kalman_filter_lr_terminate(void);
 extern void kalman_filter_lr_atexit(void);
-extern void kalman_filter_lr_api(const mxArray *prhs[12], const mxArray *plhs[2]);
+extern void kalman_filter_lr_api(const mxArray *prhs[14], const mxArray *plhs[2]);
 extern void kalman_filter_lr_xil_terminate(void);
-extern void kalman_filter_lr(emxArray_real_T *r, emxArray_real_T *A, emxArray_real_T *Pk, emxArray_real_T *Q, real_T R_fakt, real_T delta, emxArray_real_T *xl, emxArray_real_T *yl, emxArray_real_T *xr, emxArray_real_T *yr, emxArray_real_T *xm, emxArray_real_T *ym);
+extern void kalman_filter_lr(emxArray_real_T *r, real_T delta_x, real_T delta_y, real_T delta_phi, emxArray_real_T *Pk, emxArray_real_T *Q, real_T R_fakt, real_T delta, emxArray_real_T *xl, emxArray_real_T *yl, emxArray_real_T *xr, emxArray_real_T *yr, emxArray_real_T *xm, emxArray_real_T *ym);
 
 #endif
 /* 

@@ -4,6 +4,7 @@
 #include "lms/module.h"
 #include "lms/math/polyline.h"
 #include "street_environment/road.h"
+#include "sensor_utils/car.h"
 
 class TrajectoryLineCreator : public lms::Module {
 public:
@@ -15,6 +16,7 @@ private:
     const street_environment::Environment *environment;
     lms::math::polyLine2f *line;
     const lms::type::ModuleConfig *config;
+    sensor_utils::Car *car;
 
 };
 

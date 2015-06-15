@@ -2,7 +2,7 @@
  * File: kalman_filter_lr.c
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 01-Jun-2015 15:11:47
+ * C/C++ source code generated on  : 15-Jun-2015 13:18:28
  */
 
 /* Include Files */
@@ -191,7 +191,9 @@ static void eml_null_assignment(emxArray_real_T *x, const emxArray_boolean_T
  *   4. Kalman-Filter: Praediktion -> Messwerte einbeziehen -> Update
  *   5. Zustandsbegrenzungen einbringen
  * Arguments    : emxArray_real_T *r
- *                const emxArray_real_T *A
+ *                double delta_x
+ *                double delta_y
+ *                double delta_phi
  *                emxArray_real_T *Pk
  *                const emxArray_real_T *Q
  *                double R_fakt
@@ -204,22 +206,22 @@ static void eml_null_assignment(emxArray_real_T *x, const emxArray_boolean_T
  *                emxArray_real_T *ym
  * Return Type  : void
  */
-void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
-                      emxArray_real_T *Pk, const emxArray_real_T *Q, double
-                      R_fakt, double delta, emxArray_real_T *xl, emxArray_real_T
-                      *yl, emxArray_real_T *xr, emxArray_real_T *yr,
-                      emxArray_real_T *xm, emxArray_real_T *ym)
+void kalman_filter_lr(emxArray_real_T *r, double delta_x, double delta_y, double
+                      delta_phi, emxArray_real_T *Pk, const emxArray_real_T *Q,
+                      double R_fakt, double delta, emxArray_real_T *xl,
+                      emxArray_real_T *yl, emxArray_real_T *xr, emxArray_real_T *
+                      yr, emxArray_real_T *xm, emxArray_real_T *ym)
 {
   emxArray_real_T *P;
   emxArray_real_T *z_m;
   emxArray_real_T *zmm;
-  emxArray_real_T *y_tilde;
-  int z_m_idx_0;
-  int zmm_idx_0;
+  emxArray_real_T *xp;
+  int xp_idx_0;
   int br;
+  int ar;
   int i5;
   emxArray_real_T *D;
-  int ar;
+  int loop_ub;
   int m;
   double dist_point;
   double a;
@@ -250,78 +252,81 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   emxArray_real_T *Hm;
   emxArray_real_T *H;
   int i6;
+  emxArray_real_T *b_Hl;
   int k;
   int ic;
-  int ib;
   int ia;
+  int c;
+  emxArray_real_T *b;
   emxArray_real_T *b_zl;
   emxArray_real_T *b_zml;
+  emxArray_real_T *y_tilde;
   emxArray_real_T *C;
   emxArray_real_T *b_C;
   emxArray_real_T *b_Hr;
   b_emxInit_real_T(&P, 2);
   emxInit_real_T(&z_m, 1);
   emxInit_real_T(&zmm, 1);
-  emxInit_real_T(&y_tilde, 1);
+  emxInit_real_T(&xp, 1);
 
   /* % linke Seitenlinie */
-  projectPoints(r, delta, z_m, zmm, y_tilde);
+  projectPoints(r, delta, xp, z_m, zmm);
 
   /* Punkte von Mittellinie nach links projizieren */
-  z_m_idx_0 = z_m->size[0];
-  zmm_idx_0 = zmm->size[0];
-  br = y_tilde->size[0];
+  xp_idx_0 = xp->size[0];
+  br = z_m->size[0];
+  ar = zmm->size[0];
   i5 = P->size[0] * P->size[1];
-  P->size[0] = z_m_idx_0;
+  P->size[0] = xp_idx_0;
   P->size[1] = 3;
   emxEnsureCapacity((emxArray__common *)P, i5, (int)sizeof(double));
-  for (i5 = 0; i5 < z_m_idx_0; i5++) {
-    P->data[i5] = z_m->data[i5];
-  }
-
-  for (i5 = 0; i5 < zmm_idx_0; i5++) {
-    P->data[i5 + P->size[0]] = zmm->data[i5];
+  for (i5 = 0; i5 < xp_idx_0; i5++) {
+    P->data[i5] = xp->data[i5];
   }
 
   for (i5 = 0; i5 < br; i5++) {
-    P->data[i5 + (P->size[0] << 1)] = y_tilde->data[i5];
+    P->data[i5 + P->size[0]] = z_m->data[i5];
+  }
+
+  for (i5 = 0; i5 < ar; i5++) {
+    P->data[i5 + (P->size[0] << 1)] = zmm->data[i5];
   }
 
   b_emxInit_real_T(&D, 2);
-  z_m_idx_0 = xl->size[0];
+  xp_idx_0 = xl->size[0];
   i5 = D->size[0] * D->size[1];
-  D->size[0] = z_m_idx_0;
+  D->size[0] = xp_idx_0;
   D->size[1] = 3;
   emxEnsureCapacity((emxArray__common *)D, i5, (int)sizeof(double));
-  ar = xl->size[0] * 3;
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = xl->size[0] * 3;
+  for (i5 = 0; i5 < loop_ub; i5++) {
     D->data[i5] = 10000.0;
   }
 
   /*  Fuer jeden Messpunkt den nähesten Punkt der aktuellen Praediktion finden  */
-  for (z_m_idx_0 = 0; z_m_idx_0 < r->size[0]; z_m_idx_0++) {
+  for (xp_idx_0 = 0; xp_idx_0 < r->size[0]; xp_idx_0++) {
     for (m = 0; m < xl->size[0]; m++) {
-      dist_point = P->data[z_m_idx_0] - xl->data[m];
-      a = P->data[z_m_idx_0 + P->size[0]] - yl->data[m];
+      dist_point = P->data[xp_idx_0] - xl->data[m];
+      a = P->data[xp_idx_0 + P->size[0]] - yl->data[m];
       dist_point = sqrt(dist_point * dist_point + a * a);
       if (dist_point < D->data[m + (D->size[0] << 1)]) {
-        D->data[m] = 1.0 + (double)z_m_idx_0;
+        D->data[m] = 1.0 + (double)xp_idx_0;
         D->data[m + D->size[0]] = 0.0;
         D->data[m + (D->size[0] << 1)] = dist_point;
       }
 
-      if (1.0 + (double)z_m_idx_0 > 1.0) {
-        b_P[0] = P->data[(int)((1.0 + (double)z_m_idx_0) - 1.0) - 1];
-        b_P[1] = P->data[((int)((1.0 + (double)z_m_idx_0) - 1.0) + P->size[0]) -
+      if (1.0 + (double)xp_idx_0 > 1.0) {
+        b_P[0] = P->data[(int)((1.0 + (double)xp_idx_0) - 1.0) - 1];
+        b_P[1] = P->data[((int)((1.0 + (double)xp_idx_0) - 1.0) + P->size[0]) -
           1];
-        c_P[0] = P->data[z_m_idx_0];
-        c_P[1] = P->data[z_m_idx_0 + P->size[0]];
+        c_P[0] = P->data[xp_idx_0];
+        c_P[1] = P->data[xp_idx_0 + P->size[0]];
         b_xl[0] = xl->data[m];
         b_xl[1] = yl->data[m];
         d_line_point(b_P, c_P, b_xl, &dist_point, &a, unusedU2);
         if ((dist_point < D->data[m + (D->size[0] << 1)]) && (a > 0.0) && (a <
              1.0)) {
-          D->data[m] = (1.0 + (double)z_m_idx_0) - 1.0;
+          D->data[m] = (1.0 + (double)xp_idx_0) - 1.0;
           D->data[m + D->size[0]] = a;
           D->data[m + (D->size[0] << 1)] = dist_point;
         }
@@ -332,14 +337,14 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   emxInit_boolean_T(&ind, 1);
 
   /*  Messpunkte ausfiltern, die vor dem letzten prädizierten Punkt oder zu weit entfernt liegen */
-  ar = D->size[0];
-  z_m_idx_0 = r->size[0];
+  loop_ub = D->size[0];
+  xp_idx_0 = r->size[0];
   i5 = ind->size[0];
-  ind->size[0] = ar;
+  ind->size[0] = loop_ub;
   emxEnsureCapacity((emxArray__common *)ind, i5, (int)sizeof(boolean_T));
-  for (i5 = 0; i5 < ar; i5++) {
-    ind->data[i5] = ((D->data[i5] == z_m_idx_0) || (D->data[i5 + (D->size[0] <<
-      1)] > 0.5));
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    ind->data[i5] = ((D->data[i5] == xp_idx_0) || (D->data[i5 + (D->size[0] << 1)]
+      > 0.5));
   }
 
   emxInit_real_T(&b_D, 1);
@@ -348,20 +353,20 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   b_eml_null_assignment(D, ind);
 
   /*  Messmatrix, Mess- und Erwartungsvektor bauen */
-  ar = D->size[0];
+  loop_ub = D->size[0];
   i5 = b_D->size[0];
-  b_D->size[0] = ar;
+  b_D->size[0] = loop_ub;
   emxEnsureCapacity((emxArray__common *)b_D, i5, (int)sizeof(double));
-  for (i5 = 0; i5 < ar; i5++) {
+  for (i5 = 0; i5 < loop_ub; i5++) {
     b_D->data[i5] = D->data[i5];
   }
 
   emxInit_real_T(&c_D, 1);
-  ar = D->size[0];
+  loop_ub = D->size[0];
   i5 = c_D->size[0];
-  c_D->size[0] = ar;
+  c_D->size[0] = loop_ub;
   emxEnsureCapacity((emxArray__common *)c_D, i5, (int)sizeof(double));
-  for (i5 = 0; i5 < ar; i5++) {
+  for (i5 = 0; i5 < loop_ub; i5++) {
     c_D->data[i5] = D->data[i5 + D->size[0]];
   }
 
@@ -371,10 +376,10 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   i5 = zl->size[0];
   zl->size[0] = (int)(2.0 * (double)xl->size[0]);
   emxEnsureCapacity((emxArray__common *)zl, i5, (int)sizeof(double));
-  ar = (int)(2.0 * (double)xl->size[0]);
+  loop_ub = (int)(2.0 * (double)xl->size[0]);
   emxFree_real_T(&c_D);
   emxFree_real_T(&b_D);
-  for (i5 = 0; i5 < ar; i5++) {
+  for (i5 = 0; i5 < loop_ub; i5++) {
     zl->data[i5] = 0.0;
   }
 
@@ -382,8 +387,8 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   i5 = zml->size[0];
   zml->size[0] = (int)(2.0 * (double)xl->size[0]);
   emxEnsureCapacity((emxArray__common *)zml, i5, (int)sizeof(double));
-  ar = (int)(2.0 * (double)xl->size[0]);
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = (int)(2.0 * (double)xl->size[0]);
+  for (i5 = 0; i5 < loop_ub; i5++) {
     zml->data[i5] = 0.0;
   }
 
@@ -401,62 +406,62 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   }
 
   /* % rechte Seitenlinie */
-  b_projectPoints(r, delta, z_m, zmm, y_tilde);
+  b_projectPoints(r, delta, xp, z_m, zmm);
 
   /* Punkte von Mittellinie nach rechts projizieren */
-  z_m_idx_0 = z_m->size[0];
-  zmm_idx_0 = zmm->size[0];
-  br = y_tilde->size[0];
+  xp_idx_0 = xp->size[0];
+  br = z_m->size[0];
+  ar = zmm->size[0];
   i5 = P->size[0] * P->size[1];
-  P->size[0] = z_m_idx_0;
+  P->size[0] = xp_idx_0;
   P->size[1] = 3;
   emxEnsureCapacity((emxArray__common *)P, i5, (int)sizeof(double));
-  for (i5 = 0; i5 < z_m_idx_0; i5++) {
-    P->data[i5] = z_m->data[i5];
-  }
-
-  for (i5 = 0; i5 < zmm_idx_0; i5++) {
-    P->data[i5 + P->size[0]] = zmm->data[i5];
+  for (i5 = 0; i5 < xp_idx_0; i5++) {
+    P->data[i5] = xp->data[i5];
   }
 
   for (i5 = 0; i5 < br; i5++) {
-    P->data[i5 + (P->size[0] << 1)] = y_tilde->data[i5];
+    P->data[i5 + P->size[0]] = z_m->data[i5];
   }
 
-  z_m_idx_0 = xr->size[0];
+  for (i5 = 0; i5 < ar; i5++) {
+    P->data[i5 + (P->size[0] << 1)] = zmm->data[i5];
+  }
+
+  xp_idx_0 = xr->size[0];
   i5 = D->size[0] * D->size[1];
-  D->size[0] = z_m_idx_0;
+  D->size[0] = xp_idx_0;
   D->size[1] = 3;
   emxEnsureCapacity((emxArray__common *)D, i5, (int)sizeof(double));
-  ar = xr->size[0] * 3;
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = xr->size[0] * 3;
+  for (i5 = 0; i5 < loop_ub; i5++) {
     D->data[i5] = 10000.0;
   }
 
   /*  Fuer jeden Messpunkt den nähesten Punkt der aktuellen Praediktion finden */
-  for (z_m_idx_0 = 0; z_m_idx_0 < r->size[0]; z_m_idx_0++) {
+  for (xp_idx_0 = 0; xp_idx_0 < r->size[0]; xp_idx_0++) {
     for (m = 0; m < xr->size[0]; m++) {
-      dist_point = P->data[z_m_idx_0] - xr->data[m];
-      a = P->data[z_m_idx_0 + P->size[0]] - yr->data[m];
+      dist_point = P->data[xp_idx_0] - xr->data[m];
+      a = P->data[xp_idx_0 + P->size[0]] - yr->data[m];
       dist_point = sqrt(dist_point * dist_point + a * a);
       if (dist_point < D->data[m + (D->size[0] << 1)]) {
-        D->data[m] = 1.0 + (double)z_m_idx_0;
+        D->data[m] = 1.0 + (double)xp_idx_0;
         D->data[m + D->size[0]] = 0.0;
         D->data[m + (D->size[0] << 1)] = dist_point;
       }
 
-      if (1.0 + (double)z_m_idx_0 > 1.0) {
-        d_P[0] = P->data[(int)((1.0 + (double)z_m_idx_0) - 1.0) - 1];
-        d_P[1] = P->data[((int)((1.0 + (double)z_m_idx_0) - 1.0) + P->size[0]) -
+      if (1.0 + (double)xp_idx_0 > 1.0) {
+        d_P[0] = P->data[(int)((1.0 + (double)xp_idx_0) - 1.0) - 1];
+        d_P[1] = P->data[((int)((1.0 + (double)xp_idx_0) - 1.0) + P->size[0]) -
           1];
-        e_P[0] = P->data[z_m_idx_0];
-        e_P[1] = P->data[z_m_idx_0 + P->size[0]];
+        e_P[0] = P->data[xp_idx_0];
+        e_P[1] = P->data[xp_idx_0 + P->size[0]];
         b_xr[0] = xr->data[m];
         b_xr[1] = yr->data[m];
         d_line_point(d_P, e_P, b_xr, &dist_point, &a, unusedU2);
         if ((dist_point < D->data[m + (D->size[0] << 1)]) && (a > 0.0) && (a <
              1.0)) {
-          D->data[m] = (1.0 + (double)z_m_idx_0) - 1.0;
+          D->data[m] = (1.0 + (double)xp_idx_0) - 1.0;
           D->data[m + D->size[0]] = a;
           D->data[m + (D->size[0] << 1)] = dist_point;
         }
@@ -466,14 +471,14 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
 
   /*  Messpunkte ausfiltern, die vor dem letzten prädizierten Punkt oder zu weit entfernt liegen */
   /*  ind = ((D(:, 1) == numel(r) & D(:, 2) == 0) | D(:, 3) > 0.5 ); */
-  ar = D->size[0];
-  z_m_idx_0 = r->size[0];
+  loop_ub = D->size[0];
+  xp_idx_0 = r->size[0];
   i5 = ind->size[0];
-  ind->size[0] = ar;
+  ind->size[0] = loop_ub;
   emxEnsureCapacity((emxArray__common *)ind, i5, (int)sizeof(boolean_T));
-  for (i5 = 0; i5 < ar; i5++) {
-    ind->data[i5] = ((D->data[i5] == z_m_idx_0) || (D->data[i5 + (D->size[0] <<
-      1)] > 0.5));
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    ind->data[i5] = ((D->data[i5] == xp_idx_0) || (D->data[i5 + (D->size[0] << 1)]
+      > 0.5));
   }
 
   emxInit_real_T(&d_D, 1);
@@ -482,20 +487,20 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   b_eml_null_assignment(D, ind);
 
   /*  Messmatrix, Mess- und Erwartungsvektor bauen */
-  ar = D->size[0];
+  loop_ub = D->size[0];
   i5 = d_D->size[0];
-  d_D->size[0] = ar;
+  d_D->size[0] = loop_ub;
   emxEnsureCapacity((emxArray__common *)d_D, i5, (int)sizeof(double));
-  for (i5 = 0; i5 < ar; i5++) {
+  for (i5 = 0; i5 < loop_ub; i5++) {
     d_D->data[i5] = D->data[i5];
   }
 
   emxInit_real_T(&e_D, 1);
-  ar = D->size[0];
+  loop_ub = D->size[0];
   i5 = e_D->size[0];
-  e_D->size[0] = ar;
+  e_D->size[0] = loop_ub;
   emxEnsureCapacity((emxArray__common *)e_D, i5, (int)sizeof(double));
-  for (i5 = 0; i5 < ar; i5++) {
+  for (i5 = 0; i5 < loop_ub; i5++) {
     e_D->data[i5] = D->data[i5 + D->size[0]];
   }
 
@@ -505,10 +510,10 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   i5 = zr->size[0];
   zr->size[0] = (int)(2.0 * (double)xr->size[0]);
   emxEnsureCapacity((emxArray__common *)zr, i5, (int)sizeof(double));
-  ar = (int)(2.0 * (double)xr->size[0]);
+  loop_ub = (int)(2.0 * (double)xr->size[0]);
   emxFree_real_T(&e_D);
   emxFree_real_T(&d_D);
-  for (i5 = 0; i5 < ar; i5++) {
+  for (i5 = 0; i5 < loop_ub; i5++) {
     zr->data[i5] = 0.0;
   }
 
@@ -516,8 +521,8 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   i5 = zmr->size[0];
   zmr->size[0] = (int)(2.0 * (double)xr->size[0]);
   emxEnsureCapacity((emxArray__common *)zmr, i5, (int)sizeof(double));
-  ar = (int)(2.0 * (double)xr->size[0]);
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = (int)(2.0 * (double)xr->size[0]);
+  for (i5 = 0; i5 < loop_ub; i5++) {
     zmr->data[i5] = 0.0;
   }
 
@@ -535,60 +540,60 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   }
 
   /* % Mittellinie */
-  getPointsFromState(r, delta, z_m, zmm, y_tilde);
-  z_m_idx_0 = z_m->size[0];
-  zmm_idx_0 = zmm->size[0];
-  br = y_tilde->size[0];
+  getPointsFromState(r, delta, xp, z_m, zmm);
+  xp_idx_0 = xp->size[0];
+  br = z_m->size[0];
+  ar = zmm->size[0];
   i5 = P->size[0] * P->size[1];
-  P->size[0] = z_m_idx_0;
+  P->size[0] = xp_idx_0;
   P->size[1] = 3;
   emxEnsureCapacity((emxArray__common *)P, i5, (int)sizeof(double));
-  for (i5 = 0; i5 < z_m_idx_0; i5++) {
-    P->data[i5] = z_m->data[i5];
-  }
-
-  for (i5 = 0; i5 < zmm_idx_0; i5++) {
-    P->data[i5 + P->size[0]] = zmm->data[i5];
+  for (i5 = 0; i5 < xp_idx_0; i5++) {
+    P->data[i5] = xp->data[i5];
   }
 
   for (i5 = 0; i5 < br; i5++) {
-    P->data[i5 + (P->size[0] << 1)] = y_tilde->data[i5];
+    P->data[i5 + P->size[0]] = z_m->data[i5];
   }
 
-  z_m_idx_0 = xm->size[0];
+  for (i5 = 0; i5 < ar; i5++) {
+    P->data[i5 + (P->size[0] << 1)] = zmm->data[i5];
+  }
+
+  xp_idx_0 = xm->size[0];
   i5 = D->size[0] * D->size[1];
-  D->size[0] = z_m_idx_0;
+  D->size[0] = xp_idx_0;
   D->size[1] = 3;
   emxEnsureCapacity((emxArray__common *)D, i5, (int)sizeof(double));
-  ar = xm->size[0] * 3;
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = xm->size[0] * 3;
+  for (i5 = 0; i5 < loop_ub; i5++) {
     D->data[i5] = 10000.0;
   }
 
   /*  Fuer jeden Messpunkt den nähesten Punkt der aktuellen Praediktion finden  */
-  for (z_m_idx_0 = 0; z_m_idx_0 < r->size[0]; z_m_idx_0++) {
+  for (xp_idx_0 = 0; xp_idx_0 < r->size[0]; xp_idx_0++) {
     for (m = 0; m < xm->size[0]; m++) {
-      dist_point = P->data[z_m_idx_0] - xm->data[m];
-      a = P->data[z_m_idx_0 + P->size[0]] - ym->data[m];
+      dist_point = P->data[xp_idx_0] - xm->data[m];
+      a = P->data[xp_idx_0 + P->size[0]] - ym->data[m];
       dist_point = sqrt(dist_point * dist_point + a * a);
       if (dist_point < D->data[m + (D->size[0] << 1)]) {
-        D->data[m] = 1.0 + (double)z_m_idx_0;
+        D->data[m] = 1.0 + (double)xp_idx_0;
         D->data[m + D->size[0]] = 0.0;
         D->data[m + (D->size[0] << 1)] = dist_point;
       }
 
-      if (1.0 + (double)z_m_idx_0 > 1.0) {
-        f_P[0] = P->data[(int)((1.0 + (double)z_m_idx_0) - 1.0) - 1];
-        f_P[1] = P->data[((int)((1.0 + (double)z_m_idx_0) - 1.0) + P->size[0]) -
+      if (1.0 + (double)xp_idx_0 > 1.0) {
+        f_P[0] = P->data[(int)((1.0 + (double)xp_idx_0) - 1.0) - 1];
+        f_P[1] = P->data[((int)((1.0 + (double)xp_idx_0) - 1.0) + P->size[0]) -
           1];
-        g_P[0] = P->data[z_m_idx_0];
-        g_P[1] = P->data[z_m_idx_0 + P->size[0]];
+        g_P[0] = P->data[xp_idx_0];
+        g_P[1] = P->data[xp_idx_0 + P->size[0]];
         b_xm[0] = xm->data[m];
         b_xm[1] = ym->data[m];
         d_line_point(f_P, g_P, b_xm, &dist_point, &a, unusedU2);
         if ((dist_point < D->data[m + (D->size[0] << 1)]) && (a > 0.0) && (a <
              1.0)) {
-          D->data[m] = (1.0 + (double)z_m_idx_0) - 1.0;
+          D->data[m] = (1.0 + (double)xp_idx_0) - 1.0;
           D->data[m + D->size[0]] = a;
           D->data[m + (D->size[0] << 1)] = dist_point;
         }
@@ -597,14 +602,14 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   }
 
   /*  Messpunkte ausfiltern, die vor dem letzten prädizierten Punkt oder zu weit entfernt liegen */
-  ar = D->size[0];
-  z_m_idx_0 = r->size[0];
+  loop_ub = D->size[0];
+  xp_idx_0 = r->size[0];
   i5 = ind->size[0];
-  ind->size[0] = ar;
+  ind->size[0] = loop_ub;
   emxEnsureCapacity((emxArray__common *)ind, i5, (int)sizeof(boolean_T));
-  for (i5 = 0; i5 < ar; i5++) {
-    ind->data[i5] = ((D->data[i5] == z_m_idx_0) || (D->data[i5 + (D->size[0] <<
-      1)] > 0.5));
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    ind->data[i5] = ((D->data[i5] == xp_idx_0) || (D->data[i5 + (D->size[0] << 1)]
+      > 0.5));
   }
 
   emxInit_real_T(&f_D, 1);
@@ -613,21 +618,21 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   b_eml_null_assignment(D, ind);
 
   /*  Messmatrix, Mess- und Erwartungsvektor bauen */
-  ar = D->size[0];
+  loop_ub = D->size[0];
   i5 = f_D->size[0];
-  f_D->size[0] = ar;
+  f_D->size[0] = loop_ub;
   emxEnsureCapacity((emxArray__common *)f_D, i5, (int)sizeof(double));
   emxFree_boolean_T(&ind);
-  for (i5 = 0; i5 < ar; i5++) {
+  for (i5 = 0; i5 < loop_ub; i5++) {
     f_D->data[i5] = D->data[i5];
   }
 
   emxInit_real_T(&g_D, 1);
-  ar = D->size[0];
+  loop_ub = D->size[0];
   i5 = g_D->size[0];
-  g_D->size[0] = ar;
+  g_D->size[0] = loop_ub;
   emxEnsureCapacity((emxArray__common *)g_D, i5, (int)sizeof(double));
-  for (i5 = 0; i5 < ar; i5++) {
+  for (i5 = 0; i5 < loop_ub; i5++) {
     g_D->data[i5] = D->data[i5 + D->size[0]];
   }
 
@@ -636,18 +641,18 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   i5 = z_m->size[0];
   z_m->size[0] = (int)(2.0 * (double)xm->size[0]);
   emxEnsureCapacity((emxArray__common *)z_m, i5, (int)sizeof(double));
-  ar = (int)(2.0 * (double)xm->size[0]);
+  loop_ub = (int)(2.0 * (double)xm->size[0]);
   emxFree_real_T(&g_D);
   emxFree_real_T(&f_D);
-  for (i5 = 0; i5 < ar; i5++) {
+  for (i5 = 0; i5 < loop_ub; i5++) {
     z_m->data[i5] = 0.0;
   }
 
   i5 = zmm->size[0];
   zmm->size[0] = (int)(2.0 * (double)xm->size[0]);
   emxEnsureCapacity((emxArray__common *)zmm, i5, (int)sizeof(double));
-  ar = (int)(2.0 * (double)xm->size[0]);
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = (int)(2.0 * (double)xm->size[0]);
+  for (i5 = 0; i5 < loop_ub; i5++) {
     zmm->data[i5] = 0.0;
   }
 
@@ -673,27 +678,27 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   H->size[0] = (Hl->size[0] + Hr->size[0]) + Hm->size[0];
   H->size[1] = Hl->size[1];
   emxEnsureCapacity((emxArray__common *)H, i5, (int)sizeof(double));
-  ar = Hl->size[1];
-  for (i5 = 0; i5 < ar; i5++) {
-    br = Hl->size[0];
-    for (i6 = 0; i6 < br; i6++) {
+  loop_ub = Hl->size[1];
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    ar = Hl->size[0];
+    for (i6 = 0; i6 < ar; i6++) {
       H->data[i6 + H->size[0] * i5] = Hl->data[i6 + Hl->size[0] * i5];
     }
   }
 
-  ar = Hr->size[1];
-  for (i5 = 0; i5 < ar; i5++) {
-    br = Hr->size[0];
-    for (i6 = 0; i6 < br; i6++) {
+  loop_ub = Hr->size[1];
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    ar = Hr->size[0];
+    for (i6 = 0; i6 < ar; i6++) {
       H->data[(i6 + Hl->size[0]) + H->size[0] * i5] = Hr->data[i6 + Hr->size[0] *
         i5];
     }
   }
 
-  ar = Hm->size[1];
-  for (i5 = 0; i5 < ar; i5++) {
-    br = Hm->size[0];
-    for (i6 = 0; i6 < br; i6++) {
+  loop_ub = Hm->size[1];
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    ar = Hm->size[0];
+    for (i6 = 0; i6 < ar; i6++) {
       H->data[((i6 + Hl->size[0]) + Hr->size[0]) + H->size[0] * i5] = Hm->
         data[i6 + Hm->size[0] * i5];
     }
@@ -703,76 +708,96 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   /* Messwerte */
   /* erwartete Werte */
   /* % KALMAN FILTER     */
-  /*  r = f(r,u) (Ax+Bu) */
-  eye(2.0 * ((double)((unsigned int)xl->size[0] + xr->size[0]) + (double)
-             xm->size[0]), Hl);
+  /* state transition (experimentell und vereinfacht) */
+  xp_idx_0 = r->size[0];
   i5 = Hl->size[0] * Hl->size[1];
+  Hl->size[0] = xp_idx_0;
   emxEnsureCapacity((emxArray__common *)Hl, i5, (int)sizeof(double));
-  z_m_idx_0 = Hl->size[0];
-  zmm_idx_0 = Hl->size[1];
-  ar = z_m_idx_0 * zmm_idx_0;
-  for (i5 = 0; i5 < ar; i5++) {
-    Hl->data[i5] *= R_fakt;
+  xp_idx_0 = r->size[0];
+  i5 = Hl->size[0] * Hl->size[1];
+  Hl->size[1] = xp_idx_0;
+  emxEnsureCapacity((emxArray__common *)Hl, i5, (int)sizeof(double));
+  loop_ub = r->size[0] * r->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    Hl->data[i5] = 0.0;
   }
 
-  if ((A->size[1] == 1) || (Pk->size[0] == 1)) {
-    i5 = Hr->size[0] * Hr->size[1];
-    Hr->size[0] = A->size[0];
-    Hr->size[1] = Pk->size[1];
-    emxEnsureCapacity((emxArray__common *)Hr, i5, (int)sizeof(double));
-    ar = A->size[0];
-    for (i5 = 0; i5 < ar; i5++) {
-      br = Pk->size[1];
-      for (i6 = 0; i6 < br; i6++) {
-        Hr->data[i5 + Hr->size[0] * i6] = 0.0;
-        z_m_idx_0 = A->size[1];
-        for (zmm_idx_0 = 0; zmm_idx_0 < z_m_idx_0; zmm_idx_0++) {
-          Hr->data[i5 + Hr->size[0] * i6] += A->data[i5 + A->size[0] * zmm_idx_0]
-            * Pk->data[zmm_idx_0 + Pk->size[0] * i6];
-        }
+  Hl->data[0] = 1.0;
+  Hl->data[1 + Hl->size[0]] = 1.0;
+  Hl->data[1 + (Hl->size[0] << 1)] = delta_x / sqrt(1.0 - delta * delta *
+    (r->data[2] * r->data[2]) / 4.0);
+  for (xp_idx_0 = 0; xp_idx_0 < (int)(((double)r->size[0] - 1.0) + -2.0);
+       xp_idx_0++) {
+    Hl->data[(xp_idx_0 + Hl->size[0] * (xp_idx_0 + 2)) + 2] = 1.0 - delta_x /
+      delta;
+    Hl->data[(xp_idx_0 + Hl->size[0] * ((int)((3.0 + (double)xp_idx_0) + 1.0) -
+               1)) + 2] = delta_x / delta;
+  }
+
+  Hl->data[(r->size[0] + Hl->size[0] * (r->size[0] - 1)) - 1] = 1.0;
+  i5 = xp->size[0];
+  xp->size[0] = r->size[0];
+  emxEnsureCapacity((emxArray__common *)xp, i5, (int)sizeof(double));
+  loop_ub = r->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    xp->data[i5] = r->data[i5];
+  }
+
+  emxInit_real_T(&b_Hl, 1);
+  if ((Hl->size[1] == 1) || (r->size[0] == 1)) {
+    i5 = b_Hl->size[0];
+    b_Hl->size[0] = Hl->size[0];
+    emxEnsureCapacity((emxArray__common *)b_Hl, i5, (int)sizeof(double));
+    loop_ub = Hl->size[0];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      b_Hl->data[i5] = 0.0;
+      ar = Hl->size[1];
+      for (i6 = 0; i6 < ar; i6++) {
+        b_Hl->data[i5] += Hl->data[i5 + Hl->size[0] * i6] * r->data[i6];
       }
     }
+
+    i5 = r->size[0];
+    r->size[0] = b_Hl->size[0];
+    emxEnsureCapacity((emxArray__common *)r, i5, (int)sizeof(double));
+    loop_ub = b_Hl->size[0];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      r->data[i5] = b_Hl->data[i5];
+    }
   } else {
-    k = A->size[1];
-    unusedU2[0] = (unsigned int)A->size[0];
-    unusedU2[1] = (unsigned int)Pk->size[1];
-    m = A->size[0];
-    i5 = Hr->size[0] * Hr->size[1];
-    Hr->size[0] = (int)unusedU2[0];
-    emxEnsureCapacity((emxArray__common *)Hr, i5, (int)sizeof(double));
-    i5 = Hr->size[0] * Hr->size[1];
-    Hr->size[1] = (int)unusedU2[1];
-    emxEnsureCapacity((emxArray__common *)Hr, i5, (int)sizeof(double));
-    ar = (int)unusedU2[0] * (int)unusedU2[1];
-    for (i5 = 0; i5 < ar; i5++) {
-      Hr->data[i5] = 0.0;
+    k = Hl->size[1];
+    unusedU2[0] = Hl->size[0];
+    m = Hl->size[0];
+    i5 = r->size[0];
+    r->size[0] = (int)unusedU2[0];
+    emxEnsureCapacity((emxArray__common *)r, i5, (int)sizeof(double));
+    loop_ub = (int)unusedU2[0];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      r->data[i5] = 0.0;
     }
 
-    if ((A->size[0] == 0) || (Pk->size[1] == 0)) {
+    if (Hl->size[0] == 0) {
     } else {
-      z_m_idx_0 = A->size[0] * (Pk->size[1] - 1);
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= z_m_idx_0)) {
-        i5 = zmm_idx_0 + m;
-        for (ic = zmm_idx_0; ic + 1 <= i5; ic++) {
-          Hr->data[ic] = 0.0;
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= 0)) {
+        for (ic = 0; ic + 1 <= m; ic++) {
+          r->data[ic] = 0.0;
         }
 
-        zmm_idx_0 += m;
+        xp_idx_0 = m;
       }
 
       br = 0;
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= z_m_idx_0)) {
-        ar = -1;
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= 0)) {
+        ar = 0;
         i5 = br + k;
-        for (ib = br; ib + 1 <= i5; ib++) {
-          if (Pk->data[ib] != 0.0) {
+        for (loop_ub = br; loop_ub + 1 <= i5; loop_ub++) {
+          if (xp->data[loop_ub] != 0.0) {
             ia = ar;
-            i6 = zmm_idx_0 + m;
-            for (ic = zmm_idx_0; ic + 1 <= i6; ic++) {
+            for (ic = 0; ic + 1 <= m; ic++) {
               ia++;
-              Hr->data[ic] += Pk->data[ib] * A->data[ia];
+              r->data[ic] += xp->data[loop_ub] * Hl->data[ia - 1];
             }
           }
 
@@ -780,82 +805,167 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
         }
 
         br += k;
-        zmm_idx_0 += m;
+        xp_idx_0 = m;
       }
     }
   }
 
-  i5 = Hm->size[0] * Hm->size[1];
-  Hm->size[0] = A->size[1];
-  Hm->size[1] = A->size[0];
-  emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
-  ar = A->size[0];
-  for (i5 = 0; i5 < ar; i5++) {
-    br = A->size[1];
-    for (i6 = 0; i6 < br; i6++) {
-      Hm->data[i6 + Hm->size[0] * i5] = A->data[i5 + A->size[0] * i6];
-    }
+  emxFree_real_T(&b_Hl);
+  r->data[0] -= delta_y;
+  r->data[1] -= delta_phi;
+  eye(2.0 * ((double)((unsigned int)xl->size[0] + xr->size[0]) + (double)
+             xm->size[0]), Hr);
+  i5 = Hr->size[0] * Hr->size[1];
+  emxEnsureCapacity((emxArray__common *)Hr, i5, (int)sizeof(double));
+  xp_idx_0 = Hr->size[0];
+  br = Hr->size[1];
+  loop_ub = xp_idx_0 * br;
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    Hr->data[i5] *= R_fakt;
   }
 
-  if ((Hr->size[1] == 1) || (Hm->size[0] == 1)) {
-    i5 = Pk->size[0] * Pk->size[1];
-    Pk->size[0] = Hr->size[0];
-    Pk->size[1] = Hm->size[1];
-    emxEnsureCapacity((emxArray__common *)Pk, i5, (int)sizeof(double));
-    ar = Hr->size[0];
-    for (i5 = 0; i5 < ar; i5++) {
-      br = Hm->size[1];
-      for (i6 = 0; i6 < br; i6++) {
-        Pk->data[i5 + Pk->size[0] * i6] = 0.0;
-        z_m_idx_0 = Hr->size[1];
-        for (zmm_idx_0 = 0; zmm_idx_0 < z_m_idx_0; zmm_idx_0++) {
-          Pk->data[i5 + Pk->size[0] * i6] += Hr->data[i5 + Hr->size[0] *
-            zmm_idx_0] * Hm->data[zmm_idx_0 + Hm->size[0] * i6];
+  if ((Hl->size[1] == 1) || (Pk->size[0] == 1)) {
+    i5 = Hm->size[0] * Hm->size[1];
+    Hm->size[0] = Hl->size[0];
+    Hm->size[1] = Pk->size[1];
+    emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
+    loop_ub = Hl->size[0];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      ar = Pk->size[1];
+      for (i6 = 0; i6 < ar; i6++) {
+        Hm->data[i5 + Hm->size[0] * i6] = 0.0;
+        xp_idx_0 = Hl->size[1];
+        for (br = 0; br < xp_idx_0; br++) {
+          Hm->data[i5 + Hm->size[0] * i6] += Hl->data[i5 + Hl->size[0] * br] *
+            Pk->data[br + Pk->size[0] * i6];
         }
       }
     }
   } else {
-    k = Hr->size[1];
-    unusedU2[0] = (unsigned int)Hr->size[0];
-    unusedU2[1] = (unsigned int)Hm->size[1];
-    m = Hr->size[0];
+    k = Hl->size[1];
+    unusedU2[0] = (unsigned int)Hl->size[0];
+    unusedU2[1] = (unsigned int)Pk->size[1];
+    m = Hl->size[0];
+    i5 = Hm->size[0] * Hm->size[1];
+    Hm->size[0] = (int)unusedU2[0];
+    emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
+    i5 = Hm->size[0] * Hm->size[1];
+    Hm->size[1] = (int)unusedU2[1];
+    emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
+    loop_ub = (int)unusedU2[0] * (int)unusedU2[1];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      Hm->data[i5] = 0.0;
+    }
+
+    if ((Hl->size[0] == 0) || (Pk->size[1] == 0)) {
+    } else {
+      c = Hl->size[0] * (Pk->size[1] - 1);
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= c)) {
+        i5 = xp_idx_0 + m;
+        for (ic = xp_idx_0; ic + 1 <= i5; ic++) {
+          Hm->data[ic] = 0.0;
+        }
+
+        xp_idx_0 += m;
+      }
+
+      br = 0;
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= c)) {
+        ar = 0;
+        i5 = br + k;
+        for (loop_ub = br; loop_ub + 1 <= i5; loop_ub++) {
+          if (Pk->data[loop_ub] != 0.0) {
+            ia = ar;
+            i6 = xp_idx_0 + m;
+            for (ic = xp_idx_0; ic + 1 <= i6; ic++) {
+              ia++;
+              Hm->data[ic] += Pk->data[loop_ub] * Hl->data[ia - 1];
+            }
+          }
+
+          ar += m;
+        }
+
+        br += k;
+        xp_idx_0 += m;
+      }
+    }
+  }
+
+  b_emxInit_real_T(&b, 2);
+  i5 = b->size[0] * b->size[1];
+  b->size[0] = Hl->size[1];
+  b->size[1] = Hl->size[0];
+  emxEnsureCapacity((emxArray__common *)b, i5, (int)sizeof(double));
+  loop_ub = Hl->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    ar = Hl->size[1];
+    for (i6 = 0; i6 < ar; i6++) {
+      b->data[i6 + b->size[0] * i5] = Hl->data[i5 + Hl->size[0] * i6];
+    }
+  }
+
+  if ((Hm->size[1] == 1) || (b->size[0] == 1)) {
+    i5 = Pk->size[0] * Pk->size[1];
+    Pk->size[0] = Hm->size[0];
+    Pk->size[1] = b->size[1];
+    emxEnsureCapacity((emxArray__common *)Pk, i5, (int)sizeof(double));
+    loop_ub = Hm->size[0];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      ar = b->size[1];
+      for (i6 = 0; i6 < ar; i6++) {
+        Pk->data[i5 + Pk->size[0] * i6] = 0.0;
+        xp_idx_0 = Hm->size[1];
+        for (br = 0; br < xp_idx_0; br++) {
+          Pk->data[i5 + Pk->size[0] * i6] += Hm->data[i5 + Hm->size[0] * br] *
+            b->data[br + b->size[0] * i6];
+        }
+      }
+    }
+  } else {
+    k = Hm->size[1];
+    unusedU2[0] = (unsigned int)Hm->size[0];
+    unusedU2[1] = (unsigned int)b->size[1];
+    m = Hm->size[0];
     i5 = Pk->size[0] * Pk->size[1];
     Pk->size[0] = (int)unusedU2[0];
     Pk->size[1] = (int)unusedU2[1];
     emxEnsureCapacity((emxArray__common *)Pk, i5, (int)sizeof(double));
-    ar = (int)unusedU2[1];
-    for (i5 = 0; i5 < ar; i5++) {
-      br = (int)unusedU2[0];
-      for (i6 = 0; i6 < br; i6++) {
+    loop_ub = (int)unusedU2[1];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      ar = (int)unusedU2[0];
+      for (i6 = 0; i6 < ar; i6++) {
         Pk->data[i6 + Pk->size[0] * i5] = 0.0;
       }
     }
 
-    if ((Hr->size[0] == 0) || (Hm->size[1] == 0)) {
+    if ((Hm->size[0] == 0) || (b->size[1] == 0)) {
     } else {
-      z_m_idx_0 = Hr->size[0] * (Hm->size[1] - 1);
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= z_m_idx_0)) {
-        i5 = zmm_idx_0 + m;
-        for (ic = zmm_idx_0; ic + 1 <= i5; ic++) {
+      c = Hm->size[0] * (b->size[1] - 1);
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= c)) {
+        i5 = xp_idx_0 + m;
+        for (ic = xp_idx_0; ic + 1 <= i5; ic++) {
           Pk->data[ic] = 0.0;
         }
 
-        zmm_idx_0 += m;
+        xp_idx_0 += m;
       }
 
       br = 0;
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= z_m_idx_0)) {
-        ar = -1;
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= c)) {
+        ar = 0;
         i5 = br + k;
-        for (ib = br; ib + 1 <= i5; ib++) {
-          if (Hm->data[ib] != 0.0) {
+        for (loop_ub = br; loop_ub + 1 <= i5; loop_ub++) {
+          if (b->data[loop_ub] != 0.0) {
             ia = ar;
-            i6 = zmm_idx_0 + m;
-            for (ic = zmm_idx_0; ic + 1 <= i6; ic++) {
+            i6 = xp_idx_0 + m;
+            for (ic = xp_idx_0; ic + 1 <= i6; ic++) {
               ia++;
-              Pk->data[ic] += Hm->data[ib] * Hr->data[ia];
+              Pk->data[ic] += b->data[loop_ub] * Hm->data[ia - 1];
             }
           }
 
@@ -863,17 +973,17 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
         }
 
         br += k;
-        zmm_idx_0 += m;
+        xp_idx_0 += m;
       }
     }
   }
 
   i5 = Pk->size[0] * Pk->size[1];
   emxEnsureCapacity((emxArray__common *)Pk, i5, (int)sizeof(double));
-  ar = Pk->size[1];
-  for (i5 = 0; i5 < ar; i5++) {
-    br = Pk->size[0];
-    for (i6 = 0; i6 < br; i6++) {
+  loop_ub = Pk->size[1];
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    ar = Pk->size[0];
+    for (i6 = 0; i6 < ar; i6++) {
       Pk->data[i6 + Pk->size[0] * i5] += Q->data[i6 + Q->size[0] * i5];
     }
   }
@@ -883,68 +993,70 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   i5 = b_zl->size[0];
   b_zl->size[0] = (zl->size[0] + zr->size[0]) + z_m->size[0];
   emxEnsureCapacity((emxArray__common *)b_zl, i5, (int)sizeof(double));
-  ar = zl->size[0];
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = zl->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
     b_zl->data[i5] = zl->data[i5];
   }
 
-  ar = zr->size[0];
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = zr->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
     b_zl->data[i5 + zl->size[0]] = zr->data[i5];
   }
 
-  ar = z_m->size[0];
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = z_m->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
     b_zl->data[(i5 + zl->size[0]) + zr->size[0]] = z_m->data[i5];
   }
 
+  emxFree_real_T(&z_m);
   emxFree_real_T(&zr);
   emxFree_real_T(&zl);
   i5 = b_zml->size[0];
   b_zml->size[0] = (zml->size[0] + zmr->size[0]) + zmm->size[0];
   emxEnsureCapacity((emxArray__common *)b_zml, i5, (int)sizeof(double));
-  ar = zml->size[0];
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = zml->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
     b_zml->data[i5] = zml->data[i5];
   }
 
-  ar = zmr->size[0];
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = zmr->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
     b_zml->data[i5 + zml->size[0]] = zmr->data[i5];
   }
 
-  ar = zmm->size[0];
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = zmm->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
     b_zml->data[(i5 + zml->size[0]) + zmr->size[0]] = zmm->data[i5];
   }
 
   emxFree_real_T(&zmm);
   emxFree_real_T(&zmr);
   emxFree_real_T(&zml);
+  emxInit_real_T(&y_tilde, 1);
   i5 = y_tilde->size[0];
   y_tilde->size[0] = b_zl->size[0];
   emxEnsureCapacity((emxArray__common *)y_tilde, i5, (int)sizeof(double));
-  ar = b_zl->size[0];
-  for (i5 = 0; i5 < ar; i5++) {
+  loop_ub = b_zl->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
     y_tilde->data[i5] = b_zl->data[i5] - b_zml->data[i5];
   }
 
   emxFree_real_T(&b_zml);
   emxFree_real_T(&b_zl);
   if ((H->size[1] == 1) || (Pk->size[0] == 1)) {
-    i5 = Hr->size[0] * Hr->size[1];
-    Hr->size[0] = H->size[0];
-    Hr->size[1] = Pk->size[1];
-    emxEnsureCapacity((emxArray__common *)Hr, i5, (int)sizeof(double));
-    ar = H->size[0];
-    for (i5 = 0; i5 < ar; i5++) {
-      br = Pk->size[1];
-      for (i6 = 0; i6 < br; i6++) {
-        Hr->data[i5 + Hr->size[0] * i6] = 0.0;
-        z_m_idx_0 = H->size[1];
-        for (zmm_idx_0 = 0; zmm_idx_0 < z_m_idx_0; zmm_idx_0++) {
-          Hr->data[i5 + Hr->size[0] * i6] += H->data[i5 + H->size[0] * zmm_idx_0]
-            * Pk->data[zmm_idx_0 + Pk->size[0] * i6];
+    i5 = Hm->size[0] * Hm->size[1];
+    Hm->size[0] = H->size[0];
+    Hm->size[1] = Pk->size[1];
+    emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
+    loop_ub = H->size[0];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      ar = Pk->size[1];
+      for (i6 = 0; i6 < ar; i6++) {
+        Hm->data[i5 + Hm->size[0] * i6] = 0.0;
+        xp_idx_0 = H->size[1];
+        for (br = 0; br < xp_idx_0; br++) {
+          Hm->data[i5 + Hm->size[0] * i6] += H->data[i5 + H->size[0] * br] *
+            Pk->data[br + Pk->size[0] * i6];
         }
       }
     }
@@ -953,42 +1065,42 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
     unusedU2[0] = (unsigned int)H->size[0];
     unusedU2[1] = (unsigned int)Pk->size[1];
     m = H->size[0];
-    i5 = Hr->size[0] * Hr->size[1];
-    Hr->size[0] = (int)unusedU2[0];
-    emxEnsureCapacity((emxArray__common *)Hr, i5, (int)sizeof(double));
-    i5 = Hr->size[0] * Hr->size[1];
-    Hr->size[1] = (int)unusedU2[1];
-    emxEnsureCapacity((emxArray__common *)Hr, i5, (int)sizeof(double));
-    ar = (int)unusedU2[0] * (int)unusedU2[1];
-    for (i5 = 0; i5 < ar; i5++) {
-      Hr->data[i5] = 0.0;
+    i5 = Hm->size[0] * Hm->size[1];
+    Hm->size[0] = (int)unusedU2[0];
+    emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
+    i5 = Hm->size[0] * Hm->size[1];
+    Hm->size[1] = (int)unusedU2[1];
+    emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
+    loop_ub = (int)unusedU2[0] * (int)unusedU2[1];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      Hm->data[i5] = 0.0;
     }
 
     if ((H->size[0] == 0) || (Pk->size[1] == 0)) {
     } else {
-      z_m_idx_0 = H->size[0] * (Pk->size[1] - 1);
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= z_m_idx_0)) {
-        i5 = zmm_idx_0 + m;
-        for (ic = zmm_idx_0; ic + 1 <= i5; ic++) {
-          Hr->data[ic] = 0.0;
+      c = H->size[0] * (Pk->size[1] - 1);
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= c)) {
+        i5 = xp_idx_0 + m;
+        for (ic = xp_idx_0; ic + 1 <= i5; ic++) {
+          Hm->data[ic] = 0.0;
         }
 
-        zmm_idx_0 += m;
+        xp_idx_0 += m;
       }
 
       br = 0;
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= z_m_idx_0)) {
-        ar = -1;
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= c)) {
+        ar = 0;
         i5 = br + k;
-        for (ib = br; ib + 1 <= i5; ib++) {
-          if (Pk->data[ib] != 0.0) {
+        for (loop_ub = br; loop_ub + 1 <= i5; loop_ub++) {
+          if (Pk->data[loop_ub] != 0.0) {
             ia = ar;
-            i6 = zmm_idx_0 + m;
-            for (ic = zmm_idx_0; ic + 1 <= i6; ic++) {
+            i6 = xp_idx_0 + m;
+            for (ic = xp_idx_0; ic + 1 <= i6; ic++) {
               ia++;
-              Hr->data[ic] += Pk->data[ib] * H->data[ia];
+              Hm->data[ic] += Pk->data[loop_ub] * H->data[ia - 1];
             }
           }
 
@@ -996,82 +1108,82 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
         }
 
         br += k;
-        zmm_idx_0 += m;
+        xp_idx_0 += m;
       }
     }
   }
 
-  i5 = Hm->size[0] * Hm->size[1];
-  Hm->size[0] = H->size[1];
-  Hm->size[1] = H->size[0];
-  emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
-  ar = H->size[0];
-  for (i5 = 0; i5 < ar; i5++) {
-    br = H->size[1];
-    for (i6 = 0; i6 < br; i6++) {
-      Hm->data[i6 + Hm->size[0] * i5] = H->data[i5 + H->size[0] * i6];
+  i5 = b->size[0] * b->size[1];
+  b->size[0] = H->size[1];
+  b->size[1] = H->size[0];
+  emxEnsureCapacity((emxArray__common *)b, i5, (int)sizeof(double));
+  loop_ub = H->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    ar = H->size[1];
+    for (i6 = 0; i6 < ar; i6++) {
+      b->data[i6 + b->size[0] * i5] = H->data[i5 + H->size[0] * i6];
     }
   }
 
   b_emxInit_real_T(&C, 2);
-  if ((Hr->size[1] == 1) || (Hm->size[0] == 1)) {
+  if ((Hm->size[1] == 1) || (b->size[0] == 1)) {
     i5 = C->size[0] * C->size[1];
-    C->size[0] = Hr->size[0];
-    C->size[1] = Hm->size[1];
+    C->size[0] = Hm->size[0];
+    C->size[1] = b->size[1];
     emxEnsureCapacity((emxArray__common *)C, i5, (int)sizeof(double));
-    ar = Hr->size[0];
-    for (i5 = 0; i5 < ar; i5++) {
-      br = Hm->size[1];
-      for (i6 = 0; i6 < br; i6++) {
+    loop_ub = Hm->size[0];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      ar = b->size[1];
+      for (i6 = 0; i6 < ar; i6++) {
         C->data[i5 + C->size[0] * i6] = 0.0;
-        z_m_idx_0 = Hr->size[1];
-        for (zmm_idx_0 = 0; zmm_idx_0 < z_m_idx_0; zmm_idx_0++) {
-          C->data[i5 + C->size[0] * i6] += Hr->data[i5 + Hr->size[0] * zmm_idx_0]
-            * Hm->data[zmm_idx_0 + Hm->size[0] * i6];
+        xp_idx_0 = Hm->size[1];
+        for (br = 0; br < xp_idx_0; br++) {
+          C->data[i5 + C->size[0] * i6] += Hm->data[i5 + Hm->size[0] * br] *
+            b->data[br + b->size[0] * i6];
         }
       }
     }
   } else {
-    k = Hr->size[1];
-    unusedU2[0] = (unsigned int)Hr->size[0];
-    unusedU2[1] = (unsigned int)Hm->size[1];
-    m = Hr->size[0];
+    k = Hm->size[1];
+    unusedU2[0] = (unsigned int)Hm->size[0];
+    unusedU2[1] = (unsigned int)b->size[1];
+    m = Hm->size[0];
     i5 = C->size[0] * C->size[1];
     C->size[0] = (int)unusedU2[0];
     emxEnsureCapacity((emxArray__common *)C, i5, (int)sizeof(double));
     i5 = C->size[0] * C->size[1];
     C->size[1] = (int)unusedU2[1];
     emxEnsureCapacity((emxArray__common *)C, i5, (int)sizeof(double));
-    ar = (int)unusedU2[0] * (int)unusedU2[1];
-    for (i5 = 0; i5 < ar; i5++) {
+    loop_ub = (int)unusedU2[0] * (int)unusedU2[1];
+    for (i5 = 0; i5 < loop_ub; i5++) {
       C->data[i5] = 0.0;
     }
 
-    if ((Hr->size[0] == 0) || (Hm->size[1] == 0)) {
+    if ((Hm->size[0] == 0) || (b->size[1] == 0)) {
     } else {
-      z_m_idx_0 = Hr->size[0] * (Hm->size[1] - 1);
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= z_m_idx_0)) {
-        i5 = zmm_idx_0 + m;
-        for (ic = zmm_idx_0; ic + 1 <= i5; ic++) {
+      c = Hm->size[0] * (b->size[1] - 1);
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= c)) {
+        i5 = xp_idx_0 + m;
+        for (ic = xp_idx_0; ic + 1 <= i5; ic++) {
           C->data[ic] = 0.0;
         }
 
-        zmm_idx_0 += m;
+        xp_idx_0 += m;
       }
 
       br = 0;
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= z_m_idx_0)) {
-        ar = -1;
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= c)) {
+        ar = 0;
         i5 = br + k;
-        for (ib = br; ib + 1 <= i5; ib++) {
-          if (Hm->data[ib] != 0.0) {
+        for (loop_ub = br; loop_ub + 1 <= i5; loop_ub++) {
+          if (b->data[loop_ub] != 0.0) {
             ia = ar;
-            i6 = zmm_idx_0 + m;
-            for (ic = zmm_idx_0; ic + 1 <= i6; ic++) {
+            i6 = xp_idx_0 + m;
+            for (ic = xp_idx_0; ic + 1 <= i6; ic++) {
               ia++;
-              C->data[ic] += Hm->data[ib] * Hr->data[ia];
+              C->data[ic] += b->data[loop_ub] * Hm->data[ia - 1];
             }
           }
 
@@ -1079,83 +1191,81 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
         }
 
         br += k;
-        zmm_idx_0 += m;
+        xp_idx_0 += m;
       }
     }
   }
 
-  i5 = Hm->size[0] * Hm->size[1];
-  Hm->size[0] = H->size[1];
-  Hm->size[1] = H->size[0];
-  emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
-  ar = H->size[0];
-  for (i5 = 0; i5 < ar; i5++) {
-    br = H->size[1];
-    for (i6 = 0; i6 < br; i6++) {
-      Hm->data[i6 + Hm->size[0] * i5] = H->data[i5 + H->size[0] * i6];
+  i5 = b->size[0] * b->size[1];
+  b->size[0] = H->size[1];
+  b->size[1] = H->size[0];
+  emxEnsureCapacity((emxArray__common *)b, i5, (int)sizeof(double));
+  loop_ub = H->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    ar = H->size[1];
+    for (i6 = 0; i6 < ar; i6++) {
+      b->data[i6 + b->size[0] * i5] = H->data[i5 + H->size[0] * i6];
     }
   }
 
-  if ((Pk->size[1] == 1) || (Hm->size[0] == 1)) {
-    i5 = Hr->size[0] * Hr->size[1];
-    Hr->size[0] = Pk->size[0];
-    Hr->size[1] = Hm->size[1];
-    emxEnsureCapacity((emxArray__common *)Hr, i5, (int)sizeof(double));
-    ar = Pk->size[0];
-    for (i5 = 0; i5 < ar; i5++) {
-      br = Hm->size[1];
-      for (i6 = 0; i6 < br; i6++) {
-        Hr->data[i5 + Hr->size[0] * i6] = 0.0;
-        z_m_idx_0 = Pk->size[1];
-        for (zmm_idx_0 = 0; zmm_idx_0 < z_m_idx_0; zmm_idx_0++) {
-          Hr->data[i5 + Hr->size[0] * i6] += Pk->data[i5 + Pk->size[0] *
-            zmm_idx_0] * Hm->data[zmm_idx_0 + Hm->size[0] * i6];
+  if ((Pk->size[1] == 1) || (b->size[0] == 1)) {
+    i5 = Hm->size[0] * Hm->size[1];
+    Hm->size[0] = Pk->size[0];
+    Hm->size[1] = b->size[1];
+    emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
+    loop_ub = Pk->size[0];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      ar = b->size[1];
+      for (i6 = 0; i6 < ar; i6++) {
+        Hm->data[i5 + Hm->size[0] * i6] = 0.0;
+        xp_idx_0 = Pk->size[1];
+        for (br = 0; br < xp_idx_0; br++) {
+          Hm->data[i5 + Hm->size[0] * i6] += Pk->data[i5 + Pk->size[0] * br] *
+            b->data[br + b->size[0] * i6];
         }
       }
     }
   } else {
     k = Pk->size[1];
     unusedU2[0] = (unsigned int)Pk->size[0];
-    unusedU2[1] = (unsigned int)Hm->size[1];
+    unusedU2[1] = (unsigned int)b->size[1];
     m = Pk->size[0];
-    i5 = Hr->size[0] * Hr->size[1];
-    Hr->size[0] = (int)unusedU2[0];
-    emxEnsureCapacity((emxArray__common *)Hr, i5, (int)sizeof(double));
-    i5 = Hr->size[0] * Hr->size[1];
-    Hr->size[1] = (int)unusedU2[1];
-    emxEnsureCapacity((emxArray__common *)Hr, i5, (int)sizeof(double));
-    ar = (int)unusedU2[0] * (int)unusedU2[1];
-    for (i5 = 0; i5 < ar; i5++) {
-      Hr->data[i5] = 0.0;
+    i5 = Hm->size[0] * Hm->size[1];
+    Hm->size[0] = (int)unusedU2[0];
+    emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
+    i5 = Hm->size[0] * Hm->size[1];
+    Hm->size[1] = (int)unusedU2[1];
+    emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
+    loop_ub = (int)unusedU2[0] * (int)unusedU2[1];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      Hm->data[i5] = 0.0;
     }
 
-    if ((Pk->size[0] == 0) || (Hm->size[1] == 0)) {
+    if ((Pk->size[0] == 0) || (b->size[1] == 0)) {
     } else {
-      z_m_idx_0 = Pk->size[0] * (Hm->size[1] - 1);
-      zmm_idx_0 = 0;
-      while (((m > 0) && (zmm_idx_0 <= z_m_idx_0)) || ((m < 0) && (zmm_idx_0 >=
-               z_m_idx_0))) {
-        i5 = zmm_idx_0 + m;
-        for (ic = zmm_idx_0; ic + 1 <= i5; ic++) {
-          Hr->data[ic] = 0.0;
+      c = Pk->size[0] * (b->size[1] - 1);
+      xp_idx_0 = 0;
+      while (((m > 0) && (xp_idx_0 <= c)) || ((m < 0) && (xp_idx_0 >= c))) {
+        i5 = xp_idx_0 + m;
+        for (ic = xp_idx_0; ic + 1 <= i5; ic++) {
+          Hm->data[ic] = 0.0;
         }
 
-        zmm_idx_0 += m;
+        xp_idx_0 += m;
       }
 
       br = 0;
-      zmm_idx_0 = 0;
-      while (((m > 0) && (zmm_idx_0 <= z_m_idx_0)) || ((m < 0) && (zmm_idx_0 >=
-               z_m_idx_0))) {
-        ar = -1;
+      xp_idx_0 = 0;
+      while (((m > 0) && (xp_idx_0 <= c)) || ((m < 0) && (xp_idx_0 >= c))) {
+        ar = 0;
         i5 = br + k;
-        for (ib = br; ib + 1 <= i5; ib++) {
-          if (Hm->data[ib] != 0.0) {
+        for (loop_ub = br; loop_ub + 1 <= i5; loop_ub++) {
+          if (b->data[loop_ub] != 0.0) {
             ia = ar;
-            i6 = zmm_idx_0 + m;
-            for (ic = zmm_idx_0; ic + 1 <= i6; ic++) {
+            i6 = xp_idx_0 + m;
+            for (ic = xp_idx_0; ic + 1 <= i6; ic++) {
               ia++;
-              Hr->data[ic] += Hm->data[ib] * Pk->data[ia];
+              Hm->data[ic] += b->data[loop_ub] * Pk->data[ia - 1];
             }
           }
 
@@ -1163,7 +1273,7 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
         }
 
         br += k;
-        zmm_idx_0 += m;
+        xp_idx_0 += m;
       }
     }
   }
@@ -1173,59 +1283,60 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   b_C->size[0] = C->size[0];
   b_C->size[1] = C->size[1];
   emxEnsureCapacity((emxArray__common *)b_C, i5, (int)sizeof(double));
-  ar = C->size[0] * C->size[1];
-  for (i5 = 0; i5 < ar; i5++) {
-    b_C->data[i5] = C->data[i5] + Hl->data[i5];
+  loop_ub = C->size[0] * C->size[1];
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    b_C->data[i5] = C->data[i5] + Hr->data[i5];
   }
 
-  mrdivide(Hr, b_C, Hl);
+  mrdivide(Hm, b_C, Hl);
   emxFree_real_T(&b_C);
+  emxFree_real_T(&Hm);
   if ((Hl->size[1] == 1) || (y_tilde->size[0] == 1)) {
-    i5 = z_m->size[0];
-    z_m->size[0] = Hl->size[0];
-    emxEnsureCapacity((emxArray__common *)z_m, i5, (int)sizeof(double));
-    ar = Hl->size[0];
-    for (i5 = 0; i5 < ar; i5++) {
-      z_m->data[i5] = 0.0;
-      br = Hl->size[1];
-      for (i6 = 0; i6 < br; i6++) {
-        z_m->data[i5] += Hl->data[i5 + Hl->size[0] * i6] * y_tilde->data[i6];
+    i5 = xp->size[0];
+    xp->size[0] = Hl->size[0];
+    emxEnsureCapacity((emxArray__common *)xp, i5, (int)sizeof(double));
+    loop_ub = Hl->size[0];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      xp->data[i5] = 0.0;
+      ar = Hl->size[1];
+      for (i6 = 0; i6 < ar; i6++) {
+        xp->data[i5] += Hl->data[i5 + Hl->size[0] * i6] * y_tilde->data[i6];
       }
     }
   } else {
     k = Hl->size[1];
     unusedU2[0] = Hl->size[0];
     m = Hl->size[0];
-    i5 = z_m->size[0];
-    z_m->size[0] = (int)unusedU2[0];
-    emxEnsureCapacity((emxArray__common *)z_m, i5, (int)sizeof(double));
-    ar = (int)unusedU2[0];
-    for (i5 = 0; i5 < ar; i5++) {
-      z_m->data[i5] = 0.0;
+    i5 = xp->size[0];
+    xp->size[0] = (int)unusedU2[0];
+    emxEnsureCapacity((emxArray__common *)xp, i5, (int)sizeof(double));
+    loop_ub = (int)unusedU2[0];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      xp->data[i5] = 0.0;
     }
 
     if (Hl->size[0] == 0) {
     } else {
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= 0)) {
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= 0)) {
         for (ic = 0; ic + 1 <= m; ic++) {
-          z_m->data[ic] = 0.0;
+          xp->data[ic] = 0.0;
         }
 
-        zmm_idx_0 = m;
+        xp_idx_0 = m;
       }
 
       br = 0;
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= 0)) {
-        ar = -1;
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= 0)) {
+        ar = 0;
         i5 = br + k;
-        for (ib = br; ib + 1 <= i5; ib++) {
-          if (y_tilde->data[ib] != 0.0) {
+        for (loop_ub = br; loop_ub + 1 <= i5; loop_ub++) {
+          if (y_tilde->data[loop_ub] != 0.0) {
             ia = ar;
             for (ic = 0; ic + 1 <= m; ic++) {
               ia++;
-              z_m->data[ic] += y_tilde->data[ib] * Hl->data[ia];
+              xp->data[ic] += y_tilde->data[loop_ub] * Hl->data[ia - 1];
             }
           }
 
@@ -1233,7 +1344,7 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
         }
 
         br += k;
-        zmm_idx_0 = m;
+        xp_idx_0 = m;
       }
     }
   }
@@ -1241,27 +1352,27 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   emxFree_real_T(&y_tilde);
   i5 = r->size[0];
   emxEnsureCapacity((emxArray__common *)r, i5, (int)sizeof(double));
-  ar = r->size[0];
-  for (i5 = 0; i5 < ar; i5++) {
-    r->data[i5] += z_m->data[i5];
+  loop_ub = r->size[0];
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    r->data[i5] += xp->data[i5];
   }
 
-  emxFree_real_T(&z_m);
+  emxFree_real_T(&xp);
   eye(r->size[0], Hr);
   if ((Hl->size[1] == 1) || (H->size[0] == 1)) {
     i5 = C->size[0] * C->size[1];
     C->size[0] = Hl->size[0];
     C->size[1] = H->size[1];
     emxEnsureCapacity((emxArray__common *)C, i5, (int)sizeof(double));
-    ar = Hl->size[0];
-    for (i5 = 0; i5 < ar; i5++) {
-      br = H->size[1];
-      for (i6 = 0; i6 < br; i6++) {
+    loop_ub = Hl->size[0];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      ar = H->size[1];
+      for (i6 = 0; i6 < ar; i6++) {
         C->data[i5 + C->size[0] * i6] = 0.0;
-        z_m_idx_0 = Hl->size[1];
-        for (zmm_idx_0 = 0; zmm_idx_0 < z_m_idx_0; zmm_idx_0++) {
-          C->data[i5 + C->size[0] * i6] += Hl->data[i5 + Hl->size[0] * zmm_idx_0]
-            * H->data[zmm_idx_0 + H->size[0] * i6];
+        xp_idx_0 = Hl->size[1];
+        for (br = 0; br < xp_idx_0; br++) {
+          C->data[i5 + C->size[0] * i6] += Hl->data[i5 + Hl->size[0] * br] *
+            H->data[br + H->size[0] * i6];
         }
       }
     }
@@ -1276,36 +1387,36 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
     i5 = C->size[0] * C->size[1];
     C->size[1] = (int)unusedU2[1];
     emxEnsureCapacity((emxArray__common *)C, i5, (int)sizeof(double));
-    ar = (int)unusedU2[0] * (int)unusedU2[1];
-    for (i5 = 0; i5 < ar; i5++) {
+    loop_ub = (int)unusedU2[0] * (int)unusedU2[1];
+    for (i5 = 0; i5 < loop_ub; i5++) {
       C->data[i5] = 0.0;
     }
 
     if ((Hl->size[0] == 0) || (H->size[1] == 0)) {
     } else {
-      z_m_idx_0 = Hl->size[0] * (H->size[1] - 1);
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= z_m_idx_0)) {
-        i5 = zmm_idx_0 + m;
-        for (ic = zmm_idx_0; ic + 1 <= i5; ic++) {
+      c = Hl->size[0] * (H->size[1] - 1);
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= c)) {
+        i5 = xp_idx_0 + m;
+        for (ic = xp_idx_0; ic + 1 <= i5; ic++) {
           C->data[ic] = 0.0;
         }
 
-        zmm_idx_0 += m;
+        xp_idx_0 += m;
       }
 
       br = 0;
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= z_m_idx_0)) {
-        ar = -1;
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= c)) {
+        ar = 0;
         i5 = br + k;
-        for (ib = br; ib + 1 <= i5; ib++) {
-          if (H->data[ib] != 0.0) {
+        for (loop_ub = br; loop_ub + 1 <= i5; loop_ub++) {
+          if (H->data[loop_ub] != 0.0) {
             ia = ar;
-            i6 = zmm_idx_0 + m;
-            for (ic = zmm_idx_0; ic + 1 <= i6; ic++) {
+            i6 = xp_idx_0 + m;
+            for (ic = xp_idx_0; ic + 1 <= i6; ic++) {
               ia++;
-              C->data[ic] += H->data[ib] * Hl->data[ia];
+              C->data[ic] += H->data[loop_ub] * Hl->data[ia - 1];
             }
           }
 
@@ -1313,7 +1424,7 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
         }
 
         br += k;
-        zmm_idx_0 += m;
+        xp_idx_0 += m;
       }
     }
   }
@@ -1322,21 +1433,21 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
   emxFree_real_T(&Hl);
   i5 = Hr->size[0] * Hr->size[1];
   emxEnsureCapacity((emxArray__common *)Hr, i5, (int)sizeof(double));
-  z_m_idx_0 = Hr->size[0];
-  zmm_idx_0 = Hr->size[1];
-  ar = z_m_idx_0 * zmm_idx_0;
-  for (i5 = 0; i5 < ar; i5++) {
+  xp_idx_0 = Hr->size[0];
+  br = Hr->size[1];
+  loop_ub = xp_idx_0 * br;
+  for (i5 = 0; i5 < loop_ub; i5++) {
     Hr->data[i5] -= C->data[i5];
   }
 
   emxFree_real_T(&C);
-  i5 = Hm->size[0] * Hm->size[1];
-  Hm->size[0] = Pk->size[0];
-  Hm->size[1] = Pk->size[1];
-  emxEnsureCapacity((emxArray__common *)Hm, i5, (int)sizeof(double));
-  ar = Pk->size[0] * Pk->size[1];
-  for (i5 = 0; i5 < ar; i5++) {
-    Hm->data[i5] = Pk->data[i5];
+  i5 = b->size[0] * b->size[1];
+  b->size[0] = Pk->size[0];
+  b->size[1] = Pk->size[1];
+  emxEnsureCapacity((emxArray__common *)b, i5, (int)sizeof(double));
+  loop_ub = Pk->size[0] * Pk->size[1];
+  for (i5 = 0; i5 < loop_ub; i5++) {
+    b->data[i5] = Pk->data[i5];
   }
 
   b_emxInit_real_T(&b_Hr, 2);
@@ -1345,15 +1456,15 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
     b_Hr->size[0] = Hr->size[0];
     b_Hr->size[1] = Pk->size[1];
     emxEnsureCapacity((emxArray__common *)b_Hr, i5, (int)sizeof(double));
-    ar = Hr->size[0];
-    for (i5 = 0; i5 < ar; i5++) {
-      br = Pk->size[1];
-      for (i6 = 0; i6 < br; i6++) {
+    loop_ub = Hr->size[0];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      ar = Pk->size[1];
+      for (i6 = 0; i6 < ar; i6++) {
         b_Hr->data[i5 + b_Hr->size[0] * i6] = 0.0;
-        z_m_idx_0 = Hr->size[1];
-        for (zmm_idx_0 = 0; zmm_idx_0 < z_m_idx_0; zmm_idx_0++) {
-          b_Hr->data[i5 + b_Hr->size[0] * i6] += Hr->data[i5 + Hr->size[0] *
-            zmm_idx_0] * Pk->data[zmm_idx_0 + Pk->size[0] * i6];
+        xp_idx_0 = Hr->size[1];
+        for (br = 0; br < xp_idx_0; br++) {
+          b_Hr->data[i5 + b_Hr->size[0] * i6] += Hr->data[i5 + Hr->size[0] * br]
+            * Pk->data[br + Pk->size[0] * i6];
         }
       }
     }
@@ -1362,10 +1473,10 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
     Pk->size[0] = b_Hr->size[0];
     Pk->size[1] = b_Hr->size[1];
     emxEnsureCapacity((emxArray__common *)Pk, i5, (int)sizeof(double));
-    ar = b_Hr->size[1];
-    for (i5 = 0; i5 < ar; i5++) {
-      br = b_Hr->size[0];
-      for (i6 = 0; i6 < br; i6++) {
+    loop_ub = b_Hr->size[1];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      ar = b_Hr->size[0];
+      for (i6 = 0; i6 < ar; i6++) {
         Pk->data[i6 + Pk->size[0] * i5] = b_Hr->data[i6 + b_Hr->size[0] * i5];
       }
     }
@@ -1378,39 +1489,39 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
     Pk->size[0] = (int)unusedU2[0];
     Pk->size[1] = (int)unusedU2[1];
     emxEnsureCapacity((emxArray__common *)Pk, i5, (int)sizeof(double));
-    ar = (int)unusedU2[1];
-    for (i5 = 0; i5 < ar; i5++) {
-      br = (int)unusedU2[0];
-      for (i6 = 0; i6 < br; i6++) {
+    loop_ub = (int)unusedU2[1];
+    for (i5 = 0; i5 < loop_ub; i5++) {
+      ar = (int)unusedU2[0];
+      for (i6 = 0; i6 < ar; i6++) {
         Pk->data[i6 + Pk->size[0] * i5] = 0.0;
       }
     }
 
-    if ((Hr->size[0] == 0) || (Hm->size[1] == 0)) {
+    if ((Hr->size[0] == 0) || (b->size[1] == 0)) {
     } else {
-      z_m_idx_0 = Hr->size[0] * (Hm->size[1] - 1);
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= z_m_idx_0)) {
-        i5 = zmm_idx_0 + m;
-        for (ic = zmm_idx_0; ic + 1 <= i5; ic++) {
+      c = Hr->size[0] * (b->size[1] - 1);
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= c)) {
+        i5 = xp_idx_0 + m;
+        for (ic = xp_idx_0; ic + 1 <= i5; ic++) {
           Pk->data[ic] = 0.0;
         }
 
-        zmm_idx_0 += m;
+        xp_idx_0 += m;
       }
 
       br = 0;
-      zmm_idx_0 = 0;
-      while ((m > 0) && (zmm_idx_0 <= z_m_idx_0)) {
-        ar = -1;
+      xp_idx_0 = 0;
+      while ((m > 0) && (xp_idx_0 <= c)) {
+        ar = 0;
         i5 = br + k;
-        for (ib = br; ib + 1 <= i5; ib++) {
-          if (Hm->data[ib] != 0.0) {
+        for (loop_ub = br; loop_ub + 1 <= i5; loop_ub++) {
+          if (b->data[loop_ub] != 0.0) {
             ia = ar;
-            i6 = zmm_idx_0 + m;
-            for (ic = zmm_idx_0; ic + 1 <= i6; ic++) {
+            i6 = xp_idx_0 + m;
+            for (ic = xp_idx_0; ic + 1 <= i6; ic++) {
               ia++;
-              Pk->data[ic] += Hm->data[ib] * Hr->data[ia];
+              Pk->data[ic] += b->data[loop_ub] * Hr->data[ia - 1];
             }
           }
 
@@ -1418,34 +1529,34 @@ void kalman_filter_lr(emxArray_real_T *r, const emxArray_real_T *A,
         }
 
         br += k;
-        zmm_idx_0 += m;
+        xp_idx_0 += m;
       }
     }
   }
 
   emxFree_real_T(&b_Hr);
-  emxFree_real_T(&Hm);
+  emxFree_real_T(&b);
   emxFree_real_T(&Hr);
 
   /* % Zustandsbegrenzungen */
   /*  Krümmung */
   /*  bezogen auf Mittellinie, 0.72 entspricht einem minimalen Innenradius von 1m */
   i5 = r->size[0];
-  for (z_m_idx_0 = 2; z_m_idx_0 - 2 <= i5 - 3; z_m_idx_0++) {
-    if ((-0.75 >= r->data[z_m_idx_0]) || rtIsNaN(r->data[z_m_idx_0])) {
+  for (xp_idx_0 = 2; xp_idx_0 - 2 <= i5 - 3; xp_idx_0++) {
+    if ((-0.75 >= r->data[xp_idx_0]) || rtIsNaN(r->data[xp_idx_0])) {
       dist_point = -0.75;
     } else {
-      dist_point = r->data[z_m_idx_0];
+      dist_point = r->data[xp_idx_0];
     }
 
-    r->data[z_m_idx_0] = dist_point;
-    if ((0.75 <= r->data[z_m_idx_0]) || rtIsNaN(r->data[z_m_idx_0])) {
+    r->data[xp_idx_0] = dist_point;
+    if ((0.75 <= r->data[xp_idx_0]) || rtIsNaN(r->data[xp_idx_0])) {
       dist_point = 0.75;
     } else {
-      dist_point = r->data[z_m_idx_0];
+      dist_point = r->data[xp_idx_0];
     }
 
-    r->data[z_m_idx_0] = dist_point;
+    r->data[xp_idx_0] = dist_point;
   }
 
   /*  y-Wert des ersten Punktes */

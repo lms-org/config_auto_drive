@@ -89,8 +89,11 @@ bool EnvironmentPredictor::cycle() {
     }
     //Kalman with middle-lane
     //TODO später mit der richtigen positionsänderung arbeiten
-    double deltaX = car->velocity*0.01;
-    kalman_filter_lr(zustandsVector,/*stateTransitionMatrix*/deltaX,kovarianzMatrixDesZustandes,
+    double deltaX = car->deltaPosition().x;
+    double deltaY = car->deltaPosition().y;
+    logger.debug("deltapos: ") << deltaX << " "<<deltaY;
+    double deltaPhi = 0;
+    kalman_filter_lr(zustandsVector,deltaX,deltaY,deltaPhi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      r_fakt,partLength,lx,ly,rx,ry,mx,my);
 
