@@ -3,7 +3,6 @@
         <multithreading enabled="false" threads="auto" />
         <clock enabled="true" unit="hz" value="100" />
         <configMonitor enabled="true" />
-        <profiling enabled="false" />
 	</execution>
     <if notSet="norender">
         <include src="render.xml"/>
