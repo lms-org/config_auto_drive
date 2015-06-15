@@ -16,8 +16,11 @@ bool VelocityController::cycle() {
     if(!defaultDrive())
         return true;
     logger.debug("cycle") << "defaultDrive-velocity: " << car->targetSpeed;
-    launchControll(car->targetSpeed,car->velocity);
-    logger.debug("cycle") << "end-velocity: " << car->targetSpeed;
+    if(config->get<bool>("launchControllEnable",true)){
+        launchControll(car->targetSpeed,car->velocity);
+        logger.debug("cycle") << "end-velocity: " << car->targetSpeed;
+    }
+    lastCall = lms::extra::PrecisionTime::now();
     return true;
 }
 
