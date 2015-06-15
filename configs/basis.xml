@@ -27,8 +27,8 @@
 		<name>velocity_controller</name>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_MERGED"/>
 		<config>
-		    <maxSpeed>0.2</maxSpeed>
-		    <minCurveSpeed>0.1</minCurveSpeed>
+		    <maxSpeed>1</maxSpeed>
+		    <minCurveSpeed>1</minCurveSpeed>
 		    <forcastLength>0.5</forcastLength>
 		    <maxDeltaTInMs>15</maxDeltaTInMs>
 		    <maxAcc>4</maxAcc>
@@ -79,7 +79,7 @@
 	    <name>environment_predictor</name>
 	    <config>
 	        <elementCount>10</elementCount>
-	        <r_fakt>1000</r_fakt>
+	        <r_fakt>40</r_fakt>
 	    </config>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
 		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_MERGED"/>

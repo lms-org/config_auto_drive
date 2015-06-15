@@ -91,6 +91,7 @@ bool EnvironmentPredictor::cycle() {
     //TODO später mit der richtigen positionsänderung arbeiten
     double deltaX = car->deltaPosition().x;
     double deltaY = car->deltaPosition().y;
+    deltaY = 0;
     logger.debug("deltapos: ") << deltaX << " "<<deltaY;
     double deltaPhi = 0;
     kalman_filter_lr(zustandsVector,deltaX,deltaY,deltaPhi,kovarianzMatrixDesZustandes,
