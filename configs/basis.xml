@@ -27,6 +27,7 @@
 		<name>velocity_controller</name>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_MERGED"/>
 		<config>
+		    <launchControllEnabled>false</launchControllEnabled>
 		    <maxSpeed>1</maxSpeed>
 		    <minCurveSpeed>1</minCurveSpeed>
 		    <forcastLength>0.5</forcastLength>

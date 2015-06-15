@@ -16,7 +16,7 @@ bool VelocityController::cycle() {
     if(!defaultDrive())
         return true;
     logger.debug("cycle") << "defaultDrive-velocity: " << car->targetSpeed;
-    if(config->get<bool>("launchControllEnable",true)){
+    if(config->get<bool>("launchControllEnabled",true)){
         launchControll(car->targetSpeed,car->velocity);
         logger.debug("cycle") << "end-velocity: " << car->targetSpeed;
     }
