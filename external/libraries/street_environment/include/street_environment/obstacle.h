@@ -1,5 +1,5 @@
-#ifndef DYNAMIC_ENTITY_H
-#define DYNAMIC_ENTITY_H
+#ifndef OBSTACLE_H
+#define OBSTACLE_H
 
 #include "lms/math/vertex.h"
 #include "street_environment.h"
@@ -77,4 +77,4 @@ struct Obstacle:public EnvironmentObject {
 };
 } //street_environment
 
-#endif /* DYNAMIC_ENTITY_H */
+#endif /* OBSTACLE_H */

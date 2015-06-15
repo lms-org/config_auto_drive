@@ -1,17 +1,21 @@
 <framework>
 	<modulesToEnable>
 		<module>image_hint_worker</module>
-		<module logLevel="DEBUG">image_hint_transformer</module>
-		<module logLevel="WARN">environment_predictor</module>
-		<module>trajectory_line_creator</module>
-		<module>trajectory_point_creator</module>
-		<module logLevel="WARN">image_hint_generator</module>
-		<module logLevel="WARN">environment_filter</module>
-		<module logLevel="WARN">trajectory_point_controller</module>
-		<module logLevel="WARN">velocity_controller</module>
-		<module logLevel="WARN">sensor_tracker</module>
+		<module logLevel="ERROR">image_hint_transformer</module>
+		<module logLevel="DEBUG">environment_predictor</module>
+		<module logLevel="ERROR">trajectory_line_creator</module>
+		<module logLevel="ERROR">trajectory_point_creator</module>
+		<module logLevel="ERROR">image_hint_generator</module>
+		<module logLevel="ERROR">environment_filter</module>
+		<module logLevel="ERROR">trajectory_point_controller</module>
+		<module logLevel="DEBUG">velocity_controller</module>
+		<module logLevel="ERROR">sensor_tracker</module>
         <module>image_proxy</module>
+        <module>car_tracker</module>
 	</modulesToEnable>
+	<module>
+	    <name>car_tracker</name>
+	</module>
 	<module>
 	    <name>environment_logger</name>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD"/>
@@ -23,8 +27,8 @@
 		<name>velocity_controller</name>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_MERGED"/>
 		<config>
-		    <maxSpeed>1.5</maxSpeed>
-		    <minCurveSpeed>0.5</minCurveSpeed>
+		    <maxSpeed>0.2</maxSpeed>
+		    <minCurveSpeed>0.1</minCurveSpeed>
 		    <forcastLength>0.5</forcastLength>
 		    <maxDeltaTInMs>15</maxDeltaTInMs>
 		    <maxAcc>4</maxAcc>
@@ -35,7 +39,6 @@
 		<name>trajectory_point_controller</name>
 		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
 		<config>
-		    <maxSpeed>1</maxSpeed>
 		    <aggro>0.95</aggro>
 		</config>
     </module>
@@ -101,7 +104,7 @@
     <module>
         <name>image_proxy</name>
         <config>
-            <displayMode>DIRECTORY</displayMode>
+            <displayMode>IMAGE_CHANNEL</displayMode>
         </config>
         <config user="phibedy">
             <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150611-185503</directory>

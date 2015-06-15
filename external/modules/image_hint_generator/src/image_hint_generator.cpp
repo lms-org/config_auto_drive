@@ -60,7 +60,130 @@ bool ImageHintGenerator::cycle() {
 void ImageHintGenerator::createHintForCrossingUsingSinglePoints(const street_environment::RoadLane &middle ){
     using lms::math::vertex2f;
     using lms::math::vertex2i;
-    (void)middle;
+
+    //TODO der code ist schon sehr redundant, da sollte man sich was tolles überlegen!
+
+    float streetWidth = 0.4;
+    //float startSearchDistance = 0.4;
+    int numberOfSearchPoints = 1;
+    //+1 damit man nicht auf der Linie sucht
+    float distanceBetweenSearchPoints = streetWidth/(numberOfSearchPoints+1);
+
+    //Abstand zum Auto
+    float startSearchDistance = 0.4;
+    //suchlänge
+    float searchLength = 2;
+
+    bool foundStart = false;
+    //aufpunkt auf der linie
+    vertex2f *middlePoints = new vertex2f[3*numberOfSearchPoints];
+    for(int i = 1; i < (int)middle.points().size(); i++){
+        //TODO ziehmlich schlecht so ;D
+        vertex2f top = middle.points()[i];
+        vertex2f bot = middle.points()[i-1];
+        vertex2f distance = top-bot;
+        distance = distance.normalize();
+        float tmpX = distance.x;
+        distance.x = -distance.y;
+        distance.y = tmpX;
+
+        if(top.length() > 0.4 && !foundStart){
+            //linke Linie
+            for(int k = 0; k < numberOfSearchPoints; k++){
+                //such-start-punkte in Auto-Koordinaten
+                middlePoints[k] = top+distance*distanceBetweenSearchPoints*(k+1);
+                foundStart = true;
+            }
+            //rechte Linie
+            for(int k = 0; k < numberOfSearchPoints; k++){
+                //such-start-punkte in Auto-Koordinaten
+                middlePoints[numberOfSearchPoints+k] = top-distance*distanceBetweenSearchPoints*(k+1);
+                foundStart = true;
+            }
+            //Linie daneben
+            for(int k = 0; k < numberOfSearchPoints; k++){
+                //such-start-punkte in Auto-Koordinaten
+                middlePoints[2*numberOfSearchPoints+k] = top-distance*(streetWidth + distanceBetweenSearchPoints*(k+1));
+                foundStart = true;
+            }
+        }else if(top.length() > startSearchDistance+searchLength){
+            //Hier muss man nichts tun, so weit suchen wir keine Hindernisse
+            break;
+        }else if(top.length() > 0.4){
+            lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *line = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
+            line->name = "CROSSING_"+std::to_string(i);
+            //Linke linie
+            for(int k = 0; k < numberOfSearchPoints; k++){
+                vertex2f endMiddle = top+distance*distanceBetweenSearchPoints*(k+1);
+
+                //convert to image-pixel-value
+                vertex2i startMiddleI;
+                vertex2i endMiddleI;
+                lms::imaging::V2C(&middlePoints[k],&startMiddleI);
+                lms::imaging::V2C(&endMiddle,&endMiddleI);
+                //create hint
+                float imageSearchDistance = (endMiddleI-startMiddleI).length();
+                float searchAngle = (endMiddleI-startMiddleI).angle();
+
+                lms::imaging::find::LinePoint::LinePointParam lpp = defaultLinePointParameter;
+                lpp.x = startMiddleI.x;
+                lpp.y = startMiddleI.y;
+                lpp.searchAngle = searchAngle;
+                lpp.searchLength = imageSearchDistance;
+                line->parameter.addParam(lpp);
+                //alter endPunkt wird neuer Startpunkt:
+                middlePoints[k] = endMiddle;
+            }
+            //rechte Linie
+            for(int k = 0; k < numberOfSearchPoints; k++){
+                vertex2f endMiddle = top-distance*distanceBetweenSearchPoints*(k+1);
+
+                //convert to image-pixel-value
+                vertex2i startMiddleI;
+                vertex2i endMiddleI;
+                lms::imaging::V2C(&middlePoints[numberOfSearchPoints+k],&startMiddleI);
+                lms::imaging::V2C(&endMiddle,&endMiddleI);
+                //create hint
+                float imageSearchDistance = (endMiddleI-startMiddleI).length();
+                float searchAngle = (endMiddleI-startMiddleI).angle();
+
+                lms::imaging::find::LinePoint::LinePointParam lpp = defaultLinePointParameter;
+                lpp.x = startMiddleI.x;
+                lpp.y = startMiddleI.y;
+                lpp.edge = true;
+                lpp.searchAngle = searchAngle;
+                lpp.searchLength = imageSearchDistance;
+                line->parameter.addParam(lpp);
+                //alter endPunkt wird neuer Startpunkt:
+                middlePoints[numberOfSearchPoints+k] = endMiddle;
+            }
+            //daneben
+            for(int k = 0; k < numberOfSearchPoints; k++){
+                vertex2f endMiddle = top-distance*(streetWidth+distanceBetweenSearchPoints*(k+1));
+
+                //convert to image-pixel-value
+                vertex2i startMiddleI;
+                vertex2i endMiddleI;
+                lms::imaging::V2C(&middlePoints[2*numberOfSearchPoints+k],&startMiddleI);
+                lms::imaging::V2C(&endMiddle,&endMiddleI);
+                //create hint
+                float imageSearchDistance = (endMiddleI-startMiddleI).length();
+                float searchAngle = (endMiddleI-startMiddleI).angle();
+
+                lms::imaging::find::LinePoint::LinePointParam lpp = defaultLinePointParameter;
+                lpp.x = startMiddleI.x;
+                lpp.y = startMiddleI.y;
+                lpp.edge = true;
+                lpp.searchAngle = searchAngle;
+                lpp.searchLength = imageSearchDistance;
+                line->parameter.addParam(lpp);
+                //alter endPunkt wird neuer Startpunkt:
+                middlePoints[2*numberOfSearchPoints+k] = endMiddle;
+            }
+            hintContainer->add(line);
+        }
+    }
+    delete[] middlePoints;
 
 }
 

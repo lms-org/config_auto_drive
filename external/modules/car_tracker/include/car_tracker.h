@@ -4,10 +4,11 @@
 #include "lms/module.h"
 #include "comm/senseboard.h"
 #include "lms/extra/time.h"
+#include "sensor_utils/car.h"
 
 class CarTracker : public lms::Module {
     struct DeltaState{
-        DeltaState():x(0),y(0),phi(0),valid(false){
+        DeltaState():valid(false),x(0),y(0),phi(0){
         }
         bool valid;
         float x;
@@ -30,6 +31,7 @@ private:
     float delta;
     lms::extra::PrecisionTime last;
     bool firstRun;
+    sensor_utils::Car *car;
 };
 
 #endif /* CAR_TRACKER */
