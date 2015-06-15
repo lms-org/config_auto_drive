@@ -8,7 +8,7 @@
 		<module logLevel="ERROR">image_hint_generator</module>
 		<module logLevel="ERROR">environment_filter</module>
 		<module logLevel="ERROR">trajectory_point_controller</module>
-		<module logLevel="DEBUG">velocity_controller</module>
+		<module logLevel="INFO">velocity_controller</module>
 		<module logLevel="ERROR">sensor_tracker</module>
         <module>image_proxy</module>
         <module>car_tracker</module>
@@ -28,10 +28,10 @@
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_MERGED"/>
 		<config>
 		    <launchControllEnabled>false</launchControllEnabled>
-		    <maxSpeed>1</maxSpeed>
-		    <minCurveSpeed>1</minCurveSpeed>
+		    <maxSpeed>2.6</maxSpeed>
+		    <minCurveSpeed>1.8</minCurveSpeed>
 		    <forcastLength>0.5</forcastLength>
-		    <maxDeltaTInMs>15</maxDeltaTInMs>
+		    <maxDeltaTInMs>100</maxDeltaTInMs>
 		    <maxAcc>4</maxAcc>
 		    <minAcc>-6</minAcc>
 		</config>
@@ -104,8 +104,8 @@
 	</module>
     <module>
         <name>image_proxy</name>
-        <config>
-            <displayMode>IMAGE_CHANNEL</displayMode>
+        <config><!--IMAGE_CHANNEL-->
+            <displayMode>DIRECTORY</displayMode>
         </config>
         <config user="phibedy">
             <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150611-185503</directory>

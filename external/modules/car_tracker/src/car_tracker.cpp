@@ -23,6 +23,7 @@ bool CarTracker::cycle() {
         return true;
     }
     delta = lms::extra::PrecisionTime::since(last).toFloat<std::milli>()/1000;
+    logger.debug("cycle: ")<<"Delta t: "<< delta;
     DeltaState deltaTra;
     DeltaState deltaVeh;
     DeltaState deltaMouse;
@@ -35,7 +36,7 @@ bool CarTracker::cycle() {
     car->updatePosition(lms::math::vertex2f(car->velocity*delta,0),lms::math::vertex2f(1,0));
 
     logger.debug("cycle: ")<<"speed: "<<car->targetSpeed << " deltaPos: " << car->velocity*delta;
-
+    last = lms::extra::PrecisionTime::now();
     //TODO Kalman everything
     //TODO use EIGEN
     return true;

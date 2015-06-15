@@ -15,11 +15,10 @@ bool VelocityController::deinitialize() {
 bool VelocityController::cycle() {
     if(!defaultDrive())
         return true;
-    logger.debug("cycle") << "defaultDrive-velocity: " << car->targetSpeed;
     if(config->get<bool>("launchControllEnabled",true)){
         launchControll(car->targetSpeed,car->velocity);
-        logger.debug("cycle") << "end-velocity: " << car->targetSpeed;
     }
+    logger.debug("info") << "end-velocity: " << car->targetSpeed;
     lastCall = lms::extra::PrecisionTime::now();
     return true;
 }
@@ -46,17 +45,15 @@ bool VelocityController::defaultDrive(){
     }
 
     //TODO gewichteter mittelwert!
-    //TODO der ansatz ist prinzipiell bei S-Kurven schlecht!
+    //TODO der ansatz ist prinzipiell bei S-Kurven fragwürdig!
     float middleCurvation = 0;
-    std::string s;
     for(int i = 0; i < partsNeeded; i++){
         middleCurvation += middle.polarDarstellung[i+2];
-        s += std::to_string(middle.polarDarstellung[i+2])+ " ; ";
     }
     middleCurvation = fabs(middleCurvation)/partsNeeded;
-    logger.debug("defaultDrive")<<"curvations: " << s;
     logger.debug("defaultDrive") <<"middle-curcation: " << middleCurvation;
     float velocity = (minCurveSpeed-maxSpeed)/(maxCurvation)*(middleCurvation)+maxSpeed;
+    logger.debug("defaultDrive")<<"velocity: "<<velocity;
     car->targetSpeed = velocity;
     return true;
 }
