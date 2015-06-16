@@ -1,11 +1,11 @@
 num_buffers = 8
 width = 752
-height = 410
+height = 408
 offset_x = 0
 offset_y = 70
 
 pixelclock = 40
-framerate = 100.19
+framerate = 100.41
 #Drinnen 9.95
 exposure = 2
 
