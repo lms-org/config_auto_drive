@@ -29,14 +29,14 @@ bool SensorTracker::cycle() {
     float velocity = controlData->control.velocity.velocity;
     float sensorVal = sensorData->ir[sensorData->IR_SIDE_REAR];
 
-    logger.info("cycle") << "speed: "<<velocity << " ir: " << sensorVal << " "<< sensorData->IR_SIDE_REAR;
+    logger.debug("cycle") << "speed: "<<velocity << " ir: " << sensorVal << " "<< sensorData->IR_SIDE_REAR;
     float distance = velocity*delta.toFloat<std::milli>()/1000;
     lde->add(distance,sensorVal);
     //just for debugging
     currentSensor->points().clear();
     currentSensor->points().push_back(lms::math::vertex2f(0.05,-0.05));
     float y = -0.05-sensorVal;
-    logger.info("y") << y;
+    logger.debug("y") << y;
     currentSensor->points().push_back(lms::math::vertex2f(0.05,y));
     return true;
 }

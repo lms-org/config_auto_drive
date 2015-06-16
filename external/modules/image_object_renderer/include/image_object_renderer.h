@@ -4,7 +4,7 @@
 #include "lms/module.h"
 #include "lms/datamanager.h"
 #include "lms/imaging_detection/image_hint.h"
-#include "image_objects/environment.h"
+#include "street_environment/road.h"
 
 class ImageObjectRenderer : public lms::Module {
 public:
@@ -20,7 +20,7 @@ private:
 
     lms::imaging::Image *image;
     lms::imaging::BGRAImageGraphics *graphics;
-    std::vector<const Environment*> toDrawEnv;
+    std::vector<const street_environment::Environment*> toDrawEnv;
     std::vector<const lms::math::polyLine2f*> toDrawPolyLines;
     std::vector<const lms::math::vertex2f*> toDrawVertex2f;
     std::vector<const std::pair<lms::math::vertex2f,lms::math::vertex2f>*> toDrawVertex4f;

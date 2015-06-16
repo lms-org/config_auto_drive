@@ -4,8 +4,8 @@
 #include "lms/datamanager.h"
 
 bool EnvironmentFilter::initialize() {
-    input = datamanager()->readChannel<Environment>(this, "ENVIRONMENT_INPUT");
-    output = datamanager()->writeChannel<Environment>(this, "ENVIRONMENT_OUTPUT");
+    input = datamanager()->readChannel<street_environment::Environment>(this, "ENVIRONMENT_INPUT");
+    output = datamanager()->writeChannel<street_environment::Environment>(this, "ENVIRONMENT_OUTPUT");
     return true;
 }
 
@@ -15,21 +15,24 @@ bool EnvironmentFilter::deinitialize() {
 }
 
 bool EnvironmentFilter::cycle() {
-    output->lanes.clear();
-    Environment::RoadLane filtered;
-    for(Environment::RoadLane lane : input->lanes){
-        filtered = lane;
-        //if(lane.type() != Environment::RoadLaneType::MIDDLE)
-        filterLane(filtered);
-        output->lanes.push_back(filtered);
+    //TODO destroy objects
+    output->objects.clear();
+    //street_environment::RoadLane filtered;
+    for(const std::shared_ptr<street_environment::EnvironmentObject> &obj : input->objects){
+        if(obj->name().find("LANE") != std::string::npos){
+            std::shared_ptr<street_environment::RoadLane> lane = obj->getCopyAsPtr<street_environment::RoadLane>();
+            filterLane(*lane.get());
+            output->objects.push_back(lane);
+        }else if(obj->name().find("OBSTACLE")!= std::string::npos){
+            //TODO
+            output->objects.push_back(obj);
+        }
     }
     return true;
 }
 
-void EnvironmentFilter::filterLane(Environment::RoadLane &lane){
+void EnvironmentFilter::filterLane(street_environment::RoadLane &lane){
     using lms::math::vertex2f;
-
-
     //remove points that are inside the car
     lane.reduce([this](const vertex2f& p1){
         //TODO 0.1 should be moved to config

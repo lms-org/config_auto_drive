@@ -1,18 +1,27 @@
 <framework>
-    <execution>
-        <!--profiling enabled="true" /-->
-        <!--clock enabled="true" value="1" unit = "hz"/-->
-    </execution>
+    <!--execution>
+        <profiling enabled="true" />
+        <if set="1hz">
+            <clock enabled="true" unit="hz" value="1" />
+        </if>
+    </execution-->
 	<modulesToEnable>
         <!--module logLevel="WARN">camera_importer</module-->
         <module logLevel="DEBUG">ueye_importer</module>
-		<module logLevel="WARN">image_converter</module>
-		<module logLevel="WARN">image_logger</module>
-	</modulesToEnable>
+		<module logLevel="ERROR">image_converter</module>
+        <if set="image_logger">
+            <module logLevel="DEBUG">image_logger</module>
+        </if>
+    </modulesToEnable>
 	<module>
 		<name>image_logger</name>
+        <config user="hans">
+            <directory>/home/hans/workspace/config_auto_drive/test_images</directory>
+        </config>
+        <config user="phibedy">
+            <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images</directory>
+        </config>
 		<config>
-		    <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images</directory>
 		    <create_subfolder_with_current_date>true</create_subfolder_with_current_date>
 		    <filepattern>%04i</filepattern>
 		</config>
@@ -35,6 +44,8 @@
 		    <output_format>GREY</output_format>
 	    </config>
 	</module>
-    <!--include src="render.xml"/-->
+    <if notSet="norender">
+        <include src="render.xml"/>
+    </if>
     <include src="basis.xml" />
 </framework>

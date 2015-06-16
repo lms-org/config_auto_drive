@@ -14,7 +14,7 @@
 <a name="2"><font color="#888888 "><i>    2   </i></font></a><font color="#117755"><I> * File: getPointsFromState.c</i></font>
 <a name="3"><font color="#888888 "><i>    3   </i></font></a><font color="#117755"><I> *</i></font>
 <a name="4"><font color="#888888 "><i>    4   </i></font></a><font color="#117755"><I> * MATLAB Coder version            : 2.7</i></font>
-<a name="5"><font color="#888888 "><i>    5   </i></font></a><font color="#117755"><I> * C/C++ source code generated on  : 01-Jun-2015 15:11:47</i></font>
+<a name="5"><font color="#888888 "><i>    5   </i></font></a><font color="#117755"><I> * C/C++ source code generated on  : 15-Jun-2015 13:18:28</i></font>
 <a name="6"><font color="#888888 "><i>    6   </i></font></a><font color="#117755"><I> */</i></font>
 <a name="7"><font color="#888888 "><i>    7   </i></font></a>
 <a name="8"><font color="#888888 "><i>    8   </i></font></a><font color="#117755"><i>/* Include Files */</i></font>
@@ -64,49 +64,48 @@
 <a name="52"><font color="#888888 "><i>   52   </i></font></a>  P-&gt;data[1 + P-&gt;size[0]] = P-&gt;data[P-&gt;size[0]] + delta * sin(r-&gt;data[1]);
 <a name="53"><font color="#888888 "><i>   53   </i></font></a>  P-&gt;data[1 + (P-&gt;size[0] &lt;&lt; 1)] = r-&gt;data[1];
 <a name="54"><font color="#888888 "><i>   54   </i></font></a>  <font color="#112266"><b>for</b></font> (r_idx_0 = 2; r_idx_0 - 2 &lt;= r-&gt;size[0] - 3; r_idx_0++) <b>{</b>
-<a name="55"><font color="#888888 "><i>   55   </i></font></a>    phi = (phi - 2.0 * acos(delta * r-&gt;data[r_idx_0] / 2.0)) -
-<a name="56"><font color="#888888 "><i>   56   </i></font></a>      3.1415926535897931;
-<a name="57"><font color="#888888 "><i>   57   </i></font></a>
-<a name="58"><font color="#888888 "><i>   58   </i></font></a>    <font color="#117755"><i>/*  -dw wegen VZ-Definition der Krümmung */</i></font>
-<a name="59"><font color="#888888 "><i>   59   </i></font></a>    P-&gt;data[r_idx_0] = P-&gt;data[r_idx_0 - 1] + delta * cos(phi);
-<a name="60"><font color="#888888 "><i>   60   </i></font></a>    P-&gt;data[r_idx_0 + P-&gt;size[0]] = P-&gt;data[(r_idx_0 + P-&gt;size[0]) - 1] + delta *
-<a name="61"><font color="#888888 "><i>   61   </i></font></a>      sin(phi);
-<a name="62"><font color="#888888 "><i>   62   </i></font></a>    P-&gt;data[r_idx_0 + (P-&gt;size[0] &lt;&lt; 1)] = phi;
-<a name="63"><font color="#888888 "><i>   63   </i></font></a>  <b>}</b>
-<a name="64"><font color="#888888 "><i>   64   </i></font></a>
-<a name="65"><font color="#888888 "><i>   65   </i></font></a>  r_idx_0 = P-&gt;size[0];
-<a name="66"><font color="#888888 "><i>   66   </i></font></a>  i0 = X-&gt;size[0];
-<a name="67"><font color="#888888 "><i>   67   </i></font></a>  X-&gt;size[0] = r_idx_0;
-<a name="68"><font color="#888888 "><i>   68   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((<a href="kalman_filter_lr_types_h.html#type_emxArray__common" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_emxArray__common');" target="_self"><font color="#1122aa">emxArray__common</font></a> *)X, i0, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
-<a name="69"><font color="#888888 "><i>   69   </i></font></a>  <font color="#112266"><b>for</b></font> (i0 = 0; i0 &lt; r_idx_0; i0++) <b>{</b>
-<a name="70"><font color="#888888 "><i>   70   </i></font></a>    X-&gt;data[i0] = P-&gt;data[i0];
-<a name="71"><font color="#888888 "><i>   71   </i></font></a>  <b>}</b>
-<a name="72"><font color="#888888 "><i>   72   </i></font></a>
-<a name="73"><font color="#888888 "><i>   73   </i></font></a>  r_idx_0 = P-&gt;size[0];
-<a name="74"><font color="#888888 "><i>   74   </i></font></a>  i0 = Y-&gt;size[0];
-<a name="75"><font color="#888888 "><i>   75   </i></font></a>  Y-&gt;size[0] = r_idx_0;
-<a name="76"><font color="#888888 "><i>   76   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((<a href="kalman_filter_lr_types_h.html#type_emxArray__common" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_emxArray__common');" target="_self"><font color="#1122aa">emxArray__common</font></a> *)Y, i0, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
-<a name="77"><font color="#888888 "><i>   77   </i></font></a>  <font color="#112266"><b>for</b></font> (i0 = 0; i0 &lt; r_idx_0; i0++) <b>{</b>
-<a name="78"><font color="#888888 "><i>   78   </i></font></a>    Y-&gt;data[i0] = P-&gt;data[i0 + P-&gt;size[0]];
-<a name="79"><font color="#888888 "><i>   79   </i></font></a>  <b>}</b>
-<a name="80"><font color="#888888 "><i>   80   </i></font></a>
-<a name="81"><font color="#888888 "><i>   81   </i></font></a>  r_idx_0 = P-&gt;size[0];
-<a name="82"><font color="#888888 "><i>   82   </i></font></a>  i0 = PHI-&gt;size[0];
-<a name="83"><font color="#888888 "><i>   83   </i></font></a>  PHI-&gt;size[0] = r_idx_0;
-<a name="84"><font color="#888888 "><i>   84   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((<a href="kalman_filter_lr_types_h.html#type_emxArray__common" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_emxArray__common');" target="_self"><font color="#1122aa">emxArray__common</font></a> *)PHI, i0, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
-<a name="85"><font color="#888888 "><i>   85   </i></font></a>  <font color="#112266"><b>for</b></font> (i0 = 0; i0 &lt; r_idx_0; i0++) <b>{</b>
-<a name="86"><font color="#888888 "><i>   86   </i></font></a>    PHI-&gt;data[i0] = P-&gt;data[i0 + (P-&gt;size[0] &lt;&lt; 1)];
-<a name="87"><font color="#888888 "><i>   87   </i></font></a>  <b>}</b>
-<a name="88"><font color="#888888 "><i>   88   </i></font></a>
-<a name="89"><font color="#888888 "><i>   89   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_emxFree_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxFree_real_T');" target="_self"><font color="#1122aa">emxFree_real_T</font></a>(&amp;P);
-<a name="90"><font color="#888888 "><i>   90   </i></font></a><b>}</b>
-<a name="91"><font color="#888888 "><i>   91   </i></font></a>
-<a name="92"><font color="#888888 "><i>   92   </i></font></a><font color="#117755"><i>/*</i></font>
-<a name="93"><font color="#888888 "><i>   93   </i></font></a><font color="#117755"><I> * File trailer for getPointsFromState.c</i></font>
-<a name="94"><font color="#888888 "><i>   94   </i></font></a><font color="#117755"><I> *</i></font>
-<a name="95"><font color="#888888 "><i>   95   </i></font></a><font color="#117755"><I> * [EOF]</i></font>
-<a name="96"><font color="#888888 "><i>   96   </i></font></a><font color="#117755"><I> */</i></font>
-<a name="97"><font color="#888888 "><i>   97   </i></font></a></pre>
+<a name="55"><font color="#888888 "><i>   55   </i></font></a>    <font color="#117755"><i>/*  "-" wegen VZ-Definition der Kruemmung */</i></font>
+<a name="56"><font color="#888888 "><i>   56   </i></font></a>    phi = (phi + 2.0 * acos(-delta * r-&gt;data[r_idx_0] / 2.0)) -
+<a name="57"><font color="#888888 "><i>   57   </i></font></a>      3.1415926535897931;
+<a name="58"><font color="#888888 "><i>   58   </i></font></a>    P-&gt;data[r_idx_0] = P-&gt;data[r_idx_0 - 1] + delta * cos(phi);
+<a name="59"><font color="#888888 "><i>   59   </i></font></a>    P-&gt;data[r_idx_0 + P-&gt;size[0]] = P-&gt;data[(r_idx_0 + P-&gt;size[0]) - 1] + delta *
+<a name="60"><font color="#888888 "><i>   60   </i></font></a>      sin(phi);
+<a name="61"><font color="#888888 "><i>   61   </i></font></a>    P-&gt;data[r_idx_0 + (P-&gt;size[0] &lt;&lt; 1)] = phi;
+<a name="62"><font color="#888888 "><i>   62   </i></font></a>  <b>}</b>
+<a name="63"><font color="#888888 "><i>   63   </i></font></a>
+<a name="64"><font color="#888888 "><i>   64   </i></font></a>  r_idx_0 = P-&gt;size[0];
+<a name="65"><font color="#888888 "><i>   65   </i></font></a>  i0 = X-&gt;size[0];
+<a name="66"><font color="#888888 "><i>   66   </i></font></a>  X-&gt;size[0] = r_idx_0;
+<a name="67"><font color="#888888 "><i>   67   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((<a href="kalman_filter_lr_types_h.html#type_emxArray__common" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_emxArray__common');" target="_self"><font color="#1122aa">emxArray__common</font></a> *)X, i0, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
+<a name="68"><font color="#888888 "><i>   68   </i></font></a>  <font color="#112266"><b>for</b></font> (i0 = 0; i0 &lt; r_idx_0; i0++) <b>{</b>
+<a name="69"><font color="#888888 "><i>   69   </i></font></a>    X-&gt;data[i0] = P-&gt;data[i0];
+<a name="70"><font color="#888888 "><i>   70   </i></font></a>  <b>}</b>
+<a name="71"><font color="#888888 "><i>   71   </i></font></a>
+<a name="72"><font color="#888888 "><i>   72   </i></font></a>  r_idx_0 = P-&gt;size[0];
+<a name="73"><font color="#888888 "><i>   73   </i></font></a>  i0 = Y-&gt;size[0];
+<a name="74"><font color="#888888 "><i>   74   </i></font></a>  Y-&gt;size[0] = r_idx_0;
+<a name="75"><font color="#888888 "><i>   75   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((<a href="kalman_filter_lr_types_h.html#type_emxArray__common" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_emxArray__common');" target="_self"><font color="#1122aa">emxArray__common</font></a> *)Y, i0, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
+<a name="76"><font color="#888888 "><i>   76   </i></font></a>  <font color="#112266"><b>for</b></font> (i0 = 0; i0 &lt; r_idx_0; i0++) <b>{</b>
+<a name="77"><font color="#888888 "><i>   77   </i></font></a>    Y-&gt;data[i0] = P-&gt;data[i0 + P-&gt;size[0]];
+<a name="78"><font color="#888888 "><i>   78   </i></font></a>  <b>}</b>
+<a name="79"><font color="#888888 "><i>   79   </i></font></a>
+<a name="80"><font color="#888888 "><i>   80   </i></font></a>  r_idx_0 = P-&gt;size[0];
+<a name="81"><font color="#888888 "><i>   81   </i></font></a>  i0 = PHI-&gt;size[0];
+<a name="82"><font color="#888888 "><i>   82   </i></font></a>  PHI-&gt;size[0] = r_idx_0;
+<a name="83"><font color="#888888 "><i>   83   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((<a href="kalman_filter_lr_types_h.html#type_emxArray__common" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_emxArray__common');" target="_self"><font color="#1122aa">emxArray__common</font></a> *)PHI, i0, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
+<a name="84"><font color="#888888 "><i>   84   </i></font></a>  <font color="#112266"><b>for</b></font> (i0 = 0; i0 &lt; r_idx_0; i0++) <b>{</b>
+<a name="85"><font color="#888888 "><i>   85   </i></font></a>    PHI-&gt;data[i0] = P-&gt;data[i0 + (P-&gt;size[0] &lt;&lt; 1)];
+<a name="86"><font color="#888888 "><i>   86   </i></font></a>  <b>}</b>
+<a name="87"><font color="#888888 "><i>   87   </i></font></a>
+<a name="88"><font color="#888888 "><i>   88   </i></font></a>  <a href="kalman_filter_lr_emxutil_c.html#fcn_emxFree_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxFree_real_T');" target="_self"><font color="#1122aa">emxFree_real_T</font></a>(&amp;P);
+<a name="89"><font color="#888888 "><i>   89   </i></font></a><b>}</b>
+<a name="90"><font color="#888888 "><i>   90   </i></font></a>
+<a name="91"><font color="#888888 "><i>   91   </i></font></a><font color="#117755"><i>/*</i></font>
+<a name="92"><font color="#888888 "><i>   92   </i></font></a><font color="#117755"><I> * File trailer for getPointsFromState.c</i></font>
+<a name="93"><font color="#888888 "><i>   93   </i></font></a><font color="#117755"><I> *</i></font>
+<a name="94"><font color="#888888 "><i>   94   </i></font></a><font color="#117755"><I> * [EOF]</i></font>
+<a name="95"><font color="#888888 "><i>   95   </i></font></a><font color="#117755"><I> */</i></font>
+<a name="96"><font color="#888888 "><i>   96   </i></font></a></pre>
 </td></tr></table>
 </p>
 </body>

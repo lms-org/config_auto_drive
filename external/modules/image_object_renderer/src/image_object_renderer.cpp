@@ -13,7 +13,7 @@ bool ImageObjectRenderer::initialize() {
     image->resize(512,512,lms::imaging::Format::BGRA);
     graphics = new lms::imaging::BGRAImageGraphics(*image);
     for(std::string ev : environments){
-        toDrawEnv.push_back(datamanager()->readChannel<Environment>(this,ev));
+        toDrawEnv.push_back(datamanager()->readChannel<street_environment::Environment>(this,ev));
     }
     for(std::string pl : polylines){
         toDrawPolyLines.push_back(datamanager()->readChannel<lms::math::polyLine2f>(this,pl));
@@ -32,15 +32,16 @@ bool ImageObjectRenderer::deinitialize() {
 }
 
 bool ImageObjectRenderer::cycle() {
-    logger.time("TOTAL");
-    logger.time("FILL");
-    image->fill(0);
-    logger.timeEnd("FILL");
-    logger.time("ENV");
+   image->fill(0);
    for(uint i = 0; i < toDrawEnv.size(); i++){
         setColor(environments[i]);
-        for(const Environment::RoadLane &lane : toDrawEnv[i]->lanes){
-            drawPolyLine(lane);
+        for(const std::shared_ptr<const street_environment::EnvironmentObject> &obj : toDrawEnv[i]->objects){
+            if(obj->name().find("LANE") != std::string::npos){
+                const street_environment::RoadLane &lane = obj->getAsReference<const street_environment::RoadLane>();
+                drawPolyLine(lane);
+            }else if(obj->name().find("OBSTACLE") != std::string::npos){
+                //TODO
+            }
         }
     }
    logger.timeEnd("ENV");

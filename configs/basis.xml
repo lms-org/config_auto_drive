@@ -2,25 +2,19 @@
 	<modulesToEnable>
 		<module>image_hint_worker</module>
 		<module logLevel="ERROR">image_hint_transformer</module>
-		<module>environment_predictor</module>
-		<module>trajectory_line_creator</module>
-		<module>trajectory_point_creator</module>
-		<module>image_hint_generator</module>
+		<module logLevel="DEBUG">environment_predictor</module>
+		<module logLevel="ERROR">trajectory_line_creator</module>
+		<module logLevel="ERROR">trajectory_point_creator</module>
+		<module logLevel="ERROR">image_hint_generator</module>
 		<module logLevel="ERROR">environment_filter</module>
-		<module logLevel="DEBUG">trajectory_point_controller</module>
-		<module logLevel="DEBUG">velocity_controller</module>
-		<module>sensor_tracker</module>
+		<module logLevel="ERROR">trajectory_point_controller</module>
+		<module logLevel="INFO">velocity_controller</module>
+		<module logLevel="ERROR">sensor_tracker</module>
         <module>image_proxy</module>
+        <module>car_tracker</module>
 	</modulesToEnable>
 	<module>
-		<name>image_logger_t</name>
-		<realName>image_logger</realName>
-		<config>
-		    <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/logging_data/img/</directory>
-		    <create_subfolder_with_current_date>true</create_subfolder_with_current_date>
-                    <filepattern>%04i</filepattern>
-		</config>
-		<channelMapping from="IMAGE" to="TRANS_IMAGE"/>
+	    <name>car_tracker</name>
 	</module>
 	<module>
 	    <name>environment_logger</name>
@@ -33,11 +27,11 @@
 		<name>velocity_controller</name>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_MERGED"/>
 		<config>
+		    <launchControllEnabled>false</launchControllEnabled>
 		    <maxSpeed>1.5</maxSpeed>
-		    <minCurveSpeed>0.5</minCurveSpeed>
-		    <!--maxCurvationInRad>1</maxCurvationInRad-->
+		    <minCurveSpeed>1.0</minCurveSpeed>
 		    <forcastLength>0.5</forcastLength>
-		    <maxDeltaTInMs>15</maxDeltaTInMs>
+		    <maxDeltaTInMs>100</maxDeltaTInMs>
 		    <maxAcc>4</maxAcc>
 		    <minAcc>-6</minAcc>
 		</config>
@@ -46,7 +40,7 @@
 		<name>trajectory_point_controller</name>
 		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
 		<config>
-		    <maxSpeed>1</maxSpeed>
+		    <aggro>0.95</aggro>
 		</config>
     </module>
 	<module>
@@ -67,12 +61,13 @@
 		<channelMapping from="LINE" to="TRAJECTORY_LINE"/>
 		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
 		<config>
-			<distanceSearched> 0.5 </distanceSearched>
+			<distanceSearched> 0.4 </distanceSearched>
 		</config>
 	</module>
 	<module>
 	    <name>trajectory_line_creator</name>
-		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_MERGED"/>
+		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_FILTERED"/>
+		<channelMapping from="ENVIRONMENT_MIDDLE" to="ENVIRONMENT_ROAD_MERGED"/>
 		<channelMapping from="LINE" to="TRAJECTORY_LINE"/>
 		<config src="environment.lconf" />
 	</module>
@@ -84,7 +79,8 @@
 	<module>
 	    <name>environment_predictor</name>
 	    <config>
-	    <elementCount>10</elementCount>
+	        <elementCount>10</elementCount>
+	        <r_fakt>40</r_fakt>
 	    </config>
 		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
 		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_MERGED"/>
@@ -108,16 +104,16 @@
 	</module>
     <module>
         <name>image_proxy</name>
-        <config>
+        <config><!--IMAGE_CHANNEL-->
             <displayMode>IMAGE_CHANNEL</displayMode>
         </config>
         <config user="phibedy">
-            <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150519-164907</directory>
+            <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150611-185503</directory>
             <singleFile>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150519-164907/0000.pgm</singleFile>
         </config>
         <config user="hans">
-            <directory>/home/hans/workspace/config_auto_drive/test_images/20150519-164907</directory>
-            <singleFile>/home/hans/workspace/config_auto_drive/test_images/20150519-164907/0050.pgm</singleFile>
+            <directory>/home/hans/phoenix/config_auto_drive/test_images/20150519-164907</directory>
+            <singleFile>/home/hans/phoenix/config_auto_drive/test_images/20150519-164907/0050.pgm</singleFile>
         </config>
         <config user="tobi">
             <directory>/home/tobi/phoenix_code/repos/config_auto_drive/test_images/20150519-164907</directory>

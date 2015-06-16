@@ -4,7 +4,9 @@
 #include "lms/module.h"
 #include "lms/math/polyline.h"
 #include "lms/math/math.h"
-#include "image_objects/environment.h"
+#include "street_environment/road.h"
+#include "sensor_utils/car.h"
+
 #include "senseboard2015.h"
 
 class VelocityController : public lms::Module {
@@ -13,9 +15,10 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    const Environment *envInput;
+    const street_environment::Environment *envInput;
     const lms::type::ModuleConfig *config;
-    Comm::SensorBoard::ControlData *controlData;
+    sensor_utils::Car *car;
+
     lms::extra::PrecisionTime lastCall;
     /**
      * @brief launchControll

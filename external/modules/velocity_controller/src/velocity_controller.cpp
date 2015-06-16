@@ -2,9 +2,8 @@
 #include "lms/datamanager.h"
 
 bool VelocityController::initialize() {
-    envInput = datamanager()->readChannel<Environment>(this,"ENVIRONMENT_INPUT");
-    controlData = datamanager()->writeChannel<Comm::SensorBoard::ControlData>(this,"CONTROL_DATA");
-    config = getConfig();
+    envInput = datamanager()->readChannel<street_environment::Environment>(this,"ENVIRONMENT_INPUT");
+    car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");config = getConfig();
     lastCall = lms::extra::PrecisionTime::now()-lms::extra::PrecisionTime::fromMillis(config->get<float>("maxDeltaTInMs")*10);
     return true;
 }
@@ -14,21 +13,22 @@ bool VelocityController::deinitialize() {
 }
 
 bool VelocityController::cycle() {
-    float currentVelocity = controlData->control.velocity.velocity;
     if(!defaultDrive())
         return true;
-    float newVeolocity = controlData->control.velocity.velocity;
-    //launchControll(newVeolocity,currentVelocity);
-    controlData->control.velocity.velocity = 1;
+    if(config->get<bool>("launchControllEnabled",true)){
+        launchControll(car->targetSpeed,car->velocity);
+    }
+    logger.debug("info") << "end-velocity: " << car->targetSpeed;
+    lastCall = lms::extra::PrecisionTime::now();
     return true;
 }
 
 bool VelocityController::defaultDrive(){
-    if(envInput->lanes.size() != 1){
-        logger.warn("defaultDrive") << "no valid lane given, laneCount: "<<envInput->lanes.size();
+    if(envInput->objects.size() != 1){
+        logger.warn("defaultDrive") << "no valid lane given, laneCount: "<<envInput->objects.size();
         return false;
     }
-    const Environment::RoadLane &middle = envInput->lanes[0];
+    const street_environment::RoadLane &middle = envInput->objects[0]->getAsReference<const street_environment::RoadLane>();
     float maxSpeed = config->get<float>("maxSpeed",1);
     float minCurveSpeed = config->get<float>("minCurveSpeed",maxSpeed/2);
     float maxCurvation = config->get<float>("maxCurvation",1);
@@ -38,20 +38,23 @@ bool VelocityController::defaultDrive(){
         partsNeeded = (int)middle.points().size()-2;
 
     }
+    logger.debug("defaultDrive") << "parts needed: " << partsNeeded;
     if(partsNeeded == 0 || partsNeeded == INFINITY || partsNeeded == NAN){
         logger.warn("cycle")<<"parsNeeded not valid: " << partsNeeded;
         return false;
     }
 
     //TODO gewichteter mittelwert!
-    //TODO der ansatz ist prinzipiell bei S-Kurven schlecht!
+    //TODO der ansatz ist prinzipiell bei S-Kurven fragwürdig!
     float middleCurvation = 0;
     for(int i = 0; i < partsNeeded; i++){
         middleCurvation += middle.polarDarstellung[i+2];
     }
     middleCurvation = fabs(middleCurvation)/partsNeeded;
+    logger.debug("defaultDrive") <<"middle-curcation: " << middleCurvation;
     float velocity = (minCurveSpeed-maxSpeed)/(maxCurvation)*(middleCurvation)+maxSpeed;
-    controlData->control.velocity.velocity = velocity;
+    logger.debug("defaultDrive")<<"velocity: "<<velocity;
+    car->targetSpeed = velocity;
     return true;
 }
 
@@ -70,7 +73,7 @@ bool VelocityController::launchControll(float newVelocity,float currentVelocity)
     }else{
         return false;
     }
-    controlData->control.velocity.velocity = velocityLimited;
+    car->targetSpeed = velocityLimited;
     return true;
 }
 

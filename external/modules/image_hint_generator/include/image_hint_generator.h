@@ -4,7 +4,7 @@
 #include "lms/module.h"
 #include "lms/datamanager.h"
 #include "lms/imaging_detection/image_hint.h"
-#include "image_objects/environment.h"
+#include "street_environment/road.h"
 #include "lms/imaging_detection/line_point.h"
 #include <vector>
 
@@ -15,8 +15,11 @@ public:
     bool cycle() override;
 private:
     void initialHints();
-    void createHintsFromMiddleLane();
-    const Environment *middleEnv;
+    void createHintsFromMiddleLane(const street_environment::RoadLane &middle );
+    void createHintForObstacleUsingSinglePoints(const street_environment::RoadLane &middle );
+    void createHintForCrossingUsingSinglePoints(const street_environment::RoadLane &middle );
+    void createHintForObstacleUsingOneLineSequence(const street_environment::RoadLane &middle );
+    const street_environment::Environment *middleEnv;
     lms::imaging::find::HintContainer *hintContainer;
     lms::imaging::find::HintContainer *hintContainer_Left;
     lms::imaging::find::HintContainer *hintContainer_Right;

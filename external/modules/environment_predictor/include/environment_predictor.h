@@ -4,8 +4,9 @@
 #include "lms/module.h"
 #include "lms/imaging/image.h"
 #include "lms/imaging/format.h"
-#include "image_objects/environment.h"
+#include "street_environment/road.h"
 #include "lms/type/module_config.h"
+#include "sensor_utils/car.h"
 extern "C"{
 #include "kalman_filter_lr_emxAPI.h"
 }
@@ -17,14 +18,16 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    const Environment *envInput;
-    Environment *envOutput;
+    void resetData();
+    const street_environment::Environment *envInput;
+    street_environment::Environment *envOutput;
+    const sensor_utils::Car *car;
 
     emxArray_real_T *zustandsVector;
     int partCount;
     double partLength;
     const lms::type::ModuleConfig *config;
-    void convertToKalmanArray(const Environment::RoadLane &lane,emxArray_real_T **x,emxArray_real_T **y);
+    void convertToKalmanArray(const street_environment::RoadLane &lane,emxArray_real_T **x,emxArray_real_T **y);
     void asEinheitsMatrix(emxArray_real_T *mat);
     void clearMatrix(emxArray_real_T *mat);
     emxArray_real_T *stateTransitionMatrix;
@@ -33,7 +36,7 @@ private:
     emxArray_real_T *kovarianzMatrixDesZustandUebergangs;
     double r_fakt; //messgenauigkeit
     void createOutput();
-    void convertZustandToLane(Environment::RoadLane &output);
+    void convertZustandToLane(street_environment::RoadLane &output);
 
     void printMat(emxArray_real_T *mat);
 };
