@@ -2,22 +2,27 @@
 	<modulesToEnable>
 		<module>image_hint_worker</module>
 		<module logLevel="ERROR">image_hint_transformer</module>
-		<module logLevel="DEBUG">environment_predictor</module>
+                <module logLevel="ERROR">environment_predictor</module>
 		<module logLevel="ERROR">trajectory_line_creator</module>
 		<module logLevel="ERROR">trajectory_point_creator</module>
 		<module logLevel="ERROR">image_hint_generator</module>
 		<module logLevel="ERROR">environment_filter</module>
 		<module logLevel="ERROR">trajectory_point_controller</module>
-		<module logLevel="INFO">velocity_controller</module>
+                <module logLevel="ERROR">velocity_controller</module>
 		<module logLevel="ERROR">sensor_tracker</module>
-        <module>image_proxy</module>
-        <module>car_tracker</module>
+                <module logLevel="ERROR">image_proxy</module>
+                <module logLevel="ERROR">car_tracker</module>
         
-        <if notSet="sendData">
-            <module>SENDER</module>
-        </if>
+            <if set="sendData">
+                <module>socket_data_sender</module>
+            </if>
 	</modulesToEnable>
-	<module>
+        <module>
+                <name>socket_data_sender</name>
+                <libpath>socket_data/sender</libpath>
+                <config src="socket_data/car_socket_data_sender.lconf" />
+        </module>
+        <module>
 	    <name>car_tracker</name>
 	</module>
 	<module>

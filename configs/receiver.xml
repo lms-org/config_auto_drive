@@ -5,12 +5,13 @@
 		<maxThreadCount>1</maxThreadCount>
 	    <configMonitor>true</configMonitor>
 	</execution>
-	<include src="cam.xml"/>
 	<modulesToEnable>
-		<module logLevel="DEBUG">RECEIVER</module>
+                <module logLevel="DEBUG">socket_data_receiver</module>
 	</modulesToEnable>
-	<module>
-	    <name>RECEIVER</name>
-	</module>
+        <module>
+            <name>socket_data_receiver</name>
+            <libpath>socket_data/receiver</libpath>
+            <config src="socket_data/pc_socket_data_receiver.lconf" />
+        </module>
 	<include src="render.xml"/>
 </framework>
