@@ -1,0 +1,16 @@
+<framework>
+	<execution>
+		<maxThreadCount> 1 </maxThreadCount>
+		<clock enabled="true" unit="hz">100</clock>
+		<maxThreadCount>1</maxThreadCount>
+	    <configMonitor>true</configMonitor>
+	</execution>
+	<include src="cam.xml"/>
+	<modulesToEnable>
+		<module logLevel="DEBUG">RECEIVER</module>
+	</modulesToEnable>
+	<module>
+	    <name>RECEIVER</name>
+	</module>
+	<include src="render.xml"/>
+</framework>

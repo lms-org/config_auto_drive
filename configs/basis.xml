@@ -12,6 +12,10 @@
 		<module logLevel="ERROR">sensor_tracker</module>
         <module>image_proxy</module>
         <module>car_tracker</module>
+        
+        <if notSet="sendData">
+            <module>SENDER</module>
+        </if>
 	</modulesToEnable>
 	<module>
 	    <name>car_tracker</name>
