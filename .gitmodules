@@ -64,3 +64,12 @@
 [submodule "external/libraries/street_environment"]
 	path = external/libraries/street_environment
 	url = https://github.com/Phibedy/street_environment.git
+[submodule "external/modules/socket_data"]
+	path = external/modules/socket_data
+	url = https://github.com/Phibedy/socket_data.git
+[submodule "external/libraries/socket_connection"]
+	path = external/libraries/socket_connection
+	url = https://github.com/Phibedy/socket_connection.git
+[submodule "external/libraries/cereal"]
+	path = external/libraries/cereal
+	url = https://github.com/syxolk/cereal.git
