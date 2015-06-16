@@ -61,3 +61,6 @@
 [submodule "external/modules/ueye_importer"]
 	path = external/modules/ueye_importer
 	url = http://git.tum-phoenix.de/carolocup/ueye_importer.git
+[submodule "external/libraries/street_environment"]
+	path = external/libraries/street_environment
+	url = https://github.com/Phibedy/street_environment.git
