@@ -52,7 +52,7 @@ bool TrajectoryLineCreator::cycle() {
     //TODO
     if(stayLeft){
         deltaPos += car->deltaPosition().length();
-        logger.error("stay left: STEP") <<deltaPos;
+        logger.debug("stay left: STEP") <<deltaPos;
     }
     //
     for(size_t i = 1; i < middle.points().size(); i++) {
@@ -69,7 +69,7 @@ bool TrajectoryLineCreator::cycle() {
         if(obstacleDistance-mid.length() < distanceObstacleBeforeChangeLine){
             if(mid.length() < 0.6){
                 stayLeft = true;
-                logger.error("stay left: BEGIN") <<deltaPos;
+                logger.debug("stay left: BEGIN") <<deltaPos;
                 deltaPos = 0;
             }
             orthogonal *= -1;

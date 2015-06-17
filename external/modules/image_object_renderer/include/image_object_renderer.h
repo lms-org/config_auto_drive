@@ -5,6 +5,7 @@
 #include "lms/datamanager.h"
 #include "lms/imaging_detection/image_hint.h"
 #include "street_environment/road.h"
+#include "street_environment/obstacle.h"
 
 class ImageObjectRenderer : public lms::Module {
 public:
@@ -24,6 +25,7 @@ private:
     std::vector<const lms::math::polyLine2f*> toDrawPolyLines;
     std::vector<const lms::math::vertex2f*> toDrawVertex2f;
     std::vector<const std::pair<lms::math::vertex2f,lms::math::vertex2f>*> toDrawVertex4f;
+    void drawObstacle(const street_environment::Obstacle &obstacle);
     void drawPolyLine(const lms::math::polyLine2f &lane);
     void drawVertex2f(const lms::math::vertex2f &v);
     void drawVertex4f(const std::pair<lms::math::vertex2f,lms::math::vertex2f> &v);

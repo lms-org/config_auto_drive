@@ -99,6 +99,7 @@
         <config>
             <elementCount>10</elementCount>
             <r_fakt>40</r_fakt>
+            <elementLength>0.2</elementLength>
         </config>
             <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
             <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_MERGED"/>
@@ -106,14 +107,81 @@
     <module>
         <name>image_hint_transformer</name>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
+		<channelMapping from="ENV_MID" to="ENVIRONMENT_ROAD_MERGED"/>
     </module>
     <module>
         <name>image_hint_worker</name>
     </module>
+	<module>
+	    <name>image_hint_generator</name>
+		<writePriority>10</writePriority>
+	    <channelMapping from="OBSTACLE_HINTS" to="OBSTACLE_HINTS"/>
+		<channelMapping from="HINTS" to="HINTS"/>
+		<channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
+		<channelMapping from="ENV_MID" to="ENVIRONMENT_ROAD_MERGED"/>
+		<config name="defaultLPParameter" src="imaging/defaultEdgePointParam.lconf"/>
+	    <config name="defaultLPParameter" src="imaging/defaultLinePointParam.lconf"/>
+	    <config name="defaultLPParameter" src="imaging/defaultLineParam.lconf"/>
+	</module>
+	<module>
+	    <name>sensor_tracker</name>
+	</module>
+	<module>
+	    <name>trajectory_point_creator</name>
+		<channelMapping from="LINE" to="TRAJECTORY_LINE"/>
+		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
+		<config>
+			<distanceSearched> 0.4 </distanceSearched>
+		</config>
+	</module>
+	<module>
+	    <name>trajectory_line_creator</name>
+		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_FILTERED"/>
+		<channelMapping from="ENVIRONMENT_MIDDLE" to="ENVIRONMENT_ROAD_MERGED"/>
+		<channelMapping from="LINE" to="TRAJECTORY_LINE"/>
+		<config src="environment.lconf" />
+	</module>
+	<module>
+	    <name>environment_filter</name>
+		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_RAW"/>
+		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
+	</module>
+	<module>
+	    <name>environment_predictor</name>
+	    <config>
+	        <elementCount>10</elementCount>
+	        <r_fakt>40</r_fakt>
+	    </config>
+		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
+		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_MERGED"/>
+	</module>
+	<module>
+		<name>image_hint_transformer</name>
+		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
+	</module>
+	<module>
+	    <name>image_hint_worker</name>
+	    <channelMapping from="HINTS" to="HINTS"/>
+	</module>
+	<!--module>
+	    <name>image_hint_worker_obstacle</name>
+	    <realName>image_hint_worker</realName>
+	    <channelMapping from="HINTS" to="OBSTACLE_HINTS"/>
+	</module-->
+	<module>
+		<name>image_converter_trans</name>
+		<realName>image_converter</realName>	
+	    <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
+	    <channelMapping from="OUTPUT_IMAGE" to="TRANS_IMAGE"/>
+	    <config>
+		    <output_format>GREY</output_format>
+		    <filter>imageV2C</filter>
+	    </config>
+	</module>
     <module>
         <name>image_proxy</name>
         <config><!--IMAGE_CHANNEL-->
-            <displayMode>IMAGE_CHANNEL</displayMode>
+            <displayMode>DIRECTORY</displayMode>
         </config>
         <config user="phibedy">
             <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150611-185503</directory>

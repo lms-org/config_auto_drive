@@ -4,13 +4,15 @@
 
 bool ImageObjectRenderer::initialize() {
     //get all elements that you want to draw
+    int imageWidth = getConfig()->get<int>("imageWidth",512);
+    int imageHeight = getConfig()->get<int>("imageHeight",512);
     environments = getConfig()->getArray<std::string>("environments");
     polylines = getConfig()->getArray<std::string>("polylines");
     vertex2f = getConfig()->getArray<std::string>("vertex2f");
     vertex4f = getConfig()->getArray<std::string>("vertex4f");
     //create the image you want to draw on
     image = datamanager()->writeChannel<lms::imaging::Image>(this,"IMAGE");
-    image->resize(512,512,lms::imaging::Format::BGRA);
+    image->resize(imageWidth,imageHeight,lms::imaging::Format::BGRA);
     graphics = new lms::imaging::BGRAImageGraphics(*image);
     for(std::string ev : environments){
         toDrawEnv.push_back(datamanager()->readChannel<street_environment::Environment>(this,ev));
@@ -40,7 +42,8 @@ bool ImageObjectRenderer::cycle() {
                 const street_environment::RoadLane &lane = obj->getAsReference<const street_environment::RoadLane>();
                 drawPolyLine(lane);
             }else if(obj->name().find("OBSTACLE") != std::string::npos){
-                //TODO
+                const street_environment::Obstacle &obstacle = obj->getAsReference<const street_environment::Obstacle>();
+                drawObstacle(obstacle);
             }
         }
     }
@@ -75,6 +78,11 @@ void ImageObjectRenderer::drawVertex2f(const lms::math::vertex2f &v){
 
 void ImageObjectRenderer::drawVertex4f(const std::pair<lms::math::vertex2f,lms::math::vertex2f> &v){
     drawVertex2f(lms::math::vertex2f(v.first.x,v.first.y));
+}
+
+void ImageObjectRenderer::drawObstacle(const street_environment::Obstacle &obstacle){
+    setColor("OBSTACLE");
+    drawVertex2f(obstacle.position);
 }
 
 void ImageObjectRenderer::drawPolyLine(const lms::math::polyLine2f &lane){

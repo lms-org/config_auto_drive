@@ -10,8 +10,14 @@
 bool ImageHintGenerator::initialize() {
     gaussBuffer = new lms::imaging::Image();
     middleEnv = datamanager()->writeChannel<street_environment::Environment>(this,"ENV_MID");
-    hintContainer = datamanager()->
+    hintContainerLane = datamanager()->
             writeChannel<lms::imaging::find::HintContainer>(this,"HINTS");
+    /*
+    hintContainerObstacle = datamanager()->
+            writeChannel<lms::imaging::find::HintContainer>(this,"OBSTACLE_HINTS");
+    //TODO
+    hintContainerObstacle = hintContainerLane;
+    */
     target = datamanager()->readChannel<lms::imaging::Image>(this,"TARGET_IMAGE");
     defaultLinePointParameter.fromConfig(getConfig("defaultLPParameter"));
     defaultLinePointParameter.target =target;
@@ -32,7 +38,8 @@ bool ImageHintGenerator::deinitialize() {
 bool ImageHintGenerator::cycle() {
     //TODO
     static bool fromMiddle = true;
-    hintContainer->clear();
+    hintContainerLane->clear();
+    //hintContainerObstacle->clear();
     //set the gaussbuffer
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
     //clear the gaussBuffer not necessary!
@@ -180,7 +187,7 @@ void ImageHintGenerator::createHintForCrossingUsingSinglePoints(const street_env
                 //alter endPunkt wird neuer Startpunkt:
                 middlePoints[2*numberOfSearchPoints+k] = endMiddle;
             }
-            hintContainer->add(line);
+            hintContainerLane->add(line);
         }
     }
     delete[] middlePoints;
@@ -266,7 +273,7 @@ void ImageHintGenerator::createHintForObstacleUsingOneLineSequence(const street_
             lms::imaging::find::ImageHint<lms::imaging::find::Line> *obstHint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>();
             obstHint->name = "OBSTACLE_"+i;
             obstHint->parameter = lineParam;
-            hintContainer->add(obstHint);
+            hintContainerLane->add(obstHint);
 
             //alter endPunkt wird neuer Startpunkt:
             startMiddle = endMiddle;
@@ -351,7 +358,7 @@ void ImageHintGenerator::createHintForObstacleUsingSinglePoints(const street_env
                 //alter endPunkt wird neuer Startpunkt:
                 middlePoints[k] = endMiddle;
             }
-            hintContainer->add(line);
+            hintContainerLane->add(line);
         }
     }
     delete[] middlePoints;
@@ -437,13 +444,13 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
         }
     }
     if(hintLeft->getTarget() != nullptr){
-        hintContainer->add(hintLeft);
+        hintContainerLane->add(hintLeft);
     }
     if(hintRight->getTarget() != nullptr){
-        hintContainer->add(hintRight);
+        hintContainerLane->add(hintRight);
     }
     if(hintMiddle->getTarget() != nullptr){
-        hintContainer->add(hintMiddle);
+        hintContainerLane->add(hintMiddle);
     }
 }
 
@@ -474,7 +481,7 @@ void ImageHintGenerator::initialHints(){
         //result =
         return result;
     };
-    hintContainer->add(hint);
+    hintContainerLane->add(hint);
     //hint->parameter.containing;
     //add it
     hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>(*hint);
@@ -482,7 +489,7 @@ void ImageHintGenerator::initialHints(){
     hint->parameter.x = 40;
     hint->parameter.y = 100;
     hint->parameter.searchAngle = M_PI;
-    hintContainer->add(hint);
+    hintContainerLane->add(hint);
 
     lms::imaging::find::ImageHint<lms::imaging::find::SplittedLine> *hintSplit = new lms::imaging::find::ImageHint<lms::imaging::find::SplittedLine>();
     hintSplit->name = "MIDDLE_LANE";

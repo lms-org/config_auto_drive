@@ -20,7 +20,8 @@ private:
     void createHintForCrossingUsingSinglePoints(const street_environment::RoadLane &middle );
     void createHintForObstacleUsingOneLineSequence(const street_environment::RoadLane &middle );
     const street_environment::Environment *middleEnv;
-    lms::imaging::find::HintContainer *hintContainer;
+    lms::imaging::find::HintContainer *hintContainerLane;
+    lms::imaging::find::HintContainer *hintContainerObstacle;
     lms::imaging::find::HintContainer *hintContainer_Left;
     lms::imaging::find::HintContainer *hintContainer_Right;
     lms::imaging::find::HintContainer *hintContainer_Middle;
