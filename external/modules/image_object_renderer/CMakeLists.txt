@@ -9,4 +9,4 @@ set (HEADERS
 include_directories("include")
 
 add_library (image_object_renderer MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(image_object_renderer PRIVATE lms imaging)
+target_link_libraries(image_object_renderer PRIVATE lms imaging street_environment)
