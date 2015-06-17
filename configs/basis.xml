@@ -1,14 +1,15 @@
 <framework>
 	<modulesToEnable>
 		<module>image_hint_worker</module>
+		<module>image_hint_worker_obstacle</module>
 		<module logLevel="ERROR">image_hint_transformer</module>
-                <module logLevel="ERROR">environment_predictor</module>
+        <module logLevel="ERROR">environment_predictor</module>
 		<module logLevel="ERROR">trajectory_line_creator</module>
 		<module logLevel="ERROR">trajectory_point_creator</module>
 		<module logLevel="ERROR">image_hint_generator</module>
 		<module logLevel="ERROR">environment_filter</module>
 		<module logLevel="ERROR">trajectory_point_controller</module>
-                <module logLevel="ERROR">velocity_controller</module>
+        <module logLevel="ERROR">velocity_controller</module>
 		<module logLevel="ERROR">sensor_tracker</module>
                 <module logLevel="ERROR">image_proxy</module>
                 <module logLevel="ERROR">car_tracker</module>
@@ -55,6 +56,7 @@
 	<module>
 	    <name>image_hint_generator</name>
 		<writePriority>10</writePriority>
+	    <channelMapping from="OBSTACLE_HINTS" to="OBSTACLE_HINTS"/>
 		<channelMapping from="HINTS" to="HINTS"/>
 		<channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
 		<channelMapping from="ENV_MID" to="ENVIRONMENT_ROAD_MERGED"/>
@@ -100,6 +102,12 @@
 	</module>
 	<module>
 	    <name>image_hint_worker</name>
+	    <channelMapping from="HINTS" to="HINTS"/>
+	</module>
+	<module>
+	    <name>image_hint_worker_obstacle</name>
+	    <realName>image_hint_worker</realName>
+	    <channelMapping from="HINTS" to="OBSTACLE_HINTS"/>
 	</module>
 	<module>
 		<name>image_converter_trans</name>
@@ -114,7 +122,7 @@
     <module>
         <name>image_proxy</name>
         <config><!--IMAGE_CHANNEL-->
-            <displayMode>IMAGE_CHANNEL</displayMode>
+            <displayMode>DIRECTORY</displayMode>
         </config>
         <config user="phibedy">
             <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150611-185503</directory>

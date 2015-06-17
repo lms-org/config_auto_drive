@@ -35,6 +35,11 @@
 		    <colorG>0</colorG>
 		    <colorB>255</colorB>
 		</config>
+		<config name="OBSTACLE">
+		    <colorR>50</colorR>
+		    <colorG>200</colorG>
+		    <colorB>100</colorB>
+		</config>
 		<config name="TRAJECTORY_LINE">
 		    <colorR>255</colorR>
 		    <colorG>255</colorG>
