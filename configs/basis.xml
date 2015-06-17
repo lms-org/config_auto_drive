@@ -1,116 +1,115 @@
 <framework>
-	<modulesToEnable>
-		<module>image_hint_worker</module>
-		<module logLevel="ERROR">image_hint_transformer</module>
-                <module logLevel="ERROR">environment_predictor</module>
-		<module logLevel="ERROR">trajectory_line_creator</module>
-		<module logLevel="ERROR">trajectory_point_creator</module>
-		<module logLevel="ERROR">image_hint_generator</module>
-		<module logLevel="ERROR">environment_filter</module>
-		<module logLevel="ERROR">trajectory_point_controller</module>
-                <module logLevel="ERROR">velocity_controller</module>
-		<module logLevel="ERROR">sensor_tracker</module>
-                <module logLevel="ERROR">image_proxy</module>
-                <module logLevel="ERROR">car_tracker</module>
-        
-            <if set="sendData">
-                <module>socket_data_sender</module>
-            </if>
-	</modulesToEnable>
-        <module>
-                <name>socket_data_sender</name>
-                <libpath>socket_data/sender</libpath>
-                <config src="socket_data/car_socket_data_sender.lconf" />
-        </module>
-        <module>
-	    <name>car_tracker</name>
-	</module>
-	<module>
-	    <name>environment_logger</name>
-		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD"/>
-		<config>
-		    <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/logging_data</directory>
-		</config>
-	</module>
-	<module>
-		<name>velocity_controller</name>
-		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_MERGED"/>
-		<config>
-		    <launchControllEnabled>false</launchControllEnabled>
-		    <maxSpeed>1.5</maxSpeed>
-		    <minCurveSpeed>1.0</minCurveSpeed>
-		    <forcastLength>0.5</forcastLength>
-		    <maxDeltaTInMs>100</maxDeltaTInMs>
-		    <maxAcc>4</maxAcc>
-		    <minAcc>-6</minAcc>
-		</config>
+    <modulesToEnable>
+        <module>image_hint_worker</module>
+        <module logLevel="ERROR">image_hint_transformer</module>
+        <module logLevel="ERROR">environment_predictor</module>
+        <module logLevel="ERROR">trajectory_line_creator</module>
+        <module logLevel="ERROR">trajectory_point_creator</module>
+        <module logLevel="ERROR">image_hint_generator</module>
+        <module logLevel="ERROR">environment_filter</module>
+        <module logLevel="ERROR">trajectory_point_controller</module>
+        <module logLevel="ERROR">velocity_controller</module>
+        <module logLevel="ERROR">sensor_tracker</module>
+        <module logLevel="ERROR">image_proxy</module>
+        <module logLevel="ERROR">car_tracker</module>
+        <if set="sendData">
+            <module>socket_data_sender</module>
+            <module logLevel="WARN">image_converter_scaledown</module>
+        </if>
+    </modulesToEnable>
+    <module>
+        <name>image_converter_scaledown</name>
+        <realName>image_converter</realName>
+        <config>
+            <scaleDown>2</scaleDown>
+        </config>
+        <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
+        <channelMapping from="OUTPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
     </module>
-	<module>
-		<name>trajectory_point_controller</name>
-		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
-		<config>
-		    <aggro>0.95</aggro>
-		</config>
+    <module>
+        <name>socket_data_sender</name>
+        <libpath>socket_data/sender</libpath>
+        <config src="socket_data/car_socket_data_sender.lconf" />
     </module>
-	<module>
-	    <name>image_hint_generator</name>
-		<writePriority>10</writePriority>
-		<channelMapping from="HINTS" to="HINTS"/>
-		<channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
-		<channelMapping from="ENV_MID" to="ENVIRONMENT_ROAD_MERGED"/>
-		<config name="defaultLPParameter" src="imaging/defaultEdgePointParam.lconf"/>
-	    <config name="defaultLPParameter" src="imaging/defaultLinePointParam.lconf"/>
-	    <config name="defaultLPParameter" src="imaging/defaultLineParam.lconf"/>
-	</module>
-	<module>
-	    <name>sensor_tracker</name>
-	</module>
-	<module>
-	    <name>trajectory_point_creator</name>
-		<channelMapping from="LINE" to="TRAJECTORY_LINE"/>
-		<channelMapping from="POINT" to="TRAJECTORY_POINT"/>
-		<config>
-			<distanceSearched> 0.4 </distanceSearched>
-		</config>
-	</module>
-	<module>
-	    <name>trajectory_line_creator</name>
-		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_FILTERED"/>
-		<channelMapping from="ENVIRONMENT_MIDDLE" to="ENVIRONMENT_ROAD_MERGED"/>
-		<channelMapping from="LINE" to="TRAJECTORY_LINE"/>
-		<config src="environment.lconf" />
-	</module>
-	<module>
-	    <name>environment_filter</name>
-		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_RAW"/>
-		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
-	</module>
-	<module>
-	    <name>environment_predictor</name>
-	    <config>
-	        <elementCount>10</elementCount>
-	        <r_fakt>40</r_fakt>
-	    </config>
-		<channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
-		<channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_MERGED"/>
-	</module>
-	<module>
-		<name>image_hint_transformer</name>
-		<channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
-	</module>
-	<module>
-	    <name>image_hint_worker</name>
-	</module>
-	<module>
-		<name>image_converter_trans</name>
-		<realName>image_converter</realName>	
-	    <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
-	    <channelMapping from="OUTPUT_IMAGE" to="TRANS_IMAGE"/>
-	    <config>
-		    <output_format>GREY</output_format>
-		    <filter>imageV2C</filter>
-	    </config>
-	</module>
+    <module>
+        <name>car_tracker</name>
+    </module>
+    <module>
+        <name>environment_logger</name>
+        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD"/>
+        <config>
+            <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/logging_data</directory>
+        </config>
+    </module>
+    <module>
+        <name>velocity_controller</name>
+        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_MERGED"/>
+        <config>
+            <launchControllEnabled>false</launchControllEnabled>
+            <maxSpeed>1.5</maxSpeed>
+            <minCurveSpeed>1.0</minCurveSpeed>
+            <forcastLength>0.5</forcastLength>
+            <maxDeltaTInMs>100</maxDeltaTInMs>
+            <maxAcc>4</maxAcc>
+            <minAcc>-6</minAcc>
+        </config>
+    </module>
+    <module>
+        <name>trajectory_point_controller</name>
+        <channelMapping from="POINT" to="TRAJECTORY_POINT"/>
+        <config>
+            <aggro>0.95</aggro>
+        </config>
+    </module>
+    <module>
+        <name>image_hint_generator</name>
+        <writePriority>10</writePriority>
+        <channelMapping from="HINTS" to="HINTS"/>
+        <channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
+        <channelMapping from="ENV_MID" to="ENVIRONMENT_ROAD_MERGED"/>
+        <config name="defaultLPParameter" src="imaging/defaultEdgePointParam.lconf"/>
+        <config name="defaultLPParameter" src="imaging/defaultLinePointParam.lconf"/>
+        <config name="defaultLPParameter" src="imaging/defaultLineParam.lconf"/>
+    </module>
+    <module>
+        <name>sensor_tracker</name>
+    </module>
+    <module>
+        <name>trajectory_point_creator</name>
+        <channelMapping from="LINE" to="TRAJECTORY_LINE"/>
+        <channelMapping from="POINT" to="TRAJECTORY_POINT"/>
+        <config>
+            <distanceSearched>0.4</distanceSearched>
+        </config>
+    </module>
+    <module>
+        <name>trajectory_line_creator</name>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_FILTERED"/>
+        <channelMapping from="ENVIRONMENT_MIDDLE" to="ENVIRONMENT_ROAD_MERGED"/>
+        <channelMapping from="LINE" to="TRAJECTORY_LINE"/>
+        <config src="environment.lconf" />
+    </module>
+    <module>
+        <name>environment_filter</name>
+        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_RAW"/>
+        <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
+    </module>
+    <module>
+        <name>environment_predictor</name>
+        <config>
+            <elementCount>10</elementCount>
+            <r_fakt>40</r_fakt>
+        </config>
+            <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
+            <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_MERGED"/>
+    </module>
+    <module>
+        <name>image_hint_transformer</name>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
+    </module>
+    <module>
+        <name>image_hint_worker</name>
+    </module>
     <module>
         <name>image_proxy</name>
         <config><!--IMAGE_CHANNEL-->
