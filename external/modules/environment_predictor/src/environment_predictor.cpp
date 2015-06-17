@@ -141,6 +141,10 @@ void EnvironmentPredictor::convertZustandToLane(street_environment::RoadLane &ou
     output.points().push_back(p1);
     output.points().push_back(p2);
     output.polarPartLength = partLength;
+    //add first two values
+    output.polarDarstellung.push_back(zustandsVector->data[0]);
+    output.polarDarstellung.push_back(zustandsVector->data[1]);
+
     for(int i = 2; i < partCount; i++){
         lms::math::vertex2f pi;
         double dw = 2*acos(partLength*zustandsVector->data[i]/2);

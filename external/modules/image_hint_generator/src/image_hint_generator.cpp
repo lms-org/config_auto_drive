@@ -39,7 +39,7 @@ bool ImageHintGenerator::cycle() {
     //TODO
     static bool fromMiddle = true;
     hintContainerLane->clear();
-    hintContainerObstacle->clear();
+    //hintContainerObstacle->clear();
     //set the gaussbuffer
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
     //clear the gaussBuffer not necessary!
