@@ -22,14 +22,20 @@ bool EnvironmentPredictor::initialize() {
     partLength = config->get<float>("elementLength",0.2);
     r_fakt=config->get<double>("r_fakt",20);
     zustandsVector = emxCreate_real_T(partCount,1);
-    clearMatrix(zustandsVector);
-    zustandsVector->data[0] = getConfig()->get<float>("distanceToMiddle",0.2);
 
     stateTransitionMatrix = emxCreate_real_T(partCount,partCount);
-    asEinheitsMatrix(stateTransitionMatrix);
     kovarianzMatrixDesZustandes = emxCreate_real_T(partCount,partCount);
-    asEinheitsMatrix(kovarianzMatrixDesZustandes);
     kovarianzMatrixDesZustandUebergangs = emxCreate_real_T(partCount,partCount);
+    resetData();
+    return true;
+}
+
+void EnvironmentPredictor::resetData(){
+    logger.error("resetData");
+    clearMatrix(zustandsVector);
+    zustandsVector->data[0] = getConfig()->get<float>("distanceToMiddle",0.2);
+    asEinheitsMatrix(stateTransitionMatrix);
+    asEinheitsMatrix(kovarianzMatrixDesZustandes);
     clearMatrix(kovarianzMatrixDesZustandUebergangs);
 
     for(int x = 0; x < partCount; x++){
@@ -37,7 +43,6 @@ bool EnvironmentPredictor::initialize() {
             kovarianzMatrixDesZustandUebergangs->data[y*partCount+x]=15*(1-pow(0.2,1/fabs(x-y)));
         }
     }
-    return true;
 }
 
 bool EnvironmentPredictor::deinitialize() {
@@ -45,6 +50,11 @@ bool EnvironmentPredictor::deinitialize() {
 }
 
 bool EnvironmentPredictor::cycle() {
+
+    for(std::string content : messaging()->receive("RC_STATE_CHANGED")){
+        resetData();
+    }
+
     //länge der später zu berechnenden Abschnitten
     //convert data to lines
     emxArray_real_T *rx = nullptr;

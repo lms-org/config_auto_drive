@@ -7,10 +7,10 @@
     </execution-->
 	<modulesToEnable>
         <!--module logLevel="WARN">camera_importer</module-->
-        <module logLevel="DEBUG">ueye_importer</module>
+        <module logLevel="ERROR">ueye_importer</module>
 		<module logLevel="ERROR">image_converter</module>
         <if set="image_logger">
-            <module logLevel="DEBUG">image_logger</module>
+            <module logLevel="ERROR">image_logger</module>
         </if>
     </modulesToEnable>
 	<module>

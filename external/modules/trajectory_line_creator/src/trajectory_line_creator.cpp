@@ -22,6 +22,7 @@ bool TrajectoryLineCreator::cycle() {
 
     // translate the middle lane to the right with a quarter of the street width
     const float translation = 4.0f / config->get<float>("street.width", 0.8);
+    //TODO das sollte von der aktuellen geschwindigkeit abhängen!
     float distanceObstacleBeforeChangeLine = 0.4;
 
     using lms::math::vertex2f;

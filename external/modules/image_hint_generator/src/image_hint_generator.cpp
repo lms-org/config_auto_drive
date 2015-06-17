@@ -327,7 +327,6 @@ void ImageHintGenerator::createHintForObstacleUsingSinglePoints(const street_env
                 check.searchParam().searchLength = 20;
                 check.searchParam().searchType = lms::imaging::find::EdgePoint::EdgeType::HIGH_LOW;
                 bool found = check.find(DRAWDEBUG_ARG_N);
-                std::cout << "VALIDATE POINT: " << !found<<std::endl;
                 return !found;
             };
             for(int k = 0; k < numberOfSearchPoints; k++){

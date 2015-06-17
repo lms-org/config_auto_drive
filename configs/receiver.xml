@@ -1,0 +1,17 @@
+<framework>
+	<execution>
+		<maxThreadCount> 1 </maxThreadCount>
+		<clock enabled="true" unit="hz">100</clock>
+		<maxThreadCount>1</maxThreadCount>
+	    <configMonitor>true</configMonitor>
+	</execution>
+	<modulesToEnable>
+                <module logLevel="DEBUG">socket_data_receiver</module>
+	</modulesToEnable>
+        <module>
+            <name>socket_data_receiver</name>
+            <libpath>socket_data/receiver</libpath>
+            <config src="socket_data/pc_socket_data_receiver.lconf" />
+        </module>
+	<include src="render.xml"/>
+</framework>

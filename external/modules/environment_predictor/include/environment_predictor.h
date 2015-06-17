@@ -18,6 +18,7 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
+    void resetData();
     const street_environment::Environment *envInput;
     street_environment::Environment *envOutput;
     const sensor_utils::Car *car;

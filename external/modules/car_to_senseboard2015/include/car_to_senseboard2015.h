@@ -14,7 +14,9 @@ public:
     bool cycle() override;
 
 private:
+    bool lastRcState;
     Comm::SensorBoard::ControlData *controlData;
+    Comm::SensorBoard::SensorData *sensorData;
     /*const*/ sensor_utils::Car *car;
 };
 
