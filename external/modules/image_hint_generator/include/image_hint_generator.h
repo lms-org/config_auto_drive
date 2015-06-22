@@ -6,6 +6,7 @@
 #include "lms/imaging_detection/image_hint.h"
 #include "street_environment/road.h"
 #include "lms/imaging_detection/line_point.h"
+#include "lms/type/module_config.h"
 #include <vector>
 
 class ImageHintGenerator : public lms::Module {
@@ -19,6 +20,7 @@ private:
     void createHintForObstacleUsingSinglePoints(const street_environment::RoadLane &middle );
     void createHintForCrossingUsingSinglePoints(const street_environment::RoadLane &middle );
     void createHintForObstacleUsingOneLineSequence(const street_environment::RoadLane &middle );
+    const lms::type::ModuleConfig *config;
     const street_environment::Environment *middleEnv;
     lms::imaging::find::HintContainer *hintContainerLane;
     lms::imaging::find::HintContainer *hintContainerObstacle;

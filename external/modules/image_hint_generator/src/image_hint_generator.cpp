@@ -8,16 +8,15 @@
 #include "lms/math/vertex.h"
 #include "lms/imaging/warp.h"
 bool ImageHintGenerator::initialize() {
+    config = getConfig();
     gaussBuffer = new lms::imaging::Image();
     middleEnv = datamanager()->writeChannel<street_environment::Environment>(this,"ENV_MID");
     hintContainerLane = datamanager()->
             writeChannel<lms::imaging::find::HintContainer>(this,"HINTS");
-    /*
+
     hintContainerObstacle = datamanager()->
             writeChannel<lms::imaging::find::HintContainer>(this,"OBSTACLE_HINTS");
-    //TODO
-    hintContainerObstacle = hintContainerLane;
-    */
+
     target = datamanager()->readChannel<lms::imaging::Image>(this,"TARGET_IMAGE");
     defaultLinePointParameter.fromConfig(getConfig("defaultLPParameter"));
     defaultLinePointParameter.target =target;
@@ -36,10 +35,9 @@ bool ImageHintGenerator::deinitialize() {
     return false;
 }
 bool ImageHintGenerator::cycle() {
-    //TODO
     static bool fromMiddle = true;
     hintContainerLane->clear();
-    //hintContainerObstacle->clear();
+    hintContainerObstacle->clear();
     //set the gaussbuffer
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
     //clear the gaussBuffer not necessary!
@@ -53,10 +51,13 @@ bool ImageHintGenerator::cycle() {
             logger.error("createHintsFromMiddleLane") << "middle is no middle lane!";
             return true;
         }
-
         createHintsFromMiddleLane(middle);
-        createHintForObstacleUsingSinglePoints(middle);
-        createHintForCrossingUsingSinglePoints(middle);
+
+        if(config->get<bool>("searchForObstacles",false)){
+            createHintForObstacleUsingSinglePoints(middle);
+        }else if(config->get<bool>("searchForCrossing",false)){
+            createHintForCrossingUsingSinglePoints(middle);
+        }
     }else{
         initialHints();
         fromMiddle = true;
@@ -475,7 +476,10 @@ void ImageHintGenerator::initialHints(){
     hint->parameter.verify = true;
     hint->parameter.preferVerify = false;
     hint->parameter.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM)->bool{
+
+#if IMAGING_DRAW_DEBUG == 1
         (void)DRAWDEBUG_ARG_N;
+#endif
         //logger.info("check") << x <<" "<< y;
         bool result =  std::abs(160-lp.high_low.x)>50 || std::abs(lp.high_low.y)<140;
         //result =
@@ -514,7 +518,10 @@ void ImageHintGenerator::initialHints(){
     hintSplit->parameter.lineMinLength = 10;
     hintSplit->parameter.lineMaxLength = 80;
     hintSplit->parameter.validPoint = [this](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM){
+
+#if IMAGING_DRAW_DEBUG == 1
         (void)DRAWDEBUG_ARG_N;
+#endif
         bool result =  std::abs(160-lp.low_high.x)>50 || std::abs(lp.low_high.y)<140;
         float angle = lms::math::limitAngle_nPI_PI(lp.param().searchAngle);
         result = result && (fabs(angle) < M_PI_2l*0.5) &&!(lp.low_high.y < 50);
