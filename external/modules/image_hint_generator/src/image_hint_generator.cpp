@@ -188,7 +188,7 @@ void ImageHintGenerator::createHintForCrossingUsingSinglePoints(const street_env
                 //alter endPunkt wird neuer Startpunkt:
                 middlePoints[2*numberOfSearchPoints+k] = endMiddle;
             }
-            hintContainerLane->add(line);
+            hintContainerObstacle->add(line);
         }
     }
     delete[] middlePoints;
@@ -274,7 +274,7 @@ void ImageHintGenerator::createHintForObstacleUsingOneLineSequence(const street_
             lms::imaging::find::ImageHint<lms::imaging::find::Line> *obstHint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>();
             obstHint->name = "OBSTACLE_"+i;
             obstHint->parameter = lineParam;
-            hintContainerLane->add(obstHint);
+            hintContainerObstacle->add(obstHint);
 
             //alter endPunkt wird neuer Startpunkt:
             startMiddle = endMiddle;
@@ -359,7 +359,7 @@ void ImageHintGenerator::createHintForObstacleUsingSinglePoints(const street_env
                 //alter endPunkt wird neuer Startpunkt:
                 middlePoints[k] = endMiddle;
             }
-            hintContainerLane->add(line);
+            hintContainerObstacle->add(line);
         }
     }
     delete[] middlePoints;
@@ -456,6 +456,7 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
 }
 
 void ImageHintGenerator::initialHints(){
+    //TODO, don't work with all cams!
     lms::imaging::find::ImageHint<lms::imaging::find::Line> *hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>();
     hint->name = "RIGHT_LANE";
     hint->parameter.target =target;
