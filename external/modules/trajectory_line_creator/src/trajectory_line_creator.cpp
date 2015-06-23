@@ -41,9 +41,9 @@ bool TrajectoryLineCreator::cycle() {
     for(std::shared_ptr<street_environment::EnvironmentObject> obj : environment->objects){
         if(obj->name().find("OBSTACLE") != std::string::npos){
             const street_environment::Obstacle &obst = obj->getAsReference<const street_environment::Obstacle>();
-            if(obst.position.length()<obstacleDistance){
-                if(obst.position.length() < obstacleDistance){
-                    obstacleDistance = obst.position.length();
+            if(obst.m_tmpPosition.length()<obstacleDistance){
+                if(obst.m_tmpPosition.length() < obstacleDistance){
+                    obstacleDistance = obst.m_tmpPosition.length();
                 }
             }
         }

@@ -366,9 +366,10 @@ void ImageHintGenerator::createHintForObstacleUsingSinglePoints(const street_env
 }
 
 void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::RoadLane &middle){
+    //TODO wenn ein Hinderniss einen Suchpunkt überdeckt könnten wir von der anderen Seite danach suchen!
     using lms::math::vertex2f;
     using lms::math::vertex2i;
-    //line Distance with search offset :)
+    //distance between lines and offset for search
     float lineOffset = 0.1;
     float lineDistance = 0.4-lineOffset;
     lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintLeft = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();

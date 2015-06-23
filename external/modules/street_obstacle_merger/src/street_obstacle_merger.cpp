@@ -12,26 +12,60 @@ bool StreetObstacleMerger::deinitialize() {
 }
 
 bool StreetObstacleMerger::cycle() {
+    //get vectors from environments
     std::vector<street_environment::Obstacle*> obstaclesNew;
     std::vector<street_environment::Obstacle*> obstaclesOld;
 
     getObstacles(*envInput,obstaclesNew);
     getObstacles(*envOutput,obstaclesOld);
+
+    //merge them
+    merge(obstaclesNew,obstaclesOld);
+
+    //Remove invalid obstacles
+    filter(obstaclesOld);
+
+    //create new env output
+    createOutput(obstaclesOld);
+    return true;
+}
+
+void StreetObstacleMerger::createOutput(std::vector<street_environment::Obstacle*> &obstaclesOld){
+    envOutput->objects.clear();
+
     for(uint i = 0; i < obstaclesOld.size(); i++){
-        for(uint i = 0; i < obstaclesNew.size(); i++){
+        //create a copy
+        std::shared_ptr<street_environment::Obstacle> obstacle(new street_environment::Obstacle(*obstaclesOld[i]));
+        envOutput->objects.push_back(obstacle);
+    }
+
+}
+
+void StreetObstacleMerger::filter(std::vector<street_environment::Obstacle*> &obstaclesOld){
+    //TODO hier könnte man sich auch etwas besseres einfallen lassen
+    for(uint i = 0; i < obstaclesOld.size(); i++){
+        if(obstaclesOld[i]->position().x < -0.35){
+            obstaclesOld.erase(obstaclesOld.begin() + i);
+        }
+    }
+}
+
+void StreetObstacleMerger::merge(std::vector<street_environment::Obstacle*> &obstaclesNew,std::vector<street_environment::Obstacle*> &obstaclesOld){
+    for(uint i = 0; i < obstaclesOld.size();){
+        for(uint i = 0; i < obstaclesNew.size();){
             bool merged = merge(*obstaclesOld[i],*obstaclesNew[i]);
             if(merged){
-                //TODO do sth smart
+                //remove merged obstacle
+                obstaclesNew.erase(obstaclesNew.begin() + i);
+                //no need to increase the index
             }else{
-                //do nothing
+                //seems to be a new obstacle -> add it
+                obstaclesOld.push_back(obstaclesNew[i]);
+                //increase index
+                i++;
             }
         }
     }
-
-    //std::vector<street_environment::Obstacle&> cossings;
-    //get all new found obstacles
-
-    return true;
 }
 
 void StreetObstacleMerger::getObstacles(const street_environment::Environment &env,std::vector<street_environment::Obstacle*> &output){
@@ -43,6 +77,9 @@ void StreetObstacleMerger::getObstacles(const street_environment::Environment &e
 }
 
 bool StreetObstacleMerger::merge(street_environment::Obstacle &from, street_environment::Obstacle &to){
-    //TODO
+    //TODO, was besseres überlegen!
+    if(from.position().distance(-to.position())<0.5){
+        return true;
+    }
     return false;
 }
