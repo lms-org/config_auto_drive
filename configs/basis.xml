@@ -22,7 +22,7 @@
         <name>image_converter_scaledown</name>
         <realName>image_converter</realName>
         <config>
-            <scaleDown>2</scaleDown>
+            <scaleDown>10</scaleDown>
         </config>
         <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="OUTPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
