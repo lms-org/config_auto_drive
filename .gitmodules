@@ -73,3 +73,6 @@
 [submodule "external/modules/--force"]
 	path = external/modules/--force
 	url = https://github.com/Phibedy/ueye_importer.git
+[submodule "external/modules/ueye_importer"]
+	path = external/modules/ueye_importer
+	url = https://github.com/Phibedy/ueye_importer.git
