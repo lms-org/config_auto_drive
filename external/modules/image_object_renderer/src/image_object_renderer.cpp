@@ -82,7 +82,7 @@ void ImageObjectRenderer::drawVertex4f(const std::pair<lms::math::vertex2f,lms::
 
 void ImageObjectRenderer::drawObstacle(const street_environment::Obstacle &obstacle){
     setColor("OBSTACLE");
-    drawVertex2f(obstacle.position);
+    drawVertex2f(obstacle.m_tmpPosition);
 }
 
 void ImageObjectRenderer::drawPolyLine(const lms::math::polyLine2f &lane){
