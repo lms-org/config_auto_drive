@@ -1,3 +1,3 @@
-dataChannels = IMAGE_GREY_SCALE,TRAJECTORY_LINE
-ip = localhost
+dataChannels = ENVIRONMENT_ROAD_FILTERED
+ip = 192.168.0.112
 port = 65002
