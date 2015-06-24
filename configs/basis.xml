@@ -119,20 +119,12 @@
         <name>image_hint_worker_obstacle</name>
         <realName>image_hint_worker</realName>
         <channelMapping from="HINTS" to="HINTS_OBSTACLE"/>
-    </module>
-    <module>
-        <name>environment_predictor</name>
-        <config>
-            <elementCount>10</elementCount>
-            <r_fakt>40</r_fakt>
-        </config>
-        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
-        <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_MERGED"/>
+        <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_OBST"/>
     </module>
     <module>
         <name>image_proxy</name>
         <config><!--IMAGE_CHANNEL-->
-            <displayMode>DIRECTORY</displayMode>
+            <displayMode>IMAGE_CHANNEL</displayMode>
         </config>
         <config user="phibedy">
             <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150519-164907</directory>

@@ -15,7 +15,7 @@ bool ImageHintGenerator::initialize() {
             writeChannel<lms::imaging::find::HintContainer>(this,"HINTS");
 
     hintContainerObstacle = datamanager()->
-            writeChannel<lms::imaging::find::HintContainer>(this,"OBSTACLE_HINTS");
+            writeChannel<lms::imaging::find::HintContainer>(this,"HINTS_OBSTACLE");
 
     target = datamanager()->readChannel<lms::imaging::Image>(this,"TARGET_IMAGE");
     defaultLinePointParameter.fromConfig(getConfig("defaultLPParameter"));

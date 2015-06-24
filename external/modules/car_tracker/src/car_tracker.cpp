@@ -33,12 +33,12 @@ bool CarTracker::cycle() {
     getFromVehicle(deltaVeh);
     //getFromMouseSensors(deltaMouse);
     //TODO
-    car->updateVelocity(car->targetSpeed,lms::math::vertex2f(1,0));
     lms::math::vertex2f pos = car->position;
     pos.x += deltaVeh.x;
     pos.y += deltaVeh.y;
     float angle = car->viewDirection.angle()+deltaVeh.phi;
     car->updatePosition(pos,lms::math::vertex2f(cos(angle),sin(angle)));
+    car->updateVelocity(car->targetSpeed,lms::math::vertex2f(cos(angle),sin(angle)));
 
     logger.debug("cycle: ")<<"speed: "<<car->targetSpeed << " deltaPos: " << car->velocity*delta;
     last = lms::extra::PrecisionTime::now();

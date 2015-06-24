@@ -19,6 +19,8 @@ bool StreetObstacleMerger::cycle() {
     getObstacles(*envInput,obstaclesNew);
     getObstacles(*envOutput,obstaclesOld);
 
+    //TODO kalman stuff!
+
     //merge them
     merge(obstaclesNew,obstaclesOld);
 
