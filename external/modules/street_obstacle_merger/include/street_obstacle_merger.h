@@ -16,10 +16,10 @@ private:
     void createOutput(std::vector<street_environment::Obstacle*> &obstaclesOld);
 
 
-    void getObstacles(const street_environment::Environment &env,std::vector<street_environment::Obstacle*> &output);
+    void getObstacles(const street_environment::EnvironmentObjects &env,std::vector<street_environment::Obstacle*> &output);
     bool merge(street_environment::Obstacle &from, street_environment::Obstacle &to);
-    const street_environment::Environment *envInput;
-    street_environment::Environment *envOutput;
+    const street_environment::EnvironmentObjects *envInput;
+    street_environment::EnvironmentObjects *envOutput;
 
 
 };

@@ -12,9 +12,10 @@ extern "C"{
 #include "projectPoints.h"
 }
 bool EnvironmentPredictor::initialize() {
-    envInput = datamanager()->readChannel<street_environment::Environment>(this,"ENVIRONMENT_INPUT");
+    envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
 
-    envOutput = datamanager()->writeChannel<street_environment::Environment>(this,"ENVIRONMENT_OUTPUT");
+    envOutput = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_OUTPUT");
+    roadOutput = datamanager()->writeChannel<street_environment::RoadLane>(this,"ROAD_OUTPUT");
     car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
     config = getConfig();
 
@@ -121,7 +122,13 @@ bool EnvironmentPredictor::cycle() {
 
 void EnvironmentPredictor::createOutput(){
     envOutput->objects.clear();
+
     //create middle
+    roadOutput->type(street_environment::RoadLaneType::MIDDLE);
+    convertZustandToLane(*roadOutput);
+    roadOutput->name("MIDDLE_LANE");
+
+    //old - remove later on!
     street_environment::RoadLanePtr middle(new street_environment::RoadLane());
     middle->type(street_environment::RoadLaneType::MIDDLE);
     convertZustandToLane(*middle);
@@ -130,6 +137,9 @@ void EnvironmentPredictor::createOutput(){
 }
 
 void EnvironmentPredictor::convertZustandToLane(street_environment::RoadLane &output){
+    //clear points
+    output.points().clear();
+
     lms::math::vertex2f p1;
     p1.x = 0;
     p1.y = zustandsVector->data[0];

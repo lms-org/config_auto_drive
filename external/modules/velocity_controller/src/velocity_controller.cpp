@@ -2,7 +2,7 @@
 #include "lms/datamanager.h"
 
 bool VelocityController::initialize() {
-    envInput = datamanager()->readChannel<street_environment::Environment>(this,"ENVIRONMENT_INPUT");
+    envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
     car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");config = getConfig();
     lastCall = lms::extra::PrecisionTime::now()-lms::extra::PrecisionTime::fromMillis(config->get<float>("maxDeltaTInMs")*10);
     return true;

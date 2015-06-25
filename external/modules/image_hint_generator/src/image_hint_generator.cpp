@@ -10,7 +10,7 @@
 bool ImageHintGenerator::initialize() {
     config = getConfig();
     gaussBuffer = new lms::imaging::Image();
-    middleEnv = datamanager()->writeChannel<street_environment::Environment>(this,"ENV_MID");
+    middleEnv = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this,"ENV_MID");
     hintContainerLane = datamanager()->
             writeChannel<lms::imaging::find::HintContainer>(this,"HINTS");
 

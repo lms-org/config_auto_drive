@@ -4,8 +4,8 @@
 #include "lms/datamanager.h"
 
 bool EnvironmentFilter::initialize() {
-    input = datamanager()->readChannel<street_environment::Environment>(this, "ENVIRONMENT_INPUT");
-    output = datamanager()->writeChannel<street_environment::Environment>(this, "ENVIRONMENT_OUTPUT");
+    input = datamanager()->readChannel<street_environment::EnvironmentObjects>(this, "ENVIRONMENT_INPUT");
+    output = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this, "ENVIRONMENT_OUTPUT");
     return true;
 }
 

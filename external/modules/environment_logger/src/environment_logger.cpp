@@ -6,7 +6,7 @@
 #include "lms/math/vertex.h"
 bool EnvironmentLogger::initialize() {
     count = 0;
-    input = datamanager()->readChannel<street_environment::Environment>(this, "ENVIRONMENT_INPUT");
+    input = datamanager()->readChannel<street_environment::EnvironmentObjects>(this, "ENVIRONMENT_INPUT");
     directory = getConfig()->get<std::string>("directory");
     return true;
 }

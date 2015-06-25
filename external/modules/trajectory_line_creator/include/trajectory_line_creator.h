@@ -12,9 +12,9 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    const street_environment::Environment *environmentMiddle;
-    const street_environment::Environment *environment;
-    lms::math::polyLine2f *line;
+    const street_environment::EnvironmentObstacles *envObstacles;
+    const street_environment::RoadLane *road;
+    lms::math::polyLine2f *trajectory;
     const lms::type::ModuleConfig *config;
     sensor_utils::Car *car;
 

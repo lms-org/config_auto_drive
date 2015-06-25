@@ -88,6 +88,7 @@
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_FILTERED"/>
         <channelMapping from="ENVIRONMENT_MIDDLE" to="ENVIRONMENT_ROAD_MERGED"/>
         <channelMapping from="LINE" to="TRAJECTORY_LINE"/>
+        <channelMapping from="ROAD" to="ROAD_OUTPUT"/>
         <config src="environment.lconf" />
     </module>
     <module>

@@ -2,8 +2,8 @@
 #include "lms/datamanager.h"
 
 bool StreetObstacleMerger::initialize() {
-    envInput = datamanager()->readChannel<street_environment::Environment>(this,"ENVIRONMENT_INPUT");
-    envOutput = datamanager()->writeChannel<street_environment::Environment>(this,"ENVIRONMENT_OUTPUT");
+    envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
+    envOutput = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_OUTPUT");
    return true;
 }
 
@@ -70,7 +70,7 @@ void StreetObstacleMerger::merge(std::vector<street_environment::Obstacle*> &obs
     }
 }
 
-void StreetObstacleMerger::getObstacles(const street_environment::Environment &env,std::vector<street_environment::Obstacle*> &output){
+void StreetObstacleMerger::getObstacles(const street_environment::EnvironmentObjects &env,std::vector<street_environment::Obstacle*> &output){
     for(std::shared_ptr<street_environment::EnvironmentObject> obj : env.objects){
         if(obj->name().find("OBSTACLE") != std::string::npos){
             output.push_back(static_cast<street_environment::Obstacle*>(obj.get()));

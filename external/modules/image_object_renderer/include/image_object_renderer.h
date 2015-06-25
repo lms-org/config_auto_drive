@@ -24,7 +24,7 @@ private:
 
     lms::imaging::Image *image;
     lms::imaging::BGRAImageGraphics *graphics;
-    std::vector<const street_environment::Environment*> toDrawEnv;
+    std::vector<const street_environment::EnvironmentObjects*> toDrawEnv;
     std::vector<const lms::math::polyLine2f*> toDrawPolyLines;
     std::vector<const lms::math::vertex2f*> toDrawVertex2f;
     std::vector<const std::pair<lms::math::vertex2f,lms::math::vertex2f>*> toDrawVertex4f;

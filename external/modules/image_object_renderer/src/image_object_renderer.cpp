@@ -15,7 +15,7 @@ bool ImageObjectRenderer::initialize() {
     image->resize(imageWidth,imageHeight,lms::imaging::Format::BGRA);
     graphics = new lms::imaging::BGRAImageGraphics(*image);
     for(std::string ev : environments){
-        toDrawEnv.push_back(datamanager()->readChannel<street_environment::Environment>(this,ev));
+        toDrawEnv.push_back(datamanager()->readChannel<street_environment::EnvironmentObjects>(this,ev));
     }
     for(std::string pl : polylines){
         toDrawPolyLines.push_back(datamanager()->readChannel<lms::math::polyLine2f>(this,pl));
@@ -82,7 +82,7 @@ void ImageObjectRenderer::drawVertex4f(const std::pair<lms::math::vertex2f,lms::
 
 void ImageObjectRenderer::drawObstacle(const street_environment::Obstacle &obstacle){
     setColor("OBSTACLE");
-    drawVertex2f(obstacle.m_tmpPosition);
+    drawVertex2f(obstacle.position());
 }
 
 void ImageObjectRenderer::drawPolyLine(const lms::math::polyLine2f &lane){
