@@ -7,7 +7,7 @@
     </execution>
     <modulesToEnable>
         <module logLevel="DEBUG">socket_data_receiver</module>
-        <module logLevel="WARN">image_converter_scaleup</module>
+        <module logLevel="DEBUG">image_converter_scaleup</module>
     </modulesToEnable>
     <module>
         <name>socket_data_receiver</name>

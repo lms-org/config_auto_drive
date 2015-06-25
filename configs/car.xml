@@ -3,12 +3,11 @@
 		<maxThreadCount> 1 </maxThreadCount>
 		<!--clock enabled="false" unit="hz">100</clock-->
 		<maxThreadCount>1</maxThreadCount>
-	    <configMonitor>true</configMonitor>
-	    <!--profiling enabled="true" /-->
+                <configMonitor>true</configMonitor>
 	</execution>
 	<modulesToEnable>
-		<module logLevel="DEBUG">importer_senseboard2015</module>
-	    <module logLevel="DEBUG">car_to_senseboard2015</module>
+            <module logLevel="DEBUG">importer_senseboard2015</module>
+            <module logLevel="DEBUG">car_to_senseboard2015</module>
 	</modulesToEnable>	
 	<module>
 		<name>importer_senseboard2015</name>
@@ -30,6 +29,7 @@
 	    <config name="velocity" src="sensor/velocity.lconf" />
 	</module>
 	<module>
+            <writePriority>1000</writePriority>
 	    <name>car_to_senseboard2015</name>
 	</module>
 	<include src="cam.xml"/>

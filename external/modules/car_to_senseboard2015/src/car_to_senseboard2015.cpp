@@ -26,6 +26,7 @@ bool CarToSenseboard2015::cycle() {
 
     controlData->steering_front = car->steering_front;
     controlData->steering_rear = car->steering_rear;
+
     if(sensorData->rc_on != lastRcState){
         lastRcState = sensorData->rc_on;
         //TODO broadcast msg
