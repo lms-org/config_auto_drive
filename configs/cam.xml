@@ -1,10 +1,10 @@
 <framework>
-    <!--execution>
-        <profiling enabled="true" />
+    <execution>
+        <!--profiling enabled="true" /-->
         <if set="1hz">
             <clock enabled="true" unit="hz" value="1" />
         </if>
-    </execution-->
+    </execution>
     <modulesToEnable>
         <!--module logLevel="WARN">camera_importer</module-->
         <module logLevel="ERROR">ueye_importer</module>
