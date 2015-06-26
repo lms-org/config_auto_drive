@@ -2,7 +2,7 @@
  * File: kalman_filter_lr.c
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 26-Jun-2015 19:42:29
+ * C/C++ source code generated on  : 15-Jun-2015 13:18:28
  */
 
 /* Include Files */
@@ -722,8 +722,8 @@ void kalman_filter_lr(emxArray_real_T *r, double delta_x, double delta_y, double
     Hl->data[i5] = 0.0;
   }
 
-  Hl->data[0] = 1.0 - delta_y / r->data[0];
-  Hl->data[1 + Hl->size[0]] = 1.0 - delta_phi / r->data[1];
+  Hl->data[0] = 1.0;
+  Hl->data[1 + Hl->size[0]] = 1.0;
   Hl->data[1 + (Hl->size[0] << 1)] = delta_x / sqrt(1.0 - delta * delta *
     (r->data[2] * r->data[2]) / 4.0);
   for (xp_idx_0 = 0; xp_idx_0 < (int)(((double)r->size[0] - 1.0) + -2.0);
@@ -811,9 +811,8 @@ void kalman_filter_lr(emxArray_real_T *r, double delta_x, double delta_y, double
   }
 
   emxFree_real_T(&b_Hl);
-
-  /*  r(1) = r(1) - delta_y; */
-  /*  r(2) = r(2) - delta_phi; */
+  r->data[0] -= delta_y;
+  r->data[1] -= delta_phi;
   eye(2.0 * ((double)((unsigned int)xl->size[0] + xr->size[0]) + (double)
              xm->size[0]), Hr);
   i5 = Hr->size[0] * Hr->size[1];

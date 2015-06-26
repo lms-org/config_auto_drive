@@ -2,7 +2,7 @@
  * File: kalman_filter_lr_emxutil.h
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 26-Jun-2015 19:42:29
+ * C/C++ source code generated on  : 15-Jun-2015 13:18:28
  */
 
 #ifndef __KALMAN_FILTER_LR_EMXUTIL_H__

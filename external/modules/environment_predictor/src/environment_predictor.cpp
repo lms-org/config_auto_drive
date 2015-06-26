@@ -109,11 +109,13 @@ bool EnvironmentPredictor::cycle() {
     double deltaX = 0;
     double deltaY = 0;
     double deltaPhi =0;
-    if(config->get<bool>("enableMove",false)){
-    deltaX = car->deltaX();
-    deltaY = car->deltaY();
-    deltaPhi = car->deltaPhi();
+    /*
+    if(false || config->get<bool>("enableMove",false)){
+        deltaX = car->deltaX();
+        deltaY = car->deltaY();
+        deltaPhi = car->deltaPhi();
     }
+    */
     logger.debug("deltapos: ") << deltaX << " "<<deltaY << " "<<deltaPhi;
     kalman_filter_lr(zustandsVector,deltaX,deltaY,deltaPhi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
