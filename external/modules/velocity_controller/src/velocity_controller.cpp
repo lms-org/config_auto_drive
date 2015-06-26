@@ -1,5 +1,6 @@
 #include "velocity_controller.h"
 #include "lms/datamanager.h"
+#include "lms/messaging.h"
 
 bool VelocityController::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
@@ -13,6 +14,12 @@ bool VelocityController::deinitialize() {
 }
 
 bool VelocityController::cycle() {
+    //check for error-stop
+    if(messaging()->receive("STOP_CAR").size() > 0){
+        car->targetSpeed = 0;
+        logger.warn("cycle")<<"STOP_CAR called";
+        return true;
+    }
     if(!defaultDrive())
         return true;
     if(config->get<bool>("launchControllEnabled",true)){
