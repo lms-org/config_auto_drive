@@ -4,15 +4,15 @@
         <module logLevel="ERROR">image_hint_transformer</module>
         <module>image_hint_worker_lane</module>
         <module>image_hint_worker_obstacle</module>
-        <module logLevel="ERROR">environment_predictor</module>
+        <module logLevel="DEBUG">environment_predictor</module>
         <module logLevel="ERROR">trajectory_line_creator</module>
         <module logLevel="ERROR">trajectory_point_creator</module>
         <module logLevel="ERROR">environment_filter</module>
         <module logLevel="ERROR">trajectory_point_controller</module>
-        <module logLevel="ERROR">velocity_controller</module>
+        <module logLevel="WARN">velocity_controller</module>
         <module logLevel="ERROR">sensor_tracker</module>
         <module logLevel="ERROR">image_proxy</module>
-        <module logLevel="ERROR">car_tracker</module>
+        <module logLevel="DEBUG">car_tracker</module>
         <if set="sendData">
             <module>socket_data_sender</module>
             <module logLevel="WARN">image_converter_scaledown</module>
@@ -100,7 +100,8 @@
         <name>environment_predictor</name>
         <config>
             <elementCount>10</elementCount>
-            <r_fakt>20</r_fakt>
+            <r_fakt>50</r_fakt>
+            <kov>15</kov>
             <elementLength>0.2</elementLength>
         </config>
             <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>

@@ -27,6 +27,9 @@ bool EnvironmentPredictor::initialize() {
     kovarianzMatrixDesZustandes = emxCreate_real_T(partCount,partCount);
     kovarianzMatrixDesZustandUebergangs = emxCreate_real_T(partCount,partCount);
     resetData();
+    configsChanged();
+
+
     return true;
 }
 
@@ -102,11 +105,16 @@ bool EnvironmentPredictor::cycle() {
     }
     //Kalman with middle-lane
     //TODO später mit der richtigen positionsänderung arbeiten
-    double deltaX = 0;//car->deltaPosition().x;
-    double deltaY = 0;//car->deltaPosition().y;
+    double deltaX = car->deltaX();
+    double deltaY = car->deltaY();
+    double deltaPhi = car->deltaPhi();
     //deltaY = 0;
-    logger.debug("deltapos: ") << deltaX << " "<<deltaY;
-    double deltaPhi = 0;//car->deltaPhi();
+    logger.debug("deltapos: ") << deltaX << " "<<deltaY << " "<<deltaPhi;
+    /*
+    deltaX = 0;
+    deltaY = 0;
+    deltaPhi =0;
+    */
     kalman_filter_lr(zustandsVector,deltaX,deltaY,deltaPhi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      r_fakt,partLength,lx,ly,rx,ry,mx,my);

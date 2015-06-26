@@ -25,7 +25,7 @@ bool CarToSenseboard2015::cycle() {
     controlData->control.velocity.velocity = car->targetSpeed;
 
     controlData->steering_front = car->steering_front;
-    controlData->steering_rear = car->steering_rear;
+    controlData->steering_rear = -car->steering_rear;
 
     if(sensorData->rc_on != lastRcState){
         lastRcState = sensorData->rc_on;

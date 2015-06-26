@@ -49,9 +49,9 @@ bool CarTracker::cycle() {
 
 void CarTracker::getFromVehicle(DeltaState &d){
     //get needed values
-    float velocity = controlData->control.velocity.velocity;
-    float steeringFront = controlData->steering_front;
-    float steeringRear = controlData->steering_rear;
+    float velocity = car->velocity;
+    float steeringFront = car->steering_front;
+    float steeringRear = car->steering_rear;
     float radstand = getConfig()->get<float>("radstand",0.26);
 
     //TODO vorzeichen
@@ -59,16 +59,20 @@ void CarTracker::getFromVehicle(DeltaState &d){
     d.y = velocity*delta*sin(steeringRear);
     d.phi = velocity*delta/radstand*sin(steeringFront-steeringRear)/cos(steeringRear);
 
+    logger.debug("getFromVehicle") << d.x << " "<<d.y << " " <<d.phi;
     //TODO
 }
 
 void CarTracker::getFromTrajectory(DeltaState &d){
+    (void)d;
     //TODO
 }
 
 void CarTracker::getFromMouseSensors(DeltaState &d){
+    (void)d;
     //TODO
 }
 void CarTracker::getFromImu(DeltaState &d){
+    (void)d;
     //TODO
 }
