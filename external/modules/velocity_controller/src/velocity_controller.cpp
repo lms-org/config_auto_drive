@@ -1,6 +1,7 @@
 #include "velocity_controller.h"
 #include "lms/datamanager.h"
 #include "lms/messaging.h"
+#include <string>     // std::string, std::stof
 
 bool VelocityController::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
@@ -20,6 +21,18 @@ bool VelocityController::cycle() {
         logger.warn("cycle")<<"STOP_CAR called";
         return true;
     }
+    float vel = INFINITY;
+    for (const std::string &m : messaging()->receive("CAR_VELOCITY")){
+        float tmpVel = stof(m);
+        if(fabs(tmpVel) < vel){
+            vel = tmpVel;
+        }
+    }
+    if(vel != INFINITY){
+        logger.debug("setting speed manually: ") << vel;
+        car->targetSpeed = vel;
+    }
+
     if(!defaultDrive())
         return true;
     if(config->get<bool>("launchControllEnabled",true)){
