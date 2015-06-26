@@ -2,7 +2,7 @@
  * File: mrdivide.h
  *
  * MATLAB Coder version            : 2.7
- * C/C++ source code generated on  : 15-Jun-2015 13:18:28
+ * C/C++ source code generated on  : 26-Jun-2015 19:42:29
  */
 
 #ifndef __MRDIVIDE_H__
