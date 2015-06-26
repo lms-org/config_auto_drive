@@ -105,16 +105,16 @@ bool EnvironmentPredictor::cycle() {
     }
     //Kalman with middle-lane
     //TODO später mit der richtigen positionsänderung arbeiten
-    double deltaX = car->deltaX();
-    double deltaY = car->deltaY();
-    double deltaPhi = car->deltaPhi();
-    //deltaY = 0;
+
+    double deltaX = 0;
+    double deltaY = 0;
+    double deltaPhi =0;
+    if(config->get<bool>("enableMove",false)){
+    deltaX = car->deltaX();
+    deltaY = car->deltaY();
+    deltaPhi = car->deltaPhi();
+    }
     logger.debug("deltapos: ") << deltaX << " "<<deltaY << " "<<deltaPhi;
-    /*
-    deltaX = 0;
-    deltaY = 0;
-    deltaPhi =0;
-    */
     kalman_filter_lr(zustandsVector,deltaX,deltaY,deltaPhi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      r_fakt,partLength,lx,ly,rx,ry,mx,my);

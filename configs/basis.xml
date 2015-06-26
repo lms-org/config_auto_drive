@@ -103,6 +103,7 @@
             <r_fakt>50</r_fakt>
             <kov>15</kov>
             <elementLength>0.2</elementLength>
+            <enableMove>false</enableMove>
         </config>
             <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
             <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_MERGED"/>
