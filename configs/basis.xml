@@ -100,7 +100,7 @@
         <name>environment_predictor</name>
         <config>
             <elementCount>10</elementCount>
-            <r_fakt>40</r_fakt>
+            <r_fakt>20</r_fakt>
             <elementLength>0.2</elementLength>
         </config>
             <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>

@@ -21,7 +21,6 @@ bool EnvironmentPredictor::initialize() {
 
     partCount = config->get<int>("elementCount",10);
     partLength = config->get<float>("elementLength",0.2);
-    r_fakt=config->get<double>("r_fakt",20);
     zustandsVector = emxCreate_real_T(partCount,1);
 
     stateTransitionMatrix = emxCreate_real_T(partCount,partCount);
@@ -41,7 +40,7 @@ void EnvironmentPredictor::resetData(){
 
     for(int x = 0; x < partCount; x++){
         for(int y = 0; y < partCount; y++){
-            kovarianzMatrixDesZustandUebergangs->data[y*partCount+x]=15*(1-pow(0.2,1/fabs(x-y)));
+            kovarianzMatrixDesZustandUebergangs->data[y*partCount+x]=config->get<float>("kov",15)*(1-pow(0.2,1/fabs(x-y)));
         }
     }
 }
@@ -55,6 +54,9 @@ bool EnvironmentPredictor::cycle() {
     for(std::string content : messaging()->receive("RC_STATE_CHANGED")){
         resetData();
     }
+
+
+    r_fakt=config->get<double>("r_fakt",20);
 
     //länge der später zu berechnenden Abschnitten
     //convert data to lines
@@ -100,11 +102,11 @@ bool EnvironmentPredictor::cycle() {
     }
     //Kalman with middle-lane
     //TODO später mit der richtigen positionsänderung arbeiten
-    double deltaX = car->deltaPosition().x;
-    double deltaY = car->deltaPosition().y;
-    deltaY = 0;
+    double deltaX = 0;//car->deltaPosition().x;
+    double deltaY = 0;//car->deltaPosition().y;
+    //deltaY = 0;
     logger.debug("deltapos: ") << deltaX << " "<<deltaY;
-    double deltaPhi = 0;
+    double deltaPhi = 0;//car->deltaPhi();
     kalman_filter_lr(zustandsVector,deltaX,deltaY,deltaPhi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      r_fakt,partLength,lx,ly,rx,ry,mx,my);

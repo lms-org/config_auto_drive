@@ -7,13 +7,13 @@ offset_y = 130
 pixelclock = 35
 framerate = 101.04
 #Drinnen 9.95
-exposure = 9.95
+exposure = 20
 
 hardware_gamma = 41
 gamma = 1.0
 
 gain = 60
-gain_boost = 0
+gain_boost = 1
 gain_auto = 0
 
 blacklevel_auto = 0
