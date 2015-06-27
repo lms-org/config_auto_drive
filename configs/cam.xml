@@ -1,6 +1,6 @@
 <framework>
     <execution>
-        <!--profiling enabled="true" /-->
+    <configMonitor enabled="true" />
         <if set="1hz">
             <clock enabled="true" unit="hz" value="1" />
         </if>

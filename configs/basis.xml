@@ -22,7 +22,7 @@
         <name>image_converter_scaledown</name>
         <realName>image_converter</realName>
         <config>
-            <scaleDown>2</scaleDown>
+            <scaleDown>5</scaleDown>
         </config>
         <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="OUTPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
@@ -47,8 +47,8 @@
         <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_MERGED"/>
         <config>
             <launchControllEnabled>false</launchControllEnabled>
-            <maxSpeed>1.5</maxSpeed>
-            <minCurveSpeed>1.0</minCurveSpeed>
+            <maxSpeed>2.6</maxSpeed>
+            <minCurveSpeed>2.6</minCurveSpeed>
             <forcastLength>0.5</forcastLength>
             <maxDeltaTInMs>100</maxDeltaTInMs>
             <maxAcc>4</maxAcc>
@@ -60,7 +60,7 @@
         <channelMapping from="POINT" to="TRAJECTORY_POINT"/>
         <config>
             <aggro>0.95</aggro>
-            <regler>1</regler>
+            <regler>2</regler>
         </config>
     </module>
     <module>
@@ -101,8 +101,9 @@
         <name>environment_predictor</name>
         <config>
             <elementCount>10</elementCount>
-            <r_fakt>50</r_fakt>
+            <r_fakt>25</r_fakt>
             <kov>15</kov>
+            <kovAbnahme>0.99</kovAbnahme>
             <elementLength>0.2</elementLength>
             <enableMove>false</enableMove>
         </config>

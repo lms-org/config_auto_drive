@@ -43,7 +43,7 @@ void EnvironmentPredictor::resetData(){
 
     for(int x = 0; x < partCount; x++){
         for(int y = 0; y < partCount; y++){
-            kovarianzMatrixDesZustandUebergangs->data[y*partCount+x]=config->get<float>("kov",15)*(1-pow(0.2,1/fabs(x-y)));
+            kovarianzMatrixDesZustandUebergangs->data[y*partCount+x]=config->get<float>("kov",15)*(1-pow(config->get<float>("kovAbnahme",0.2),1/fabs(x-y)));
         }
     }
 }
