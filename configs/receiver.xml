@@ -18,7 +18,7 @@
         <name>image_converter_scaleup</name>
         <realName>image_converter</realName>
         <config>
-            <scaleUp>1</scaleUp>
+            <scaleUp>5</scaleUp>
         </config>
         <channelMapping from="INPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
         <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE"/>
