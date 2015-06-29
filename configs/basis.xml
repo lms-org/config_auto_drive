@@ -47,8 +47,8 @@
         <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_MERGED"/>
         <config>
             <launchControllEnabled>false</launchControllEnabled>
-            <maxSpeed>2.6</maxSpeed>
-            <minCurveSpeed>2.6</minCurveSpeed>
+            <maxSpeed>1.0</maxSpeed>
+            <minCurveSpeed>1.0</minCurveSpeed>
             <forcastLength>0.5</forcastLength>
             <maxDeltaTInMs>100</maxDeltaTInMs>
             <maxAcc>4</maxAcc>
@@ -129,7 +129,7 @@
     <module>
         <name>image_proxy</name>
         <config><!--IMAGE_CHANNEL-->
-            <displayMode>DIRECTORY</displayMode>
+            <displayMode>IMAGE_CHANNEL</displayMode>
         </config>
         <config user="phibedy">
             <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150625-151241</directory>

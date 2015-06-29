@@ -33,10 +33,14 @@ bool CarTracker::cycle() {
     getFromVehicle(deltaVeh);
     //getFromMouseSensors(deltaMouse);
     //TODO
-    lms::math::vertex2f pos = car->position();
-    pos.x += deltaVeh.x;
-    pos.y += deltaVeh.y;
     float angle = car->viewDirection().angle()+deltaVeh.phi;
+    lms::math::vertex2f pos;
+    //rotate in absolute position
+    pos.x = deltaVeh.x;
+    pos.y = deltaVeh.y;
+    pos = pos.rotate(-angle);
+    pos += car->position();
+
     car->updatePosition(pos,lms::math::vertex2f(cos(angle),sin(angle)));
     car->updateVelocity(car->targetSpeed,lms::math::vertex2f(cos(angle),sin(angle)));
 
@@ -58,9 +62,6 @@ void CarTracker::getFromVehicle(DeltaState &d){
     d.x = velocity*delta*cos(steeringRear);
     d.y = velocity*delta*sin(steeringRear);
     d.phi = velocity*delta/radstand*sin(steeringFront-steeringRear)/cos(steeringRear);
-
-    logger.debug("getFromVehicle") << d.x << " "<<d.y << " " <<d.phi;
-    //TODO
 }
 
 void CarTracker::getFromTrajectory(DeltaState &d){

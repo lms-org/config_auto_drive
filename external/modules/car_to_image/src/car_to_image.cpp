@@ -13,7 +13,7 @@ bool CarToImage::initialize() {
 
     meterToPxl = 50;
     offsetX = 200;
-    offsetY = 200;
+    offsetY = 800;
     image->resize(imageWidth,imageHeight,lms::imaging::Format::BGRA);
     image->fill(255);
     return true;
@@ -31,6 +31,6 @@ bool CarToImage::cycle() {
     logger.debug("cycle")<<"position: "<< x <<" "<<y;
     lms::imaging::BGRAImageGraphics graphics(*image);
     graphics.setColor(lms::imaging::blue);
-    graphics.drawPixel(x,y);
+    graphics.drawCross(x,y,4);
     return true;
 }

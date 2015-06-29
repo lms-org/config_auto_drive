@@ -3,7 +3,7 @@
 		<maxThreadCount> 1 </maxThreadCount>
 		<!--clock enabled="false" unit="hz">100</clock-->
 		<maxThreadCount>1</maxThreadCount>
-                <configMonitor>true</configMonitor>
+                <configMonitor enabled="true"/>
 	</execution>
 	<modulesToEnable>
             <module logLevel="DEBUG">importer_senseboard2015</module>
