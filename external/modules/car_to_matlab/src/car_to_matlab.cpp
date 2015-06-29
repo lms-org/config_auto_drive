@@ -15,5 +15,6 @@ bool CarToMatlab::deinitialize() {
 }
 
 bool CarToMatlab::cycle() {
+    logger.debug("cycle")<< car->position().x <<" "<< car->position().y<< " "<<car->targetSpeed<<" "<<car->steering_front<<" "<<car->steering_rear;
     return true;
 }

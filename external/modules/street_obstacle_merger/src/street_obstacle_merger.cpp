@@ -3,8 +3,12 @@
 
 bool StreetObstacleMerger::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
-    envOutput = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_OUTPUT");
-   return true;
+    envOutput = datamanager()->writeChannel<street_environment::EnvironmentObstacles>(this,"ENVIRONMENT_OUTPUT");
+
+    //We should havet the roadlane and the car from the current cycle
+    car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
+    middle = datamanager()->readChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
+    return true;
 }
 
 bool StreetObstacleMerger::deinitialize() {
@@ -16,10 +20,19 @@ bool StreetObstacleMerger::cycle() {
     std::vector<street_environment::Obstacle*> obstaclesNew;
     std::vector<street_environment::Obstacle*> obstaclesOld;
 
+
     getObstacles(*envInput,obstaclesNew);
     getObstacles(*envOutput,obstaclesOld);
 
-    //TODO kalman stuff!
+    //update old obstacles
+    for(street_environment::Obstacle *obst:obstaclesOld){
+        obst->kalman(*middle,car->deltaX());
+    }
+
+    //kalman new obstacles
+    for(street_environment::Obstacle *obst:obstaclesNew){
+        obst->kalman(*middle,0);
+    }
 
     //merge them
     merge(obstaclesNew,obstaclesOld);
@@ -75,6 +88,12 @@ void StreetObstacleMerger::getObstacles(const street_environment::EnvironmentObj
         if(obj->name().find("OBSTACLE") != std::string::npos){
             output.push_back(static_cast<street_environment::Obstacle*>(obj.get()));
         }
+    }
+}
+
+void StreetObstacleMerger::getObstacles(const street_environment::EnvironmentObstacles &env,std::vector<street_environment::Obstacle*> &output){
+    for(std::shared_ptr<street_environment::Obstacle> obj : env.objects){
+        output.push_back(obj.get());
     }
 }
 

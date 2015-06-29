@@ -2,6 +2,7 @@
 #define LMS_TRAJECTORY_POINT_CREATOR_H
 
 #include "lms/module.h"
+#include "sensor_utils/car.h"
 #include "street_environment/street_environment.h"
 #include "street_environment/obstacle.h"
 
@@ -17,9 +18,12 @@ private:
 
 
     void getObstacles(const street_environment::EnvironmentObjects &env,std::vector<street_environment::Obstacle*> &output);
+    void getObstacles(const street_environment::EnvironmentObstacles &env,std::vector<street_environment::Obstacle*> &output);
     bool merge(street_environment::Obstacle &from, street_environment::Obstacle &to);
     const street_environment::EnvironmentObjects *envInput;
-    street_environment::EnvironmentObjects *envOutput;
+    street_environment::EnvironmentObstacles *envOutput;
+    const street_environment::RoadLane *middle;
+    const sensor_utils::Car *car;
 
 
 };

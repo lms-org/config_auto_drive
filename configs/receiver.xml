@@ -8,11 +8,15 @@
     <modulesToEnable>
         <module logLevel="DEBUG">socket_data_receiver</module>
         <module logLevel="DEBUG">image_converter_scaleup</module>
+        <module logLevel="DEBUG">car_to_matlab</module>
     </modulesToEnable>
     <module>
         <name>socket_data_receiver</name>
         <libpath>socket_data/receiver</libpath>
         <config src="socket_data/pc_socket_data_receiver.lconf" />
+    </module>
+    <module>
+        <name>car_to_matlab</name>
     </module>
     <module>
         <name>image_converter_scaleup</name>
