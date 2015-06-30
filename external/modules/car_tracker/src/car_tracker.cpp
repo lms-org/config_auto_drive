@@ -56,12 +56,27 @@ void CarTracker::getFromVehicle(DeltaState &d){
     float velocity = car->velocity();
     float steeringFront = car->steering_front;
     float steeringRear = car->steering_rear;
+
+    float distance = velocity*delta;
     float radstand = getConfig()->get<float>("radstand",0.26);
 
-    //TODO vorzeichen
-    d.x = velocity*delta*cos(steeringRear);
-    d.y = velocity*delta*sin(steeringRear);
-    d.phi = velocity*delta/radstand*sin(steeringFront-steeringRear)/cos(steeringRear);
+    //Man geht davon aus, dass die x,y-Abweichung, wegen kleiner Schritte, durch die Vorderräder gering ist.
+    d.x = distance*cos(steeringRear);
+    d.y = distance*sin(steeringRear);
+    d.phi = distance/radstand*sin(steeringFront-steeringRear)/cos(steeringRear);
+
+    //Betrachte beide Achsen getrennt. Der Abstand zwischen den Rädern ist somit in einem Schritt nicht konstant!
+    lms::math::vertex2f rear(distance*cos(steeringRear),distance*sin(steeringRear));
+    lms::math::vertex2f front(distance*cos(steeringFront)+radstand,distance*sin(steeringFront));;
+    lms::math::vertex2f delta = front-rear;
+    //Man mittelt den Wert mit der Vorderachse (TODO macht das überhaupt sinn?)
+    /*
+    d.x = rear.x;
+    d.y = rear.y;
+    d.phi = delta.angle();
+    */
+
+
 }
 
 void CarTracker::getFromTrajectory(DeltaState &d){

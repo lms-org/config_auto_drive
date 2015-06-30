@@ -10,4 +10,4 @@ set (HEADERS
 include_directories("include")
 
 add_library (car_to_matlab MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(car_to_matlab PRIVATE lms math_lib sensor_utils)
+target_link_libraries(car_to_matlab PRIVATE lms math_lib sensor_utils socket_connection)

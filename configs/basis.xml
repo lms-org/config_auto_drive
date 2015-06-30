@@ -13,11 +13,15 @@
         <module logLevel="ERROR">sensor_tracker</module>
         <module logLevel="ERROR">image_proxy</module>
         <module logLevel="ERROR">car_tracker</module>
+        <module>car_to_matlab</module>
         <if set="sendData">
             <module>socket_data_sender</module>
             <module logLevel="WARN">image_converter_scaledown</module>
         </if>
     </modulesToEnable>
+    <module>
+        <name>car_to_matlab</name>
+    </module>
     <module>
         <name>image_converter_scaledown</name>
         <realName>image_converter</realName>
