@@ -5,9 +5,15 @@
 		<maxThreadCount>1</maxThreadCount>
                 <configMonitor enabled="true"/>
 	</execution>
-	<modulesToEnable>
+    <modulesToEnable>
+        <if notSet="sense_link">
             <module logLevel="DEBUG">importer_senseboard2015</module>
             <module logLevel="DEBUG">car_to_senseboard2015</module>
+        </if>
+        <if set="sense_link">
+            <module logLevel="DEBUG">usb_sense_link</module>
+            <module logLevel="DEBUG">car_to_sense_link</module>
+        </if>
 	</modulesToEnable>	
 	<module>
 		<name>importer_senseboard2015</name>
@@ -28,9 +34,22 @@
 	    <config name="servo_rear" src="sensor/servo_rear.lconf" />
 	    <config name="velocity" src="sensor/velocity.lconf" />
 	</module>
+    <module>
+        <name>usb_sense_link</name>
+        <config>
+            <path>/dev/ttyACM0</path>
+            <init_sleep>3</init_sleep>
+            <sensorChannels></sensorChannels>
+            <actuatorChannels>ACTUATOR_DATA</actuatorChannels>
+        </config>
+    </module>
 	<module>
-            <writePriority>1000</writePriority>
+        <writePriority>1000</writePriority>
 	    <name>car_to_senseboard2015</name>
 	</module>
+    <module>
+        <name>car_to_sense_link</name>
+        <writePriority>1000</writePriority>
+    </module>
 	<include src="cam.xml"/>
 </framework>
