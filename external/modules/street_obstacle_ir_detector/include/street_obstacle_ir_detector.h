@@ -12,7 +12,7 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    street_environment::EnvironmentObjects *env;
+    street_environment::EnvironmentObstacles *env;
     /**
      * @brief currentObstacle null if there is no obstacle currently found by the IR
      */

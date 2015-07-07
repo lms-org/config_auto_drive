@@ -23,8 +23,10 @@ bool CarToMatlab::cycle() {
     server->cycle();
     server->setSocketListener(this);
 
-    std::stringstream ss;;
-    ss<<"car:"<<car->position().x <<","<<car->position().y<<","<<car->velocity()<<","<<car->steering_front<<","<<car->steering_rear<<"\n";
+    std::stringstream ss;
+    ss<<"car,xy:"<<car->position().x <<","<<car->position().y<<"\n";
+    ss<<"velocity:"<<car->velocity()<<"\n";
+
     if(server->hasClients()){
         server->sendMessageToAllClients(ss.str().c_str(),ss.str().size());
     }

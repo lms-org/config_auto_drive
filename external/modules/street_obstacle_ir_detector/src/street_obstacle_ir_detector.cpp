@@ -4,7 +4,7 @@
 bool StreetObstacleIRDetector::initialize() {
     config = getConfig();
     distanceSensor = datamanager()->readChannel<sensor_utils::DistanceSensor>(this,"DISTANCE_SENSOR");
-    env = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT");
+    env = datamanager()->writeChannel<street_environment::EnvironmentObstacles>(this,"ENVIRONMENT");
     return true;
 }
 
