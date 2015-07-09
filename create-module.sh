@@ -14,10 +14,16 @@ moduleUpper=$(echo $1 | tr '[:lower:]' '[:upper:]')
 moduleCamel=$(echo $1 | sed -e 's/_\([a-z]\)/\u\1/g' -e 's/^[a-z]/\u&/')
 
 cd external/modules
-mkdir -p "$module"
+
+if [ -e "$module" ]; then
+  echo "Module directory is already existing: $module"
+  exit 1
+fi
+
+mkdir "$module"
 cd "$module"
-mkdir -p src
-mkdir -p include
+mkdir src
+mkdir include
 
 cat > CMakeLists.txt << EOF
 set(SOURCES
