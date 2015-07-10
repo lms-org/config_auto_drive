@@ -2,7 +2,7 @@
 
 # Check if the module name was given as command line argument
 if [ -z $1 ]; then
-  echo "Usage: create-modules.sh <module-name>"
+  echo "Usage: create-module.sh <module_name>"
   exit 1
 fi
 
@@ -27,8 +27,8 @@ mkdir include
 
 cat > CMakeLists.txt << EOF
 set(SOURCES
-	"src/${module}.cpp"
-	"src/interface.cpp"
+  "src/${module}.cpp"
+  "src/interface.cpp"
 )
 
 set(HEADERS
