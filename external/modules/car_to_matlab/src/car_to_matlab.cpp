@@ -28,7 +28,7 @@ bool CarToMatlab::cycle() {
     ss<<"velocity:"<<car->velocity()<<"\n";
 
     if(server->hasClients()){
-        server->sendMessageToAllClients(ss.str().c_str(),ss.str().size());
+        server->sendMessageToAllClients(ss.str().c_str(),ss.str().size(),false);
     }
 
     return true;

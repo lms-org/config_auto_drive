@@ -65,8 +65,12 @@ bool VelocityController::defaultDrive(){
     }
 
     //TODO gewichteter mittelwert!
+    //TODO oder median benutzen
     //TODO der ansatz ist prinzipiell bei S-Kurven fragwürdig!
     float middleCurvation = 0;
+    if(middle.polarDarstellung.size()+1 > partsNeeded){
+        logger.error("defaultDrive")<<"partsNeeded is wrong!";
+    }
     for(int i = 0; i < partsNeeded; i++){
         middleCurvation += middle.polarDarstellung[i+2];
     }
@@ -81,8 +85,9 @@ bool VelocityController::defaultDrive(){
 
 bool VelocityController::launchControll(float newVelocity,float currentVelocity){
     float deltaT = lms::extra::PrecisionTime::since(lastCall).toFloat();
-    if(deltaT*1000 > config->get<float>("maxDeltaTInMs")){
-        return false;
+    //beim Start wird das z.B. angenommen
+    if(deltaT*1000 > config->get<float>("maxDeltaTInMs",100)){
+        deltaT = config->get<int>("defaultDeltaTInMs",10)*1000;
     }
     float acc = (newVelocity -currentVelocity)/deltaT;
     float velocityLimited = newVelocity;
