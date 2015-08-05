@@ -33,7 +33,7 @@
     <module>
         <name>ueye_importer</name>
         <channelMapping from="CAMERA_IMAGE" to="IMAGE" />
-        <config name="ueye" src="camera/ueye_small.lconf" />
+        <config src="camera/ueye_small.lconf" />
     </module>
     <module>
         <name>image_converter</name>

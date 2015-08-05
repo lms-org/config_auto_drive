@@ -8,12 +8,12 @@
         <module logLevel="ERROR">trajectory_line_creator</module>
         <module logLevel="ERROR">trajectory_point_creator</module>
         <module logLevel="ERROR">environment_filter</module>
-        <module logLevel="ERROR">trajectory_point_controller</module>
+        <module logLevel="DEBUG">trajectory_point_controller</module>
         <module logLevel="WARN">velocity_controller</module>
-        <module logLevel="ERROR">sensor_tracker</module>
-        <module logLevel="ERROR">image_proxy</module>
-        <module logLevel="ERROR">car_tracker</module>
-        <module logLevel="ERROR">car_to_matlab</module>
+        <module logLevel="DEBUG">sensor_tracker</module>
+        <module logLevel="DEBUG">image_proxy</module>
+        <module logLevel="DEBUG">car_tracker</module>
+        <module logLevel="DEBUG">car_to_matlab</module>
         <if set="sendData">
             <module>socket_data_sender</module>
             <module logLevel="WARN">image_converter_scaledown</module>
