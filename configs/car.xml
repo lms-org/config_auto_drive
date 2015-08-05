@@ -1,9 +1,6 @@
 <framework>
 	<execution>
-		<maxThreadCount> 1 </maxThreadCount>
-		<!--clock enabled="false" unit="hz">100</clock-->
-		<maxThreadCount>1</maxThreadCount>
-                <configMonitor enabled="true"/>
+        <!--clock enabled="true" unit="hz" value="10" /-->
 	</execution>
     <modulesToEnable>
         <if notSet="sense_link">
@@ -44,8 +41,8 @@
         </config>
     </module>
 	<module>
-        <writePriority>1000</writePriority>
 	    <name>car_to_senseboard2015</name>
+	    <writePriority>1000</writePriority>
 	</module>
     <module>
         <name>car_to_sense_link</name>

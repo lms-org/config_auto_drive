@@ -1,7 +1,6 @@
 <framework>
 	<execution>
-		<maxThreadCount> 1 </maxThreadCount>
-		<clock enabled="true" unit="hz">100</clock>
+		<clock enabled="true" unit="hz" value="100" />
 	</execution>
 	<modulesToEnable>
 		<module logLevel="WARN">camera_importer</module>
@@ -9,12 +8,12 @@
 	</modulesToEnable>
 	<module>
 		<name>image_logger</name>
+		<channelMapping from="IMAGE" to="GREY_IMAGE"/>
 		<config>
 		    <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/test_images</directory>
 		    <create_subfolder_with_current_date>true</create_subfolder_with_current_date>
 		    <filepattern>%04i</filepattern>
 		</config>
-		<channelMapping from="IMAGE" to="GREY_IMAGE"/>
 	</module>
 	<module>
 		<name>camera_importer</name>
@@ -28,5 +27,5 @@
 		    <output_format>GREY</output_format>
 	    </config>
 	</module>
-	<include stc="basis.xml" />
+	<include src="basis.xml" />
 </framework>

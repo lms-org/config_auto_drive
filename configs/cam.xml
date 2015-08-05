@@ -1,6 +1,5 @@
 <framework>
     <execution>
-    <configMonitor enabled="true" />
         <if set="1hz">
             <clock enabled="true" unit="hz" value="1" />
         </if>
@@ -15,6 +14,7 @@
     </modulesToEnable>
     <module>
         <name>image_logger</name>
+        <channelMapping from="IMAGE" to="GREY_IMAGE"/>
         <config user="hans">
             <directory>/home/hans/workspace/config_auto_drive/test_images</directory>
         </config>
@@ -25,7 +25,6 @@
             <create_subfolder_with_current_date>true</create_subfolder_with_current_date>
             <filepattern>%04i</filepattern>
         </config>
-        <channelMapping from="IMAGE" to="GREY_IMAGE"/>
     </module>
     <module>
         <name>camera_importer</name>
@@ -33,8 +32,8 @@
     </module>
     <module>
         <name>ueye_importer</name>
-        <config name="ueye" src="camera/ueye_small.lconf" />
         <channelMapping from="CAMERA_IMAGE" to="IMAGE" />
+        <config name="ueye" src="camera/ueye_small.lconf" />
     </module>
     <module>
         <name>image_converter</name>

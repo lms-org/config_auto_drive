@@ -1,9 +1,6 @@
 <framework>
     <execution>
-        <maxThreadCount> 1 </maxThreadCount>
-        <clock enabled="true" unit="hz">100</clock>
-        <maxThreadCount>1</maxThreadCount>
-        <configMonitor>true</configMonitor>
+        <clock enabled="true" unit="hz" value="100" />
     </execution>
     <modulesToEnable>
         <module logLevel="DEBUG">socket_data_receiver</module>
@@ -21,11 +18,11 @@
     <module>
         <name>image_converter_scaleup</name>
         <realName>image_converter</realName>
+        <channelMapping from="INPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
+        <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE"/>
         <config>
             <scaleUp>5</scaleUp>
         </config>
-        <channelMapping from="INPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
-        <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE"/>
     </module>
     <include src="render.xml"/>
 </framework>
