@@ -37,7 +37,7 @@ set(HEADERS
 
 include_directories(include)
 add_library($module MODULE \${SOURCES} \${HEADERS})
-target_link_libraries($module PRIVATE lms)
+target_link_libraries($module PRIVATE lmscore)
 EOF
 
 cat > README.md << EOF
