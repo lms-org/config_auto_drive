@@ -47,3 +47,5 @@ if (SHARED_HEADER)
 endif()
 #compile libs/modules
 add_subdirectory(external)
+
+add_subdirectory(LMS/lms/test)
