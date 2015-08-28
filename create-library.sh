@@ -32,7 +32,7 @@ set(HEADERS
 
 include_directories(include)
 add_library($library SHARED \${SOURCES} \${HEADERS})
-target_link_libraries($library PRIVATE lms)
+target_link_libraries($library PRIVATE lmscore)
 EOF
 
 cat > README.md << EOF

@@ -24,13 +24,6 @@ if(POLICY CMP0042)
     cmake_policy(SET CMP0042 OLD)
 endif()
 
-if(APPLE)
-    # OS X tries to resolve symbols upon link-time by default (in contrast to linux),
-    # thus we need to specify to resolve symbols dynamically.
-    # See http://stackoverflow.com/questions/3695234/what-is-the-deal-with-undefined-symbols-in-a-shared-library-or-dylib
-    SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -undefined dynamic_lookup")
-endif()
-
 #set compiler flags
 if((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU"))
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -std=c++0x -Wall -Wextra -pedantic -O0 ")
@@ -54,3 +47,5 @@ if (SHARED_HEADER)
 endif()
 #compile libs/modules
 add_subdirectory(external)
+
+add_subdirectory(LMS/lms/test)
