@@ -1,4 +1,4 @@
-set ( SOURCES 
+set ( SOURCES
 	"src/car_to_senseboard2015.cpp"
 	"src/interface.cpp"
 )
@@ -10,4 +10,4 @@ set (HEADERS
 include_directories("include")
 
 add_library (car_to_senseboard2015 MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(car_to_senseboard2015 PRIVATE lms math_lib sensor_utils)
+target_link_libraries(car_to_senseboard2015 PRIVATE lmscore math_lib sensor_utils)

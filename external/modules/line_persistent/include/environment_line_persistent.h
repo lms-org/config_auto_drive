@@ -4,7 +4,6 @@
 #include "lms/module.h"
 #include "street_environment/road.h"
 #include "lms/extra/time.h"
-#include "lms/type/framework_info.h"
 
 class LinePersistent : public lms::Module {
 public:
@@ -21,7 +20,6 @@ private:
     std::vector<LaneStore> lanes;
     const lms::math::polyLine2f *input;
     lms::math::polyLine2f *output;
-    const lms::type::FrameworkInfo *frameworkInfo;
     void addLine(const lms::math::polyLine2f &line);
     void validateLines();
     void createOutput();

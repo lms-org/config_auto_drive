@@ -6,7 +6,6 @@
 bool LinePersistent::initialize() {
     input = datamanager()->readChannel<lms::math::polyLine2f>(this, "POLYLINE_INPUT");
     output = datamanager()->writeChannel<lms::math::polyLine2f>(this, "POLYLINE_OUTPUT");
-    frameworkInfo = datamanager()->readChannel<lms::type::FrameworkInfo>(this,"FRAMEWORK_INFO");
     return true;
 }
 
@@ -34,14 +33,14 @@ void LinePersistent::addLine(const lms::math::polyLine2f &line){
     }
     ls.lane = line;
     ls.created = lms::extra::PrecisionTime::now();
-    ls.cycleCreated =frameworkInfo->cycleIteration();
+    ls.cycleCreated = cycleCounter();
     lanes.push_back(ls);
 }
 
 void LinePersistent::validateLines(){
     for(uint i = 0; i < lanes.size();){
         LaneStore &ls = lanes[i];
-        if(lanes.size() > 2 && frameworkInfo->cycleIteration()-ls.cycleCreated > 5){
+        if(lanes.size() > 2 && cycleCounter() -ls.cycleCreated > 5){
             lanes.erase(lanes.begin() + i);
         }else{
             i++;

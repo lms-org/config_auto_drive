@@ -1,4 +1,4 @@
-set ( SOURCES 
+set ( SOURCES
 	"src/image_hint_generator.cpp"
 	"src/interface.cpp"
 )
@@ -10,4 +10,4 @@ set (HEADERS
 include_directories("include")
 
 add_library (image_hint_generator MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(image_hint_generator PRIVATE lms imaging imaging_detection)
+target_link_libraries(image_hint_generator PRIVATE lmscore imaging imaging_detection)

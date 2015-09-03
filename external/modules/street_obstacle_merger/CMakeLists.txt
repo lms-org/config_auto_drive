@@ -1,4 +1,4 @@
-set ( SOURCES 
+set ( SOURCES
 	"src/street_obstacle_merger.cpp"
 	"src/interface.cpp"
 )
@@ -9,4 +9,4 @@ set (HEADERS
 include_directories("include")
 
 add_library (street_obstacle_merger MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(street_obstacle_merger PRIVATE lms math_lib street_environment)
+target_link_libraries(street_obstacle_merger PRIVATE lmscore math_lib street_environment)
