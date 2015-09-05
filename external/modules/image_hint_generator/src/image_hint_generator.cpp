@@ -526,7 +526,7 @@ void ImageHintGenerator::initialHints(){
 #endif
         bool result =  std::abs(160-lp.low_high.x)>50 || std::abs(lp.low_high.y)<140;
         float angle = lms::math::limitAngle_nPI_PI(lp.param().searchAngle);
-        result = result && (fabs(angle) < M_PI_2l*0.5) &&!(lp.low_high.y < 50);
+        result = result && (fabs(angle) < M_PI_2*0.5) &&!(lp.low_high.y < 50);
         return result;
     };
     //TODO atm we can't search for the middle-lane that way (transformer fails)
@@ -538,7 +538,7 @@ void ImageHintGenerator::initialHints(){
     hint->name = "BOX";
     hint->parameter.x = 120;
     hint->parameter.y = 50;
-    hint->parameter.searchAngle = -M_PI_2l*1.5;
+    hint->parameter.searchAngle = -M_PI_2*1.5;
     hint->parameter.stepLengthMax = 5;
     hint->parameter.lineWidthMax = 5;
     hint->parameter.maxLength = 20;
