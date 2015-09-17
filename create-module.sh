@@ -27,12 +27,12 @@ mkdir include
 
 cat > CMakeLists.txt << EOF
 set(SOURCES
-  "src/${module}.cpp"
-  "src/interface.cpp"
+    "src/${module}.cpp"
+    "src/interface.cpp"
 )
 
 set(HEADERS
-	"include/${module}.h"
+    "include/${module}.h"
 )
 
 include_directories(include)
@@ -74,15 +74,15 @@ cd ../src
 cat > "${module}.cpp" << EOF
 #include "${module}.h"
 
-${moduleCamel}::initialize() {
+bool ${moduleCamel}::initialize() {
     return true;
 }
 
-${moduleCamel}::deinitialize() {
+bool ${moduleCamel}::deinitialize() {
     return true;
 }
 
-${moduleCamel}::cycle() {
+bool ${moduleCamel}::cycle() {
     return true;
 }
 EOF
