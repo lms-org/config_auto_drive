@@ -1,5 +1,17 @@
 cmake_minimum_required(VERSION 2.8)
 
+# This macro is used in external/modules and external/libraries CMakeLists
+MACRO(SUBDIRLIST result curdir)
+  FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
+  SET(dirlist "")
+  FOREACH(child ${children})
+    IF(IS_DIRECTORY ${curdir}/${child})
+      LIST(APPEND dirlist ${child})
+    ENDIF()
+  ENDFOREACH()
+  SET(${result} ${dirlist})
+ENDMACRO()
+
 #set defines
 #set external-directory
 add_definitions(-DEXTERNAL_DIR="${CMAKE_CURRENT_BINARY_DIR}/external")
