@@ -12,11 +12,9 @@ MACRO(SUBDIRLIST result curdir)
   SET(${result} ${dirlist})
 ENDMACRO()
 
-#set defines
-#set external-directory
-add_definitions(-DEXTERNAL_DIR="${CMAKE_CURRENT_BINARY_DIR}/external")
-#set config-directory
-add_definitions(-DCONFIGS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/configs")
+set(LMS_DIR_CONFIGS ${CMAKE_CURRENT_SOURCE_DIR}/configs)
+set(LMS_DIR_EXTERNAL ${CMAKE_CURRENT_BINARY_DIR}/external)
+set(LMS_DIR_MODULES ${CMAKE_CURRENT_BINARY_DIR}/external/modules)
 
 if(POLICY CMP0042)
     # Set old MACOSX_RPATH policy on OS X
