@@ -14,7 +14,6 @@ extern "C"{
 bool EnvironmentPredictor::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
 
-    envOutput = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_OUTPUT");
     roadOutput = datamanager()->writeChannel<street_environment::RoadLane>(this,"ROAD_OUTPUT");
     car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
     config = getConfig();
@@ -54,6 +53,7 @@ bool EnvironmentPredictor::deinitialize() {
 
 bool EnvironmentPredictor::cycle() {
 
+    //TODO I don't like it hmmm
     for(std::string content : messaging()->receive("RC_STATE_CHANGED")){
         resetData();
     }
@@ -133,19 +133,10 @@ bool EnvironmentPredictor::cycle() {
 }
 
 void EnvironmentPredictor::createOutput(){
-    envOutput->objects.clear();
-
     //create middle
     roadOutput->type(street_environment::RoadLaneType::MIDDLE);
     convertZustandToLane(*roadOutput);
     roadOutput->name("MIDDLE_LANE");
-
-    //old - remove later on!
-    street_environment::RoadLanePtr middle(new street_environment::RoadLane());
-    middle->type(street_environment::RoadLaneType::MIDDLE);
-    convertZustandToLane(*middle);
-    middle->name("MIDDLE_LANE");
-    envOutput->objects.push_back(middle);
 }
 
 void EnvironmentPredictor::convertZustandToLane(street_environment::RoadLane &output){

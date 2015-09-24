@@ -20,7 +20,6 @@ public:
 private:
     void resetData();
     const street_environment::EnvironmentObjects *envInput;
-    street_environment::EnvironmentObjects *envOutput;
     street_environment::RoadLane *roadOutput;
     const sensor_utils::Car *car;
 
