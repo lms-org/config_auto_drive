@@ -12,6 +12,7 @@ MACRO(SUBDIRLIST result curdir)
   SET(${result} ${dirlist})
 ENDMACRO()
 
+set(LMS_STANDALONE FALSE)
 set(LMS_DIR_CONFIGS ${CMAKE_CURRENT_SOURCE_DIR}/configs)
 set(LMS_DIR_EXTERNAL ${CMAKE_CURRENT_BINARY_DIR}/external)
 set(LMS_DIR_MODULES ${CMAKE_CURRENT_BINARY_DIR}/external/modules)
@@ -29,7 +30,7 @@ endif()
 # show config files in QtCreator
 file(GLOB_RECURSE CONFIG_FILES_LCONF "**/*.lconf")
 file(GLOB_RECURSE CONFIG_FILES_XML "**/*.xml")
-add_executable(stub stub.cpp ${CONFIG_FILES_LCONF} ${CONFIG_FILES_XML})
+add_custom_target(show_configs SOURCES ${CONFIG_FILES_LCONF} ${CONFIG_FILES_XML})
 
 #compile core
 add_subdirectory(LMS/lms)
