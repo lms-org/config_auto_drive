@@ -21,6 +21,9 @@
         <config user="phibedy">
             <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images</directory>
         </config>
+        <config user="odroid">
+            <directory>/home/odroid/data/img</directory>
+        </config>
         <config>
             <create_subfolder_with_current_date>true</create_subfolder_with_current_date>
             <filepattern>%04i</filepattern>
