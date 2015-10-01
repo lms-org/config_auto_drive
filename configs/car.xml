@@ -10,6 +10,9 @@
         <if set="sense_link">
             <module logLevel="INFO">usb_sense_link</module>
             <module logLevel="DEBUG">car_to_sense_link</module>
+            <if set="sensor_logger">
+                <module logLevel="INFO">senselink_csvlogger</module>
+            </if>
         </if>
 	</modulesToEnable>	
 	<module>
@@ -48,6 +51,12 @@
     <module>
         <name>car_to_sense_link</name>
         <writePriority>1000</writePriority>
+    </module>
+    <module>
+        <name>senselink_csvlogger</name>
+        <config user="odroid">
+            <prefix>/home/odroid/data/sensor/sensor</prefix>
+        </config>
     </module>
 	<include src="cam.xml"/>
 </framework>
