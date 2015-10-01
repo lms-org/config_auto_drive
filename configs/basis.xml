@@ -10,7 +10,7 @@
         <module logLevel="ERROR">environment_filter</module>
         <module logLevel="DEBUG">trajectory_point_controller</module>
         <module logLevel="WARN">velocity_controller</module>
-        <module logLevel="DEBUG">sensor_tracker</module>
+        <!--<module logLevel="DEBUG">sensor_tracker</module>-->
         <module logLevel="DEBUG">image_proxy</module>
         <!--module logLevel="DEBUG">car_tracker</module-->
         <!--module logLevel="DEBUG">car_to_matlab</module-->
