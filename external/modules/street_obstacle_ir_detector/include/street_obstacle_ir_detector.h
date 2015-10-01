@@ -17,7 +17,7 @@ private:
      * @brief currentObstacle null if there is no obstacle currently found by the IR
      */
     //street_environment::Obstacle *currentObstacle;
-    const lms::type::ModuleConfig *config;
+    const lms::ModuleConfig *config;
     const sensor_utils::DistanceSensor *distanceSensor;
 
 };

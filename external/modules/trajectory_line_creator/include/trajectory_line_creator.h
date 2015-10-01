@@ -15,7 +15,7 @@ private:
     const street_environment::EnvironmentObstacles *envObstacles;
     const street_environment::RoadLane *road;
     lms::math::polyLine2f *trajectory;
-    const lms::type::ModuleConfig *config;
+    const lms::ModuleConfig *config;
     sensor_utils::Car *car;
 
 };

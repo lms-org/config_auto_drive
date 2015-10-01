@@ -104,7 +104,7 @@ void ImageObjectRenderer::drawPolyLine(const lms::math::polyLine2f &lane){
 }
 
 void ImageObjectRenderer::setColor(std::string toDrawName){
-    const lms::type::ModuleConfig* config = nullptr;
+    const lms::ModuleConfig* config = nullptr;
     if(!hasConfig(toDrawName)){
         config = getConfig();
       }else{

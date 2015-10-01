@@ -16,7 +16,7 @@ public:
     bool cycle() override;
 private:
     const street_environment::EnvironmentObjects *envInput;
-    const lms::type::ModuleConfig *config;
+    const lms::ModuleConfig *config;
     sensor_utils::Car *car;
 
     lms::extra::PrecisionTime lastCall;

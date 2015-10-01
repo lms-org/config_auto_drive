@@ -5,7 +5,8 @@
 
 bool VelocityController::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
-    car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");config = getConfig();
+    car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
+    config = getConfig();
     lastCall = lms::extra::PrecisionTime::now()-lms::extra::PrecisionTime::fromMillis(config->get<float>("maxDeltaTInMs")*10);
     return true;
 }
@@ -60,7 +61,7 @@ bool VelocityController::defaultDrive(){
     }
     logger.debug("defaultDrive") << "parts needed: " << partsNeeded;
     if(partsNeeded == 0 || partsNeeded == INFINITY || partsNeeded == NAN){
-        logger.warn("cycle")<<"parsNeeded not valid: " << partsNeeded;
+        logger.warn("cycle")<<"partsNeeded not valid: " << partsNeeded;
         return false;
     }
 
@@ -68,7 +69,7 @@ bool VelocityController::defaultDrive(){
     //TODO oder median benutzen
     //TODO der ansatz ist prinzipiell bei S-Kurven fragwürdig!
     float middleCurvation = 0;
-    if(middle.polarDarstellung.size()+1 > partsNeeded){
+    if(((int)middle.polarDarstellung.size()+1) > partsNeeded){
         logger.error("defaultDrive")<<"partsNeeded is wrong!";
     }
     for(int i = 0; i < partsNeeded; i++){

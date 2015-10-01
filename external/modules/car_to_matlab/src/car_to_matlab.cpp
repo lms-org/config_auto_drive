@@ -8,7 +8,7 @@
 
 bool CarToMatlab::initialize() {
     car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
-    server = new socket_connection::SocketServer(&logger);
+    server = new socket_connection::SocketServer(logger);
     server->start(getConfig()->get<int>("port",55555));
     return true;
 }
