@@ -112,6 +112,10 @@
             <kovAbnahme>0.99</kovAbnahme>
             <elementLength>0.2</elementLength>
             <enableMove>false</enableMove>
+            <logState>false</logState>
+        </config>
+        <config user="odroid">
+            <logPrefix>/home/odroid/data/env/env</logPrefix>
         </config>
     </module>
     <module>
