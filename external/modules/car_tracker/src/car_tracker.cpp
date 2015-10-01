@@ -6,7 +6,6 @@
 
 bool CarTracker::initialize() {
     car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
-    controlData = datamanager()->writeChannel<Comm::SensorBoard::ControlData>(this,"CONTROL_DATA");
     firstRun = true;
     delta = 0;
     return true;

@@ -5,7 +5,10 @@
 #include "comm/senseboard.h"
 #include "lms/extra/time.h"
 #include "sensor_utils/car.h"
-
+/**
+ * @brief The CarTracker class
+ * tracks the motion of our rc car
+ */
 class CarTracker : public lms::Module {
     struct DeltaState{
         DeltaState():valid(false),x(0),y(0),phi(0){
@@ -22,7 +25,6 @@ public:
     bool cycle() override;
 
 private:
-    Comm::SensorBoard::ControlData *controlData;
 
     void getFromVehicle(DeltaState &d);
     void getFromTrajectory(DeltaState &d);
