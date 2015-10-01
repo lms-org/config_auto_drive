@@ -25,6 +25,12 @@ bool EnvironmentPredictor::initialize() {
     stateTransitionMatrix = emxCreate_real_T(partCount,partCount);
     kovarianzMatrixDesZustandes = emxCreate_real_T(partCount,partCount);
     kovarianzMatrixDesZustandUebergangs = emxCreate_real_T(partCount,partCount);
+    cycleCounter = 0;
+    if(config->get<bool>("logState"))
+    {
+        logFile.open(config->get<std::string>("logPrefix") + "_" + lms::extra::currentTimeString() + "_kalmanlog.", std::ofstream::out);
+    }
+    
     resetData();
     configsChanged();
 
@@ -57,7 +63,6 @@ bool EnvironmentPredictor::cycle() {
     for(std::string content : messaging()->receive("RC_STATE_CHANGED")){
         resetData();
     }
-
 
     r_fakt=config->get<double>("r_fakt",20);
 
@@ -129,7 +134,26 @@ bool EnvironmentPredictor::cycle() {
     emxDestroyArray_real_T(ly);
     emxDestroyArray_real_T(mx);
     emxDestroyArray_real_T(my);
+    
+    logStateVector();
+    
+    cycleCounter++;
+    
     return true;
+}
+
+void EnvironmentPredictor::logStateVector()
+{
+    if(!config->get<bool>("logState"))
+    {
+        return;
+    }
+    logFile << cycleCounter;
+    for(i = 0; int i = zustandsVector->size[0]; i++)
+    {
+        logFile << "," << zustandsVector->data[i];
+    }
+    logFile << std::endl;
 }
 
 void EnvironmentPredictor::createOutput(){
