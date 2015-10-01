@@ -26,6 +26,7 @@ protected:
     const sense_link::Sensors* sensors;
     std::string prefix;
     std::unordered_map<std::pair<sense_link::SensorType, uint8_t>, std::ofstream> files;
+    size_t cycleCounter;
 };
 
 #endif // SENSELINK_CSVLOGGER_H

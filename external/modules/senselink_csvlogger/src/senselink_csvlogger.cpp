@@ -6,7 +6,9 @@ bool senselink_csvlogger::initialize() {
     logger.info("initialize") << "Open senselink_csvlogger";
     sensors = datamanager()->readChannel<sense_link::Sensors>(this, "SENSOR_DATA");
     prefix = getConfig()->get<std::string>("prefix") + "_" + lms::extra::currentTimeString();
-    offset = lms::extra::PrecisionTime::now();
+    // offset = lms::extra::PrecisionTime::now();
+    offset = 0;
+    cycleCounter = 0;
     return true;
 }
 
@@ -77,6 +79,7 @@ void senselink_csvlogger::log(  std::ofstream& os,
         case sense_link::SensorType::IMU:
             os
                 << timestamp << ","
+                << cycleCounter << ","
                 << measurement.data.IMU.accelerometer.x << ","
                 << measurement.data.IMU.accelerometer.y << ","
                 << measurement.data.IMU.accelerometer.z << ","
@@ -91,12 +94,14 @@ void senselink_csvlogger::log(  std::ofstream& os,
         case sense_link::SensorType::PROXIMITY:
             os
                 << timestamp << ","
+                << cycleCounter << ","
                 << measurement.data.Proximity.distance
                 << std::endl;
             break;
         case sense_link::SensorType::ACCELEROMETER:
             os
                 << timestamp << ","
+                << cycleCounter << ","
                 << measurement.data.Accelerometer.x << ","
                 << measurement.data.Accelerometer.y << ","
                 << measurement.data.Accelerometer.z
@@ -105,6 +110,7 @@ void senselink_csvlogger::log(  std::ofstream& os,
         case sense_link::SensorType::GYROSCOPE:
             os
                 << timestamp << ","
+                << cycleCounter << ","
                 << measurement.data.Gyroscope.x << ","
                 << measurement.data.Gyroscope.y << ","
                 << measurement.data.Gyroscope.z
@@ -113,6 +119,7 @@ void senselink_csvlogger::log(  std::ofstream& os,
         case sense_link::SensorType::MAGNETOMETER:
             os
                 << timestamp << ","
+                << cycleCounter << ","
                 << measurement.data.Magnetometer.x << ","
                 << measurement.data.Magnetometer.y << ","
                 << measurement.data.Magnetometer.z
@@ -121,6 +128,7 @@ void senselink_csvlogger::log(  std::ofstream& os,
         case sense_link::SensorType::MOUSE:
         os
             << timestamp << ","
+            << cycleCounter << ","
             << measurement.data.Mouse.x << ","
             << measurement.data.Mouse.y << ","
             << measurement.data.Mouse.surfaceQuality << ","
@@ -129,6 +137,7 @@ void senselink_csvlogger::log(  std::ofstream& os,
         case sense_link::SensorType::ODOMETER:
         os
             << timestamp << ","
+            << cycleCounter << ","
             << measurement.data.Odometer.ticks << ","
             << measurement.data.Odometer.duration << ","
             << measurement.data.Odometer.direction
