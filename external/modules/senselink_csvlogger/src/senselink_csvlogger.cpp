@@ -134,6 +134,7 @@ void senselink_csvlogger::log(  std::ofstream& os,
             << measurement.data.Mouse.surfaceQuality << ","
             << measurement.data.Mouse.duration
             << std::endl;
+        /* TODO
         case sense_link::SensorType::ODOMETER:
         os
             << timestamp << ","
@@ -143,6 +144,7 @@ void senselink_csvlogger::log(  std::ofstream& os,
             << measurement.data.Odometer.direction
             << std::endl;
         break;
+        */
         default:
             logger.warn() << "Unhandled sensor type" << static_cast<size_t>(sensorType);
             break;

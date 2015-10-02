@@ -10,7 +10,7 @@
 bool ImageHintGenerator::initialize() {
     config = getConfig();
     gaussBuffer = new lms::imaging::Image();
-    middleEnv = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this,"ENV_MID");
+    middleLane = datamanager()->writeChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
     hintContainerLane = datamanager()->
             writeChannel<lms::imaging::find::HintContainer>(this,"HINTS");
 
@@ -42,21 +42,16 @@ bool ImageHintGenerator::cycle() {
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
     //clear the gaussBuffer not necessary!
     if(fromMiddle){
-        if(middleEnv->objects.size() != 1){
-            logger.error("createHintsFromMiddleLane")<<"no valid evironment for middle-lane";
-            return true;
-        }
-        const street_environment::RoadLane &middle = middleEnv->objects[0]->getAsReference<const street_environment::RoadLane>();
-        if(middle.type() != street_environment::RoadLaneType::MIDDLE){
+        if(middleLane->type() != street_environment::RoadLaneType::MIDDLE){
             logger.error("createHintsFromMiddleLane") << "middle is no middle lane!";
             return true;
         }
-        createHintsFromMiddleLane(middle);
+        createHintsFromMiddleLane(*middleLane);
 
         if(config->get<bool>("searchForObstacles",false)){
-            createHintForObstacleUsingSinglePoints(middle);
+            createHintForObstacleUsingSinglePoints(*middleLane);
         }else if(config->get<bool>("searchForCrossing",false)){
-            createHintForCrossingUsingSinglePoints(middle);
+            createHintForCrossingUsingSinglePoints(*middleLane);
         }
     }else{
         initialHints();

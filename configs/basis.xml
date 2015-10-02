@@ -2,13 +2,14 @@
     <modulesToEnable>
         <module logLevel="ERROR">image_hint_generator</module>
         <module logLevel="ERROR">image_hint_transformer</module>
+        <module logLevel="ERROR">image_hint_transformer_obstacle</module>
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="ERROR">environment_predictor</module>
         <module logLevel="ERROR">trajectory_line_creator</module>
         <module logLevel="ERROR">trajectory_point_creator</module>
         <module logLevel="ERROR">environment_filter</module>
-        <module logLevel="DEBUG">trajectory_point_controller</module>
+        <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">velocity_controller</module>
         <!--<module logLevel="DEBUG">sensor_tracker</module>-->
         <module logLevel="DEBUG">image_proxy</module>
@@ -73,6 +74,10 @@
         <channelMapping from="HINTS" to="HINTS"/>
         <channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="ENV_MID" to="ENVIRONMENT_ROAD_MERGED"/>
+        <config>
+            <searchForObstacles>true</searchForObstacles>
+            <searchForCrossing>false</searchForCrossing>
+        </config>
         <config name="defaultLPParameter" src="imaging/defaultEdgePointParam.lconf"/>
         <config name="defaultLPParameter" src="imaging/defaultLinePointParam.lconf"/>
         <config name="defaultLPParameter" src="imaging/defaultLineParam.lconf"/>
@@ -90,10 +95,9 @@
     </module>
     <module>
         <name>trajectory_line_creator</name>
-        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_FILTERED"/>
-        <channelMapping from="ENVIRONMENT_MIDDLE" to="ENVIRONMENT_ROAD_MERGED"/>
         <channelMapping from="LINE" to="TRAJECTORY_LINE"/>
-        <channelMapping from="ROAD" to="ROAD_OUTPUT"/>
+        <channelMapping from="ROAD" to="MIDDLE_LANE"/>
+        <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
         <config src="environment.lconf" />
     </module>
     <module>
@@ -104,7 +108,7 @@
     <module>
         <name>environment_predictor</name>
         <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
-        <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_MERGED"/>
+        <channelMapping from="ROAD_OUTPUT" to="MIDDLE_LANE"/>
         <config>
             <elementCount>10</elementCount>
             <r_fakt>25</r_fakt>
@@ -121,7 +125,13 @@
     <module>
         <name>image_hint_transformer</name>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
-        <channelMapping from="ENV_MID" to="ENVIRONMENT_ROAD_MERGED"/>
+    </module>
+    <module>
+        <name>image_hint_transformer_obstacle</name>
+        <realName>image_hint_transformer</realName>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE"/>
+        <channelMapping from="HINTS" to="HINTS_OBSTACLE"/>
+
     </module>
     <module>
         <name>image_hint_worker_lane</name>
@@ -132,7 +142,7 @@
         <name>image_hint_worker_obstacle</name>
         <realName>image_hint_worker</realName>
         <channelMapping from="HINTS" to="HINTS_OBSTACLE"/>
-        <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_OBST"/>
+        <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_OBSTACLE"/>
     </module>
     <module>
         <name>image_proxy</name>

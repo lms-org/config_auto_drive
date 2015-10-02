@@ -15,7 +15,7 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    const street_environment::EnvironmentObjects *envInput;
+    const street_environment::RoadLane *road;
     const lms::ModuleConfig *config;
     sensor_utils::Car *car;
 

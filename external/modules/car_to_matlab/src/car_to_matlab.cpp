@@ -44,5 +44,7 @@ void CarToMatlab::connected(const socket_connection::SocketConnector &connected)
     //TODO
 }
 void CarToMatlab::receivedMessage(socket_connection::SocketConnector &from, char* buff, int bytesRead){
-
+    (void)from;
+    (void)buff;
+    (void)bytesRead;
 }

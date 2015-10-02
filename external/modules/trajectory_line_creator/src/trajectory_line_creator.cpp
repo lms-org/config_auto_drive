@@ -4,7 +4,7 @@
 #include "street_environment/obstacle.h"
 
 bool TrajectoryLineCreator::initialize() {
-    envObstacles = datamanager()->readChannel<street_environment::EnvironmentObstacles>(this,"ENVIRONMENT_OBSTACLES");
+    envObstacles = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_OBSTACLE");
     road = datamanager()->readChannel<street_environment::RoadLane>(this,"ROAD");
     trajectory = datamanager()->writeChannel<lms::math::polyLine2f>(this,"LINE");
     //TODO für was hat der das car?
@@ -34,6 +34,7 @@ bool TrajectoryLineCreator::cycle() {
     }
 
     const street_environment::RoadLane &middle = *road;
+    logger.warn("envObstacle-count");//<<envObstacles->objects.size();
 
     for(size_t i = 1; i < middle.points().size(); i++) {
         vertex2f p1 = middle.points()[i - 1];
@@ -50,9 +51,14 @@ bool TrajectoryLineCreator::cycle() {
         //man geht davon aus, dass die Abstand, in dem man ausweicht deutlich größer ist als das hinderniss lang!
         float obstacleLength = 0.3;
         //check all obstacles
-        for(const std::shared_ptr<street_environment::Obstacle> obst : envObstacles->objects){
-            float x = obst->position().x;
-            float y= obst->position().y;
+        for(const std::shared_ptr<street_environment::EnvironmentObject> obj : envObstacles->objects){
+            if(obj->name().find("OBSTACLE") == std::string::npos){
+                logger.warn("cycle")<<"invalid obstacle-type given: "<<obj->name();
+                continue;
+            }
+            const street_environment::Obstacle &obst = obj->getAsReference<const street_environment::Obstacle>();
+            float x = obst.position().x;
+            float y= obst.position().y;
             if(x < 0){
                 x += obstacleLength;
             }
