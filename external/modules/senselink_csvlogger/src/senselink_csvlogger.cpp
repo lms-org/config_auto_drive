@@ -131,7 +131,7 @@ void senselink_csvlogger::log(  std::ofstream& os,
             << cycleCounter << ","
             << measurement.data.Mouse.x << ","
             << measurement.data.Mouse.y << ","
-            << measurement.data.Mouse.surfaceQuality << ","
+            << size_t(measurement.data.Mouse.surfaceQuality) << ","
             << measurement.data.Mouse.duration
             << std::endl;
 
@@ -141,7 +141,7 @@ void senselink_csvlogger::log(  std::ofstream& os,
             << cycleCounter << ","
             << measurement.data.Odometer.ticks << ","
             << measurement.data.Odometer.duration << ","
-            << measurement.data.Odometer.direction
+            << size_t(measurement.data.Odometer.direction)
             << std::endl;
         break;
 
