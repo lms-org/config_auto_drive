@@ -21,6 +21,7 @@ private:
     std::vector<std::string> polylines;
     std::vector<std::string> vertex2f;
     std::vector<std::string> vertex4f;
+    std::vector<std::string> drawObjects;
 
     lms::imaging::Image *image;
     lms::imaging::BGRAImageGraphics *graphics;
@@ -28,10 +29,11 @@ private:
     std::vector<const lms::math::polyLine2f*> toDrawPolyLines;
     std::vector<const lms::math::vertex2f*> toDrawVertex2f;
     std::vector<const std::pair<lms::math::vertex2f,lms::math::vertex2f>*> toDrawVertex4f;
-    void drawObstacle(const street_environment::Obstacle &obstacle);
-    void drawPolyLine(const lms::math::polyLine2f &lane);
+    void drawObstacle(const street_environment::Obstacle *obstacle);
+    void drawPolyLine(const lms::math::polyLine2f *lane);
     void drawVertex2f(const lms::math::vertex2f &v);
     void drawVertex4f(const std::pair<lms::math::vertex2f,lms::math::vertex2f> &v);
+    void drawObject(const street_environment::EnvironmentObject *eo);
 
     void setColor(std::string toDrawName);
 

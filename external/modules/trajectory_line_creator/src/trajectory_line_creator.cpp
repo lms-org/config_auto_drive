@@ -21,6 +21,23 @@ bool TrajectoryLineCreator::cycle() {
 
     //clear old trajectory
     trajectory->points().clear();
+    simpleTrajectory();
+    return true;
+}
+
+void TrajectoryLineCreator::advancedTrajectory(){
+    //INPUT
+    //hindernisse: vector Abstand-Straße,geschwindigkeit-Straße(absolut), -1 (links) +1 (rechts) (alle hindernisse hintereinander)
+    //eigenes auto, vx,vy, dw -winkelgeschwindigkeit dw (zunächst mal 0)
+    //vector mit x-koordinaten
+    //vector mit y-koordinaten
+
+    //OUTPUT
+    //gibt x-y koodinaten zurück
+}
+
+void TrajectoryLineCreator::simpleTrajectory(){
+
 
     // translate the middle lane to the right with a quarter of the street width
     const float translation = config->get<float>("street.width", 0.8)/4.0f;
@@ -30,7 +47,7 @@ bool TrajectoryLineCreator::cycle() {
     using lms::math::vertex2f;
     if(road->points().size() == 0){
         logger.error("cycle") << "no valid environment given";
-        return true;
+        return;
     }
 
     const street_environment::RoadLane &middle = *road;
@@ -80,6 +97,6 @@ bool TrajectoryLineCreator::cycle() {
         return p1.x < 0;
     });
 
-    return true;
+
 }
 
