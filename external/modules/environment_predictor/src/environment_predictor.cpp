@@ -28,7 +28,7 @@ bool EnvironmentPredictor::initialize() {
     cycleCounter = 0;
     if(config->get<bool>("logState", false))
     {
-        logFile.open(config->get<std::string>("logPrefix") + "_" + lms::extra::currentTimeString() + "_kalmanlog.", std::ofstream::out);
+        logFile.open(config->get<std::string>("logPrefix") + "_" + lms::extra::currentTimeString() + "_kalman.csv", std::ofstream::out);
     }
     
     resetData();
