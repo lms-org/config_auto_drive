@@ -6,7 +6,7 @@
                 <module logLevel="WARN">image_renderer_debug_obstacle</module>
                 <!--module logLevel="WARN">image_renderer_global_car</module-->
                 <module logLevel="WARN">car_to_image</module>
-                <module logLevel="INFO">image_object_renderer</module>
+                <module logLevel="ERROR">image_object_renderer</module>
                 <module logLevel="WARN">image_renderer_image_object</module>
 		<module logLevel="WARN">image_converter_trans</module>
                 <module logLevel="WARN">image_renderer_trans</module>

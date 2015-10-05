@@ -4,7 +4,7 @@
 #include <string>     // std::string, std::stof
 
 bool VelocityController::initialize() {
-    road = datamanager()->readChannel<street_environment::RoadLane>(this,"ROAD");
+    road = datamanager()->readChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
     car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
     config = getConfig();
     lastCall = lms::extra::PrecisionTime::now()-lms::extra::PrecisionTime::fromMillis(config->get<float>("maxDeltaTInMs")*10);

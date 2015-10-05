@@ -6,20 +6,28 @@
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="ERROR">environment_predictor</module>
-        <module logLevel="ERROR">trajectory_line_creator</module>
+        <module logLevel="DEBUG">trajectory_line_creator</module>
         <module logLevel="ERROR">trajectory_point_creator</module>
         <module logLevel="ERROR">environment_filter</module>
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">velocity_controller</module>
         <!--<module logLevel="DEBUG">sensor_tracker</module>-->
         <module logLevel="DEBUG">image_proxy</module>
-        <!--module logLevel="DEBUG">car_tracker</module-->
+        <module logLevel="DEBUG">street_obstacle_merger</module>
+        <if notSet="sense_link">
+            <module logLevel="WARN">car_tracker</module>
+        </if>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
-            <module>socket_data_sender</module>
+            <module logLevel="WARN">socket_data_sender</module>
             <module logLevel="WARN">image_converter_scaledown</module>
         </if>
     </modulesToEnable>
+    <module>
+        <name>street_obstacle_merger</name>
+        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_OBSTACLE_RAW"/>
+        <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_OBSTACLE"/>
+    </module>
     <module>
         <name>car_to_matlab</name>
     </module>
@@ -49,7 +57,7 @@
     </module>
     <module>
         <name>velocity_controller</name>
-        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_MERGED"/>
+        <channelMapping from="ROAD" to="ENVIRONMENT_ROAD_MERGED"/>
         <config>
             <launchControllEnabled>false</launchControllEnabled>
             <maxSpeed>1.0</maxSpeed>
@@ -129,7 +137,7 @@
     <module>
         <name>image_hint_transformer_obstacle</name>
         <realName>image_hint_transformer</realName>
-        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE"/>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_RAW"/>
         <channelMapping from="HINTS" to="HINTS_OBSTACLE"/>
 
     </module>

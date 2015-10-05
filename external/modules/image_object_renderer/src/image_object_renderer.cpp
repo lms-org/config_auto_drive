@@ -70,6 +70,7 @@ bool ImageObjectRenderer::cycle() {
         street_environment::EnvironmentObject *envO = datamanager()->getChannel<street_environment::EnvironmentObject>(obj,true);
         if(envO == nullptr){
             logger.warn("cycle")<<"invalid environmentObject "<< obj;
+            continue;
         }
         drawObject(envO);
     }

@@ -1,13 +1,14 @@
 #include "street_obstacle_merger.h"
 #include "lms/datamanager.h"
+#include "street_environment/obstacle.h"
 
 bool StreetObstacleMerger::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
-    envOutput = datamanager()->writeChannel<street_environment::EnvironmentObstacles>(this,"ENVIRONMENT_OUTPUT");
+    envOutput = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_OUTPUT");
 
     //We should havet the roadlane and the car from the current cycle
-    car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
-    middle = datamanager()->readChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
+    car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
+    middle = datamanager()->writeChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
     return true;
 }
 
@@ -17,89 +18,96 @@ bool StreetObstacleMerger::deinitialize() {
 
 bool StreetObstacleMerger::cycle() {
     //get vectors from environments
-    std::vector<street_environment::Obstacle*> obstaclesNew;
-    std::vector<street_environment::Obstacle*> obstaclesOld;
+    street_environment::EnvironmentObstacles obstaclesNew;
+    street_environment::EnvironmentObstacles obstaclesOld;
 
 
     getObstacles(*envInput,obstaclesNew);
     getObstacles(*envOutput,obstaclesOld);
 
+    logger.debug("cycle")<<"number of old obstacles" << obstaclesOld.objects.size();
+
+    //TODO Kalman doesn't work with obstacle x < 0
     //update old obstacles
-    for(street_environment::Obstacle *obst:obstaclesOld){
-        obst->kalman(*middle,car->deltaX());
+    logger.error("BEGIN")<<" Car-delta: "<< car->deltaX();
+    for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
+        obst->kalman(*middle,car->movedDistance());
     }
+    logger.error("END");
 
     //kalman new obstacles
-    for(street_environment::Obstacle *obst:obstaclesNew){
+    for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesNew.objects){
         obst->kalman(*middle,0);
     }
 
+    logger.debug("cycle")<<"number of new obstacles (before merge)" << obstaclesNew.objects.size();
     //merge them
     merge(obstaclesNew,obstaclesOld);
+    logger.debug("cycle")<<"number of new obstacles (after merge)" << obstaclesOld.objects.size();
 
     //Remove invalid obstacles
     filter(obstaclesOld);
-
+    logger.debug("cycle")<<"number of new obstacles (after filter)" << obstaclesOld.objects.size();
     //create new env output
     createOutput(obstaclesOld);
+    logger.debug("cycle")<<"number of new obstacles (output)" << envOutput->objects.size();
+    logger.debug("cycle")<<"number of new obstacles (after filter)" << obstaclesOld.objects.size();
+
     return true;
 }
 
-void StreetObstacleMerger::createOutput(std::vector<street_environment::Obstacle*> &obstaclesOld){
+void StreetObstacleMerger::createOutput(street_environment::EnvironmentObstacles &obstaclesOld){
+    //clear old obstacles, if I didn't failed those shared pointers it shouldn't cause an segfault :)
+
     envOutput->objects.clear();
-
-    for(uint i = 0; i < obstaclesOld.size(); i++){
+    for(uint i = 0; i < obstaclesOld.objects.size(); i++){
         //create a copy
-        std::shared_ptr<street_environment::Obstacle> obstacle(new street_environment::Obstacle(*obstaclesOld[i]));
-        envOutput->objects.push_back(obstacle);
+        //std::shared_ptr<street_environment::Obstacle> obstacle(new street_environment::Obstacle(*obstaclesOld[i]));
+        envOutput->objects.push_back(obstaclesOld.objects[i]);
     }
-
 }
 
-void StreetObstacleMerger::filter(std::vector<street_environment::Obstacle*> &obstaclesOld){
+void StreetObstacleMerger::filter(street_environment::EnvironmentObstacles &obstaclesOld){
     //TODO hier könnte man sich auch etwas besseres einfallen lassen
-    for(uint i = 0; i < obstaclesOld.size(); i++){
-        if(obstaclesOld[i]->position().x < -0.35){
-            obstaclesOld.erase(obstaclesOld.begin() + i);
+    for(uint i = 0; i < obstaclesOld.objects.size(); i++){
+        logger.debug("objectpos: ")<<obstaclesOld.objects[i]->position().x<<" "<<obstaclesOld.objects[i]->position().y;
+        if(obstaclesOld.objects[i]->position().x < -0.35){
+            obstaclesOld.objects.erase(obstaclesOld.objects.begin() + i);
         }
     }
 }
 
-void StreetObstacleMerger::merge(std::vector<street_environment::Obstacle*> &obstaclesNew,std::vector<street_environment::Obstacle*> &obstaclesOld){
-    for(uint i = 0; i < obstaclesOld.size();){
-        for(uint i = 0; i < obstaclesNew.size();){
-            bool merged = merge(*obstaclesOld[i],*obstaclesNew[i]);
+
+void StreetObstacleMerger::merge(street_environment::EnvironmentObstacles &obstaclesNew,street_environment::EnvironmentObstacles &obstaclesOld){
+    //check if obstacles can be merged
+    for(uint k = 0; k < obstaclesNew.objects.size();k++){
+        bool merged = false;
+        for(uint i = 0; i < obstaclesOld.objects.size();i++){
+            merged = merge(obstaclesOld.objects[i],obstaclesNew.objects[k]);
             if(merged){
-                //remove merged obstacle
-                obstaclesNew.erase(obstaclesNew.begin() + i);
-                //no need to increase the index
-            }else{
-                //seems to be a new obstacle -> add it
-                obstaclesOld.push_back(obstaclesNew[i]);
-                //increase index
-                i++;
+                //TODO create merged object
+                //TODO increase some "times validated counter"
+                break;
             }
         }
+        if(!merged)
+            obstaclesOld.objects.push_back(obstaclesNew.objects[k]);
     }
 }
 
-void StreetObstacleMerger::getObstacles(const street_environment::EnvironmentObjects &env,std::vector<street_environment::Obstacle*> &output){
-    for(std::shared_ptr<street_environment::EnvironmentObject> obj : env.objects){
-        if(obj->name().find("OBSTACLE") != std::string::npos){
-            output.push_back(static_cast<street_environment::Obstacle*>(obj.get()));
+void StreetObstacleMerger::getObstacles(const street_environment::EnvironmentObjects &env,street_environment::EnvironmentObstacles &output){
+    for(const std::shared_ptr<street_environment::EnvironmentObject> obj : env.objects){
+        if(obj->getType() == 1){
+            //that cast ignores, that the obj was const
+            std::shared_ptr<street_environment::Obstacle> obst = std::static_pointer_cast<street_environment::Obstacle>(obj);
+            output.objects.push_back(obst);
         }
     }
 }
 
-void StreetObstacleMerger::getObstacles(const street_environment::EnvironmentObstacles &env,std::vector<street_environment::Obstacle*> &output){
-    for(std::shared_ptr<street_environment::Obstacle> obj : env.objects){
-        output.push_back(obj.get());
-    }
-}
-
-bool StreetObstacleMerger::merge(street_environment::Obstacle &from, street_environment::Obstacle &to){
+bool StreetObstacleMerger::merge(const std::shared_ptr<street_environment::Obstacle> &from,const std::shared_ptr<street_environment::Obstacle> &to){
     //TODO, was besseres überlegen!
-    if(from.position().distance(-to.position())<0.5){
+    if(from->position().distance(to->position())<0.5){
         return true;
     }
     return false;

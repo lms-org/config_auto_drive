@@ -51,8 +51,7 @@ void TrajectoryLineCreator::simpleTrajectory(){
     }
 
     const street_environment::RoadLane &middle = *road;
-    logger.warn("envObstacle-count");//<<envObstacles->objects.size();
-
+    logger.debug("simpleTrajectory")<<"number of obstacles: "<<envObstacles->objects.size();
     for(size_t i = 1; i < middle.points().size(); i++) {
         vertex2f p1 = middle.points()[i - 1];
         vertex2f p2 = middle.points()[i];
