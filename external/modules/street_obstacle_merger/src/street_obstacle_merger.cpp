@@ -27,9 +27,7 @@ bool StreetObstacleMerger::cycle() {
 
     logger.debug("cycle")<<"number of old obstacles" << obstaclesOld.objects.size();
 
-    //TODO Kalman doesn't work with obstacle x < 0
     //update old obstacles
-    logger.error("BEGIN")<<" Car-delta: "<< car->deltaX();
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
         obst->kalman(*middle,car->movedDistance());
     }
@@ -43,15 +41,14 @@ bool StreetObstacleMerger::cycle() {
     logger.debug("cycle")<<"number of new obstacles (before merge)" << obstaclesNew.objects.size();
     //merge them
     merge(obstaclesNew,obstaclesOld);
-    logger.debug("cycle")<<"number of new obstacles (after merge)" << obstaclesOld.objects.size();
+    logger.debug("cycle")<<"number of obstacles (after merge)" << obstaclesOld.objects.size();
 
     //Remove invalid obstacles
     filter(obstaclesOld);
-    logger.debug("cycle")<<"number of new obstacles (after filter)" << obstaclesOld.objects.size();
+    logger.debug("cycle")<<"number of obstacles (after filter)" << obstaclesOld.objects.size();
     //create new env output
     createOutput(obstaclesOld);
-    logger.debug("cycle")<<"number of new obstacles (output)" << envOutput->objects.size();
-    logger.debug("cycle")<<"number of new obstacles (after filter)" << obstaclesOld.objects.size();
+    logger.debug("cycle")<<"number of obstacles (output)" << envOutput->objects.size();
 
     return true;
 }

@@ -19,6 +19,10 @@ private:
     const lms::ModuleConfig *config;
     sensor_utils::Car *car;
 
+    /**
+     * @brief driving true the car is driving
+     */
+    bool driving;
     lms::extra::PrecisionTime lastCall;
     /**
      * @brief launchControll

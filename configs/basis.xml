@@ -6,7 +6,7 @@
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="ERROR">environment_predictor</module>
-        <module logLevel="DEBUG">trajectory_line_creator</module>
+        <module logLevel="DEBUG">trajectory_creator</module>
         <module logLevel="ERROR">trajectory_point_creator</module>
         <module logLevel="ERROR">environment_filter</module>
         <module logLevel="WARN">trajectory_point_controller</module>
@@ -102,7 +102,7 @@
         </config>
     </module>
     <module>
-        <name>trajectory_line_creator</name>
+        <name>trajectory_creator</name>
         <channelMapping from="LINE" to="TRAJECTORY_LINE"/>
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>

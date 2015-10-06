@@ -8,6 +8,7 @@ bool VelocityController::initialize() {
     car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
     config = getConfig();
     lastCall = lms::extra::PrecisionTime::now()-lms::extra::PrecisionTime::fromMillis(config->get<float>("maxDeltaTInMs")*10);
+    driving = false;
     return true;
 }
 
@@ -18,8 +19,25 @@ bool VelocityController::deinitialize() {
 bool VelocityController::cycle() {
     //check for error-stop
     if(messaging()->receive("STOP_CAR").size() > 0){
-        car->targetSpeed = 0;
+        driving = false;
         logger.warn("cycle")<<"STOP_CAR called";
+        return true;
+    }
+    for(std::string content : messaging()->receive("RC_STATE_CHANGED")){
+        std::istringstream is(content);
+        bool rc_on;
+        is >> std::boolalpha >> rc_on;
+        if(rc_on){
+            driving = false;
+        }else{
+            driving = true;
+        }
+        logger.info("cycle")<<"RC_STATE_CHANGED";
+        return true;
+    }
+    if(!driving){
+        car->targetSpeed = 0;
+        logger.debug("cycle")<<"driving disabled";
         return true;
     }
     float vel = INFINITY;

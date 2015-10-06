@@ -31,6 +31,7 @@ bool CarToSenseboard2015::cycle() {
         lastRcState = sensorData->rc_on;
         //TODO broadcast msg
         messaging()->send("RC_STATE_CHANGED",std::to_string(lastRcState));
+        logger.error("cycle")<<"RC_STATE_CHANGED: "<<std::to_string(lastRcState);
     }
     return true;
 }

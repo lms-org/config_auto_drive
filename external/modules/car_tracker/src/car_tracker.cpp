@@ -64,12 +64,13 @@ void CarTracker::getFromVehicle(DeltaState &d){
     d.y = distance*sin(steeringRear);
     d.phi = distance/radstand*sin(steeringFront-steeringRear)/cos(steeringRear);
 
+    /*
     //Betrachte beide Achsen getrennt. Der Abstand zwischen den Rädern ist somit in einem Schritt nicht konstant!
     lms::math::vertex2f rear(distance*cos(steeringRear),distance*sin(steeringRear));
     lms::math::vertex2f front(distance*cos(steeringFront)+radstand,distance*sin(steeringFront));;
     lms::math::vertex2f delta = front-rear;
     //Man mittelt den Wert mit der Vorderachse (TODO macht das überhaupt sinn?)
-    /*
+
     d.x = rear.x;
     d.y = rear.y;
     d.phi = delta.angle();

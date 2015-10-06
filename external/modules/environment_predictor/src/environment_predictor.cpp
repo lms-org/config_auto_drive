@@ -62,6 +62,7 @@ bool EnvironmentPredictor::cycle() {
     //TODO I don't like it hmmm
     for(std::string content : messaging()->receive("RC_STATE_CHANGED")){
         resetData();
+        logger.info("cycle")<<"RC_STATE_CHANGED";
     }
 
     r_fakt=config->get<double>("r_fakt",20);
