@@ -66,6 +66,7 @@ void StreetObstacleMerger::createOutput(street_environment::EnvironmentObstacles
 void StreetObstacleMerger::filter(street_environment::EnvironmentObstacles &obstaclesOld){
     //Decrease foundCounter
     for(uint i = 0; i < obstaclesOld.objects.size();i++){
+        //TODO was kluges einfallen lassen
         /*Not that smart :D
         if(obstaclesOld.objects[i]->timesFound()>10){
             obstaclesOld.objects[i]->found(10-obstaclesOld.objects[i]->timesFound());
@@ -91,6 +92,9 @@ void StreetObstacleMerger::merge(street_environment::EnvironmentObstacles &obsta
         for(uint i = 0; i < obstaclesOld.objects.size();i++){
             merged = merge(obstaclesOld.objects[i],obstaclesNew.objects[k]);
             if(merged){
+                lms::math::vertex2f pos = obstaclesNew.objects[i]->position()+obstaclesOld.objects[i]->position();
+                pos = pos*0.5;
+                obstaclesOld.objects[i]->updatePosition(pos);
                 //TODO create merged object
                 //TODO increase some "times validated counter"
                 obstaclesOld.objects[i]->found(2); //+2 as we remove one in filter

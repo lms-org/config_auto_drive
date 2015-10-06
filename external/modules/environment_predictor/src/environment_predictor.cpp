@@ -7,10 +7,8 @@
 #include "lms/imaging/warp.h"
 #include "street_environment/road.h"
 #include "cmath"
-extern "C"{
+
 #include "kalman_filter_lr.h"
-#include "projectPoints.h"
-}
 bool EnvironmentPredictor::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
 
@@ -125,7 +123,7 @@ bool EnvironmentPredictor::cycle() {
     logger.debug("deltapos: ") << deltaX << " "<<deltaY << " "<<deltaPhi;
     kalman_filter_lr(zustandsVector,deltaX,deltaY,deltaPhi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
-                     r_fakt,partLength,lx,ly,rx,ry,mx,my);
+                     r_fakt,partLength,lx,ly,rx,ry,mx,my,1);
 
     createOutput();
     //destroy stuff
@@ -167,6 +165,7 @@ void EnvironmentPredictor::createOutput(){
 void EnvironmentPredictor::convertZustandToLane(street_environment::RoadLane &output){
     //clear points
     output.points().clear();
+    output.polarDarstellung.clear();
 
     lms::math::vertex2f p1;
     p1.x = 0;
@@ -190,8 +189,10 @@ void EnvironmentPredictor::convertZustandToLane(street_environment::RoadLane &ou
         pi.x = output.points()[i-1].x + partLength*cos(phi);
         pi.y = output.points()[i-1].y + partLength*sin(phi);
         output.points().push_back(pi);
+        logger.error("points: ")<<zustandsVector->data[i]/2<< " , "<<dw<<" , " <<pi.x << " , "<<pi.y;
         output.polarDarstellung.push_back(zustandsVector->data[i]);
     }
+    logger.error("PREDICTED")<<zustandsVector->data[2];
 
 }
 

@@ -9,9 +9,8 @@
 #include "sensor_utils/car.h"
 #include <fstream>
 
-extern "C"{
 #include "kalman_filter_lr_emxAPI.h"
-}
+
 
 class EnvironmentPredictor : public lms::Module {
 

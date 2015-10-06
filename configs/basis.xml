@@ -106,7 +106,7 @@
         <channelMapping from="LINE" to="TRAJECTORY_LINE"/>
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
-        <config src="environment.lconf" />
+        <config src="trajectory_creator.lconf"/>
     </module>
     <module>
         <name>environment_filter</name>
