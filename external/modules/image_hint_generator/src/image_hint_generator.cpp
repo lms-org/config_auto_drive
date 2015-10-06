@@ -292,7 +292,7 @@ void ImageHintGenerator::createHintForObstacleUsingSinglePoints(const street_env
     float distanceBetweenSearchPoints = streetWidth/(numberOfSearchPoints+1);
 
     //Abstand zum Auto
-    float startSearchDistance = 0.4;
+    float startSearchDistance = 0.6;
     //suchlänge
     float searchLength = 2;
 

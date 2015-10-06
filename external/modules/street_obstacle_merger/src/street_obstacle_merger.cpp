@@ -31,7 +31,6 @@ bool StreetObstacleMerger::cycle() {
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
         obst->kalman(*middle,car->movedDistance());
     }
-    logger.error("END");
 
     //kalman new obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesNew.objects){
@@ -65,10 +64,20 @@ void StreetObstacleMerger::createOutput(street_environment::EnvironmentObstacles
 }
 
 void StreetObstacleMerger::filter(street_environment::EnvironmentObstacles &obstaclesOld){
+    //Decrease foundCounter
+    for(uint i = 0; i < obstaclesOld.objects.size();i++){
+        /*Not that smart :D
+        if(obstaclesOld.objects[i]->timesFound()>10){
+            obstaclesOld.objects[i]->found(10-obstaclesOld.objects[i]->timesFound());
+        }
+        */
+        obstaclesOld.objects[i]->found(-1);
+    }
+
     //TODO hier könnte man sich auch etwas besseres einfallen lassen
     for(uint i = 0; i < obstaclesOld.objects.size(); i++){
         logger.debug("objectpos: ")<<obstaclesOld.objects[i]->position().x<<" "<<obstaclesOld.objects[i]->position().y;
-        if(obstaclesOld.objects[i]->position().x < -0.35){
+        if(obstaclesOld.objects[i]->timesFound() <= 0 || obstaclesOld.objects[i]->position().x < -0.35){
             obstaclesOld.objects.erase(obstaclesOld.objects.begin() + i);
         }
     }
@@ -84,11 +93,15 @@ void StreetObstacleMerger::merge(street_environment::EnvironmentObstacles &obsta
             if(merged){
                 //TODO create merged object
                 //TODO increase some "times validated counter"
+                obstaclesOld.objects[i]->found(2); //+2 as we remove one in filter
                 break;
             }
         }
-        if(!merged)
+        if(!merged){
+            //Basic value
+            obstaclesNew.objects[k]->found(5);
             obstaclesOld.objects.push_back(obstaclesNew.objects[k]);
+        }
     }
 }
 
@@ -103,7 +116,7 @@ void StreetObstacleMerger::getObstacles(const street_environment::EnvironmentObj
 }
 
 bool StreetObstacleMerger::merge(const std::shared_ptr<street_environment::Obstacle> &from,const std::shared_ptr<street_environment::Obstacle> &to){
-    //TODO, was besseres überlegen!
+    //TODO, tangentialen und orthogonalen abstand zur mittellinie benutzen!
     if(from->position().distance(to->position())<0.5){
         return true;
     }
