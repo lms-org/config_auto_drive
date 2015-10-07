@@ -85,3 +85,6 @@
 [submodule "external/modules/trajectory_creator"]
 	path = external/modules/trajectory_creator
 	url = https://github.com/tum-phoenix/trajectory_creator
+[submodule "external/modules/parking"]
+	path = external/modules/parking
+	url = https://github.com/tum-phoenix/parking.git
