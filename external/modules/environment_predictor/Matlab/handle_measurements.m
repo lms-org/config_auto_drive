@@ -1,15 +1,11 @@
-function [H, z, zm] = handle_measurements(r, delta, proj_dist, xm, ym)
+function [H, z, zm, nValidPoints] = handle_measurements(r, delta, proj_dist, xm, ym)
 
-if proj_dist ~= 0
-    [xp, yp, phi] = projectPoints(r, delta, proj_dist); %Punkte von Mittellinie nach links/rechts projizieren
-else
-    [xp, yp, phi] = getPointsFromState(r, delta); 
-end
+[xp, yp, phi] = projectPoints(r, delta, proj_dist); %Punkte von Mittellinie nach links/rechts projizieren
 
 P = [xp, yp, phi];
 D = 10000*ones(numel(xm), 3);
 
-% Fuer jeden Messpunkt den nähesten Punkt der aktuellen Praediktion finden 
+% Fuer jeden Messpunkt den nächsten Punkt der aktuellen Praediktion finden 
 for s=1:numel(r)
    for m=1:numel(xm)            
         dist_point = sqrt((P(s, 1)-(xm(m)))^2 + (P(s, 2)-(ym(m)))^2);
@@ -30,10 +26,11 @@ for s=1:numel(r)
 end
 
 % Messpunkte ausfiltern, die vor dem letzten prädizierten Punkt oder zu weit entfernt liegen
-ind = (D(:, 1) == numel(r) | D(:, 3) > 0.5);
+ind = (D(:, 1) == numel(r) | D(:, 3) > 1);
 xm(ind) = [];
 ym(ind) = [];
 D(ind, :) = [];
+nValidPoints = size(D, 1); % Anzahl an letzlich verwerteten Messpunkten
 
 
 % Messmatrix H, Messvektor z und Erwartungsvektor zm berechnen

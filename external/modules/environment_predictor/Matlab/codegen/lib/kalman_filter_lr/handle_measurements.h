@@ -5,7 +5,7 @@
 // File: handle_measurements.h
 //
 // MATLAB Coder version            : 3.0
-// C/C++ source code generated on  : 06-Oct-2015 19:14:10
+// C/C++ source code generated on  : 07-Oct-2015 12:34:33
 //
 #ifndef __HANDLE_MEASUREMENTS_H__
 #define __HANDLE_MEASUREMENTS_H__
@@ -22,13 +22,13 @@
 // Function Declarations
 extern void b_handle_measurements(const emxArray_real_T *r, double delta,
   emxArray_real_T *xm, emxArray_real_T *ym, emxArray_real_T *H, emxArray_real_T *
-  z, emxArray_real_T *zm);
+  z, emxArray_real_T *zm, double *nValidPoints);
 extern void c_handle_measurements(const emxArray_real_T *r, double delta,
   emxArray_real_T *xm, emxArray_real_T *ym, emxArray_real_T *H, emxArray_real_T *
-  z, emxArray_real_T *zm);
+  z, emxArray_real_T *zm, double *nValidPoints);
 extern void handle_measurements(const emxArray_real_T *r, double delta,
   emxArray_real_T *xm, emxArray_real_T *ym, emxArray_real_T *H, emxArray_real_T *
-  z, emxArray_real_T *zm);
+  z, emxArray_real_T *zm, double *nValidPoints);
 
 #endif
 

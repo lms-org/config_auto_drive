@@ -1,19 +1,19 @@
 <framework>
     <modulesToEnable>
-        <module logLevel="ERROR">image_hint_generator</module>
+        <module logLevel="INFO">image_hint_generator</module>
         <module logLevel="ERROR">image_hint_transformer</module>
         <module logLevel="ERROR">image_hint_transformer_obstacle</module>
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
-        <module logLevel="ERROR">environment_predictor</module>
-        <module logLevel="DEBUG">trajectory_creator</module>
+        <module logLevel="DEBUG">environment_predictor</module>
+        <module logLevel="WARN">trajectory_creator</module>
         <module logLevel="ERROR">trajectory_point_creator</module>
         <module logLevel="ERROR">environment_filter</module>
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">velocity_controller</module>
         <!--<module logLevel="DEBUG">sensor_tracker</module>-->
-        <module logLevel="DEBUG">image_proxy</module>
-        <module logLevel="DEBUG">street_obstacle_merger</module>
+        <module logLevel="WARN">image_proxy</module>
+        <module logLevel="WARN">street_obstacle_merger</module>
         <if notSet="sense_link">
             <module logLevel="WARN">car_tracker</module>
         </if>
@@ -119,9 +119,9 @@
         <channelMapping from="ROAD_OUTPUT" to="MIDDLE_LANE"/>
         <config>
             <elementCount>10</elementCount>
-            <r_fakt>25</r_fakt>
+            <r_fakt>250</r_fakt>
             <kov>15</kov>
-            <kovAbnahme>0.99</kovAbnahme>
+            <kovAbnahme>0.2</kovAbnahme>
             <elementLength>0.2</elementLength>
             <enableMove>false</enableMove>
             <logState>false</logState>

@@ -5,7 +5,7 @@
 // File: lusolve.cpp
 //
 // MATLAB Coder version            : 3.0
-// C/C++ source code generated on  : 06-Oct-2015 19:14:10
+// C/C++ source code generated on  : 07-Oct-2015 12:34:33
 //
 
 // Include Files
@@ -26,7 +26,7 @@ void lusolve(const emxArray_real_T *A, emxArray_real_T *B)
 {
   emxArray_real_T *b_A;
   int n;
-  int i9;
+  int i8;
   int iy;
   emxArray_int32_T *ipiv;
   int j;
@@ -42,13 +42,13 @@ void lusolve(const emxArray_real_T *A, emxArray_real_T *B)
   int nb;
   emxInit_real_T(&b_A, 2);
   n = A->size[1];
-  i9 = b_A->size[0] * b_A->size[1];
+  i8 = b_A->size[0] * b_A->size[1];
   b_A->size[0] = A->size[0];
   b_A->size[1] = A->size[1];
-  emxEnsureCapacity((emxArray__common *)b_A, i9, (int)sizeof(double));
+  emxEnsureCapacity((emxArray__common *)b_A, i8, (int)sizeof(double));
   iy = A->size[0] * A->size[1];
-  for (i9 = 0; i9 < iy; i9++) {
-    b_A->data[i9] = A->data[i9];
+  for (i8 = 0; i8 < iy; i8++) {
+    b_A->data[i8] = A->data[i8];
   }
 
   emxInit_int32_T(&ipiv, 2);
@@ -57,12 +57,12 @@ void lusolve(const emxArray_real_T *A, emxArray_real_T *B)
   if (A->size[1] < 1) {
   } else {
     if (A->size[1] - 1 <= A->size[1]) {
-      i9 = A->size[1] - 1;
+      i8 = A->size[1] - 1;
     } else {
-      i9 = A->size[1];
+      i8 = A->size[1];
     }
 
-    for (j = 0; j + 1 <= i9; j++) {
+    for (j = 0; j + 1 <= i8; j++) {
       mmj = n - j;
       c = j * (n + 1);
       if (mmj < 1) {

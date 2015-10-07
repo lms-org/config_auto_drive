@@ -5,6 +5,7 @@
 #include "lms/imaging_detection/splitted_line.h"
 #include "lms/imaging_detection/point_line.h"
 #include "lms/math/math.h"
+#include <cmath>
 #include "lms/math/vertex.h"
 #include "lms/imaging/warp.h"
 bool ImageHintGenerator::initialize() {
@@ -41,6 +42,19 @@ bool ImageHintGenerator::cycle() {
     //set the gaussbuffer
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
     //clear the gaussBuffer not necessary!
+
+    /*
+    // Just for debugging
+    lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *line = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
+    lms::imaging::find::LinePoint::LinePointParam lpp = defaultLinePointParameter;
+    lpp.x = 260;
+    lpp.y = 150;
+    lpp.searchAngle = -M_PI;
+    lpp.searchLength = 80;
+    line->parameter.addParam(lpp);
+    hintContainerLane->add(line);
+    */
+
     if(fromMiddle){
         if(middleLane->type() != street_environment::RoadLaneType::MIDDLE){
             logger.error("createHintsFromMiddleLane") << "middle is no middle lane!";
@@ -57,6 +71,7 @@ bool ImageHintGenerator::cycle() {
         initialHints();
         fromMiddle = true;
     }
+
     return true;
 }
 
@@ -194,7 +209,7 @@ void ImageHintGenerator::createHintForObstacleUsingOneLineSequence(const street_
     using lms::math::vertex2f;
     using lms::math::vertex2i;
 
-    lms::imaging::find::Line::LineParam lineParam; //TODO geht sowas?= defaultLinePointParameter;
+    lms::imaging::find::Line::LineParam lineParam;
     lineParam.fromConfig(getConfig("defaultLPParameter"));
     lineParam.target =target;
     lineParam.gaussBuffer = gaussBuffer;
@@ -205,6 +220,7 @@ void ImageHintGenerator::createHintForObstacleUsingOneLineSequence(const street_
     lineParam.lineWidthTransMultiplier = 1;
     lineParam.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM)->bool{
         lms::imaging::find::EdgePoint check = lp.low_high;
+        std::cout << "FOUND: "<< check.x << " , "<<check.y <<std::endl;
         check.searchParam().x = check.x;
         check.searchParam().y = check.y;
         //20 noch in eine Config packen oder irgendwas anderes tolles tun
@@ -281,6 +297,7 @@ void ImageHintGenerator::createHintForObstacleUsingOneLineSequence(const street_
 void ImageHintGenerator::createHintForObstacleUsingSinglePoints(const street_environment::RoadLane &middle ){
     using lms::math::vertex2f;
     using lms::math::vertex2i;
+    logger.info("createHintForObstacleUsingSinglePoints") << "using";
 
     //TODO der code ist schon sehr redundant, da sollte man sich was tolles überlegen!
 
@@ -350,6 +367,7 @@ void ImageHintGenerator::createHintForObstacleUsingSinglePoints(const street_env
                 lpp.edge = true;
                 lpp.searchAngle = searchAngle;
                 lpp.searchLength = imageSearchDistance;
+                //lpp.sobelThreshold = 50;
                 line->parameter.addParam(lpp);
                 //alter endPunkt wird neuer Startpunkt:
                 middlePoints[k] = endMiddle;
@@ -373,20 +391,25 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
     hintRight->name = "RIGHT_LANE";
     lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintMiddle = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
     hintMiddle->name = "MIDDLE_LANE";
+    //TODO: add more random points - punkte nicht nur an den enden erzeugen, abstand angeben und dazwischen interpolieren ,(mindestabstand zwischen den punkten)
     for(int i = 1; i < (int)middle.points().size(); i++){
         vertex2f bot = middle.points()[i-1];
         vertex2f top = middle.points()[i];
         vertex2f distance = top-bot;
+        float dLength = distance.length();
+        vertex2f tangent = distance.normalize();
+        tangent = tangent*dLength*((double) rand() / (RAND_MAX));
+
         distance = distance.normalize();
         float tmpX = distance.x;
         distance.x = -distance.y;
         distance.y = tmpX;
         distance *= lineDistance;
         //such-start-punkte in Auto-Koordinaten
-        vertex2f left = top+distance;
-        vertex2f right = top-distance;
+        vertex2f left = bot+tangent+distance;
+        vertex2f right = bot+tangent-distance;
         //TODO wenn es nicht mehr geht, dann wegen /lineDistance
-        vertex2f middle = top-distance/lineDistance*lineOffset;
+        vertex2f middle = bot+tangent-distance/lineDistance*lineOffset;
 
         //such-start-punkte in Bild-Koordinaten
         vertex2i leftI;
@@ -410,7 +433,6 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
         defaultLinePointParameter.searchLength = searchLength;
         //add hints
         //add left
-
         if(defaultLinePointParameter.target->inside(leftI.x , leftI.y)){
             defaultLinePointParameter.x = leftI.x;
             defaultLinePointParameter.y = leftI.y;

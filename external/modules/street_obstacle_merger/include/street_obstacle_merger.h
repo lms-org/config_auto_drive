@@ -5,6 +5,7 @@
 #include "sensor_utils/car.h"
 #include "street_environment/street_environment.h"
 #include "street_environment/obstacle.h"
+#include "lms/math/math.h"
 
 class StreetObstacleMerger : public lms::Module {
 public:
@@ -22,12 +23,16 @@ private:
     void createOutput(street_environment::EnvironmentObstacles &obstaclesOld);
 
 
+    bool inVisibleArea(float x, float y);
+
     void getObstacles(const street_environment::EnvironmentObjects &env,street_environment::EnvironmentObstacles &output);
     bool merge(const std::shared_ptr<street_environment::Obstacle> &from,const std::shared_ptr<street_environment::Obstacle> &to);
     const street_environment::EnvironmentObjects *envInput;
     street_environment::EnvironmentObjects *envOutput;
     const street_environment::RoadLane *middle;
+    const lms::ModuleConfig* config;
     const sensor_utils::Car *car;
+    std::vector<lms::math::Rect> visibleAreas;
 
 
 };

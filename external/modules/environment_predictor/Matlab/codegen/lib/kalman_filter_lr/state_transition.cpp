@@ -5,7 +5,7 @@
 // File: state_transition.cpp
 //
 // MATLAB Coder version            : 3.0
-// C/C++ source code generated on  : 06-Oct-2015 19:14:10
+// C/C++ source code generated on  : 07-Oct-2015 12:34:33
 //
 
 // Include Files
@@ -38,7 +38,7 @@ void state_transition(emxArray_real_T *r, double delta, double delta_x, double
   int i;
   double d;
   emxArray_real_T *b;
-  int i8;
+  int i7;
   int ia;
   emxArray_real_T *b_A;
   int ar;
@@ -86,47 +86,47 @@ void state_transition(emxArray_real_T *r, double delta, double delta_x, double
   }
 
   emxInit_real_T1(&b, 1);
-  i8 = b->size[0];
+  i7 = b->size[0];
   b->size[0] = r->size[0];
-  emxEnsureCapacity((emxArray__common *)b, i8, (int)sizeof(double));
+  emxEnsureCapacity((emxArray__common *)b, i7, (int)sizeof(double));
   ia = r->size[0];
-  for (i8 = 0; i8 < ia; i8++) {
-    b->data[i8] = r->data[i8];
+  for (i7 = 0; i7 < ia; i7++) {
+    b->data[i7] = r->data[i7];
   }
 
   emxInit_real_T1(&b_A, 1);
   if ((A->size[1] == 1) || (r->size[0] == 1)) {
-    i8 = b_A->size[0];
+    i7 = b_A->size[0];
     b_A->size[0] = A->size[0];
-    emxEnsureCapacity((emxArray__common *)b_A, i8, (int)sizeof(double));
+    emxEnsureCapacity((emxArray__common *)b_A, i7, (int)sizeof(double));
     ia = A->size[0];
-    for (i8 = 0; i8 < ia; i8++) {
-      b_A->data[i8] = 0.0;
+    for (i7 = 0; i7 < ia; i7++) {
+      b_A->data[i7] = 0.0;
       ar = A->size[1];
       for (ib = 0; ib < ar; ib++) {
-        b_A->data[i8] += A->data[i8 + A->size[0] * ib] * r->data[ib];
+        b_A->data[i7] += A->data[i7 + A->size[0] * ib] * r->data[ib];
       }
     }
 
-    i8 = r->size[0];
+    i7 = r->size[0];
     r->size[0] = b_A->size[0];
-    emxEnsureCapacity((emxArray__common *)r, i8, (int)sizeof(double));
+    emxEnsureCapacity((emxArray__common *)r, i7, (int)sizeof(double));
     ia = b_A->size[0];
-    for (i8 = 0; i8 < ia; i8++) {
-      r->data[i8] = b_A->data[i8];
+    for (i7 = 0; i7 < ia; i7++) {
+      r->data[i7] = b_A->data[i7];
     }
   } else {
     k = A->size[1];
     A_idx_0 = (unsigned int)A->size[0];
-    i8 = r->size[0];
+    i7 = r->size[0];
     r->size[0] = (int)A_idx_0;
-    emxEnsureCapacity((emxArray__common *)r, i8, (int)sizeof(double));
+    emxEnsureCapacity((emxArray__common *)r, i7, (int)sizeof(double));
     m = A->size[0];
-    i8 = r->size[0];
-    emxEnsureCapacity((emxArray__common *)r, i8, (int)sizeof(double));
+    i7 = r->size[0];
+    emxEnsureCapacity((emxArray__common *)r, i7, (int)sizeof(double));
     ia = r->size[0];
-    for (i8 = 0; i8 < ia; i8++) {
-      r->data[i8] = 0.0;
+    for (i7 = 0; i7 < ia; i7++) {
+      r->data[i7] = 0.0;
     }
 
     if (A->size[0] == 0) {
@@ -144,8 +144,8 @@ void state_transition(emxArray_real_T *r, double delta, double delta_x, double
       ar = 0;
       while ((m > 0) && (ar <= 0)) {
         ar = 0;
-        i8 = br + k;
-        for (ib = br; ib + 1 <= i8; ib++) {
+        i7 = br + k;
+        for (ib = br; ib + 1 <= i7; ib++) {
           if (b->data[ib] != 0.0) {
             ia = ar;
             for (ic = 0; ic + 1 <= m; ic++) {

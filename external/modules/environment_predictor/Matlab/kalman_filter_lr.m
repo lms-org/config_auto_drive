@@ -25,20 +25,20 @@ function [r, Pk] = kalman_filter_lr (r, delta_x, delta_y, delta_phi, Pk, Q, R_fa
 %  1. Projektion der Punkte von der Mittellinie nach links bzw. rechts
 %  2. Fuer jeden Messpunkt: Berechnung des kleinsten Abstands zum aktuell praedizierten Strassenverlauf
 %  3. Assemblierung der Jakobimatrix fuer die Projektion aus dem Zustandsraum von r auf x-y-Koordinaten
-%  4. Kalman-Filter: Praediktion -> Messwerte einbeziehen -> Update
+%  4. Kalman-Filter anwenden
 %  5. Zustandsbegrenzungen einbringen (mathematisch unschön aber praktisch funktionierts)
 
 
 %% Messpunkte verarbeiten
 
 % linke Seitenlinie
-[Hl, zl, zml] = handle_measurements(r, delta, 0.38, xl, yl);
+[Hl, zl, zml, nPointsL] = handle_measurements(r, delta, 0.38, xl, yl);
 
 % rechte Seitenlinie
-[Hr, zr, zmr] = handle_measurements(r, delta, -0.38, xr, yr);
+[Hr, zr, zmr, nPointsR] = handle_measurements(r, delta, -0.38, xr, yr);
 
 % Mittellinie
-[Hm, zm, zmm] = handle_measurements(r, delta, 0, xm, ym);
+[Hm, zm, zmm, nPointsM] = handle_measurements(r, delta, 0, xm, ym);
 
 % Linien in eine Matrix kombinieren
 H = [Hl; Hr; Hm]; %Messmatrix
@@ -55,7 +55,7 @@ else
     [r, A] = state_transition(r, delta, delta_x, delta_y, delta_phi, interp_mode);    
 end
 
-R = R_fakt.*eye(2*(numel(xl) + numel(xr) + numel(xm))); 
+R = R_fakt.*eye(2*(nPointsL + nPointsR + nPointsM)); 
 
 % Filtergleichungen EKF
 Pk = A*Pk*A' + Q;

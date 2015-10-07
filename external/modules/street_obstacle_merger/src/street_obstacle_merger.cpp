@@ -9,7 +9,32 @@ bool StreetObstacleMerger::initialize() {
     //We should havet the roadlane and the car from the current cycle
     car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
     middle = datamanager()->writeChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
+    config = getConfig();
+
+    if(config->hasKey("visibleAreas")){
+        std::vector<std::string> sRects = config->getArray<std::string>("visibleAreas");
+        for(std::string &sRect: sRects){
+            lms::math::Rect r;
+            if(!config->hasKey(sRect+"_x") || !config->hasKey(sRect+"_y") ||!config->hasKey(sRect+"_w")||!config->hasKey(sRect+"_h")){
+                logger.error("initialize")<<"visibleArea not valid: "<< sRect;
+                return false;
+            }
+            r.x = config->get<float>(sRect+"_x");
+            r.y = config->get<float>(sRect+"_y");
+            r.width = config->get<float>(sRect+"_w");
+            r.height = config->get<float>(sRect+"_h");
+            visibleAreas.push_back(r);
+        }
+    }
     return true;
+}
+
+bool StreetObstacleMerger::inVisibleArea(float x, float y){
+    for(lms::math::Rect& r:visibleAreas){
+        if(r.contains(x,y))
+            return true;
+    }
+    return false;
 }
 
 bool StreetObstacleMerger::deinitialize() {
@@ -65,13 +90,18 @@ void StreetObstacleMerger::createOutput(street_environment::EnvironmentObstacles
 
 void StreetObstacleMerger::filter(street_environment::EnvironmentObstacles &obstaclesOld){
     //Decrease foundCounter
+
     for(uint i = 0; i < obstaclesOld.objects.size();i++){
-        //TODO was kluges einfallen lassen
-        /*Not that smart :D
+        if(!inVisibleArea(obstaclesOld.objects[i]->position().x,
+                obstaclesOld.objects[i]->position().y)){
+            //if the obstacle can't be found by the sensors we won't decrease the counter, we just translate it every step and remove it later on
+            continue;
+        }
+
+        //Not that smart :D
         if(obstaclesOld.objects[i]->timesFound()>10){
             obstaclesOld.objects[i]->found(10-obstaclesOld.objects[i]->timesFound());
         }
-        */
         obstaclesOld.objects[i]->found(-1);
     }
 

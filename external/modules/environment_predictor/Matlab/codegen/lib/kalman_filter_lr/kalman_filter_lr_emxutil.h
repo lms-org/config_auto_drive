@@ -5,7 +5,7 @@
 // File: kalman_filter_lr_emxutil.h
 //
 // MATLAB Coder version            : 3.0
-// C/C++ source code generated on  : 06-Oct-2015 19:14:10
+// C/C++ source code generated on  : 07-Oct-2015 12:34:33
 //
 #ifndef __KALMAN_FILTER_LR_EMXUTIL_H__
 #define __KALMAN_FILTER_LR_EMXUTIL_H__

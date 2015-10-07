@@ -33,17 +33,10 @@ for i=1:numel(ind) %alle Messpunkte iterieren
     H(count, 2)   = d_phi0(ind(i), 1);   %Ableitung nach phi0
     H(count+1, 2) = d_phi0(ind(i), 2);   
     
-    for c=3:ind(i) %Ableitung nach Krümmungen c
-%         if c==ind(i)
-%             H(count, c)   = d_c_x(ind(i)-1, c-1) - lambda(i)*d^2*sin(P(ind(i), 3))/sqrt(1-d^2*r(c-1)^2/4);
-%             H(count+1, c) = d_c_y(ind(i)-1, c-1) + lambda(i)*d^2*cos(P(ind(i), 3))/sqrt(1-d^2*r(c-1)^2/4);
-%         else
-%             H(count, c)   = d_c_x(ind(i), c-1);
-%             H(count+1, c) = d_c_y(ind(i), c-1);
-%         end   
+    for c=3:ind(i) %Ableitung nach Krümmungen c 
         if c==ind(i)
-            H(count, c)   = d_c_x(ind(i), c-1) - lambda(i)*d^2*sin(P(ind(i)+1, 3))/sqrt(1-d^2*r(c-1)^2/4);
-            H(count+1, c) = d_c_y(ind(i), c-1) + lambda(i)*d^2*cos(P(ind(i)+1, 3))/sqrt(1-d^2*r(c-1)^2/4);
+            H(count, c)   = d_c_x(ind(i), c-1) + lambda(i)*d^2*sin(P(ind(i)+1, 3))/sqrt(1-d^2*r(c-1)^2/4);
+            H(count+1, c) = d_c_y(ind(i), c-1) - lambda(i)*d^2*cos(P(ind(i)+1, 3))/sqrt(1-d^2*r(c-1)^2/4);
         else
             H(count, c)   = d_c_x(ind(i), c-1);
             H(count+1, c) = d_c_y(ind(i), c-1);

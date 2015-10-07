@@ -57,7 +57,7 @@ bool EnvironmentPredictor::deinitialize() {
 
 bool EnvironmentPredictor::cycle() {
 
-    //TODO I don't like it hmmm
+    //I don't like it hmmm
     for(std::string content : messaging()->receive("RC_STATE_CHANGED")){
         resetData();
         logger.info("cycle")<<"RC_STATE_CHANGED";
@@ -120,11 +120,9 @@ bool EnvironmentPredictor::cycle() {
         deltaPhi = car->deltaPhi();
     }
     */
-    logger.debug("deltapos: ") << deltaX << " "<<deltaY << " "<<deltaPhi;
     kalman_filter_lr(zustandsVector,deltaX,deltaY,deltaPhi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      r_fakt,partLength,lx,ly,rx,ry,mx,my,1);
-
     createOutput();
     //destroy stuff
     emxDestroyArray_real_T(rx);
@@ -185,14 +183,13 @@ void EnvironmentPredictor::convertZustandToLane(street_environment::RoadLane &ou
     for(int i = 2; i < partCount; i++){
         lms::math::vertex2f pi;
         double dw = 2*acos(partLength*zustandsVector->data[i]/2);
-        phi = phi -dw-M_PI;
+        phi = phi -dw+M_PI;
         pi.x = output.points()[i-1].x + partLength*cos(phi);
         pi.y = output.points()[i-1].y + partLength*sin(phi);
         output.points().push_back(pi);
-        logger.error("points: ")<<zustandsVector->data[i]/2<< " , "<<dw<<" , " <<pi.x << " , "<<pi.y;
+        logger.debug("points: ")<<"krümmung: "<<zustandsVector->data[i]<< " ,dw "<<dw<<" ,x:  " <<pi.x << " ,y: "<<pi.y;
         output.polarDarstellung.push_back(zustandsVector->data[i]);
     }
-    logger.error("PREDICTED")<<zustandsVector->data[2];
 
 }
 

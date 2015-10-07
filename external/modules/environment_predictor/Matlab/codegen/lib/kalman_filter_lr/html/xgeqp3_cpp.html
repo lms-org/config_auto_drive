@@ -17,7 +17,7 @@
 <a name="5"><font color="#888888 "><i>    5   </i></font></a><font color="#117755"><i>// File: xgeqp3.cpp</i></font>
 <a name="6"><font color="#888888 "><i>    6   </i></font></a><font color="#117755"><i>//</i></font>
 <a name="7"><font color="#888888 "><i>    7   </i></font></a><font color="#117755"><i>// MATLAB Coder version            : 3.0</i></font>
-<a name="8"><font color="#888888 "><i>    8   </i></font></a><font color="#117755"><i>// C/C++ source code generated on  : 06-Oct-2015 19:14:10</i></font>
+<a name="8"><font color="#888888 "><i>    8   </i></font></a><font color="#117755"><i>// C/C++ source code generated on  : 07-Oct-2015 12:34:33</i></font>
 <a name="9"><font color="#888888 "><i>    9   </i></font></a><font color="#117755"><i>//</i></font>
 <a name="10"><font color="#888888 "><i>   10   </i></font></a>
 <a name="11"><font color="#888888 "><i>   11   </i></font></a><font color="#117755"><i>// Include Files</i></font>
@@ -72,7 +72,7 @@
 <a name="60"><font color="#888888 "><i>   60   </i></font></a>  <font color="#112266"><b>int</b></font> m;
 <a name="61"><font color="#888888 "><i>   61   </i></font></a>  <font color="#112266"><b>int</b></font> n;
 <a name="62"><font color="#888888 "><i>   62   </i></font></a>  <font color="#112266"><b>int</b></font> mn;
-<a name="63"><font color="#888888 "><i>   63   </i></font></a>  <font color="#112266"><b>int</b></font> i10;
+<a name="63"><font color="#888888 "><i>   63   </i></font></a>  <font color="#112266"><b>int</b></font> i9;
 <a name="64"><font color="#888888 "><i>   64   </i></font></a>  emxArray_real_T *work;
 <a name="65"><font color="#888888 "><i>   65   </i></font></a>  <font color="#112266"><b>int</b></font> itemp;
 <a name="66"><font color="#888888 "><i>   66   </i></font></a>  emxArray_real_T *vn1;
@@ -102,30 +102,30 @@
 <a name="90"><font color="#888888 "><i>   90   </i></font></a>    mn = A-&gt;size[1];
 <a name="91"><font color="#888888 "><i>   91   </i></font></a>  <b>}</b>
 <a name="92"><font color="#888888 "><i>   92   </i></font></a>
-<a name="93"><font color="#888888 "><i>   93   </i></font></a>  i10 = tau-&gt;size[0];
+<a name="93"><font color="#888888 "><i>   93   </i></font></a>  i9 = tau-&gt;size[0];
 <a name="94"><font color="#888888 "><i>   94   </i></font></a>  tau-&gt;size[0] = mn;
-<a name="95"><font color="#888888 "><i>   95   </i></font></a>  <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((emxArray__common *)tau, i10, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
+<a name="95"><font color="#888888 "><i>   95   </i></font></a>  <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((emxArray__common *)tau, i9, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
 <a name="96"><font color="#888888 "><i>   96   </i></font></a>  <a href="colon_cpp.html#fcn_eml_signed_integer_colon" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_eml_signed_integer_colon');" target="_self"><font color="#1122aa">eml_signed_integer_colon</font></a>(A-&gt;size[1], jpvt);
 <a name="97"><font color="#888888 "><i>   97   </i></font></a>  <font color="#112266"><b>if</b></font> ((A-&gt;size[0] == 0) || (A-&gt;size[1] == 0)) <b>{</b>
 <a name="98"><font color="#888888 "><i>   98   </i></font></a>  <b>}</b> <font color="#112266"><b>else</b></font> <b>{</b>
 <a name="99"><font color="#888888 "><i>   99   </i></font></a>    <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxInit_real_T1" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxInit_real_T1');" target="_self"><font color="#1122aa">emxInit_real_T1</font></a>(&amp;work, 1);
 <a name="100"><font color="#888888 "><i>  100   </i></font></a>    itemp = A-&gt;size[1];
-<a name="101"><font color="#888888 "><i>  101   </i></font></a>    i10 = work-&gt;size[0];
+<a name="101"><font color="#888888 "><i>  101   </i></font></a>    i9 = work-&gt;size[0];
 <a name="102"><font color="#888888 "><i>  102   </i></font></a>    work-&gt;size[0] = itemp;
-<a name="103"><font color="#888888 "><i>  103   </i></font></a>    <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((emxArray__common *)work, i10, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
-<a name="104"><font color="#888888 "><i>  104   </i></font></a>    <font color="#112266"><b>for</b></font> (i10 = 0; i10 &lt; itemp; i10++) <b>{</b>
-<a name="105"><font color="#888888 "><i>  105   </i></font></a>      work-&gt;data[i10] = 0.0;
+<a name="103"><font color="#888888 "><i>  103   </i></font></a>    <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((emxArray__common *)work, i9, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
+<a name="104"><font color="#888888 "><i>  104   </i></font></a>    <font color="#112266"><b>for</b></font> (i9 = 0; i9 &lt; itemp; i9++) <b>{</b>
+<a name="105"><font color="#888888 "><i>  105   </i></font></a>      work-&gt;data[i9] = 0.0;
 <a name="106"><font color="#888888 "><i>  106   </i></font></a>    <b>}</b>
 <a name="107"><font color="#888888 "><i>  107   </i></font></a>
 <a name="108"><font color="#888888 "><i>  108   </i></font></a>    <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxInit_real_T1" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxInit_real_T1');" target="_self"><font color="#1122aa">emxInit_real_T1</font></a>(&amp;vn1, 1);
 <a name="109"><font color="#888888 "><i>  109   </i></font></a>    <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxInit_real_T1" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxInit_real_T1');" target="_self"><font color="#1122aa">emxInit_real_T1</font></a>(&amp;vn2, 1);
 <a name="110"><font color="#888888 "><i>  110   </i></font></a>    itemp = A-&gt;size[1];
-<a name="111"><font color="#888888 "><i>  111   </i></font></a>    i10 = vn1-&gt;size[0];
+<a name="111"><font color="#888888 "><i>  111   </i></font></a>    i9 = vn1-&gt;size[0];
 <a name="112"><font color="#888888 "><i>  112   </i></font></a>    vn1-&gt;size[0] = itemp;
-<a name="113"><font color="#888888 "><i>  113   </i></font></a>    <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((emxArray__common *)vn1, i10, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
-<a name="114"><font color="#888888 "><i>  114   </i></font></a>    i10 = vn2-&gt;size[0];
+<a name="113"><font color="#888888 "><i>  113   </i></font></a>    <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((emxArray__common *)vn1, i9, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
+<a name="114"><font color="#888888 "><i>  114   </i></font></a>    i9 = vn2-&gt;size[0];
 <a name="115"><font color="#888888 "><i>  115   </i></font></a>    vn2-&gt;size[0] = vn1-&gt;size[0];
-<a name="116"><font color="#888888 "><i>  116   </i></font></a>    <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((emxArray__common *)vn2, i10, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
+<a name="116"><font color="#888888 "><i>  116   </i></font></a>    <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((emxArray__common *)vn2, i9, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
 <a name="117"><font color="#888888 "><i>  117   </i></font></a>    k = 1;
 <a name="118"><font color="#888888 "><i>  118   </i></font></a>    <font color="#112266"><b>for</b></font> (nmi = 0; nmi + 1 &lt;= n; nmi++) <b>{</b>
 <a name="119"><font color="#888888 "><i>  119   </i></font></a>      vn1-&gt;data[nmi] = <a href="xnrm2_cpp.html#fcn_xnrm2" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_xnrm2');" target="_self"><font color="#1122aa">xnrm2</font></a>(m, A, k);
@@ -270,9 +270,9 @@
 <a name="258"><font color="#888888 "><i>  258   </i></font></a>            <b>}</b>
 <a name="259"><font color="#888888 "><i>  259   </i></font></a>
 <a name="260"><font color="#888888 "><i>  260   </i></font></a>            iy = 0;
-<a name="261"><font color="#888888 "><i>  261   </i></font></a>            i10 = i_ip1 + m * (lastc - 1);
+<a name="261"><font color="#888888 "><i>  261   </i></font></a>            i9 = i_ip1 + m * (lastc - 1);
 <a name="262"><font color="#888888 "><i>  262   </i></font></a>            itemp = i_ip1;
-<a name="263"><font color="#888888 "><i>  263   </i></font></a>            <font color="#112266"><b>while</b></font> ((m &gt; 0) &amp;&amp; (itemp &lt;= i10)) <b>{</b>
+<a name="263"><font color="#888888 "><i>  263   </i></font></a>            <font color="#112266"><b>while</b></font> ((m &gt; 0) &amp;&amp; (itemp &lt;= i9)) <b>{</b>
 <a name="264"><font color="#888888 "><i>  264   </i></font></a>              ix = i_i;
 <a name="265"><font color="#888888 "><i>  265   </i></font></a>              smax = 0.0;
 <a name="266"><font color="#888888 "><i>  266   </i></font></a>              pvt = itemp + lastv;
@@ -294,8 +294,8 @@
 <a name="282"><font color="#888888 "><i>  282   </i></font></a>              <font color="#112266"><b>if</b></font> (work-&gt;data[itemp] != 0.0) <b>{</b>
 <a name="283"><font color="#888888 "><i>  283   </i></font></a>                smax = work-&gt;data[itemp] * -tau-&gt;data[i];
 <a name="284"><font color="#888888 "><i>  284   </i></font></a>                ix = i_i;
-<a name="285"><font color="#888888 "><i>  285   </i></font></a>                i10 = lastv + i_ip1;
-<a name="286"><font color="#888888 "><i>  286   </i></font></a>                <font color="#112266"><b>for</b></font> (pvt = i_ip1; pvt &lt;= i10; pvt++) <b>{</b>
+<a name="285"><font color="#888888 "><i>  285   </i></font></a>                i9 = lastv + i_ip1;
+<a name="286"><font color="#888888 "><i>  286   </i></font></a>                <font color="#112266"><b>for</b></font> (pvt = i_ip1; pvt &lt;= i9; pvt++) <b>{</b>
 <a name="287"><font color="#888888 "><i>  287   </i></font></a>                  A-&gt;data[pvt - 1] += A-&gt;data[ix] * smax;
 <a name="288"><font color="#888888 "><i>  288   </i></font></a>                  ix++;
 <a name="289"><font color="#888888 "><i>  289   </i></font></a>                <b>}</b>

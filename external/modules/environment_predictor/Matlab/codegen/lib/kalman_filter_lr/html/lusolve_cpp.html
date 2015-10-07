@@ -17,7 +17,7 @@
 <a name="5"><font color="#888888 "><i>    5   </i></font></a><font color="#117755"><i>// File: lusolve.cpp</i></font>
 <a name="6"><font color="#888888 "><i>    6   </i></font></a><font color="#117755"><i>//</i></font>
 <a name="7"><font color="#888888 "><i>    7   </i></font></a><font color="#117755"><i>// MATLAB Coder version            : 3.0</i></font>
-<a name="8"><font color="#888888 "><i>    8   </i></font></a><font color="#117755"><i>// C/C++ source code generated on  : 06-Oct-2015 19:14:10</i></font>
+<a name="8"><font color="#888888 "><i>    8   </i></font></a><font color="#117755"><i>// C/C++ source code generated on  : 07-Oct-2015 12:34:33</i></font>
 <a name="9"><font color="#888888 "><i>    9   </i></font></a><font color="#117755"><i>//</i></font>
 <a name="10"><font color="#888888 "><i>   10   </i></font></a>
 <a name="11"><font color="#888888 "><i>   11   </i></font></a><font color="#117755"><i>// Include Files</i></font>
@@ -38,7 +38,7 @@
 <a name="26"><font color="#888888 "><i>   26   </i></font></a><b>{</b>
 <a name="27"><font color="#888888 "><i>   27   </i></font></a>  emxArray_real_T *b_A;
 <a name="28"><font color="#888888 "><i>   28   </i></font></a>  <font color="#112266"><b>int</b></font> n;
-<a name="29"><font color="#888888 "><i>   29   </i></font></a>  <font color="#112266"><b>int</b></font> i9;
+<a name="29"><font color="#888888 "><i>   29   </i></font></a>  <font color="#112266"><b>int</b></font> i8;
 <a name="30"><font color="#888888 "><i>   30   </i></font></a>  <font color="#112266"><b>int</b></font> iy;
 <a name="31"><font color="#888888 "><i>   31   </i></font></a>  emxArray_int32_T *ipiv;
 <a name="32"><font color="#888888 "><i>   32   </i></font></a>  <font color="#112266"><b>int</b></font> j;
@@ -54,13 +54,13 @@
 <a name="42"><font color="#888888 "><i>   42   </i></font></a>  <font color="#112266"><b>int</b></font> nb;
 <a name="43"><font color="#888888 "><i>   43   </i></font></a>  <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxInit_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxInit_real_T');" target="_self"><font color="#1122aa">emxInit_real_T</font></a>(&amp;b_A, 2);
 <a name="44"><font color="#888888 "><i>   44   </i></font></a>  n = A-&gt;size[1];
-<a name="45"><font color="#888888 "><i>   45   </i></font></a>  i9 = b_A-&gt;size[0] * b_A-&gt;size[1];
+<a name="45"><font color="#888888 "><i>   45   </i></font></a>  i8 = b_A-&gt;size[0] * b_A-&gt;size[1];
 <a name="46"><font color="#888888 "><i>   46   </i></font></a>  b_A-&gt;size[0] = A-&gt;size[0];
 <a name="47"><font color="#888888 "><i>   47   </i></font></a>  b_A-&gt;size[1] = A-&gt;size[1];
-<a name="48"><font color="#888888 "><i>   48   </i></font></a>  <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((emxArray__common *)b_A, i9, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
+<a name="48"><font color="#888888 "><i>   48   </i></font></a>  <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxEnsureCapacity" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxEnsureCapacity');" target="_self"><font color="#1122aa">emxEnsureCapacity</font></a>((emxArray__common *)b_A, i8, (<font color="#112266"><b>int</b></font>)<font color="#112266"><b>sizeof</b></font>(<font color="#112266"><b>double</b></font>));
 <a name="49"><font color="#888888 "><i>   49   </i></font></a>  iy = A-&gt;size[0] * A-&gt;size[1];
-<a name="50"><font color="#888888 "><i>   50   </i></font></a>  <font color="#112266"><b>for</b></font> (i9 = 0; i9 &lt; iy; i9++) <b>{</b>
-<a name="51"><font color="#888888 "><i>   51   </i></font></a>    b_A-&gt;data[i9] = A-&gt;data[i9];
+<a name="50"><font color="#888888 "><i>   50   </i></font></a>  <font color="#112266"><b>for</b></font> (i8 = 0; i8 &lt; iy; i8++) <b>{</b>
+<a name="51"><font color="#888888 "><i>   51   </i></font></a>    b_A-&gt;data[i8] = A-&gt;data[i8];
 <a name="52"><font color="#888888 "><i>   52   </i></font></a>  <b>}</b>
 <a name="53"><font color="#888888 "><i>   53   </i></font></a>
 <a name="54"><font color="#888888 "><i>   54   </i></font></a>  <a href="kalman_filter_lr_emxutil_cpp.html#fcn_emxInit_int32_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_emxInit_int32_T');" target="_self"><font color="#1122aa">emxInit_int32_T</font></a>(&amp;ipiv, 2);
@@ -69,12 +69,12 @@
 <a name="57"><font color="#888888 "><i>   57   </i></font></a>  <font color="#112266"><b>if</b></font> (A-&gt;size[1] &lt; 1) <b>{</b>
 <a name="58"><font color="#888888 "><i>   58   </i></font></a>  <b>}</b> <font color="#112266"><b>else</b></font> <b>{</b>
 <a name="59"><font color="#888888 "><i>   59   </i></font></a>    <font color="#112266"><b>if</b></font> (A-&gt;size[1] - 1 &lt;= A-&gt;size[1]) <b>{</b>
-<a name="60"><font color="#888888 "><i>   60   </i></font></a>      i9 = A-&gt;size[1] - 1;
+<a name="60"><font color="#888888 "><i>   60   </i></font></a>      i8 = A-&gt;size[1] - 1;
 <a name="61"><font color="#888888 "><i>   61   </i></font></a>    <b>}</b> <font color="#112266"><b>else</b></font> <b>{</b>
-<a name="62"><font color="#888888 "><i>   62   </i></font></a>      i9 = A-&gt;size[1];
+<a name="62"><font color="#888888 "><i>   62   </i></font></a>      i8 = A-&gt;size[1];
 <a name="63"><font color="#888888 "><i>   63   </i></font></a>    <b>}</b>
 <a name="64"><font color="#888888 "><i>   64   </i></font></a>
-<a name="65"><font color="#888888 "><i>   65   </i></font></a>    <font color="#112266"><b>for</b></font> (j = 0; j + 1 &lt;= i9; j++) <b>{</b>
+<a name="65"><font color="#888888 "><i>   65   </i></font></a>    <font color="#112266"><b>for</b></font> (j = 0; j + 1 &lt;= i8; j++) <b>{</b>
 <a name="66"><font color="#888888 "><i>   66   </i></font></a>      mmj = n - j;
 <a name="67"><font color="#888888 "><i>   67   </i></font></a>      c = j * (n + 1);
 <a name="68"><font color="#888888 "><i>   68   </i></font></a>      <font color="#112266"><b>if</b></font> (mmj &lt; 1) <b>{</b>

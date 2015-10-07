@@ -5,7 +5,7 @@
 // File: xscal.h
 //
 // MATLAB Coder version            : 3.0
-// C/C++ source code generated on  : 06-Oct-2015 19:14:10
+// C/C++ source code generated on  : 07-Oct-2015 12:34:33
 //
 #ifndef __XSCAL_H__
 #define __XSCAL_H__

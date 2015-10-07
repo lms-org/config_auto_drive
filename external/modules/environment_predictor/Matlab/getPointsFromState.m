@@ -14,8 +14,7 @@ P(2, 2) = P(1, 2) + delta*sin(r(2));
 P(2, 3) = phi;
     
 for s=3:numel(r)   
-        dw = 2*acos(-delta*r(s)/2); % "-" wegen VZ-Definition der Kruemmung
-        phi = phi - dw - pi; 
+        phi = phi + pi - 2*acos(delta*r(s)/2); 
         P(s, 1) = P(s-1, 1) + delta*cos(phi);
         P(s, 2) = P(s-1, 2) + delta*sin(phi);
         P(s, 3) = phi;  

@@ -5,7 +5,7 @@
 // File: handle_measurements.cpp
 //
 // MATLAB Coder version            : 3.0
-// C/C++ source code generated on  : 06-Oct-2015 19:14:10
+// C/C++ source code generated on  : 07-Oct-2015 12:34:33
 //
 
 // Include Files
@@ -14,7 +14,6 @@
 #include "handle_measurements.h"
 #include "kalman_filter_lr_emxutil.h"
 #include "messmatrix.h"
-#include "getPointsFromState.h"
 #include "projectPoints.h"
 
 // Function Declarations
@@ -158,11 +157,210 @@ static void eml_null_assignment(emxArray_real_T *x, const emxArray_boolean_T
 //                emxArray_real_T *H
 //                emxArray_real_T *z
 //                emxArray_real_T *zm
+//                double *nValidPoints
 // Return Type  : void
 //
 void b_handle_measurements(const emxArray_real_T *r, double delta,
   emxArray_real_T *xm, emxArray_real_T *ym, emxArray_real_T *H, emxArray_real_T *
-  z, emxArray_real_T *zm)
+  z, emxArray_real_T *zm, double *nValidPoints)
+{
+  emxArray_real_T *P;
+  emxArray_real_T *xp;
+  emxArray_real_T *yp;
+  emxArray_real_T *phi;
+  int xp_idx_0;
+  int yp_idx_0;
+  int phi_idx_0;
+  int i3;
+  emxArray_real_T *D;
+  int s;
+  int m;
+  double a;
+  double b_a;
+  double dist_point;
+  double b_P[2];
+  double M_idx_1;
+  double c_P[2];
+  double v[2];
+  double lambda;
+  double dist_line;
+  emxArray_boolean_T *ind;
+  emxArray_real_T *b_D;
+  emxArray_real_T *c_D;
+  unsigned int count;
+  emxInit_real_T(&P, 2);
+  emxInit_real_T1(&xp, 1);
+  emxInit_real_T1(&yp, 1);
+  emxInit_real_T1(&phi, 1);
+  projectPoints(r, delta, -0.38, xp, yp, phi);
+
+  // Punkte von Mittellinie nach links/rechts projizieren
+  xp_idx_0 = xp->size[0];
+  yp_idx_0 = yp->size[0];
+  phi_idx_0 = phi->size[0];
+  i3 = P->size[0] * P->size[1];
+  P->size[0] = xp_idx_0;
+  P->size[1] = 3;
+  emxEnsureCapacity((emxArray__common *)P, i3, (int)sizeof(double));
+  for (i3 = 0; i3 < xp_idx_0; i3++) {
+    P->data[i3] = xp->data[i3];
+  }
+
+  emxFree_real_T(&xp);
+  for (i3 = 0; i3 < yp_idx_0; i3++) {
+    P->data[i3 + P->size[0]] = yp->data[i3];
+  }
+
+  emxFree_real_T(&yp);
+  for (i3 = 0; i3 < phi_idx_0; i3++) {
+    P->data[i3 + (P->size[0] << 1)] = phi->data[i3];
+  }
+
+  emxFree_real_T(&phi);
+  emxInit_real_T(&D, 2);
+  i3 = D->size[0] * D->size[1];
+  D->size[0] = xm->size[0];
+  D->size[1] = 3;
+  emxEnsureCapacity((emxArray__common *)D, i3, (int)sizeof(double));
+  xp_idx_0 = xm->size[0] * 3;
+  for (i3 = 0; i3 < xp_idx_0; i3++) {
+    D->data[i3] = 10000.0;
+  }
+
+  //  Fuer jeden Messpunkt den nächsten Punkt der aktuellen Praediktion finden
+  for (s = 0; s < r->size[0]; s++) {
+    for (m = 0; m < xm->size[0]; m++) {
+      a = P->data[s] - xm->data[m];
+      b_a = P->data[s + P->size[0]] - ym->data[m];
+      dist_point = sqrt(a * a + b_a * b_a);
+      if (dist_point < D->data[m + (D->size[0] << 1)]) {
+        D->data[m] = 1.0 + (double)s;
+        D->data[m + D->size[0]] = 0.0;
+        D->data[m + (D->size[0] << 1)] = dist_point;
+      }
+
+      if (1 + s > 1) {
+        b_P[0] = P->data[s - 1];
+        b_P[1] = P->data[(s + P->size[0]) - 1];
+        b_a = xm->data[m];
+        M_idx_1 = ym->data[m];
+
+        // Abstand d zwischen der Gerade g (von P in Richtung Q) und dem Punkt M 
+        // S ist der Punkt auf g mit kleinstem Abstand zu M
+        c_P[0] = P->data[s];
+        c_P[1] = P->data[s + P->size[0]];
+        for (i3 = 0; i3 < 2; i3++) {
+          v[i3] = c_P[i3] - b_P[i3];
+        }
+
+        lambda = -(v[0] * (b_P[0] - b_a) + v[1] * (b_P[1] - M_idx_1)) / (v[0] *
+          v[0] + v[1] * v[1]);
+        for (i3 = 0; i3 < 2; i3++) {
+          b_P[i3] += lambda * v[i3];
+        }
+
+        a = b_a - b_P[0];
+        b_a = M_idx_1 - b_P[1];
+        dist_line = sqrt(a * a + b_a * b_a);
+        if ((dist_line < D->data[m + (D->size[0] << 1)]) && (lambda > 0.0) &&
+            (lambda < 1.0)) {
+          D->data[m] = (1.0 + (double)s) - 1.0;
+          D->data[m + D->size[0]] = lambda;
+          D->data[m + (D->size[0] << 1)] = dist_line;
+        }
+      }
+    }
+  }
+
+  emxInit_boolean_T(&ind, 1);
+
+  //  Messpunkte ausfiltern, die vor dem letzten prädizierten Punkt oder zu weit entfernt liegen 
+  xp_idx_0 = D->size[0];
+  yp_idx_0 = r->size[0];
+  i3 = ind->size[0];
+  ind->size[0] = xp_idx_0;
+  emxEnsureCapacity((emxArray__common *)ind, i3, (int)sizeof(boolean_T));
+  for (i3 = 0; i3 < xp_idx_0; i3++) {
+    ind->data[i3] = ((D->data[i3] == yp_idx_0) || (D->data[i3 + (D->size[0] << 1)]
+      > 1.0));
+  }
+
+  emxInit_real_T1(&b_D, 1);
+  eml_null_assignment(xm, ind);
+  eml_null_assignment(ym, ind);
+  b_eml_null_assignment(D, ind);
+  *nValidPoints = D->size[0];
+
+  //  Anzahl an letzlich verwerteten Messpunkten
+  //  Messmatrix H, Messvektor z und Erwartungsvektor zm berechnen
+  xp_idx_0 = D->size[0];
+  i3 = b_D->size[0];
+  b_D->size[0] = xp_idx_0;
+  emxEnsureCapacity((emxArray__common *)b_D, i3, (int)sizeof(double));
+  emxFree_boolean_T(&ind);
+  for (i3 = 0; i3 < xp_idx_0; i3++) {
+    b_D->data[i3] = D->data[i3];
+  }
+
+  emxInit_real_T1(&c_D, 1);
+  xp_idx_0 = D->size[0];
+  i3 = c_D->size[0];
+  c_D->size[0] = xp_idx_0;
+  emxEnsureCapacity((emxArray__common *)c_D, i3, (int)sizeof(double));
+  for (i3 = 0; i3 < xp_idx_0; i3++) {
+    c_D->data[i3] = D->data[i3 + D->size[0]];
+  }
+
+  messmatrix(P, r, delta, b_D, c_D, H);
+  i3 = z->size[0];
+  z->size[0] = (int)(2.0 * (double)xm->size[0]);
+  emxEnsureCapacity((emxArray__common *)z, i3, (int)sizeof(double));
+  xp_idx_0 = (int)(2.0 * (double)xm->size[0]);
+  emxFree_real_T(&c_D);
+  emxFree_real_T(&b_D);
+  for (i3 = 0; i3 < xp_idx_0; i3++) {
+    z->data[i3] = 0.0;
+  }
+
+  i3 = zm->size[0];
+  zm->size[0] = (int)(2.0 * (double)xm->size[0]);
+  emxEnsureCapacity((emxArray__common *)zm, i3, (int)sizeof(double));
+  xp_idx_0 = (int)(2.0 * (double)xm->size[0]);
+  for (i3 = 0; i3 < xp_idx_0; i3++) {
+    zm->data[i3] = 0.0;
+  }
+
+  count = 2U;
+  for (m = 0; m < xm->size[0]; m++) {
+    z->data[(int)count - 2] = xm->data[m];
+    z->data[(int)count - 1] = ym->data[m];
+    zm->data[(int)count - 2] = P->data[(int)D->data[m] - 1] + D->data[m +
+      D->size[0]] * (P->data[(int)(D->data[m] + 1.0) - 1] - P->data[(int)D->
+                     data[m] - 1]);
+    zm->data[(int)count - 1] = P->data[((int)D->data[m] + P->size[0]) - 1] +
+      D->data[m + D->size[0]] * (P->data[((int)(D->data[m] + 1.0) + P->size[0])
+      - 1] - P->data[((int)D->data[m] + P->size[0]) - 1]);
+    count += 2U;
+  }
+
+  emxFree_real_T(&D);
+  emxFree_real_T(&P);
+}
+
+//
+// Arguments    : const emxArray_real_T *r
+//                double delta
+//                emxArray_real_T *xm
+//                emxArray_real_T *ym
+//                emxArray_real_T *H
+//                emxArray_real_T *z
+//                emxArray_real_T *zm
+//                double *nValidPoints
+// Return Type  : void
+//
+void c_handle_measurements(const emxArray_real_T *r, double delta,
+  emxArray_real_T *xm, emxArray_real_T *ym, emxArray_real_T *H, emxArray_real_T *
+  z, emxArray_real_T *zm, double *nValidPoints)
 {
   emxArray_real_T *P;
   emxArray_real_T *xp;
@@ -192,7 +390,7 @@ void b_handle_measurements(const emxArray_real_T *r, double delta,
   emxInit_real_T1(&xp, 1);
   emxInit_real_T1(&yp, 1);
   emxInit_real_T1(&phi, 1);
-  projectPoints(r, delta, -0.38, xp, yp, phi);
+  projectPoints(r, delta, 0.0, xp, yp, phi);
 
   // Punkte von Mittellinie nach links/rechts projizieren
   xp_idx_0 = xp->size[0];
@@ -227,7 +425,7 @@ void b_handle_measurements(const emxArray_real_T *r, double delta,
     D->data[i4] = 10000.0;
   }
 
-  //  Fuer jeden Messpunkt den nähesten Punkt der aktuellen Praediktion finden
+  //  Fuer jeden Messpunkt den nächsten Punkt der aktuellen Praediktion finden
   for (s = 0; s < r->size[0]; s++) {
     for (m = 0; m < xm->size[0]; m++) {
       a = P->data[s] - xm->data[m];
@@ -282,14 +480,16 @@ void b_handle_measurements(const emxArray_real_T *r, double delta,
   emxEnsureCapacity((emxArray__common *)ind, i4, (int)sizeof(boolean_T));
   for (i4 = 0; i4 < xp_idx_0; i4++) {
     ind->data[i4] = ((D->data[i4] == yp_idx_0) || (D->data[i4 + (D->size[0] << 1)]
-      > 0.5));
+      > 1.0));
   }
 
   emxInit_real_T1(&b_D, 1);
   eml_null_assignment(xm, ind);
   eml_null_assignment(ym, ind);
   b_eml_null_assignment(D, ind);
+  *nValidPoints = D->size[0];
 
+  //  Anzahl an letzlich verwerteten Messpunkten
   //  Messmatrix H, Messvektor z und Erwartungsvektor zm berechnen
   xp_idx_0 = D->size[0];
   i4 = b_D->size[0];
@@ -353,204 +553,12 @@ void b_handle_measurements(const emxArray_real_T *r, double delta,
 //                emxArray_real_T *H
 //                emxArray_real_T *z
 //                emxArray_real_T *zm
-// Return Type  : void
-//
-void c_handle_measurements(const emxArray_real_T *r, double delta,
-  emxArray_real_T *xm, emxArray_real_T *ym, emxArray_real_T *H, emxArray_real_T *
-  z, emxArray_real_T *zm)
-{
-  emxArray_real_T *P;
-  emxArray_real_T *xp;
-  emxArray_real_T *yp;
-  emxArray_real_T *phi;
-  int xp_idx_0;
-  int yp_idx_0;
-  int phi_idx_0;
-  int i5;
-  emxArray_real_T *D;
-  int s;
-  int m;
-  double a;
-  double b_a;
-  double dist_point;
-  double b_P[2];
-  double M_idx_1;
-  double c_P[2];
-  double v[2];
-  double lambda;
-  double dist_line;
-  emxArray_boolean_T *ind;
-  emxArray_real_T *b_D;
-  emxArray_real_T *c_D;
-  unsigned int count;
-  emxInit_real_T(&P, 2);
-  emxInit_real_T1(&xp, 1);
-  emxInit_real_T1(&yp, 1);
-  emxInit_real_T1(&phi, 1);
-  getPointsFromState(r, delta, xp, yp, phi);
-  xp_idx_0 = xp->size[0];
-  yp_idx_0 = yp->size[0];
-  phi_idx_0 = phi->size[0];
-  i5 = P->size[0] * P->size[1];
-  P->size[0] = xp_idx_0;
-  P->size[1] = 3;
-  emxEnsureCapacity((emxArray__common *)P, i5, (int)sizeof(double));
-  for (i5 = 0; i5 < xp_idx_0; i5++) {
-    P->data[i5] = xp->data[i5];
-  }
-
-  emxFree_real_T(&xp);
-  for (i5 = 0; i5 < yp_idx_0; i5++) {
-    P->data[i5 + P->size[0]] = yp->data[i5];
-  }
-
-  emxFree_real_T(&yp);
-  for (i5 = 0; i5 < phi_idx_0; i5++) {
-    P->data[i5 + (P->size[0] << 1)] = phi->data[i5];
-  }
-
-  emxFree_real_T(&phi);
-  emxInit_real_T(&D, 2);
-  i5 = D->size[0] * D->size[1];
-  D->size[0] = xm->size[0];
-  D->size[1] = 3;
-  emxEnsureCapacity((emxArray__common *)D, i5, (int)sizeof(double));
-  xp_idx_0 = xm->size[0] * 3;
-  for (i5 = 0; i5 < xp_idx_0; i5++) {
-    D->data[i5] = 10000.0;
-  }
-
-  //  Fuer jeden Messpunkt den nähesten Punkt der aktuellen Praediktion finden
-  for (s = 0; s < r->size[0]; s++) {
-    for (m = 0; m < xm->size[0]; m++) {
-      a = P->data[s] - xm->data[m];
-      b_a = P->data[s + P->size[0]] - ym->data[m];
-      dist_point = sqrt(a * a + b_a * b_a);
-      if (dist_point < D->data[m + (D->size[0] << 1)]) {
-        D->data[m] = 1.0 + (double)s;
-        D->data[m + D->size[0]] = 0.0;
-        D->data[m + (D->size[0] << 1)] = dist_point;
-      }
-
-      if (1 + s > 1) {
-        b_P[0] = P->data[s - 1];
-        b_P[1] = P->data[(s + P->size[0]) - 1];
-        b_a = xm->data[m];
-        M_idx_1 = ym->data[m];
-
-        // Abstand d zwischen der Gerade g (von P in Richtung Q) und dem Punkt M 
-        // S ist der Punkt auf g mit kleinstem Abstand zu M
-        c_P[0] = P->data[s];
-        c_P[1] = P->data[s + P->size[0]];
-        for (i5 = 0; i5 < 2; i5++) {
-          v[i5] = c_P[i5] - b_P[i5];
-        }
-
-        lambda = -(v[0] * (b_P[0] - b_a) + v[1] * (b_P[1] - M_idx_1)) / (v[0] *
-          v[0] + v[1] * v[1]);
-        for (i5 = 0; i5 < 2; i5++) {
-          b_P[i5] += lambda * v[i5];
-        }
-
-        a = b_a - b_P[0];
-        b_a = M_idx_1 - b_P[1];
-        dist_line = sqrt(a * a + b_a * b_a);
-        if ((dist_line < D->data[m + (D->size[0] << 1)]) && (lambda > 0.0) &&
-            (lambda < 1.0)) {
-          D->data[m] = (1.0 + (double)s) - 1.0;
-          D->data[m + D->size[0]] = lambda;
-          D->data[m + (D->size[0] << 1)] = dist_line;
-        }
-      }
-    }
-  }
-
-  emxInit_boolean_T(&ind, 1);
-
-  //  Messpunkte ausfiltern, die vor dem letzten prädizierten Punkt oder zu weit entfernt liegen 
-  xp_idx_0 = D->size[0];
-  yp_idx_0 = r->size[0];
-  i5 = ind->size[0];
-  ind->size[0] = xp_idx_0;
-  emxEnsureCapacity((emxArray__common *)ind, i5, (int)sizeof(boolean_T));
-  for (i5 = 0; i5 < xp_idx_0; i5++) {
-    ind->data[i5] = ((D->data[i5] == yp_idx_0) || (D->data[i5 + (D->size[0] << 1)]
-      > 0.5));
-  }
-
-  emxInit_real_T1(&b_D, 1);
-  eml_null_assignment(xm, ind);
-  eml_null_assignment(ym, ind);
-  b_eml_null_assignment(D, ind);
-
-  //  Messmatrix H, Messvektor z und Erwartungsvektor zm berechnen
-  xp_idx_0 = D->size[0];
-  i5 = b_D->size[0];
-  b_D->size[0] = xp_idx_0;
-  emxEnsureCapacity((emxArray__common *)b_D, i5, (int)sizeof(double));
-  emxFree_boolean_T(&ind);
-  for (i5 = 0; i5 < xp_idx_0; i5++) {
-    b_D->data[i5] = D->data[i5];
-  }
-
-  emxInit_real_T1(&c_D, 1);
-  xp_idx_0 = D->size[0];
-  i5 = c_D->size[0];
-  c_D->size[0] = xp_idx_0;
-  emxEnsureCapacity((emxArray__common *)c_D, i5, (int)sizeof(double));
-  for (i5 = 0; i5 < xp_idx_0; i5++) {
-    c_D->data[i5] = D->data[i5 + D->size[0]];
-  }
-
-  messmatrix(P, r, delta, b_D, c_D, H);
-  i5 = z->size[0];
-  z->size[0] = (int)(2.0 * (double)xm->size[0]);
-  emxEnsureCapacity((emxArray__common *)z, i5, (int)sizeof(double));
-  xp_idx_0 = (int)(2.0 * (double)xm->size[0]);
-  emxFree_real_T(&c_D);
-  emxFree_real_T(&b_D);
-  for (i5 = 0; i5 < xp_idx_0; i5++) {
-    z->data[i5] = 0.0;
-  }
-
-  i5 = zm->size[0];
-  zm->size[0] = (int)(2.0 * (double)xm->size[0]);
-  emxEnsureCapacity((emxArray__common *)zm, i5, (int)sizeof(double));
-  xp_idx_0 = (int)(2.0 * (double)xm->size[0]);
-  for (i5 = 0; i5 < xp_idx_0; i5++) {
-    zm->data[i5] = 0.0;
-  }
-
-  count = 2U;
-  for (m = 0; m < xm->size[0]; m++) {
-    z->data[(int)count - 2] = xm->data[m];
-    z->data[(int)count - 1] = ym->data[m];
-    zm->data[(int)count - 2] = P->data[(int)D->data[m] - 1] + D->data[m +
-      D->size[0]] * (P->data[(int)(D->data[m] + 1.0) - 1] - P->data[(int)D->
-                     data[m] - 1]);
-    zm->data[(int)count - 1] = P->data[((int)D->data[m] + P->size[0]) - 1] +
-      D->data[m + D->size[0]] * (P->data[((int)(D->data[m] + 1.0) + P->size[0])
-      - 1] - P->data[((int)D->data[m] + P->size[0]) - 1]);
-    count += 2U;
-  }
-
-  emxFree_real_T(&D);
-  emxFree_real_T(&P);
-}
-
-//
-// Arguments    : const emxArray_real_T *r
-//                double delta
-//                emxArray_real_T *xm
-//                emxArray_real_T *ym
-//                emxArray_real_T *H
-//                emxArray_real_T *z
-//                emxArray_real_T *zm
+//                double *nValidPoints
 // Return Type  : void
 //
 void handle_measurements(const emxArray_real_T *r, double delta, emxArray_real_T
   *xm, emxArray_real_T *ym, emxArray_real_T *H, emxArray_real_T *z,
-  emxArray_real_T *zm)
+  emxArray_real_T *zm, double *nValidPoints)
 {
   emxArray_real_T *P;
   emxArray_real_T *xp;
@@ -615,7 +623,7 @@ void handle_measurements(const emxArray_real_T *r, double delta, emxArray_real_T
     D->data[i0] = 10000.0;
   }
 
-  //  Fuer jeden Messpunkt den nähesten Punkt der aktuellen Praediktion finden
+  //  Fuer jeden Messpunkt den nächsten Punkt der aktuellen Praediktion finden
   for (s = 0; s < r->size[0]; s++) {
     for (m = 0; m < xm->size[0]; m++) {
       a = P->data[s] - xm->data[m];
@@ -670,14 +678,16 @@ void handle_measurements(const emxArray_real_T *r, double delta, emxArray_real_T
   emxEnsureCapacity((emxArray__common *)ind, i0, (int)sizeof(boolean_T));
   for (i0 = 0; i0 < xp_idx_0; i0++) {
     ind->data[i0] = ((D->data[i0] == yp_idx_0) || (D->data[i0 + (D->size[0] << 1)]
-      > 0.5));
+      > 1.0));
   }
 
   emxInit_real_T1(&b_D, 1);
   eml_null_assignment(xm, ind);
   eml_null_assignment(ym, ind);
   b_eml_null_assignment(D, ind);
+  *nValidPoints = D->size[0];
 
+  //  Anzahl an letzlich verwerteten Messpunkten
   //  Messmatrix H, Messvektor z und Erwartungsvektor zm berechnen
   xp_idx_0 = D->size[0];
   i0 = b_D->size[0];

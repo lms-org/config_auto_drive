@@ -24,9 +24,6 @@ private:
     const street_environment::RoadLane* middleLane;
     lms::imaging::find::HintContainer *hintContainerLane;
     lms::imaging::find::HintContainer *hintContainerObstacle;
-    lms::imaging::find::HintContainer *hintContainer_Left;
-    lms::imaging::find::HintContainer *hintContainer_Right;
-    lms::imaging::find::HintContainer *hintContainer_Middle;
     lms::imaging::Image *gaussBuffer;
     /**
      * @brief getTargetImage Dont use that method yet!
