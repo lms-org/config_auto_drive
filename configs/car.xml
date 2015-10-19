@@ -57,12 +57,12 @@
         </config>
     </module>
 	<module>
-	    <name>car_to_senseboard2015</name>
-	    <writePriority>1000</writePriority>
+            <name>car_to_senseboard2015</name>
+            <channelMapping priority="10" from="CAR" to="CAR"/>
 	</module>
     <module>
         <name>car_to_sense_link</name>
-        <writePriority>1000</writePriority>
+        <channelMapping priority="10" from="CAR" to="CAR"/>
     </module>
     <module>
         <name>senselink_csvlogger</name>

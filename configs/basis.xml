@@ -1,11 +1,11 @@
 <framework>
     <modulesToEnable>
-        <module logLevel="INFO">image_hint_generator</module>
+        <module logLevel="WARN">image_hint_generator</module>
         <module logLevel="ERROR">image_hint_transformer</module>
         <module logLevel="ERROR">image_hint_transformer_obstacle</module>
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
-        <module logLevel="DEBUG">environment_predictor</module>
+        <module logLevel="WARN">environment_predictor</module>
         <module logLevel="WARN">trajectory_creator</module>
         <module logLevel="ERROR">trajectory_point_creator</module>
         <module logLevel="ERROR">environment_filter</module>
@@ -78,10 +78,9 @@
     </module>
     <module>
         <name>image_hint_generator</name>
-        <writePriority>10</writePriority>
         <channelMapping from="HINTS" to="HINTS"/>
         <channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
-        <channelMapping from="ENV_MID" to="ENVIRONMENT_ROAD_MERGED"/>
+        <channelMapping priority="10" from="MIDDLE_LANE" to="MIDDLE_LANE"/>
         <config>
             <searchForObstacles>true</searchForObstacles>
             <searchForCrossing>false</searchForCrossing>

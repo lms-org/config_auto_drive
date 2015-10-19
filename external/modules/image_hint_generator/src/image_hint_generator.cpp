@@ -11,7 +11,7 @@
 bool ImageHintGenerator::initialize() {
     config = getConfig();
     gaussBuffer = new lms::imaging::Image();
-    middleLane = datamanager()->writeChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
+    middleLane = datamanager()->readChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
     hintContainerLane = datamanager()->
             writeChannel<lms::imaging::find::HintContainer>(this,"HINTS");
 

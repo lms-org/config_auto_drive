@@ -10,7 +10,7 @@ bool CarToSenseboard2015::initialize() {
     /*
      * HACK: it has write-Access because it should be executed before the Senseboard!
      */
-    car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
+    car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
     lastRcState = false;
     return true;
 }

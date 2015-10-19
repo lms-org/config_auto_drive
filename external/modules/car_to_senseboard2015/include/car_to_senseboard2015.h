@@ -17,7 +17,7 @@ private:
     bool lastRcState;
     Comm::SensorBoard::ControlData *controlData;
     Comm::SensorBoard::SensorData *sensorData;
-    /*const*/ sensor_utils::Car *car;
+    const sensor_utils::Car *car;
 };
 
 #endif /* CAR_TRACKER */
