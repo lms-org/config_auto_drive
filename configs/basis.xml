@@ -25,6 +25,7 @@
     </modulesToEnable>
     <module>
         <name>street_obstacle_merger</name>
+        <channelMapping priority="10" from="CAR" to="CAR"/>
         <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_OBSTACLE_RAW"/>
         <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_OBSTACLE"/>
     </module>
@@ -114,6 +115,7 @@
     </module>
     <module>
         <name>environment_predictor</name>
+        <channelMapping priority="10" from="CAR" to="CAR"/>
         <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
         <channelMapping from="ROAD_OUTPUT" to="MIDDLE_LANE"/>
         <config>

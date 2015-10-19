@@ -13,7 +13,7 @@ bool EnvironmentPredictor::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
 
     roadOutput = datamanager()->writeChannel<street_environment::RoadLane>(this,"ROAD_OUTPUT");
-    car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
+    car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
     config = getConfig();
 
     partCount = config->get<int>("elementCount",10);

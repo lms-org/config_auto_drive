@@ -7,7 +7,7 @@ bool StreetObstacleMerger::initialize() {
     envOutput = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_OUTPUT");
 
     //We should havet the roadlane and the car from the current cycle
-    car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
+    car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
     middle = datamanager()->writeChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
     config = getConfig();
 
