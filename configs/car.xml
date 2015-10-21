@@ -6,6 +6,7 @@
         <if notSet="sense_link">
             <module logLevel="DEBUG">importer_senseboard2015</module>
             <module logLevel="DEBUG">car_to_senseboard2015</module>
+            <module logLevel="DEBUG">sensor_tracker</module>
         </if>
         <if set="sense_link">
             <module logLevel="INFO">usb_sense_link</module>

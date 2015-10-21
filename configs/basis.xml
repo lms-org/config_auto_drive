@@ -11,7 +11,6 @@
         <module logLevel="ERROR">environment_filter</module>
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">velocity_controller</module>
-        <!--<module logLevel="DEBUG">sensor_tracker</module>-->
         <module logLevel="WARN">image_proxy</module>
         <module logLevel="WARN">street_obstacle_merger</module>
         <if notSet="sense_link">

@@ -1,42 +1,18 @@
-#########
-##Lustig:
-global and local private tag in broadcasting messages
+Framework: Hans, Philipp
 
-Parken:
-- IR-sensor rechts dran bauen (Unsere IR-sensoren passen von der range nicht -.-)
-- Parklücken vermessen
+Parken: Tobi, ?
 
-audio-input/ouput
-audio-logging
+Audio Output: Fabi S
 
-udp-broadcasting / eigenen hotspot aufmachen
+FOH:
+ - Initialsuche der Bilderkennung: ?
 
-xbox-controller verbessern
--rumble-function
+FMH:
+ - Hindernisserkennung verbessern: ?
+ - Kreuzungenserkennung: ?
+ - Fahrstatus/Warten an der StartLinie/Halten an Kreuzungen: ?
+ - Moduswahl: Philipp
 
-
-#########
-##Unlustig:
-
-Umfeldmodell schicken
-Bilder schicken
-
-image-loader/logger (proxy)
-
-Schleifen in der loop durch datenkanäle
-
-prioritäten für datenkanäle anstelle für das ganze modul (Am besten beides)
-Man könnte bei datenkanälen write before read deaktivieren und nur nach prioritäten sortieren
-
-name-tags in configs (z.B. modulesToEnable)
-
-lms_lib und main-methode als executable
-
-Datengetriggerter execution-manager
-
-matlab anbindung
-
-hints dynamisch setzten (Auf umfeldmodell warten)
--sensor-visualisierung
-kinect
-
+Trajektorie:
+ - Zielpunkt bestimmen: ?
+ - Trajectorie zu festem Punkt: Lukas K.
