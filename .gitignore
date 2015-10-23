@@ -17,3 +17,4 @@ config/
 .metadata
 *.autosave
 CMakeLists.txt.user
+.idea
