@@ -1,5 +1,6 @@
 #include "image_object_renderer.h"
 #include "lms/imaging_detection/line.h"
+
 #include "lms/imaging/warp.h"
 
 bool ImageObjectRenderer::initialize() {
@@ -96,6 +97,9 @@ void ImageObjectRenderer::drawObject(const street_environment::EnvironmentObject
     }else if(eo->getType() == 1){
         const street_environment::Obstacle &obst = eo->getAsReference<const street_environment::Obstacle>();
         drawObstacle(&obst);
+    }else if(eo->getType() == 2){
+        const street_environment::Crossing &crossing = eo->getAsReference<const street_environment::Crossing>();
+        drawObstacle(&crossing);
     }
 }
 

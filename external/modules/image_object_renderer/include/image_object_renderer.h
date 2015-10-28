@@ -9,6 +9,7 @@
 #include "lms/imaging/image.h"
 #include "street_environment/road.h"
 #include "street_environment/obstacle.h"
+#include "street_environment/crossing.h"
 
 class ImageObjectRenderer : public lms::Module {
 public:

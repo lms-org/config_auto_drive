@@ -23,8 +23,8 @@ bool EnvironmentFilter::cycle() {
             std::shared_ptr<street_environment::RoadLane> lane = obj->getCopyAsPtr<street_environment::RoadLane>();
             filterLane(*lane.get());
             output->objects.push_back(lane);
-        }else if(obj->name().find("OBSTACLE")!= std::string::npos){
-            //TODO
+        }else{
+            //TODO Done somewhere else
             output->objects.push_back(obj);
         }
     }
