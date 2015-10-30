@@ -8,6 +8,7 @@
 #include <cmath>
 #include "lms/math/vertex.h"
 #include "lms/imaging_detection/street_crossing.h"
+#include "lms/imaging_detection/street_obstacle.h"
 #include "lms/imaging/warp.h"
 bool ImageHintGenerator::initialize() {
     config = getConfig();
@@ -52,9 +53,9 @@ bool ImageHintGenerator::cycle() {
         createHintsFromMiddleLane(*middleLane);
 
         if(config->get<bool>("searchForObstacles",false)){
-            createHintForObstacleUsingSinglePoints(*middleLane);
+            createHintForObstacle(*middleLane);
         }else if(config->get<bool>("searchForCrossing",false)){
-            createHintForCrossingUsingSinglePoints(*middleLane);
+            createHintForCrossing(*middleLane);
         }
     }else{
         initialHints();
@@ -64,9 +65,11 @@ bool ImageHintGenerator::cycle() {
     return true;
 }
 
-void ImageHintGenerator::createHintForCrossingUsingSinglePoints(const street_environment::RoadLane &middle ){
+void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLane &middle ){
     lms::imaging::find::ImageHint<lms::imaging::find::StreetCrossing> *crossing = new lms::imaging::find::ImageHint<lms::imaging::find::StreetCrossing>();
     lms::imaging::find::StreetCrossing::StreetCrossingParam scp;
+    scp.target = target;
+    scp.gaussBuffer = gaussBuffer;
     scp.fromConfig(getConfig("defaultLPParameter"));
     for(const lms::math::vertex2f &v:middle.points()){
         if(v.length() > 0.5 && v.length() < 1.2){
@@ -77,92 +80,35 @@ void ImageHintGenerator::createHintForCrossingUsingSinglePoints(const street_env
     hintContainerObstacle->add(crossing);
 }
 
-void ImageHintGenerator::createHintForObstacleUsingOneLineSequence(const street_environment::RoadLane &middle ){
-    using lms::math::vertex2f;
-    using lms::math::vertex2i;
+void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLane &middle ){
+    lms::imaging::find::ImageHint<lms::imaging::find::StreetObstacle> *obstacleRight = new lms::imaging::find::ImageHint<lms::imaging::find::StreetObstacle>();
+    lms::imaging::find::ImageHint<lms::imaging::find::StreetObstacle> *obstacleLeft = new lms::imaging::find::ImageHint<lms::imaging::find::StreetObstacle>();
 
-    lms::imaging::find::Line::LineParam lineParam;
-    lineParam.fromConfig(getConfig("defaultLPParameter"));
-    lineParam.target =target;
-    lineParam.gaussBuffer = gaussBuffer;
-    lineParam.fixedSearchAngle = true;
-    lineParam.edge = true;
-    //lineWidthMax muss man nur setzen, um die punktverschiebung anzupassen bei der extend menthode der line
-    lineParam.lineWidthMax = 10;
-    lineParam.lineWidthTransMultiplier = 1;
-    lineParam.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM)->bool{
-        lms::imaging::find::EdgePoint check = lp.low_high;
-        std::cout << "FOUND: "<< check.x << " , "<<check.y <<std::endl;
-        check.searchParam().x = check.x;
-        check.searchParam().y = check.y;
-        //20 noch in eine Config packen oder irgendwas anderes tolles tun
-        check.searchParam().searchLength = 20;
-        check.searchParam().searchType = lms::imaging::find::EdgePoint::EdgeType::HIGH_LOW;
-        return !check.find(DRAWDEBUG_ARG_N);
-    };
-
-    float streetWidth = 0.4;
-    //Abstand zum Auto
-    float startSearchDistance = 0.4;
-    //suchlänge
-    float searchLength = 2;
-
-    bool foundStart = false;
-    vertex2f startMiddle;
-    vertex2f endMiddle;
-    for(int i = 1; i < (int)middle.points().size(); i++){
-        //TODO ziehmlich schlecht so ;D
-        vertex2f bot = middle.points()[i-1];
-        vertex2f top = middle.points()[i];
-        vertex2f distance = top-bot;
-        distance = distance.normalize();
-        float tmpX = distance.x;
-        distance.x = -distance.y;
-        distance.y = tmpX;
-        distance *= streetWidth/2;
-        if(top.length() > 0.4 && !foundStart){
-            //such-start-punkte in Auto-Koordinaten
-            startMiddle = top-distance;
-            foundStart = true;
-        }else if(top.length() > startSearchDistance+searchLength){
-            break;
-        }else if(top.length() > 0.4){
-            endMiddle = top-distance;
-
-            //convert to image-pixel-value
-            vertex2i startMiddleI;
-            vertex2i endMiddleI;
-            lms::imaging::V2C(&startMiddle,&startMiddleI);
-            lms::imaging::V2C(&endMiddle,&endMiddleI);
-            //create hint
-            float imageSearchDistance = (endMiddleI-startMiddleI).length();
-            float searchAngle = (endMiddleI-startMiddleI).angle();
-
-            lineParam.searchAngle = searchAngle;
-            lineParam.searchLength = imageSearchDistance;
-            lineParam.x = startMiddleI.x;
-            lineParam.y = startMiddleI.y;
-            lineParam.fixedSearchAngle = true;
-            //TODO für die 200 noch eine umrechnung nutzen falls nötig!
-            lineParam.maxLength =  200;
-            lineParam.preferVerify = false;
-            lineParam.verify = false;
-            lineParam.stepLengthMax = 30;
-            lineParam.stepLengthMin = 2;
-
-            /*
-             * Besonderheit, die auftreten könnte:
-             * Hinderniss wird in zwei Suchen Gefunden, wenn endPunkt und startPunkt der nächsten Linie genau auf der Kante liegen
-             */
-            lms::imaging::find::ImageHint<lms::imaging::find::Line> *obstHint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>();
-            obstHint->name = "OBSTACLE_"+i;
-            obstHint->parameter = lineParam;
-            hintContainerObstacle->add(obstHint);
-
-            //alter endPunkt wird neuer Startpunkt:
-            startMiddle = endMiddle;
+    lms::imaging::find::StreetObstacle::StreetObstacleParam sopRight;
+    lms::imaging::find::StreetObstacle::StreetObstacleParam sopLeft;
+    sopRight.minPointCount = 3;
+    sopRight.edge = true;
+    sopRight.target = target;
+    sopRight.gaussBuffer = gaussBuffer;
+    sopRight.fromConfig(getConfig("defaultLPParameter"));
+    sopLeft = sopRight;
+    for(int i = 1; i < middle.points().size();i++){
+        lms::math::vertex2f v1 = middle.points()[i-1];
+        lms::math::vertex2f v2 = middle.points()[i];
+        lms::math::vertex2f tmp = v2-v1;
+        tmp = tmp.rotateClockwise90deg();
+        tmp = tmp.normalize();
+        tmp = tmp * 0.2; //move to middle of the street
+        if(v1.length() > 0.5 && v1.length() < 1.5){
+            //right lane
+            sopRight.middleLine.points().push_back(v1+tmp);
+            sopLeft.middleLine.points().push_back(v1-tmp);
         }
     }
+    obstacleRight->parameter = sopRight;
+    obstacleLeft->parameter = sopLeft;
+    hintContainerObstacle->add(obstacleRight);
+    hintContainerObstacle->add(obstacleLeft);
 
 }
 

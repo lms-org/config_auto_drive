@@ -18,8 +18,8 @@ private:
     void initialHints();
     void createHintsFromMiddleLane(const street_environment::RoadLane &middle );
     void createHintForObstacleUsingSinglePoints(const street_environment::RoadLane &middle );
-    void createHintForCrossingUsingSinglePoints(const street_environment::RoadLane &middle );
-    void createHintForObstacleUsingOneLineSequence(const street_environment::RoadLane &middle );
+    void createHintForCrossing(const street_environment::RoadLane &middle );
+    void createHintForObstacle(const street_environment::RoadLane &middle );
     const lms::ModuleConfig *config;
     const street_environment::RoadLane* middleLane;
     lms::imaging::find::HintContainer *hintContainerLane;
