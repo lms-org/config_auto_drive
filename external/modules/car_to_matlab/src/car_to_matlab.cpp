@@ -19,7 +19,7 @@ bool CarToMatlab::deinitialize() {
 }
 
 bool CarToMatlab::cycle() {
-    logger.debug("cycle")<< car->position().x <<" "<< car->position().y<< " "<<car->targetSpeed<<" "<<car->steering_front<<" "<<car->steering_rear;
+    logger.debug("cycle")<< car->position().x <<" "<< car->position().y<< " "<<car->targetSpeed()<<" "<<car->steeringFront()<<" "<<car->steeringRear();
     server->cycle();
     server->setSocketListener(this);
 

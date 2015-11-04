@@ -3,7 +3,7 @@
 extern "C" {
 
 void* getInstance() {
-    return new StreetObstacleMerger();
+    return new StreetObjectMerger();
 }
 
 }

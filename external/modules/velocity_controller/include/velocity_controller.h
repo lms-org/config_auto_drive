@@ -30,8 +30,8 @@ private:
      * @param currentVelocity
      * @return true if launchControll is active, false if not
      */
-    bool launchControll(float newVeolocity,float currentVelocity);
-    bool defaultDrive();
+    bool launchControll(float newVeolocity,float currentVelocity,sensor_utils::Car::State &state);
+    bool defaultDrive(sensor_utils::Car::State &state);
 
 };
 

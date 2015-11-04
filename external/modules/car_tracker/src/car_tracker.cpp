@@ -41,9 +41,9 @@ bool CarTracker::cycle() {
     pos += car->position();
 
     car->updatePosition(pos,lms::math::vertex2f(cos(angle),sin(angle)));
-    car->updateVelocity(car->targetSpeed,lms::math::vertex2f(cos(angle),sin(angle)));
+    car->updateVelocity(car->targetSpeed(),lms::math::vertex2f(cos(angle),sin(angle)));
 
-    logger.debug("cycle: ")<<"speed: "<<car->targetSpeed << " deltaPos: " << car->velocity()*delta;
+    logger.debug("cycle: ")<<"speed: "<<car->targetSpeed() << " deltaPos: " << car->velocity()*delta;
     last = lms::extra::PrecisionTime::now();
     //TODO Kalman everything
     //TODO use EIGEN
@@ -53,8 +53,8 @@ bool CarTracker::cycle() {
 void CarTracker::getFromVehicle(DeltaState &d){
     //get needed values
     float velocity = car->velocity();
-    float steeringFront = car->steering_front;
-    float steeringRear = car->steering_rear;
+    float steeringFront = car->steeringFront();
+    float steeringRear = car->steeringRear();
 
     float distance = velocity*delta;
     float radstand = getConfig()->get<float>("radstand",0.26);

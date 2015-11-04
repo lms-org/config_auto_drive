@@ -1,8 +1,9 @@
 #include "street_obstacle_merger.h"
 #include "lms/datamanager.h"
 #include "street_environment/obstacle.h"
+#include "street_environment/crossing.h"
 
-bool StreetObstacleMerger::initialize() {
+bool StreetObjectMerger::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
     envOutput = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_OUTPUT");
 
@@ -29,7 +30,7 @@ bool StreetObstacleMerger::initialize() {
     return true;
 }
 
-bool StreetObstacleMerger::inVisibleArea(float x, float y){
+bool StreetObjectMerger::inVisibleArea(float x, float y){
     for(lms::math::Rect& r:visibleAreas){
         if(r.contains(x,y))
             return true;
@@ -37,11 +38,11 @@ bool StreetObstacleMerger::inVisibleArea(float x, float y){
     return false;
 }
 
-bool StreetObstacleMerger::deinitialize() {
+bool StreetObjectMerger::deinitialize() {
     return true;
 }
 
-bool StreetObstacleMerger::cycle() {
+bool StreetObjectMerger::cycle() {
     //get vectors from environments
     street_environment::EnvironmentObstacles obstaclesNew;
     street_environment::EnvironmentObstacles obstaclesOld;
@@ -77,7 +78,7 @@ bool StreetObstacleMerger::cycle() {
     return true;
 }
 
-void StreetObstacleMerger::createOutput(street_environment::EnvironmentObstacles &obstaclesOld){
+void StreetObjectMerger::createOutput(street_environment::EnvironmentObstacles &obstaclesOld){
     //clear old obstacles, if I didn't failed those shared pointers it shouldn't cause an segfault :)
 
     envOutput->objects.clear();
@@ -88,7 +89,7 @@ void StreetObstacleMerger::createOutput(street_environment::EnvironmentObstacles
     }
 }
 
-void StreetObstacleMerger::filter(street_environment::EnvironmentObstacles &obstaclesOld){
+void StreetObjectMerger::filter(street_environment::EnvironmentObstacles &obstaclesOld){
     //Decrease foundCounter
 
     for(uint i = 0; i < obstaclesOld.objects.size();i++){
@@ -115,12 +116,12 @@ void StreetObstacleMerger::filter(street_environment::EnvironmentObstacles &obst
 }
 
 
-void StreetObstacleMerger::merge(street_environment::EnvironmentObstacles &obstaclesNew,street_environment::EnvironmentObstacles &obstaclesOld){
+void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstaclesNew,street_environment::EnvironmentObstacles &obstaclesOld){
     //check if obstacles can be merged
     for(uint k = 0; k < obstaclesNew.objects.size();k++){
         bool merged = false;
         for(uint i = 0; i < obstaclesOld.objects.size();i++){
-            merged = merge(obstaclesOld.objects[i],obstaclesNew.objects[k]);
+            merged = obstaclesOld.objects[i]->match(*obstaclesNew.objects[k].get());
             if(merged){
                 lms::math::vertex2f pos = obstaclesNew.objects[i]->position()+obstaclesOld.objects[i]->position();
                 pos = pos*0.5;
@@ -139,20 +140,15 @@ void StreetObstacleMerger::merge(street_environment::EnvironmentObstacles &obsta
     }
 }
 
-void StreetObstacleMerger::getObstacles(const street_environment::EnvironmentObjects &env,street_environment::EnvironmentObstacles &output){
+void StreetObjectMerger::getObstacles(const street_environment::EnvironmentObjects &env,street_environment::EnvironmentObstacles &output){
     for(const std::shared_ptr<street_environment::EnvironmentObject> obj : env.objects){
         if(obj->getType() == 1){
             //that cast ignores, that the obj was const
             std::shared_ptr<street_environment::Obstacle> obst = std::static_pointer_cast<street_environment::Obstacle>(obj);
             output.objects.push_back(obst);
+        }else if(obj->getType() == 2){
+            std::shared_ptr<street_environment::Obstacle> obst = std::static_pointer_cast<street_environment::Crossing>(obj);
+            output.objects.push_back(obst);
         }
     }
-}
-
-bool StreetObstacleMerger::merge(const std::shared_ptr<street_environment::Obstacle> &from,const std::shared_ptr<street_environment::Obstacle> &to){
-    //TODO, tangentialen und orthogonalen abstand zur mittellinie benutzen!
-    if(from->position().distance(to->position())<0.5){
-        return true;
-    }
-    return false;
 }

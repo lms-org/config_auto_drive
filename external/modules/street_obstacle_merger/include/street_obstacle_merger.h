@@ -1,5 +1,5 @@
-#ifndef LMS_TRAJECTORY_POINT_CREATOR_H
-#define LMS_TRAJECTORY_POINT_CREATOR_H
+#ifndef LMS_STREET_OBJECT_MERGER
+#define LMS_STREET_OBJECT_MERGER
 
 #include "lms/module.h"
 #include "sensor_utils/car.h"
@@ -7,7 +7,7 @@
 #include "street_environment/obstacle.h"
 #include "lms/math/math.h"
 
-class StreetObstacleMerger : public lms::Module {
+class StreetObjectMerger : public lms::Module {
 public:
     bool initialize() override;
     bool deinitialize() override;
@@ -26,7 +26,6 @@ private:
     bool inVisibleArea(float x, float y);
 
     void getObstacles(const street_environment::EnvironmentObjects &env,street_environment::EnvironmentObstacles &output);
-    bool merge(const std::shared_ptr<street_environment::Obstacle> &from,const std::shared_ptr<street_environment::Obstacle> &to);
     const street_environment::EnvironmentObjects *envInput;
     street_environment::EnvironmentObjects *envOutput;
     const street_environment::RoadLane *middle;
@@ -37,4 +36,4 @@ private:
 
 };
 
-#endif /* LMS_TRAJECTORY_POINT_CREATOR_H */
+#endif /* LMS_STREET_OBJECT_MERGER */

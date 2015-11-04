@@ -36,10 +36,26 @@ bool VelocityController::cycle() {
         return true;
     }
     if(!driving){
-        car->targetSpeed = 0;
+        sensor_utils::Car::State s;
+        s.state = sensor_utils::Car::StateType::IDLE;
+        s.targetSpeed = 0;
+        s.steering_front = 0;
+        s.steering_rear = 0;
+        s.priority = 100;
+        s.name = "DRIVING_DISABLED";
+        car->addState(s);
         logger.debug("cycle")<<"driving disabled";
         return true;
+    }else{
+        car->removeState("DRIVING_DISABLED");
     }
+    sensor_utils::Car::State s;
+    s.state = sensor_utils::Car::StateType::DRIVING;
+    s.targetSpeed = 0;
+    s.steering_front = 0;
+    s.steering_rear = 0;
+    s.priority = 100;
+    s.name = "DEFAULT";
     float vel = INFINITY;
     for (const std::string &m : messaging()->receive("CAR_VELOCITY")){
         float tmpVel = stof(m);
@@ -49,20 +65,22 @@ bool VelocityController::cycle() {
     }
     if(vel != INFINITY){
         logger.debug("setting speed manually: ") << vel;
-        car->targetSpeed = vel;
+        s.targetSpeed = vel;
     }
 
-    if(!defaultDrive())
+    if(!defaultDrive(s))
         return true;
+
     if(config->get<bool>("launchControllEnabled",true)){
-        launchControll(car->targetSpeed,car->velocity());
+        launchControll(car->targetSpeed(),car->velocity(),s);
     }
-    logger.debug("info") << "end-velocity: " << car->targetSpeed;
+
+    logger.debug("info") << "end-velocity: " << car->targetSpeed();
     lastCall = lms::extra::PrecisionTime::now();
     return true;
 }
 
-bool VelocityController::defaultDrive(){
+bool VelocityController::defaultDrive(sensor_utils::Car::State &state){
     //TODO check if road is invalid
 
     float maxSpeed = config->get<float>("maxSpeed",1);
@@ -90,12 +108,12 @@ bool VelocityController::defaultDrive(){
     logger.debug("defaultDrive") <<"middle-curcation: " << middleCurvation;
     float velocity = (minCurveSpeed-maxSpeed)/(maxCurvation)*(middleCurvation)+maxSpeed;
     logger.debug("defaultDrive")<<"velocity: "<<velocity;
-    car->targetSpeed = velocity;
+    state.targetSpeed = velocity;
     return true;
 }
 
 
-bool VelocityController::launchControll(float newVelocity,float currentVelocity){
+bool VelocityController::launchControll(float newVelocity,float currentVelocity,sensor_utils::Car::State &state){
     float deltaT = lms::extra::PrecisionTime::since(lastCall).toFloat();
     //beim Start wird das z.B. angenommen
     if(deltaT*1000 > config->get<float>("maxDeltaTInMs",100)){
@@ -110,7 +128,7 @@ bool VelocityController::launchControll(float newVelocity,float currentVelocity)
     }else{
         return false;
     }
-    car->targetSpeed = velocityLimited;
+    state.targetSpeed = velocityLimited;
     return true;
 }
 
