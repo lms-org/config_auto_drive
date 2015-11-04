@@ -15,10 +15,10 @@ bool ImageHintGenerator::initialize() {
     gaussBuffer = new lms::imaging::Image();
     middleLane = datamanager()->readChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
     hintContainerLane = datamanager()->
-            writeChannel<lms::imaging::find::HintContainer>(this,"HINTS");
+            writeChannel<lms::imaging::detection::HintContainer>(this,"HINTS");
 
     hintContainerObstacle = datamanager()->
-            writeChannel<lms::imaging::find::HintContainer>(this,"HINTS_OBSTACLE");
+            writeChannel<lms::imaging::detection::HintContainer>(this,"HINTS_OBSTACLE");
 
     target = datamanager()->readChannel<lms::imaging::Image>(this,"TARGET_IMAGE");
     defaultLinePointParameter.fromConfig(getConfig("defaultLPParameter"));
@@ -66,8 +66,8 @@ bool ImageHintGenerator::cycle() {
 }
 
 void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLane &middle ){
-    lms::imaging::find::ImageHint<lms::imaging::find::StreetCrossing> *crossing = new lms::imaging::find::ImageHint<lms::imaging::find::StreetCrossing>();
-    lms::imaging::find::StreetCrossing::StreetCrossingParam scp;
+    lms::imaging::detection::ImageHint<lms::imaging::detection::StreetCrossing> *crossing = new lms::imaging::detection::ImageHint<lms::imaging::detection::StreetCrossing>();
+    lms::imaging::detection::StreetCrossing::StreetCrossingParam scp;
     scp.target = target;
     scp.gaussBuffer = gaussBuffer;
     scp.fromConfig(getConfig("defaultLPParameter"));
@@ -81,18 +81,18 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
 }
 
 void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLane &middle ){
-    lms::imaging::find::ImageHint<lms::imaging::find::StreetObstacle> *obstacleRight = new lms::imaging::find::ImageHint<lms::imaging::find::StreetObstacle>();
-    lms::imaging::find::ImageHint<lms::imaging::find::StreetObstacle> *obstacleLeft = new lms::imaging::find::ImageHint<lms::imaging::find::StreetObstacle>();
+    lms::imaging::detection::ImageHint<lms::imaging::detection::StreetObstacle> *obstacleRight = new lms::imaging::detection::ImageHint<lms::imaging::detection::StreetObstacle>();
+    lms::imaging::detection::ImageHint<lms::imaging::detection::StreetObstacle> *obstacleLeft = new lms::imaging::detection::ImageHint<lms::imaging::detection::StreetObstacle>();
 
-    lms::imaging::find::StreetObstacle::StreetObstacleParam sopRight;
-    lms::imaging::find::StreetObstacle::StreetObstacleParam sopLeft;
+    lms::imaging::detection::StreetObstacle::StreetObstacleParam sopRight;
+    lms::imaging::detection::StreetObstacle::StreetObstacleParam sopLeft;
     sopRight.minPointCount = 3;
     sopRight.edge = true;
     sopRight.target = target;
     sopRight.gaussBuffer = gaussBuffer;
     sopRight.fromConfig(getConfig("defaultLPParameter"));
     sopLeft = sopRight;
-    for(int i = 1; i < middle.points().size();i++){
+    for(uint i = 1; i < middle.points().size();i++){
         lms::math::vertex2f v1 = middle.points()[i-1];
         lms::math::vertex2f v2 = middle.points()[i];
         lms::math::vertex2f tmp = v2-v1;
@@ -155,15 +155,15 @@ void ImageHintGenerator::createHintForObstacleUsingSinglePoints(const street_env
         }else if(top.length() > startSearchDistance+searchLength){
             break;
         }else if(top.length() > 0.4){
-            lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *line = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
+            lms::imaging::detection::ImageHint<lms::imaging::detection::PointLine> *line = new lms::imaging::detection::ImageHint<lms::imaging::detection::PointLine>();
             line->name = "OBSTACLE_"+std::to_string(i);
-            line->parameter.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM)->bool{
-                lms::imaging::find::EdgePoint check = lp.low_high;
+            line->parameter.validPoint = [](lms::imaging::detection::LinePoint &lp DRAWDEBUG_PARAM)->bool{
+                lms::imaging::detection::EdgePoint check = lp.low_high;
                 check.searchParam().x = check.x;
                 check.searchParam().y = check.y;
                 //20 noch in eine Config packen oder irgendwas anderes tolles tun
                 check.searchParam().searchLength = 20;
-                check.searchParam().searchType = lms::imaging::find::EdgePoint::EdgeType::HIGH_LOW;
+                check.searchParam().searchType = lms::imaging::detection::EdgePoint::EdgeType::HIGH_LOW;
                 bool found = check.find(DRAWDEBUG_ARG_N);
                 return !found;
             };
@@ -179,7 +179,7 @@ void ImageHintGenerator::createHintForObstacleUsingSinglePoints(const street_env
                 float imageSearchDistance = (endMiddleI-startMiddleI).length();
                 float searchAngle = (endMiddleI-startMiddleI).angle();
 
-                lms::imaging::find::LinePoint::LinePointParam lpp = defaultLinePointParameter;
+                lms::imaging::detection::LinePoint::LinePointParam lpp = defaultLinePointParameter;
                 lpp.x = startMiddleI.x;
                 lpp.y = startMiddleI.y;
                 lpp.edge = true;
@@ -203,11 +203,11 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
     //distance between lines and offset for search
     float lineOffset = 0.1;
     float lineDistance = 0.4-lineOffset;
-    lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintLeft = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
+    lms::imaging::detection::ImageHint<lms::imaging::detection::PointLine> *hintLeft = new lms::imaging::detection::ImageHint<lms::imaging::detection::PointLine>();
     hintLeft->name = "LEFT_LANE";
-    lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintRight = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
+    lms::imaging::detection::ImageHint<lms::imaging::detection::PointLine> *hintRight = new lms::imaging::detection::ImageHint<lms::imaging::detection::PointLine>();
     hintRight->name = "RIGHT_LANE";
-    lms::imaging::find::ImageHint<lms::imaging::find::PointLine> *hintMiddle = new lms::imaging::find::ImageHint<lms::imaging::find::PointLine>();
+    lms::imaging::detection::ImageHint<lms::imaging::detection::PointLine> *hintMiddle = new lms::imaging::detection::ImageHint<lms::imaging::detection::PointLine>();
     hintMiddle->name = "MIDDLE_LANE";
     //TODO: add more random points - punkte nicht nur an den enden erzeugen, abstand angeben und dazwischen interpolieren ,(mindestabstand zwischen den punkten)
     for(int i = 1; i < (int)middle.points().size(); i++){
@@ -293,7 +293,7 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
 
 void ImageHintGenerator::initialHints(){
     //TODO, don't work with all cams!
-    lms::imaging::find::ImageHint<lms::imaging::find::Line> *hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>();
+    lms::imaging::detection::ImageHint<lms::imaging::detection::Line> *hint = new lms::imaging::detection::ImageHint<lms::imaging::detection::Line>();
     hint->name = "RIGHT_LANE";
     hint->parameter.target =target;
     hint->parameter.maxLength = 300;
@@ -312,7 +312,7 @@ void ImageHintGenerator::initialHints(){
     hint->parameter.edge = false;
     hint->parameter.verify = true;
     hint->parameter.preferVerify = false;
-    hint->parameter.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM)->bool{
+    hint->parameter.validPoint = [](lms::imaging::detection::LinePoint &lp DRAWDEBUG_PARAM)->bool{
 
 #if IMAGING_DRAW_DEBUG == 1
         (void)DRAWDEBUG_ARG_N;
@@ -325,14 +325,14 @@ void ImageHintGenerator::initialHints(){
     hintContainerLane->add(hint);
     //hint->parameter.containing;
     //add it
-    hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>(*hint);
+    hint = new lms::imaging::detection::ImageHint<lms::imaging::detection::Line>(*hint);
     hint->name = "LEFT_LANE";
     hint->parameter.x = 40;
     hint->parameter.y = 100;
     hint->parameter.searchAngle = M_PI;
     hintContainerLane->add(hint);
 
-    lms::imaging::find::ImageHint<lms::imaging::find::SplittedLine> *hintSplit = new lms::imaging::find::ImageHint<lms::imaging::find::SplittedLine>();
+    lms::imaging::detection::ImageHint<lms::imaging::detection::SplittedLine> *hintSplit = new lms::imaging::detection::ImageHint<lms::imaging::detection::SplittedLine>();
     hintSplit->name = "MIDDLE_LANE";
     hintSplit->parameter.target =target;
     hintSplit->parameter.maxLength = 300;
@@ -354,7 +354,7 @@ void ImageHintGenerator::initialHints(){
     hintSplit->parameter.distanceBetween = 40;
     hintSplit->parameter.lineMinLength = 10;
     hintSplit->parameter.lineMaxLength = 80;
-    hintSplit->parameter.validPoint = [this](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM){
+    hintSplit->parameter.validPoint = [this](lms::imaging::detection::LinePoint &lp DRAWDEBUG_PARAM){
 
 #if IMAGING_DRAW_DEBUG == 1
         (void)DRAWDEBUG_ARG_N;
@@ -369,7 +369,7 @@ void ImageHintGenerator::initialHints(){
 
 
 
-    hint = new lms::imaging::find::ImageHint<lms::imaging::find::Line>(*hint);
+    hint = new lms::imaging::detection::ImageHint<lms::imaging::detection::Line>(*hint);
     hint->name = "BOX";
     hint->parameter.x = 120;
     hint->parameter.y = 50;
@@ -378,12 +378,12 @@ void ImageHintGenerator::initialHints(){
     hint->parameter.lineWidthMax = 5;
     hint->parameter.maxLength = 20;
     hint->parameter.edge = true;
-    hint->parameter.validPoint = [](lms::imaging::find::LinePoint &lp DRAWDEBUG_PARAM){
+    hint->parameter.validPoint = [](lms::imaging::detection::LinePoint &lp DRAWDEBUG_PARAM){
         //logger.info("check") << x <<" "<< y;
-        lms::imaging::find::EdgePoint::EdgePointParam param = lp.param();
-        param.searchType = lms::imaging::find::EdgePoint::EdgeType::HIGH_LOW;
+        lms::imaging::detection::EdgePoint::EdgePointParam param = lp.param();
+        param.searchType = lms::imaging::detection::EdgePoint::EdgeType::HIGH_LOW;
         param.searchLength = 20;
-        lms::imaging::find::EdgePoint ep;
+        lms::imaging::detection::EdgePoint ep;
         return !ep.find(param DRAWDEBUG_ARG);
     };
     //hintContainer->add(hint);

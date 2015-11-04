@@ -22,8 +22,8 @@ private:
     void createHintForObstacle(const street_environment::RoadLane &middle );
     const lms::ModuleConfig *config;
     const street_environment::RoadLane* middleLane;
-    lms::imaging::find::HintContainer *hintContainerLane;
-    lms::imaging::find::HintContainer *hintContainerObstacle;
+    lms::imaging::detection::HintContainer *hintContainerLane;
+    lms::imaging::detection::HintContainer *hintContainerObstacle;
     lms::imaging::Image *gaussBuffer;
     /**
      * @brief getTargetImage Dont use that method yet!
@@ -34,7 +34,7 @@ private:
     const lms::imaging::Image* target;
     //that's not that nice...
     std::map<std::string,const lms::imaging::Image*> targets;
-    lms::imaging::find::LinePoint::LinePointParam defaultLinePointParameter;
+    lms::imaging::detection::LinePoint::LinePointParam defaultLinePointParameter;
 };
 
 #endif /* IMAGE_HINT_TRANSFORMER_H */
