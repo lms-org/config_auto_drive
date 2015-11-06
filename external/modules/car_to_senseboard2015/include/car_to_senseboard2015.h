@@ -15,9 +15,9 @@ public:
 
 private:
     bool lastRcState;
-    Comm::SensorBoard::ControlData *controlData;
-    Comm::SensorBoard::SensorData *sensorData;
-    const sensor_utils::Car *car;
+    lms::WriteDataChannel<Comm::SensorBoard::ControlData> controlData;
+    lms::WriteDataChannel<Comm::SensorBoard::SensorData> sensorData;
+    lms::ReadDataChannel<sensor_utils::Car> car;
 };
 
 #endif /* CAR_TRACKER */

@@ -12,13 +12,13 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    street_environment::EnvironmentObstacles *env;
+    lms::WriteDataChannel<street_environment::EnvironmentObstacles> env;
     /**
      * @brief currentObstacle null if there is no obstacle currently found by the IR
      */
     //street_environment::Obstacle *currentObstacle;
     const lms::ModuleConfig *config;
-    const sensor_utils::DistanceSensor *distanceSensor;
+    lms::ReadDataChannel<sensor_utils::DistanceSensor> distanceSensor;
 
 };
 

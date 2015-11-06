@@ -26,7 +26,7 @@ public:
 
 
 private:
-    const sensor_utils::Car *car;
+    lms::ReadDataChannel<sensor_utils::Car> car;
     socket_connection::SocketServer *server;
 };
 

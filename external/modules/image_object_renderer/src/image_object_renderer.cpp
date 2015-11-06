@@ -53,7 +53,7 @@ bool ImageObjectRenderer::cycle() {
 
     for(uint i = 0; i < toDrawPolyLines.size(); i++){
         setColor(polylines[i]);
-        drawPolyLine(toDrawPolyLines[i]);
+        drawPolyLine(toDrawPolyLines[i].get());
     }
 
     for(uint i = 0; i < toDrawVertex2f.size(); i++){

@@ -15,9 +15,9 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    const street_environment::RoadLane *road;
+    lms::ReadDataChannel<street_environment::RoadLane> road;
     const lms::ModuleConfig *config;
-    sensor_utils::Car *car;
+    lms::WriteDataChannel<sensor_utils::Car> car;
 
     /**
      * @brief driving true the car is driving

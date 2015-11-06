@@ -4,6 +4,7 @@
 #include "lms/module.h"
 #include "lms/math/polyline.h"
 #include "lms/math/math.h"
+#include "lms/data_channel.h"
 
 class TrajectoryPointCreator : public lms::Module {
 public:
@@ -12,8 +13,8 @@ public:
     bool cycle() override;
 private:
     const lms::ModuleConfig *config;
-    const lms::math::polyLine2f *toFollow;
-    std::pair<lms::math::vertex2f, lms::math::vertex2f> *trajectoryPoint;
+    lms::ReadDataChannel<lms::math::polyLine2f> toFollow;
+    lms::WriteDataChannel<std::pair<lms::math::vertex2f, lms::math::vertex2f>> trajectoryPoint;
 
 
 };

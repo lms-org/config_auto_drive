@@ -12,8 +12,8 @@ public:
     bool cycle() override;
 private:
     void filterLane(street_environment::RoadLane &lane);
-    const street_environment::EnvironmentObjects *input;
-    street_environment::EnvironmentObjects *output;
+    lms::ReadDataChannel<street_environment::EnvironmentObjects> input;
+    lms::WriteDataChannel<street_environment::EnvironmentObjects> output;
 };
 
 #endif /* IMAGE_HINT_FILTER_H */

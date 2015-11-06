@@ -23,7 +23,7 @@ protected:
     
     lms::extra::PrecisionTime offset;
     
-    const sense_link::Sensors* sensors;
+    lms::ReadDataChannel<sense_link::Sensors> sensors;
     std::string prefix;
     std::unordered_map<std::pair<sense_link::SensorType, uint8_t>, std::ofstream> files;
     size_t cycleCounter;

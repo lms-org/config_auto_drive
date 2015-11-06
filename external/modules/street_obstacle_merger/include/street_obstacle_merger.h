@@ -26,11 +26,11 @@ private:
     bool inVisibleArea(float x, float y);
 
     void getObstacles(const street_environment::EnvironmentObjects &env,street_environment::EnvironmentObstacles &output);
-    const street_environment::EnvironmentObjects *envInput;
-    street_environment::EnvironmentObjects *envOutput;
-    const street_environment::RoadLane *middle;
+    lms::ReadDataChannel<street_environment::EnvironmentObjects> envInput;
+    lms::WriteDataChannel<street_environment::EnvironmentObjects> envOutput;
+    lms::ReadDataChannel<street_environment::RoadLane> middle;
     const lms::ModuleConfig* config;
-    const sensor_utils::Car *car;
+    lms::ReadDataChannel<sensor_utils::Car> car;
     std::vector<lms::math::Rect> visibleAreas;
 
 

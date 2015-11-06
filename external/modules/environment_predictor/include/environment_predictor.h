@@ -20,9 +20,9 @@ public:
     bool cycle() override;
 private:
     void resetData();
-    const street_environment::EnvironmentObjects *envInput;
-    street_environment::RoadLane *roadOutput;
-    const sensor_utils::Car *car;
+    lms::ReadDataChannel<street_environment::EnvironmentObjects> envInput;
+    lms::WriteDataChannel<street_environment::RoadLane> roadOutput;
+    lms::ReadDataChannel<sensor_utils::Car> car;
 
     emxArray_real_T *zustandsVector;
     int partCount;

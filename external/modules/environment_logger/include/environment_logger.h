@@ -10,7 +10,7 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    const street_environment::EnvironmentObjects *input;
+    lms::ReadDataChannel<street_environment::EnvironmentObjects> input;
     int count;
     std::string directory;
 };

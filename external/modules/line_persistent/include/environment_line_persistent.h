@@ -18,8 +18,8 @@ public:
     bool cycle() override;
 private:
     std::vector<LaneStore> lanes;
-    const lms::math::polyLine2f *input;
-    lms::math::polyLine2f *output;
+    lms::ReadDataChannel<lms::math::polyLine2f> input;
+    lms::WriteDataChannel<lms::math::polyLine2f> output;
     void addLine(const lms::math::polyLine2f &line);
     void validateLines();
     void createOutput();

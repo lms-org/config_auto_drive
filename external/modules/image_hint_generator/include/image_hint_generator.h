@@ -21,19 +21,14 @@ private:
     void createHintForCrossing(const street_environment::RoadLane &middle );
     void createHintForObstacle(const street_environment::RoadLane &middle );
     const lms::ModuleConfig *config;
-    const street_environment::RoadLane* middleLane;
-    lms::imaging::detection::HintContainer *hintContainerLane;
-    lms::imaging::detection::HintContainer *hintContainerObstacle;
-    lms::imaging::Image *gaussBuffer;
-    /**
-     * @brief getTargetImage Dont use that method yet!
-     * @param name
-     * @return
-     */
-    const lms::imaging::Image* getTargetImage(std::string name);
-    const lms::imaging::Image* target;
-    //that's not that nice...
-    std::map<std::string,const lms::imaging::Image*> targets;
+    lms::ReadDataChannel<street_environment::RoadLane> middleLane;
+    lms::WriteDataChannel<lms::imaging::detection::HintContainer> hintContainerLane;
+    lms::WriteDataChannel<lms::imaging::detection::HintContainer> hintContainerObstacle;
+    lms::imaging::Image* gaussBuffer;
+
+    lms::ReadDataChannel<lms::imaging::Image> target;
+    //that's not that nice...const
+    //std::map<std::string,const lms::imaging::Image*> targets;
     lms::imaging::detection::LinePoint::LinePointParam defaultLinePointParameter;
 };
 

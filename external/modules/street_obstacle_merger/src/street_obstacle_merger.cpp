@@ -9,7 +9,7 @@ bool StreetObjectMerger::initialize() {
 
     //We should havet the roadlane and the car from the current cycle
     car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
-    middle = datamanager()->writeChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
+    middle = datamanager()->readChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
     config = getConfig();
 
     if(config->hasKey("visibleAreas")){

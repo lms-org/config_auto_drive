@@ -33,7 +33,7 @@ private:
     float delta;
     lms::extra::PrecisionTime last;
     bool firstRun;
-    sensor_utils::Car *car;
+    lms::WriteDataChannel<sensor_utils::Car> car;
 };
 
 #endif /* CAR_TRACKER */

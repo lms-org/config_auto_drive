@@ -14,10 +14,10 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    const Comm::SensorBoard::SensorData *sensorData;
-    const Comm::SensorBoard::ControlData *controlData;
-    LinedDepthEnvironment *lde;
-    lms::math::polyLine2f* currentSensor;
+    lms::ReadDataChannel<Comm::SensorBoard::SensorData> sensorData;
+    lms::ReadDataChannel<Comm::SensorBoard::ControlData> controlData;
+    lms::WriteDataChannel<LinedDepthEnvironment> lde;
+    lms::WriteDataChannel<lms::math::polyLine2f> currentSensor;
     lms::extra::PrecisionTime last;
     bool fristRun;
 

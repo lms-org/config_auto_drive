@@ -23,8 +23,8 @@ public:
     bool cycle() override;
 
 private:
-    const sensor_utils::Car *car;
-    lms::imaging::Image *image;
+    lms::ReadDataChannel<sensor_utils::Car> car;
+    lms::WriteDataChannel<lms::imaging::Image> image;
     float meterToPxl;
     int offsetX;
     int offsetY;

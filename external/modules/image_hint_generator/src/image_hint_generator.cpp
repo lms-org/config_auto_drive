@@ -22,18 +22,11 @@ bool ImageHintGenerator::initialize() {
 
     target = datamanager()->readChannel<lms::imaging::Image>(this,"TARGET_IMAGE");
     defaultLinePointParameter.fromConfig(getConfig("defaultLPParameter"));
-    defaultLinePointParameter.target =target;
+    defaultLinePointParameter.target =target.get();
     defaultLinePointParameter.gaussBuffer = gaussBuffer;
     return true;
 }
 
-const lms::imaging::Image* ImageHintGenerator::getTargetImage(std::string name){
-    if(targets.find(name) == targets.end()){
-        targets[name] = datamanager()->readChannel<lms::imaging::Image>(this,name);
-    }
-    return targets[name];
-
-}
 bool ImageHintGenerator::deinitialize() {
     return false;
 }
@@ -68,7 +61,7 @@ bool ImageHintGenerator::cycle() {
 void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLane &middle ){
     lms::imaging::detection::ImageHint<lms::imaging::detection::StreetCrossing> *crossing = new lms::imaging::detection::ImageHint<lms::imaging::detection::StreetCrossing>();
     lms::imaging::detection::StreetCrossing::StreetCrossingParam scp;
-    scp.target = target;
+    scp.target = target.get();
     scp.gaussBuffer = gaussBuffer;
     scp.fromConfig(getConfig("defaultLPParameter"));
     for(const lms::math::vertex2f &v:middle.points()){
@@ -88,7 +81,7 @@ void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLan
     lms::imaging::detection::StreetObstacle::StreetObstacleParam sopLeft;
     sopRight.minPointCount = 3;
     sopRight.edge = true;
-    sopRight.target = target;
+    sopRight.target = target.get();
     sopRight.gaussBuffer = gaussBuffer;
     sopRight.fromConfig(getConfig("defaultLPParameter"));
     sopLeft = sopRight;
@@ -295,7 +288,7 @@ void ImageHintGenerator::initialHints(){
     //TODO, don't work with all cams!
     lms::imaging::detection::ImageHint<lms::imaging::detection::Line> *hint = new lms::imaging::detection::ImageHint<lms::imaging::detection::Line>();
     hint->name = "RIGHT_LANE";
-    hint->parameter.target =target;
+    hint->parameter.target =target.get();
     hint->parameter.maxLength = 300;
     hint->parameter.approxEdge = false;
     hint->parameter.lineWidthMax = 10;
@@ -334,7 +327,7 @@ void ImageHintGenerator::initialHints(){
 
     lms::imaging::detection::ImageHint<lms::imaging::detection::SplittedLine> *hintSplit = new lms::imaging::detection::ImageHint<lms::imaging::detection::SplittedLine>();
     hintSplit->name = "MIDDLE_LANE";
-    hintSplit->parameter.target =target;
+    hintSplit->parameter.target =target.get();
     hintSplit->parameter.maxLength = 300;
     hintSplit->parameter.approxEdge = false;
     hintSplit->parameter.lineWidthMax = 10;
