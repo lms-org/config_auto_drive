@@ -43,9 +43,6 @@
 [submodule "external/libraries/googletest_lib"]
 	path = external/libraries/googletest_lib
 	url = https://github.com/syxolk/googletest_lib.git
-[submodule "external/modules/image_persistent"]
-	path = external/modules/image_persistent
-	url = https://github.com/syxolk/image_persistent.git
 [submodule "external/modules/trajectory_point_controller"]
 	path = external/modules/trajectory_point_controller
 	url = https://github.com/Corni33/trajectory_point_controller.git
