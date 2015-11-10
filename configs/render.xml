@@ -16,12 +16,8 @@
 	<module>
 		<name>image_object_renderer</name>
 		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
-		<config>
-            <environments>ENVIRONMENT_ROAD_FILTERED,ENVIRONMENT_OBSTACLE</environments>
-            <envObjects>MIDDLE_LANE</envObjects>
-                    <polylines>TRAJECTORY_LINE,SENSOR_LINE</polylines>
-		    <vertex2f></vertex2f>
-		    <vertex4f>TRAJECTORY_POINT</vertex4f>
+                <config>
+                    <envObjects>MIDDLE_LANE,TRAJECTORY_LINE,SENSOR_LINE,ENVIRONMENT_ROAD_FILTERED,ENVIRONMENT_OBSTACLE,TRAJECTORY_POINT</envObjects>
 		    <!--The default Color, TODO add colors for points, lines etc -->
 		    <colorR>255</colorR>
 		    <colorG>255</colorG>
