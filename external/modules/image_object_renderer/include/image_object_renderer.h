@@ -18,11 +18,9 @@ public:
     bool cycle() override;
 private:
 
-    std::vector<std::string> environments;
-    std::vector<std::string> polylines;
-    std::vector<std::string> vertex2f;
     std::vector<std::string> vertex4f;
-    std::vector<std::string> drawObjects;
+    std::vector<std::string> drawObjectStrings;
+    std::vector<lms::ReadDataChannel<lms::Any>> drawObjects;
 
     lms::WriteDataChannel<lms::imaging::Image> image;
     lms::imaging::BGRAImageGraphics *graphics;
@@ -34,9 +32,13 @@ private:
     void drawPolyLine(const lms::math::polyLine2f *lane);
     void drawVertex2f(const lms::math::vertex2f &v);
     void drawVertex4f(const std::pair<lms::math::vertex2f,lms::math::vertex2f> &v);
-    void drawObject(const street_environment::EnvironmentObject *eo);
-
-    void setColor(std::string toDrawName);
+    void drawObject(const street_environment::EnvironmentObject *eo,bool customColori);
+    /**
+     * @brief setColor
+     * @param toDrawName
+     * @return false if the default color was used
+     */
+    bool setColor(std::string toDrawName);
 
 };
 
