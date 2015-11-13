@@ -12,21 +12,21 @@
 bool EnvironmentPredictor::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
 
+    logger.debug("ASKING FOR ROAD_OUTPUT!");
     roadOutput = datamanager()->writeChannel<street_environment::RoadLane>(this,"ROAD_OUTPUT");
     car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
-    config = getConfig();
 
-    partCount = config->get<int>("elementCount",10);
-    partLength = config->get<float>("elementLength",0.2);
+    partCount = config().get<int>("elementCount",10);
+    partLength = config().get<float>("elementLength",0.2);
     zustandsVector = emxCreate_real_T(partCount,1);
 
     stateTransitionMatrix = emxCreate_real_T(partCount,partCount);
     kovarianzMatrixDesZustandes = emxCreate_real_T(partCount,partCount);
     kovarianzMatrixDesZustandUebergangs = emxCreate_real_T(partCount,partCount);
     cycleCounter = 0;
-    if(config->get<bool>("logState", false))
+    if(config().get<bool>("logState", false))
     {
-        logFile.open(config->get<std::string>("logPrefix") + "_" + lms::extra::currentTimeString() + "_kalman.csv", std::ofstream::out);
+        logFile.open(config().get<std::string>("logPrefix") + "_" + lms::extra::currentTimeString() + "_kalman.csv", std::ofstream::out);
     }
     
     resetData();
@@ -39,14 +39,14 @@ bool EnvironmentPredictor::initialize() {
 void EnvironmentPredictor::resetData(){
     logger.error("resetData");
     clearMatrix(zustandsVector);
-    zustandsVector->data[0] = getConfig()->get<float>("distanceToMiddle",0.2);
+    zustandsVector->data[0] = config().get<float>("distanceToMiddle",0.2);
     asEinheitsMatrix(stateTransitionMatrix);
     asEinheitsMatrix(kovarianzMatrixDesZustandes);
     clearMatrix(kovarianzMatrixDesZustandUebergangs);
 
     for(int x = 0; x < partCount; x++){
         for(int y = 0; y < partCount; y++){
-            kovarianzMatrixDesZustandUebergangs->data[y*partCount+x]=config->get<float>("kov",15)*(1-pow(config->get<float>("kovAbnahme",0.2),1/fabs(x-y)));
+            kovarianzMatrixDesZustandUebergangs->data[y*partCount+x]=config().get<float>("kov",15)*(1-pow(config().get<float>("kovAbnahme",0.2),1/fabs(x-y)));
         }
     }
 }
@@ -63,7 +63,7 @@ bool EnvironmentPredictor::cycle() {
         logger.info("cycle")<<"RC_STATE_CHANGED";
     }
 
-    r_fakt=config->get<double>("r_fakt",20);
+    r_fakt=config().get<double>("r_fakt",20);
 
     //länge der später zu berechnenden Abschnitten
     //convert data to lines
@@ -155,15 +155,18 @@ void EnvironmentPredictor::logStateVector()
 
 void EnvironmentPredictor::createOutput(){
     //create middle
+    logger.debug("createOutput");
     roadOutput->type(street_environment::RoadLaneType::MIDDLE);
-    convertZustandToLane(*roadOutput);
+    convertZustandToLane(*(roadOutput.get()));
     roadOutput->name("MIDDLE_LANE");
 }
 
 void EnvironmentPredictor::convertZustandToLane(street_environment::RoadLane &output){
     //clear points
+    logger.debug("convertZustandToLane ANFANG");
     output.points().clear();
     output.polarDarstellung.clear();
+    logger.debug("convertZustandToLane CLEARED OLD VALS");
 
     lms::math::vertex2f p1;
     p1.x = 0;

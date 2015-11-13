@@ -27,7 +27,6 @@ private:
     emxArray_real_T *zustandsVector;
     int partCount;
     double partLength;
-    const lms::ModuleConfig *config;
     void convertToKalmanArray(const street_environment::RoadLane &lane,emxArray_real_T **x,emxArray_real_T **y);
     void asEinheitsMatrix(emxArray_real_T *mat);
     void clearMatrix(emxArray_real_T *mat);

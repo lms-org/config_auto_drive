@@ -8,7 +8,7 @@ bool ImageObjectRenderer::initialize() {
     int imageWidth = config().get<int>("imageWidth",512);
     int imageHeight = config().get<int>("imageHeight",512);
 
-    drawObjectStrings = config("envObjects").getArray<std::string>("envObjects");
+    drawObjectStrings = config().getArray<std::string>("envObjects");
 
     //create the image you want to draw on
     image = datamanager()->writeChannel<lms::imaging::Image>(this,"IMAGE");
@@ -27,18 +27,21 @@ bool ImageObjectRenderer::deinitialize() {
 
 bool ImageObjectRenderer::cycle() {
    image->fill(0);
-
     for(lms::ReadDataChannel<lms::Any> &dO :drawObjects){
         //set the color
+        logger.debug("trying to draw: ")<< dO.name();
         bool customColor = setColor(dO.name());
         void *p = dO.getVoid();
         if(dO.castableTo<lms::math::vertex2f>()){
             drawVertex2f(*((lms::math::vertex2f*)p));
+            logger.debug("")<< "drawing v2f";
         }else if(dO.castableTo<street_environment::EnvironmentObjects>()){
+            logger.debug("")<< "drawing evo";
             for(std::shared_ptr<street_environment::EnvironmentObject> &eo:((street_environment::EnvironmentObjects*)p)->objects){
-                drawObject(eo.get(), customColor);
+                //drawObject(eo.get(), customColor);
             }
         }else if(dO.castableTo<std::pair<lms::math::vertex2f,lms::math::vertex2f>>()){
+            logger.debug("")<< "drawing 4f";
             drawVertex4f(*((std::pair<lms::math::vertex2f,lms::math::vertex2f>*)p));
         }
     }

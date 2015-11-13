@@ -5,7 +5,7 @@
         <module logLevel="ERROR">image_hint_transformer_obstacle</module>
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
-        <module logLevel="WARN">environment_predictor</module>
+        <module logLevel="DEBUG">environment_predictor</module>
         <module logLevel="WARN">trajectory_creator</module>
         <module logLevel="ERROR">trajectory_point_creator</module>
         <module logLevel="ERROR">environment_filter</module>
