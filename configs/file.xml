@@ -1,4 +1,4 @@
-c<framework>
+<framework>
 	<execution>
         <clock enabled="true" unit="hz" value="100" />
 	</execution>

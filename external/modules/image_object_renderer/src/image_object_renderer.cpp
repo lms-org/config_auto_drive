@@ -31,18 +31,19 @@ bool ImageObjectRenderer::cycle() {
         //set the color
         logger.debug("trying to draw: ")<< dO.name();
         bool customColor = setColor(dO.name());
-        void *p = dO.getVoid();
         if(dO.castableTo<lms::math::vertex2f>()){
-            drawVertex2f(*((lms::math::vertex2f*)p));
+            drawVertex2f(*dO.getWithType<lms::math::vertex2f>());
             logger.debug("")<< "drawing v2f";
         }else if(dO.castableTo<street_environment::EnvironmentObjects>()){
             logger.debug("")<< "drawing evo";
-            for(std::shared_ptr<street_environment::EnvironmentObject> &eo:((street_environment::EnvironmentObjects*)p)->objects){
-                //drawObject(eo.get(), customColor);
+            for(std::shared_ptr<street_environment::EnvironmentObject> &eo:
+                    (dO.getWithType<street_environment::EnvironmentObjects>()->objects)){
+                //TODO
+                // drawObject(eo.get(), customColor);
             }
         }else if(dO.castableTo<std::pair<lms::math::vertex2f,lms::math::vertex2f>>()){
             logger.debug("")<< "drawing 4f";
-            drawVertex4f(*((std::pair<lms::math::vertex2f,lms::math::vertex2f>*)p));
+            drawVertex4f(*(dO.getWithType<std::pair<lms::math::vertex2f,lms::math::vertex2f>>()));
         }
     }
     return true;
