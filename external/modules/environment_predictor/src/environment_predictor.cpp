@@ -12,16 +12,7 @@
 bool EnvironmentPredictor::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
 
-    logger.debug("ASKING FOR ROAD_OUTPUT!");
     roadOutput = datamanager()->writeChannel<street_environment::RoadLane>(this,"ROAD_OUTPUT");
-
-    logger.error("HIER") <<std::to_string(roadOutput.castableTo<lms::math::vertex2f>());// << std::to_string(roadOutput.castableTo<lms::math::polyLine2f>());
-
-    if(roadOutput.castableTo<lms::math::vertex2f>()){
-        logger.error("IST CASTABLE");
-    }else{
-        logger.error("IST NICHT CASTABLE");
-    }
     car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
 
     partCount = config().get<int>("elementCount",10);
@@ -165,11 +156,6 @@ void EnvironmentPredictor::createOutput(){
     //create middle
     logger.debug("createOutput");
     roadOutput->type(street_environment::RoadLaneType::MIDDLE);
-    logger.debug("setName davor")<<roadOutput->points().size();
-    roadOutput->name("DAVOR");
-    logger.debug("setName danach");
-    logger.debug("clearTest");
-
     convertZustandToLane(*(roadOutput.get()));
     roadOutput->name("MIDDLE_LANE");
 }
