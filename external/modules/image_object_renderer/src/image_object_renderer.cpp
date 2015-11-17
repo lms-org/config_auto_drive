@@ -38,7 +38,7 @@ bool ImageObjectRenderer::cycle() {
         }else if(dO.castableTo<street_environment::EnvironmentObjects>()){
             logger.debug("")<< "drawing evo";
             for(std::shared_ptr<street_environment::EnvironmentObject> &eo:((street_environment::EnvironmentObjects*)p)->objects){
-                //drawObject(eo.get(), customColor);
+                drawObject(eo.get(), customColor);
             }
         }else if(dO.castableTo<std::pair<lms::math::vertex2f,lms::math::vertex2f>>()){
             logger.debug("")<< "drawing 4f";
