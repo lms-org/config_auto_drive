@@ -7,7 +7,7 @@
 bool EnvironmentLogger::initialize() {
     count = 0;
     input = datamanager()->readChannel<street_environment::EnvironmentObjects>(this, "ENVIRONMENT_INPUT");
-    directory = getConfig()->get<std::string>("directory");
+    directory = config().get<std::string>("directory");
     return true;
 }
 

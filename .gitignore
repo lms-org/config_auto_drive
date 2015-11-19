@@ -16,5 +16,5 @@ config/
 *.md~
 .metadata
 *.autosave
-CMakeLists.txt.user
+CMakeLists.txt.*
 .idea

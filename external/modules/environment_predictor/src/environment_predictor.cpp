@@ -12,7 +12,6 @@
 bool EnvironmentPredictor::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
 
-    logger.debug("ASKING FOR ROAD_OUTPUT!");
     roadOutput = datamanager()->writeChannel<street_environment::RoadLane>(this,"ROAD_OUTPUT");
     car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
 
@@ -165,6 +164,7 @@ void EnvironmentPredictor::convertZustandToLane(street_environment::RoadLane &ou
     //clear points
     logger.debug("convertZustandToLane ANFANG");
     output.points().clear();
+    logger.debug("convertZustandToLane ANFANG")<<1;
     output.polarDarstellung.clear();
     logger.debug("convertZustandToLane CLEARED OLD VALS");
 
