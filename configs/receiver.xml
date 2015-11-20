@@ -6,8 +6,12 @@
     <modulesToEnable>
         <module logLevel="DEBUG">socket_data_receiver</module>
         <module logLevel="DEBUG">image_converter_scaleup</module>
+        <module logLevel="Error">socket_datatype_definer</module>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
     </modulesToEnable>
+    <module>
+        <name>socket_datatype_definer</name>
+    </module>
     <module>
         <name>socket_data_receiver</name>
         <libpath>socket_data/receiver</libpath>
