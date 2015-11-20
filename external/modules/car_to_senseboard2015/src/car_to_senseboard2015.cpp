@@ -23,6 +23,7 @@ bool CarToSenseboard2015::cycle() {
     controlData->steering_front = car->steeringFront();
     controlData->steering_rear = -car->steeringRear();
 
+    logger.debug("cylce")<<"sf: "<<controlData->steering_front << " sr: "<<controlData->steering_rear << " tv: "<<controlData->control.velocity.velocity;
     if(sensorData->rc_on != lastRcState){
         lastRcState = sensorData->rc_on;
         //TODO broadcast msg
