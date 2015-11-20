@@ -29,7 +29,6 @@ private:
     lms::ReadDataChannel<street_environment::EnvironmentObjects> envInput;
     lms::WriteDataChannel<street_environment::EnvironmentObjects> envOutput;
     lms::ReadDataChannel<street_environment::RoadLane> middle;
-    const lms::ModuleConfig* config;
     lms::ReadDataChannel<sensor_utils::Car> car;
     std::vector<lms::math::Rect> visibleAreas;
 

@@ -99,7 +99,6 @@ void ImageObjectRenderer::drawPolyLine(const lms::math::polyLine2f *lane){
         }
         xOld = x;
         yOld = y;
-        logger.debug("drawPolyLine")<<x<< " "<<y;
     }
 }
 

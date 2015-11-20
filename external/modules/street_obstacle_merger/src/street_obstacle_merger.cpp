@@ -7,23 +7,22 @@ bool StreetObjectMerger::initialize() {
     envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
     envOutput = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_OUTPUT");
 
-    //We should havet the roadlane and the car from the current cycle
+    //We should have the roadlane and the car from the current cycle
     car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
     middle = datamanager()->readChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
-    config = getConfig();
 
-    if(config->hasKey("visibleAreas")){
-        std::vector<std::string> sRects = config->getArray<std::string>("visibleAreas");
+    if(config().hasKey("visibleAreas")){
+        std::vector<std::string> sRects = config().getArray<std::string>("visibleAreas");
         for(std::string &sRect: sRects){
             lms::math::Rect r;
-            if(!config->hasKey(sRect+"_x") || !config->hasKey(sRect+"_y") ||!config->hasKey(sRect+"_w")||!config->hasKey(sRect+"_h")){
+            if(!config().hasKey(sRect+"_x") || !config().hasKey(sRect+"_y") ||!config().hasKey(sRect+"_w")||!config().hasKey(sRect+"_h")){
                 logger.error("initialize")<<"visibleArea not valid: "<< sRect;
                 return false;
             }
-            r.x = config->get<float>(sRect+"_x");
-            r.y = config->get<float>(sRect+"_y");
-            r.width = config->get<float>(sRect+"_w");
-            r.height = config->get<float>(sRect+"_h");
+            r.x = config().get<float>(sRect+"_x");
+            r.y = config().get<float>(sRect+"_y");
+            r.width = config().get<float>(sRect+"_w");
+            r.height = config().get<float>(sRect+"_h");
             visibleAreas.push_back(r);
         }
     }
@@ -43,6 +42,7 @@ bool StreetObjectMerger::deinitialize() {
 }
 
 bool StreetObjectMerger::cycle() {
+
     //get vectors from environments
     street_environment::EnvironmentObstacles obstaclesNew;
     street_environment::EnvironmentObstacles obstaclesOld;
@@ -79,12 +79,9 @@ bool StreetObjectMerger::cycle() {
 }
 
 void StreetObjectMerger::createOutput(street_environment::EnvironmentObstacles &obstaclesOld){
-    //clear old obstacles, if I didn't failed those shared pointers it shouldn't cause an segfault :)
-
+    //clear old obstacles
     envOutput->objects.clear();
     for(uint i = 0; i < obstaclesOld.objects.size(); i++){
-        //create a copy
-        //std::shared_ptr<street_environment::Obstacle> obstacle(new street_environment::Obstacle(*obstaclesOld[i]));
         envOutput->objects.push_back(obstaclesOld.objects[i]);
     }
 }
@@ -142,13 +139,14 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
 
 void StreetObjectMerger::getObstacles(const street_environment::EnvironmentObjects &env,street_environment::EnvironmentObstacles &output){
     for(const std::shared_ptr<street_environment::EnvironmentObject> obj : env.objects){
-        if(obj->getType() == 1){
+        if(obj->getType() == street_environment::Obstacle::TYPE){
             //that cast ignores, that the obj was const
             std::shared_ptr<street_environment::Obstacle> obst = std::static_pointer_cast<street_environment::Obstacle>(obj);
-            output.objects.push_back(obst);
-        }else if(obj->getType() == 2){
-            std::shared_ptr<street_environment::Obstacle> obst = std::static_pointer_cast<street_environment::Crossing>(obj);
-            output.objects.push_back(obst);
+            output.objects.push_back(obst); //could that cause a segfault?
+        }else if(obj->getType() == street_environment::Crossing::TYPE){
+            //TODO
+            //std::shared_ptr<street_environment::Obstacle> obst = std::static_pointer_cast<street_environment::Crossing>(obj);
+            //output.objects.push_back(obst);
         }
     }
 }

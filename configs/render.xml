@@ -9,7 +9,7 @@
                 <module logLevel="WARN">car_to_image</module>
                 -->
                 <module logLevel="WARN">image_renderer_image_object</module>
-                <module logLevel="DEBUG">image_object_renderer</module>
+                <module logLevel="WARN">image_object_renderer</module>
 
                 <module logLevel="WARN">image_converter_trans</module>
                 <module logLevel="WARN">image_renderer_trans</module>
@@ -21,7 +21,7 @@
 		<name>image_object_renderer</name>
 		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
                 <config>
-                    <envObjects>MIDDLE_LANE<!--,TRAJECTORY_LINE,ENVIRONMENT_OBSTACLE,TRAJECTORY_POINT--></envObjects>
+                    <envObjects>MIDDLE_LANE,TRAJECTORY_LINE,ENVIRONMENT_OBSTACLE,TRAJECTORY_POINT</envObjects>
 
 		    <!--The default Color, TODO add colors for points, lines etc -->
 		    <colorR>255</colorR>

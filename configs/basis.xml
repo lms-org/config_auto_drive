@@ -6,13 +6,13 @@
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
-        <module logLevel="WARN">trajectory_creator</module>
+        <module logLevel="DEBUG">trajectory_creator</module>
         <module logLevel="ERROR">trajectory_point_creator</module>
         <module logLevel="ERROR">environment_filter</module>
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">velocity_controller</module>
         <module logLevel="WARN">image_proxy</module>
-        <!--module logLevel="WARN">street_obstacle_merger</module-->
+        <module logLevel="WARN">street_obstacle_merger</module>
         <if notSet="sense_link">
             <module logLevel="WARN">car_tracker</module>
         </if>
