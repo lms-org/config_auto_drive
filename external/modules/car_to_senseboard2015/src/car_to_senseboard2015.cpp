@@ -18,7 +18,7 @@ bool CarToSenseboard2015::deinitialize() {
 
 bool CarToSenseboard2015::cycle() {
     controlData->vel_mode = Comm::SensorBoard::ControlData::MODE_VELOCITY;
-    //controlData->control.velocity.velocity = car->targetSpeed();
+    controlData->control.velocity.velocity = car->targetSpeed();
 
     controlData->steering_front = car->steeringFront();
     controlData->steering_rear = -car->steeringRear();

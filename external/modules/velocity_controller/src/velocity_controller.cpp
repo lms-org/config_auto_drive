@@ -34,6 +34,8 @@ bool VelocityController::cycle() {
         logger.info("cycle")<<"RC_STATE_CHANGED";
         return true;
     }
+    //TODO
+    driving = true;
     if(!driving){
         sensor_utils::Car::State s;
         s.state = sensor_utils::Car::StateType::IDLE;
