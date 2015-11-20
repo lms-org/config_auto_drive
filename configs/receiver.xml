@@ -1,11 +1,12 @@
 <framework>
     <execution>
         <clock enabled="true" unit="hz" value="100" />
+        <executionType>ONLY_MAIN_THREAD</executionType>
     </execution>
     <modulesToEnable>
         <module logLevel="DEBUG">socket_data_receiver</module>
         <module logLevel="DEBUG">image_converter_scaleup</module>
-        <module logLevel="DEBUG">car_to_matlab</module>
+        <!--module logLevel="DEBUG">car_to_matlab</module-->
     </modulesToEnable>
     <module>
         <name>socket_data_receiver</name>

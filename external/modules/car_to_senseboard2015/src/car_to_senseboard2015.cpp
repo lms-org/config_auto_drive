@@ -6,10 +6,6 @@
 bool CarToSenseboard2015::initialize() {
     controlData = datamanager()->writeChannel<Comm::SensorBoard::ControlData>(this,"CONTROL_DATA");
     sensorData = datamanager()->writeChannel<Comm::SensorBoard::SensorData>(this,"SENSOR_DATA");
-
-    /*
-     * HACK: it has write-Access because it should be executed before the Senseboard!
-     */
     car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
     lastRcState = false;
     return true;
@@ -22,7 +18,7 @@ bool CarToSenseboard2015::deinitialize() {
 
 bool CarToSenseboard2015::cycle() {
     controlData->vel_mode = Comm::SensorBoard::ControlData::MODE_VELOCITY;
-    controlData->control.velocity.velocity = car->targetSpeed();
+    //controlData->control.velocity.velocity = car->targetSpeed();
 
     controlData->steering_front = car->steeringFront();
     controlData->steering_rear = -car->steeringRear();
@@ -33,5 +29,6 @@ bool CarToSenseboard2015::cycle() {
         messaging()->send("RC_STATE_CHANGED",std::to_string(lastRcState));
         logger.error("cycle")<<"RC_STATE_CHANGED: "<<std::to_string(lastRcState);
     }
+
     return true;
 }
