@@ -16,7 +16,6 @@ public:
     bool cycle() override;
 private:
     lms::ReadDataChannel<street_environment::RoadLane> road;
-    const lms::ModuleConfig *config;
     lms::WriteDataChannel<sensor_utils::Car> car;
 
     /**

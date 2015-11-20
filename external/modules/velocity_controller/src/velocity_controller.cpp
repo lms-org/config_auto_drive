@@ -6,8 +6,7 @@
 bool VelocityController::initialize() {
     road = datamanager()->readChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
     car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
-    config = getConfig();
-    lastCall = lms::extra::PrecisionTime::now()-lms::extra::PrecisionTime::fromMillis(config->get<float>("maxDeltaTInMs")*10);
+    lastCall = lms::extra::PrecisionTime::now()-lms::extra::PrecisionTime::fromMillis(config().get<float>("maxDeltaTInMs")*10);
     driving = false;
     return true;
 }
@@ -43,18 +42,20 @@ bool VelocityController::cycle() {
         s.steering_rear = 0;
         s.priority = 100;
         s.name = "DRIVING_DISABLED";
-        car->addState(s);
-        logger.debug("cycle")<<"driving disabled";
+        car->putState(s);
+        logger.debug("error")<<"driving disabled";
         return true;
     }else{
         car->removeState("DRIVING_DISABLED");
     }
+    sensor_utils::Car::State *tmp = car->getState("DEFAULT");
     sensor_utils::Car::State s;
+    if(tmp){
+        s = *tmp;
+    }
     s.state = sensor_utils::Car::StateType::DRIVING;
     s.targetSpeed = 0;
-    s.steering_front = 0;
-    s.steering_rear = 0;
-    s.priority = 100;
+    s.priority = 10;
     s.name = "DEFAULT";
     float vel = INFINITY;
     for (const std::string &m : messaging()->receive("CAR_VELOCITY")){
@@ -71,9 +72,11 @@ bool VelocityController::cycle() {
     if(!defaultDrive(s))
         return true;
 
-    if(config->get<bool>("launchControllEnabled",true)){
+    if(config().get<bool>("launchControllEnabled",false)){
         launchControll(car->targetSpeed(),car->velocity(),s);
     }
+
+    car->putState(s);
 
     logger.debug("info") << "end-velocity: " << car->targetSpeed();
     lastCall = lms::extra::PrecisionTime::now();
@@ -83,10 +86,10 @@ bool VelocityController::cycle() {
 bool VelocityController::defaultDrive(sensor_utils::Car::State &state){
     //TODO check if road is invalid
 
-    float maxSpeed = config->get<float>("maxSpeed",1);
-    float minCurveSpeed = config->get<float>("minCurveSpeed",maxSpeed/2);
-    float maxCurvation = config->get<float>("maxCurvation",1);
-    int partsNeeded = config->get<float>("forcastLength",1)/road->polarPartLength;
+    float maxSpeed = config().get<float>("maxSpeed",1);
+    float minCurveSpeed = config().get<float>("minCurveSpeed",maxSpeed/2);
+    float maxCurvation = config().get<float>("maxCurvation",1);
+    int partsNeeded = config().get<float>("forcastLength",1)/road->polarPartLength;
     if(partsNeeded > ((int)road->polarDarstellung.size())-2){
         logger.warn("cycle")<<"not enough parts available: " << partsNeeded;
         partsNeeded = ((int)road->polarDarstellung.size())-2;
@@ -116,15 +119,15 @@ bool VelocityController::defaultDrive(sensor_utils::Car::State &state){
 bool VelocityController::launchControll(float newVelocity,float currentVelocity,sensor_utils::Car::State &state){
     float deltaT = lms::extra::PrecisionTime::since(lastCall).toFloat();
     //beim Start wird das z.B. angenommen
-    if(deltaT*1000 > config->get<float>("maxDeltaTInMs",100)){
-        deltaT = config->get<int>("defaultDeltaTInMs",10)*1000;
+    if(deltaT*1000 > config().get<float>("maxDeltaTInMs",100)){
+        deltaT = config().get<int>("defaultDeltaTInMs",10)*1000;
     }
     float acc = (newVelocity -currentVelocity)/deltaT;
     float velocityLimited = newVelocity;
-    if(acc > config->get<float>("maxAcc",1)){
-        velocityLimited = currentVelocity+config->get<float>("maxAcc")*deltaT;
-    }else if(acc < config->get<float>("minAcc",-1)){
-        velocityLimited = currentVelocity+config->get<float>("minAcc")*deltaT;
+    if(acc > config().get<float>("maxAcc",1)){
+        velocityLimited = currentVelocity+config().get<float>("maxAcc")*deltaT;
+    }else if(acc < config().get<float>("minAcc",-1)){
+        velocityLimited = currentVelocity+config().get<float>("minAcc")*deltaT;
     }else{
         return false;
     }
