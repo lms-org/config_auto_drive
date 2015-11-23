@@ -85,3 +85,6 @@
 [submodule "external/modules/parking"]
 	path = external/modules/parking
 	url = https://github.com/tum-phoenix/parking.git
+[submodule "external/modules/sound_player"]
+	path = external/modules/sound_player
+	url = https://github.com/Bitfroest/sound_player
