@@ -10,7 +10,7 @@
 class SoundController : public lms::Module {
 private:
     std::vector<std::string> motorsounds;
-    std::vector<speed> speed;
+    std::vector<float> speed;
 public:
     bool initialize() override;
     bool deinitialize() override;
