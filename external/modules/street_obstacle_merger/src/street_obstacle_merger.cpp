@@ -88,7 +88,6 @@ void StreetObjectMerger::createOutput(street_environment::EnvironmentObstacles &
 
 void StreetObjectMerger::filter(street_environment::EnvironmentObstacles &obstaclesOld){
     //Decrease foundCounter
-
     for(uint i = 0; i < obstaclesOld.objects.size();i++){
         if(!inVisibleArea(obstaclesOld.objects[i]->position().x,
                 obstaclesOld.objects[i]->position().y)){

@@ -3,9 +3,9 @@
 		<module logLevel="WARN">ogre_window_manager</module>
                 <module logLevel="WARN">image_renderer_grey</module>
 		<module logLevel="WARN">image_renderer_debug</module>
-                <!--
+
                 <module logLevel="WARN">image_renderer_debug_obstacle</module>
-                <module logLevel="WARN">image_renderer_global_car</module>
+                <!--module logLevel="WARN">image_renderer_global_car</module>
                 <module logLevel="WARN">car_to_image</module>
                 -->
                 <module logLevel="WARN">image_renderer_image_object</module>
