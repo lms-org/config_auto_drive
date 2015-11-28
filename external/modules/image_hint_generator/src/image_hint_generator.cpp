@@ -192,73 +192,73 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
     hintMiddle->name = "MIDDLE_LANE";
     //TODO: add more random points - punkte nicht nur an den enden erzeugen, abstand angeben und dazwischen interpolieren ,(mindestabstand zwischen den punkten)
     for(int i = 1; i < (int)middle.points().size(); i++){
-        vertex2f bot = middle.points()[i-1];
-        vertex2f top = middle.points()[i];
-        vertex2f distance = top-bot;
-        float dLength = distance.length();
-        vertex2f tangent = distance.normalize();
-        tangent = tangent*dLength*((double) rand() / (RAND_MAX));
+        const vertex2f bot = middle.points()[i-1];
+        const vertex2f top = middle.points()[i];
+        const vertex2f tangentMain = (top-bot).normalize();
+        const float distance = (top-bot).length();
+        const vertex2f distanceOrthNorm = tangentMain.rotateAntiClockwise90deg();
 
-        distance = distance.normalize();
-        float tmpX = distance.x;
-        distance.x = -distance.y;
-        distance.y = tmpX;
-        distance *= lineDistance;
-        //such-start-punkte in Auto-Koordinaten
-        vertex2f left = bot+tangent+distance;
-        vertex2f right = bot+tangent-distance;
-        //TODO wenn es nicht mehr geht, dann wegen /lineDistance
-        vertex2f middle = bot+tangent-distance/lineDistance*lineOffset;
+        //number of points per segment
+        int numerOfSegments = 2;
+        for(int i = 0; i <numerOfSegments; i++){
+            lms::math::vertex2f tangent = tangentMain*distance*((float)i)/numerOfSegments;
 
-        //such-start-punkte in Bild-Koordinaten
-        vertex2i leftI;
-        vertex2i rightI;
-        vertex2i middleI;
-        vertex2i topI;
+            //such-start-punkte in Auto-Koordinaten
+            vertex2f left = bot+tangent+distanceOrthNorm*lineDistance;
+            vertex2f right = bot+tangent-distanceOrthNorm*lineDistance;
+            //TODO wenn es nicht mehr geht, dann wegen /lineDistance
+            vertex2f middle = bot+tangent-distanceOrthNorm*lineOffset;
+
+            //such-start-punkte in Bild-Koordinaten
+            vertex2i leftI;
+            vertex2i rightI;
+            vertex2i middleI;
+            vertex2i topI;
 
 
-        lms::imaging::V2C(&left,&leftI);
-        lms::imaging::V2C(&right,&rightI);
-        lms::imaging::V2C(&middle,&middleI);
-        lms::imaging::V2C(&top,&topI);
+            lms::imaging::V2C(&left,&leftI);
+            lms::imaging::V2C(&right,&rightI);
+            lms::imaging::V2C(&middle,&middleI);
+            lms::imaging::V2C(&top,&topI);
 
-        float angleLeft = (leftI-topI).angle();
+            float angleLeft = (leftI-rightI).angle();
 
-        float searchLength = (leftI-topI).length();
-        logger.debug("cycle") <<"searchLength pix: "<<searchLength <<" "<< leftI.x << " "<< leftI.y;
-        searchLength = searchLength/lineDistance*lineOffset*2;
-        logger.debug("cycle")<<"angleLeft: " <<angleLeft << " length: "<<searchLength;
+            float searchLength = (leftI-topI).length();
+            logger.debug("cycle") <<"searchLength pix: "<<searchLength <<" "<< leftI.x << " "<< leftI.y;
+            searchLength = searchLength/lineDistance*lineOffset*2;
+            logger.debug("cycle")<<"angleLeft: " <<angleLeft << " length: "<<searchLength;
 
-        defaultLinePointParameter.searchLength = searchLength;
-        //add hints
-        //add left
-        if(defaultLinePointParameter.target->inside(leftI.x , leftI.y)){
-            defaultLinePointParameter.x = leftI.x;
-            defaultLinePointParameter.y = leftI.y;
-            defaultLinePointParameter.searchAngle = angleLeft;
-            hintLeft->parameter.addParam(defaultLinePointParameter);
-        }else{
-            logger.debug("cycle")<<"NOT INSIDE - LEFT";
-        }
+            defaultLinePointParameter.searchLength = searchLength;
+            //add hints
+            //add left
+            if(defaultLinePointParameter.target->inside(leftI.x , leftI.y)){
+                defaultLinePointParameter.x = leftI.x;
+                defaultLinePointParameter.y = leftI.y;
+                defaultLinePointParameter.searchAngle = angleLeft;
+                hintLeft->parameter.addParam(defaultLinePointParameter);
+            }else{
+                logger.debug("cycle")<<"NOT INSIDE - LEFT";
+            }
 
-        //add right
-        if(defaultLinePointParameter.target->inside(rightI.x , rightI.y)){
-            defaultLinePointParameter.x = rightI.x;
-            defaultLinePointParameter.y = rightI.y;
-            defaultLinePointParameter.searchAngle = angleLeft+M_PI;
-            hintRight->parameter.addParam(defaultLinePointParameter);
-        }else{
-            logger.debug("cycle")<<"NOT INSIDE - RIGHT";
-        }
+            //add right
+            if(defaultLinePointParameter.target->inside(rightI.x , rightI.y)){
+                defaultLinePointParameter.x = rightI.x;
+                defaultLinePointParameter.y = rightI.y;
+                defaultLinePointParameter.searchAngle = angleLeft+M_PI;
+                hintRight->parameter.addParam(defaultLinePointParameter);
+            }else{
+                logger.debug("cycle")<<"NOT INSIDE - RIGHT";
+            }
 
-        //add middle
-        if(defaultLinePointParameter.target->inside(middleI.x , middleI.y)){
-            defaultLinePointParameter.x = middleI.x;
-            defaultLinePointParameter.y = middleI.y;
-            defaultLinePointParameter.searchAngle = angleLeft;
-            hintMiddle->parameter.addParam(defaultLinePointParameter);
-        }else{
-            logger.debug("cycle")<<"NOT INSIDE - MIDDLE";
+            //add middle
+            if(defaultLinePointParameter.target->inside(middleI.x , middleI.y)){
+                defaultLinePointParameter.x = middleI.x;
+                defaultLinePointParameter.y = middleI.y;
+                defaultLinePointParameter.searchAngle = angleLeft;
+                hintMiddle->parameter.addParam(defaultLinePointParameter);
+            }else{
+                logger.debug("cycle")<<"NOT INSIDE - MIDDLE";
+            }
         }
     }
     if(hintLeft->getTarget() != nullptr){

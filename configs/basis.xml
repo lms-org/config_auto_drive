@@ -82,7 +82,7 @@
         <channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
         <channelMapping priority="10" from="MIDDLE_LANE" to="MIDDLE_LANE"/>
         <config>
-            <searchForObstacles>true</searchForObstacles>
+            <searchForObstacles>false</searchForObstacles>
             <searchForCrossing>false</searchForCrossing>
         </config>
         <config name="defaultEPParameter" src="imaging/defaultEdgePointParam.lconf"/>
@@ -122,7 +122,7 @@
         <config>
             <elementCount>10</elementCount>
             <r_fakt>250</r_fakt>
-            <kov>150</kov>
+            <kov>15</kov>
             <kovAbnahme>0.2</kovAbnahme>
             <elementLength>0.2</elementLength>
             <enableMove>false</enableMove>
