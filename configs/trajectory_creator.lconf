@@ -1,4 +1,4 @@
-simpleTraj = false
+simpleTraj = true
 kj = 1
 kT = 100
 ks = 1
