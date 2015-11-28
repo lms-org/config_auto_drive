@@ -1,0 +1,80 @@
+#ifndef CAR_TRACKER_FILTER_MEASUREMENT_MODEL_H
+#define CAR_TRACKER_FILTER_MEASUREMENT_MODEL_H
+
+#include <kalman/MeasurementModel.hpp>
+#include "filter/system_model.h"
+
+/**
+ * @brief Measurement vector measuring the acceleration in x- and y-direction and the turn rate
+ *
+ * @param T Numeric scalar type
+ */
+template<typename T>
+class Measurement : public Kalman::Vector<T, 3>
+{
+public:
+    KALMAN_VECTOR(Measurement, T, 3)
+
+    //! acceleration in x-direction
+    static constexpr size_t AX = 0;
+
+    //! acceleration in y-direction
+    static constexpr size_t AY = 1;
+
+    //! turn rate around z-axis
+    static constexpr size_t OMEGA = 2;
+
+
+    T ax()       const { return (*this)[ AX ]; }
+    T ay()       const { return (*this)[ AY ]; }
+    T omega()    const { return (*this)[ OMEGA ]; }
+
+    T& ax()      { return (*this)[ AX ]; }
+    T& ay()      { return (*this)[ AY ]; }
+    T& omega()   { return (*this)[ OMEGA ]; }
+};
+
+/**
+ * @brief Measurement model
+ *
+ *
+ * @param T Numeric scalar type
+ * @param CovarianceBase Class template to determine the covariance representation
+ *                       (as covariance matrix (StandardBase) or as lower-triangular
+ *                       coveriace square root (SquareRootBase))
+ */
+template<typename T, template<class> class CovarianceBase = Kalman::StandardBase>
+class MeasurementModel : public Kalman::MeasurementModel<State<T>, Measurement<T>, CovarianceBase>
+{
+public:
+    //! State type shortcut definition
+    typedef State<T> S;
+
+    //! Measurement type shortcut definition
+    typedef Measurement<T> M;
+
+    /**
+     * @brief Definition of (possibly non-linear) measurement function
+     *
+     * This function maps the system state to the measurement that is expected
+     * to be received from the sensor assuming the system is currently in the
+     * estimated state.
+     *
+     * @param [in] x The system state in current time-step
+     * @returns The (predicted) sensor measurement for the system state
+     */
+    M h(const S& x) const
+    {
+        M measurement;
+
+        measurement.ax() = x.a();
+        measurement.ay() = x.omega()*x.v(); //ay = omega^2*r = v^2/r  ==> r=v/omega
+        measurement.omega() = x.omega();
+
+        return measurement;
+    }
+
+};
+
+
+#endif
