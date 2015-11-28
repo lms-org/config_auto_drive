@@ -1,0 +1,3 @@
+targetThres = 80
+numerOfSegmentsOrth =3
+minDistanceBetweenSearchPoints = 0.1

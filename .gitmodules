@@ -88,3 +88,9 @@
 [submodule "external/modules/sfml_sound_player"]
 	path = external/modules/sfml_sound_player
 	url = https://github.com/lms-org/sfml_sound_player
+[submodule "external/libraries/mavlink-messages-c"]
+	path = external/libraries/mavlink-messages-c
+	url = https://github.com/tum-phoenix/mavlink-messages-c
+[submodule "external/modules/rgb_lights_controller"]
+	path = external/modules/rgb_lights_controller
+	url = https://github.com/tum-phoenix/rgb_lights_controller

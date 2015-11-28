@@ -11,17 +11,14 @@
 #include "lms/imaging_detection/street_obstacle.h"
 #include "lms/imaging/warp.h"
 bool ImageHintGenerator::initialize() {
-    config = getConfig();
     gaussBuffer = new lms::imaging::Image();
-    middleLane = datamanager()->readChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
-    hintContainerLane = datamanager()->
-            writeChannel<lms::imaging::detection::HintContainer>(this,"HINTS");
+    middleLane = readChannel<street_environment::RoadLane>("MIDDLE_LANE");
+    hintContainerLane = writeChannel<lms::imaging::detection::HintContainer>("HINTS");
 
-    hintContainerObstacle = datamanager()->
-            writeChannel<lms::imaging::detection::HintContainer>(this,"HINTS_OBSTACLE");
+    hintContainerObstacle = writeChannel<lms::imaging::detection::HintContainer>("HINTS_OBSTACLE");
 
-    target = datamanager()->readChannel<lms::imaging::Image>(this,"TARGET_IMAGE");
-    defaultLinePointParameter.fromConfig(getConfig("defaultLPParameter"));
+    target = readChannel<lms::imaging::Image>("TARGET_IMAGE");
+    defaultLinePointParameter.fromConfig(&config("defaultLPParameter"));
     defaultLinePointParameter.target =target.get();
     defaultLinePointParameter.gaussBuffer = gaussBuffer;
     return true;
@@ -45,9 +42,9 @@ bool ImageHintGenerator::cycle() {
         }
         createHintsFromMiddleLane(*middleLane);
 
-        if(config->get<bool>("searchForObstacles",false)){
+        if(config().get<bool>("searchForObstacles",false)){
             createHintForObstacle(*middleLane);
-        }else if(config->get<bool>("searchForCrossing",false)){
+        }else if(config().get<bool>("searchForCrossing",false)){
             createHintForCrossing(*middleLane);
         }
     }else{
@@ -63,7 +60,7 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     lms::imaging::detection::StreetCrossing::StreetCrossingParam scp;
     scp.target = target.get();
     scp.gaussBuffer = gaussBuffer;
-    scp.fromConfig(getConfig("defaultLPParameter"));
+    scp.fromConfig(&config("defaultLPParameter"));
     for(const lms::math::vertex2f &v:middle.points()){
         if(v.length() > 0.5 && v.length() < 1.2){
             scp.middleLine.points().push_back(v);
@@ -83,22 +80,13 @@ void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLan
     sopRight.edge = true;
     sopRight.target = target.get();
     sopRight.gaussBuffer = gaussBuffer;
-    sopRight.fromConfig(getConfig("defaultLPParameter"));
-    sopLeft = sopRight;
-    for(uint i = 1; i < middle.points().size();i++){
-        lms::math::vertex2f v1 = middle.points()[i-1];
-        lms::math::vertex2f v2 = middle.points()[i];
-        lms::math::vertex2f tmp = v2-v1;
-        tmp = tmp.rotateClockwise90deg();
-        tmp = tmp.normalize();
-        tmp = tmp * 0.2; //move to middle of the street
-        if(v1.length() > 0.5 && v1.length() < 1.5){
-            //right lane
-            sopRight.middleLine.points().push_back(v1+tmp);
-            sopLeft.middleLine.points().push_back(v1-tmp);
-        }
-    }
+    sopRight.fromConfig(&config("defaultLPParameter"));
+    sopRight.fromConfig(&config("defaultObstacleParameter"));
+    sopRight.obstacleLeft = false;
+    sopRight.middleLine = middle;
     obstacleRight->parameter = sopRight;
+    sopLeft = sopRight;
+    sopLeft.obstacleLeft = true;
     obstacleLeft->parameter = sopLeft;
     hintContainerObstacle->add(obstacleRight);
     hintContainerObstacle->add(obstacleLeft);

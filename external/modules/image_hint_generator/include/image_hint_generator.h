@@ -20,7 +20,6 @@ private:
     void createHintForObstacleUsingSinglePoints(const street_environment::RoadLane &middle );
     void createHintForCrossing(const street_environment::RoadLane &middle );
     void createHintForObstacle(const street_environment::RoadLane &middle );
-    const lms::ModuleConfig *config;
     lms::ReadDataChannel<street_environment::RoadLane> middleLane;
     lms::WriteDataChannel<lms::imaging::detection::HintContainer> hintContainerLane;
     lms::WriteDataChannel<lms::imaging::detection::HintContainer> hintContainerObstacle;

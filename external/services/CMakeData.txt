@@ -1,0 +1,8 @@
+# If SERVICES is set, only the given directories will be compiled
+#set(SERVICES )
+
+# If N_SERVICES is set, all directories except
+#set(N_SERVICES )
+
+#if SERVIES_COMPILE_AT_FIRST compiles those libs at first
+#set(SERVICES_COMPILE_AT_FIRST )
