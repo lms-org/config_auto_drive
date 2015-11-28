@@ -38,7 +38,7 @@ bool ImageObjectRenderer::cycle() {
             logger.debug("")<< "drawing v2f";
         }else if(dO.castableTo<street_environment::EnvironmentObjects>()){
             logger.debug("")<< "drawing evo";
-            for(std::shared_ptr<street_environment::EnvironmentObject> &eo:
+            for(const std::shared_ptr<street_environment::EnvironmentObject> &eo:
                     (dO.getWithType<street_environment::EnvironmentObjects>()->objects)){
                     drawObject(eo.get(), customColor);
             }
