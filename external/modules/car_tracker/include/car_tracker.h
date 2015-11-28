@@ -37,7 +37,7 @@ private:
 //    void getFromTrajectory(DeltaState &d);
 //    void getFromMouseSensors(DeltaState &d);
 //    void getFromImu(DeltaState &d);
-    float deltaTime;
+
     lms::extra::PrecisionTime last;
     bool firstRun;
     lms::WriteDataChannel<sensor_utils::Car> car;

@@ -7,8 +7,7 @@
 
 bool CarTracker::initialize() {
     car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
-    firstRun = true;
-    deltaTime = 0;
+    firstRun = true;   
 
     /* state definition:
      * x        global x-position
@@ -45,10 +44,9 @@ bool CarTracker::cycle() {
     u.dx() = 0;
     u.dy() = 0;
     u.dtheta() = 0;
-    u.dt() = 0.01; // time since UKF was last called (parameter, masked as control input)
+    u.dt() = lms::extra::PrecisionTime::since(last).toFloat<std::milli>()/1000;; // time since UKF was last called (parameter, masked as control input)
 
     // simulate system
-    deltaTime = lms::extra::PrecisionTime::since(last).toFloat<std::milli>()/1000;
     x = sys.f(x, u);
 
     // predict state for current time-step using the ukf
