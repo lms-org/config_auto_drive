@@ -119,8 +119,15 @@ public:
         auto om = x.omega();
         double dT = u.dt();
 
-        x_.x()      = x.x() + 1/(om*om)*((v*om+a*om*dT)*sin(th+om*dT) + a*cos(th+om*dT) - v*om*sin(th) - a*cos(th));
-        x_.y()      = x.y() + 1/(om*om)*((-v*om-a*om*dT)*cos(th+om*dT) + a*sin(th+om*dT) + v*om*cos(th) - a*sin(th));
+        if (om < 0.01) {
+            x_.x()      = x.x() + 0.5*dT*(2*v+a*dT)*cos(th);
+            x_.y()      = x.y() + 0.5*dT*(2*v+a*dT)*sin(th);
+        }
+        else {
+            x_.x()      = x.x() + 1/(om*om)*((v*om+a*om*dT)*sin(th+om*dT) + a*cos(th+om*dT) - v*om*sin(th) - a*cos(th));
+            x_.y()      = x.y() + 1/(om*om)*((-v*om-a*om*dT)*cos(th+om*dT) + a*sin(th+om*dT) + v*om*cos(th) - a*sin(th));
+        }
+
         x_.theta()  = th + om*dT;
         x_.v()      = v + a*dT;
         x_.a()      = a + 0;
