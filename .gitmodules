@@ -88,3 +88,6 @@
 [submodule "external/modules/sfml_sound_player"]
 	path = external/modules/sfml_sound_player
 	url = https://github.com/lms-org/sfml_sound_player
+[submodule "external/libraries/kalman"]
+	path = external/libraries/kalman
+	url = https://github.com/mherb/kalman.git
