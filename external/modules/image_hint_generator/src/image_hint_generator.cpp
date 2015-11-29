@@ -18,15 +18,15 @@ bool ImageHintGenerator::initialize() {
     hintContainerObstacle = writeChannel<lms::imaging::detection::HintContainer>("HINTS_OBSTACLE");
 
     target = readChannel<lms::imaging::Image>("TARGET_IMAGE");
-    defaultLinePointParameter.fromConfig(&config("defaultLPParameter"));
     defaultLinePointParameter.target =target.get();
     defaultLinePointParameter.gaussBuffer = gaussBuffer;
+    configsChanged();
     return true;
 }
 
 void ImageHintGenerator::configsChanged(){
-    defaultLinePointParameter.fromConfig(&config("defaultEPParameter"));
     defaultLinePointParameter.fromConfig(&config("defaultLPParameter"));
+    defaultLinePointParameter.fromConfig(&config("defaultEPParameter"));
 
 }
 
@@ -34,14 +34,12 @@ bool ImageHintGenerator::deinitialize() {
     return false;
 }
 bool ImageHintGenerator::cycle() {
-    static bool fromMiddle = true;
     hintContainerLane->clear();
     hintContainerObstacle->clear();
     //set the gaussbuffer
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
     //clear the gaussBuffer not necessary!
 
-    if(fromMiddle){
         if(middleLane->type() != street_environment::RoadLaneType::MIDDLE){
             logger.error("createHintsFromMiddleLane") << "middle is no middle lane!";
             return true;
@@ -53,10 +51,6 @@ bool ImageHintGenerator::cycle() {
         }else if(config().get<bool>("searchForCrossing",false)){
             createHintForCrossing(*middleLane);
         }
-    }else{
-        initialHints();
-        fromMiddle = true;
-    }
 
     return true;
 }
@@ -172,7 +166,6 @@ void ImageHintGenerator::createHintForObstacleUsingSinglePoints(const street_env
                 lpp.edge = true;
                 lpp.searchAngle = searchAngle;
                 lpp.searchLength = imageSearchDistance;
-                //lpp.sobelThreshold = 50;
                 line->parameter.addParam(lpp);
                 //alter endPunkt wird neuer Startpunkt:
                 middlePoints[k] = endMiddle;
@@ -276,102 +269,4 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
     if(hintMiddle->getTarget() != nullptr){
         hintContainerLane->add(hintMiddle);
     }
-}
-
-void ImageHintGenerator::initialHints(){
-    //TODO, don't work with all cams!
-    lms::imaging::detection::ImageHint<lms::imaging::detection::Line> *hint = new lms::imaging::detection::ImageHint<lms::imaging::detection::Line>();
-    hint->name = "RIGHT_LANE";
-    hint->parameter.target =target.get();
-    hint->parameter.maxLength = 300;
-    hint->parameter.approxEdge = false;
-    hint->parameter.lineWidthMax = 10;
-    hint->parameter.lineWidthMin = 1;
-    hint->parameter.searchAngle = 0;
-    hint->parameter.searchLength = 100;
-    hint->parameter.gaussBuffer = gaussBuffer;
-    hint->parameter.x = 180;
-    hint->parameter.y = 120;
-    hint->parameter.sobelThreshold = 250;
-    hint->parameter.stepLengthMin = 2;
-    hint->parameter.stepLengthMax = 20;
-    hint->parameter.lineWidthTransMultiplier = 1;
-    hint->parameter.edge = false;
-    hint->parameter.verify = true;
-    hint->parameter.preferVerify = false;
-    hint->parameter.validPoint = [](lms::imaging::detection::LinePoint &lp DRAWDEBUG_PARAM)->bool{
-
-#if IMAGING_DRAW_DEBUG == 1
-        (void)DRAWDEBUG_ARG_N;
-#endif
-        //logger.info("check") << x <<" "<< y;
-        bool result =  std::abs(160-lp.high_low.x)>50 || std::abs(lp.high_low.y)<140;
-        //result =
-        return result;
-    };
-    hintContainerLane->add(hint);
-    //hint->parameter.containing;
-    //add it
-    hint = new lms::imaging::detection::ImageHint<lms::imaging::detection::Line>(*hint);
-    hint->name = "LEFT_LANE";
-    hint->parameter.x = 40;
-    hint->parameter.y = 100;
-    hint->parameter.searchAngle = M_PI;
-    hintContainerLane->add(hint);
-
-    lms::imaging::detection::ImageHint<lms::imaging::detection::SplittedLine> *hintSplit = new lms::imaging::detection::ImageHint<lms::imaging::detection::SplittedLine>();
-    hintSplit->name = "MIDDLE_LANE";
-    hintSplit->parameter.target =target.get();
-    hintSplit->parameter.maxLength = 300;
-    hintSplit->parameter.approxEdge = false;
-    hintSplit->parameter.lineWidthMax = 10;
-    hintSplit->parameter.lineWidthMin = 5;
-    hintSplit->parameter.searchAngle = 0;
-    hintSplit->parameter.searchLength = 50;
-    hintSplit->parameter.gaussBuffer = gaussBuffer;
-    hintSplit->parameter.x = 40;
-    hintSplit->parameter.y = 210;
-    hintSplit->parameter.sobelThreshold = 250;
-    hintSplit->parameter.stepLengthMin = 5;
-    hintSplit->parameter.stepLengthMax = 10;
-    hintSplit->parameter.lineWidthTransMultiplier = 1;
-    hintSplit->parameter.edge = false;
-    hintSplit->parameter.verify = true;
-    hintSplit->parameter.preferVerify = false;
-    hintSplit->parameter.distanceBetween = 40;
-    hintSplit->parameter.lineMinLength = 10;
-    hintSplit->parameter.lineMaxLength = 80;
-    hintSplit->parameter.validPoint = [this](lms::imaging::detection::LinePoint &lp DRAWDEBUG_PARAM){
-
-#if IMAGING_DRAW_DEBUG == 1
-        (void)DRAWDEBUG_ARG_N;
-#endif
-        bool result =  std::abs(160-lp.low_high.x)>50 || std::abs(lp.low_high.y)<140;
-        float angle = lms::math::limitAngle_nPI_PI(lp.param().searchAngle);
-        result = result && (fabs(angle) < M_PI_2*0.5) &&!(lp.low_high.y < 50);
-        return result;
-    };
-    //TODO atm we can't search for the middle-lane that way (transformer fails)
-    //hintContainer->add(hintSplit);
-
-
-
-    hint = new lms::imaging::detection::ImageHint<lms::imaging::detection::Line>(*hint);
-    hint->name = "BOX";
-    hint->parameter.x = 120;
-    hint->parameter.y = 50;
-    hint->parameter.searchAngle = -M_PI_2*1.5;
-    hint->parameter.stepLengthMax = 5;
-    hint->parameter.lineWidthMax = 5;
-    hint->parameter.maxLength = 20;
-    hint->parameter.edge = true;
-    hint->parameter.validPoint = [](lms::imaging::detection::LinePoint &lp DRAWDEBUG_PARAM){
-        //logger.info("check") << x <<" "<< y;
-        lms::imaging::detection::EdgePoint::EdgePointParam param = lp.param();
-        param.searchType = lms::imaging::detection::EdgePoint::EdgeType::HIGH_LOW;
-        param.searchLength = 20;
-        lms::imaging::detection::EdgePoint ep;
-        return !ep.find(param DRAWDEBUG_ARG);
-    };
-    //hintContainer->add(hint);
 }
