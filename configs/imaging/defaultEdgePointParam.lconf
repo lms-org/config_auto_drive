@@ -1,7 +1,5 @@
 searchAngle = 0
-searchLength = 80
-x = 180
-y = 120
-sobelThreshold = 200
-verify = true
+searchLength = 0
+sobelThreshold = 250
+verify = false
 preferVerify = false
