@@ -14,8 +14,8 @@ public:
     bool initialize() override;
     bool deinitialize() override;
     bool cycle() override;
+    void configsChanged() override;
 private:
-    void initialHints();
     void createHintsFromMiddleLane(const street_environment::RoadLane &middle );
     void createHintForObstacleUsingSinglePoints(const street_environment::RoadLane &middle );
     void createHintForCrossing(const street_environment::RoadLane &middle );
