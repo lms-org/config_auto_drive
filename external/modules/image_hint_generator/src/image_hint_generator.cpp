@@ -24,6 +24,12 @@ bool ImageHintGenerator::initialize() {
     return true;
 }
 
+void ImageHintGenerator::configsChanged(){
+    defaultLinePointParameter.fromConfig(&config("defaultEPParameter"));
+    defaultLinePointParameter.fromConfig(&config("defaultLPParameter"));
+
+}
+
 bool ImageHintGenerator::deinitialize() {
     return false;
 }
