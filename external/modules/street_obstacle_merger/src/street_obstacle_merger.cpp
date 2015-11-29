@@ -4,12 +4,12 @@
 #include "street_environment/crossing.h"
 
 bool StreetObjectMerger::initialize() {
-    envInput = datamanager()->readChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_INPUT");
-    envOutput = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this,"ENVIRONMENT_OUTPUT");
+    envInput = readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_INPUT");
+    envOutput = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_OUTPUT");
 
     //We should have the roadlane and the car from the current cycle
-    car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
-    middle = datamanager()->readChannel<street_environment::RoadLane>(this,"MIDDLE_LANE");
+    car = readChannel<sensor_utils::Car>("CAR");
+    middle = readChannel<street_environment::RoadLane>("MIDDLE_LANE");
 
     if(config().hasKey("visibleAreas")){
         std::vector<std::string> sRects = config().getArray<std::string>("visibleAreas");
@@ -49,7 +49,7 @@ bool StreetObjectMerger::cycle() {
 
 
     getObstacles(*envInput,obstaclesNew);
-    //getObstacles(*envOutput,obstaclesOld);
+    getObstacles(*envOutput,obstaclesOld);
 
     logger.debug("cycle")<<"number of old obstacles" << obstaclesOld.objects.size();
 
@@ -86,27 +86,29 @@ void StreetObjectMerger::createOutput(street_environment::EnvironmentObstacles &
     }
 }
 
-void StreetObjectMerger::filter(street_environment::EnvironmentObstacles &obstaclesOld){
+void StreetObjectMerger::filter(street_environment::EnvironmentObstacles &obstacles){
     //Decrease foundCounter
-    for(uint i = 0; i < obstaclesOld.objects.size();i++){
-        if(!inVisibleArea(obstaclesOld.objects[i]->position().x,
-                obstaclesOld.objects[i]->position().y)){
+    for(uint i = 0; i < obstacles.objects.size();i++){
+        if(!inVisibleArea(obstacles.objects[i]->position().x,
+                obstacles.objects[i]->position().y)){
+            logger.error("OBJTECT CANT BE FOUND")<<obstacles.objects[i]->position().x<<" "<<
+                    obstacles.objects[i]->position().y;
             //if the obstacle can't be found by the sensors we won't decrease the counter, we just translate it every step and remove it later on
             continue;
         }
 
         //Not that smart :D
-        if(obstaclesOld.objects[i]->timesFound()>10){
-            obstaclesOld.objects[i]->found(10-obstaclesOld.objects[i]->timesFound());
+        if(obstacles.objects[i]->timesFound()>10){
+            obstacles.objects[i]->found(10-obstacles.objects[i]->timesFound());
         }
-        obstaclesOld.objects[i]->found(-1);
+        obstacles.objects[i]->found(-1);
     }
 
     //TODO hier könnte man sich auch etwas besseres einfallen lassen
-    for(uint i = 0; i < obstaclesOld.objects.size(); i++){
-        logger.debug("objectpos: ")<<obstaclesOld.objects[i]->position().x<<" "<<obstaclesOld.objects[i]->position().y;
-        if(obstaclesOld.objects[i]->timesFound() <= 0 || obstaclesOld.objects[i]->position().x < -0.35){
-            obstaclesOld.objects.erase(obstaclesOld.objects.begin() + i);
+    for(uint i = 0; i < obstacles.objects.size(); i++){
+        logger.debug("objectpos: ")<<obstacles.objects[i]->position().x<<" "<<obstacles.objects[i]->position().y;
+        if(obstacles.objects[i]->timesFound() <= 0 || obstacles.objects[i]->position().x < -0.35){
+            obstacles.objects.erase(obstacles.objects.begin() + i);
         }
     }
 }
@@ -119,7 +121,7 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
         for(uint i = 0; i < obstaclesOld.objects.size();i++){
             merged = obstaclesOld.objects[i]->match(*obstaclesNew.objects[k].get());
             if(merged){
-                lms::math::vertex2f pos = obstaclesNew.objects[i]->position()+obstaclesOld.objects[i]->position();
+                lms::math::vertex2f pos = obstaclesNew.objects[k]->position()+obstaclesOld.objects[i]->position();
                 pos = pos*0.5;
                 obstaclesOld.objects[i]->updatePosition(pos);
                 //TODO create merged object

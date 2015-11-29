@@ -33,6 +33,7 @@
         <channelMapping priority="10" from="CAR" to="CAR"/>
         <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_OBSTACLE_RAW"/>
         <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_OBSTACLE"/>
+        <config src="visible_areas.lconf"/>
     </module>
     <module>
         <name>car_to_matlab</name>

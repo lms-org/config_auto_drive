@@ -10,6 +10,7 @@
 #include "lms/imaging_detection/street_crossing.h"
 #include "lms/imaging_detection/street_obstacle.h"
 #include "lms/imaging/warp.h"
+
 bool ImageHintGenerator::initialize() {
     gaussBuffer = new lms::imaging::Image();
     middleLane = readChannel<street_environment::RoadLane>("MIDDLE_LANE");
@@ -82,13 +83,18 @@ void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLan
     sopRight.fromConfig(&config("defaultLPParameter"));
     sopRight.fromConfig(&config("defaultObstacleParameter"));
     sopRight.obstacleLeft = false;
-    sopRight.middleLine = middle;
+    float minObstacleDistanceFromVehicle = config().get<float>("minObstacleDistanceFromVehicle",0.3);
+    for(const lms::math::vertex2f &v:middle.points()){
+        if(v.x >= minObstacleDistanceFromVehicle){
+            sopRight.middleLine.points().push_back(v);
+        }
+    }
     obstacleRight->parameter = sopRight;
     sopLeft = sopRight;
     sopLeft.obstacleLeft = true;
     obstacleLeft->parameter = sopLeft;
     hintContainerObstacle->add(obstacleRight);
-    //hintContainerObstacle->add(obstacleLeft);
+    hintContainerObstacle->add(obstacleLeft);
 
 }
 
