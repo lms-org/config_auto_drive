@@ -48,7 +48,6 @@
     </module>
     <module>
         <name>socket_data_sender</name>
-        <libpath>socket_data/sender</libpath>
         <config src="socket_data/car_socket_data_sender.lconf" />
     </module>
     <module>
