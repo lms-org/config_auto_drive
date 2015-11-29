@@ -5,7 +5,7 @@
  * File: _coder_kalman_filter_lr_api.c
  *
  * MATLAB Coder version            : 3.0
- * C/C++ source code generated on  : 07-Oct-2015 12:34:33
+ * C/C++ source code generated on  : 29-Nov-2015 11:30:09
  */
 
 /* Include Files */
@@ -369,11 +369,11 @@ static uint8_T l_emlrt_marshallIn(const emlrtStack *sp, const mxArray *src,
 }
 
 /*
- * Arguments    : const mxArray *prhs[15]
+ * Arguments    : const mxArray *prhs[16]
  *                const mxArray *plhs[2]
  * Return Type  : void
  */
-void kalman_filter_lr_api(const mxArray *prhs[15], const mxArray *plhs[2])
+void kalman_filter_lr_api(const mxArray *prhs[16], const mxArray *plhs[2])
 {
   emxArray_real_T *r;
   emxArray_real_T *Pk;
@@ -390,6 +390,7 @@ void kalman_filter_lr_api(const mxArray *prhs[15], const mxArray *plhs[2])
   real_T R_fakt;
   real_T delta;
   uint8_T interp_mode;
+  real_T prior_fact;
   emlrtStack st = { NULL, NULL, NULL };
 
   st.tls = emlrtRootTLSGlobal;
@@ -429,10 +430,11 @@ void kalman_filter_lr_api(const mxArray *prhs[15], const mxArray *plhs[2])
   emlrt_marshallIn(&st, emlrtAlias(prhs[12]), "xm", xm);
   emlrt_marshallIn(&st, emlrtAlias(prhs[13]), "ym", ym);
   interp_mode = g_emlrt_marshallIn(&st, emlrtAliasP(prhs[14]), "interp_mode");
+  prior_fact = c_emlrt_marshallIn(&st, emlrtAliasP(prhs[15]), "prior_fact");
 
   /* Invoke the target function */
   kalman_filter_lr(r, delta_x, delta_y, delta_phi, Pk, Q, R_fakt, delta, xl, yl,
-                   xr, yr, xm, ym, interp_mode);
+                   xr, yr, xm, ym, interp_mode, prior_fact);
 
   /* Marshall function outputs */
   emlrt_marshallOut(r, prhs[0]);

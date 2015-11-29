@@ -5,7 +5,7 @@
 // File: kalman_filter_lr.h
 //
 // MATLAB Coder version            : 3.0
-// C/C++ source code generated on  : 07-Oct-2015 12:34:33
+// C/C++ source code generated on  : 29-Nov-2015 11:30:09
 //
 #ifndef __KALMAN_FILTER_LR_H__
 #define __KALMAN_FILTER_LR_H__
@@ -24,7 +24,7 @@ extern void kalman_filter_lr(emxArray_real_T *r, double delta_x, double delta_y,
   double delta_phi, emxArray_real_T *Pk, const emxArray_real_T *Q, double R_fakt,
   double delta, const emxArray_real_T *xl, const emxArray_real_T *yl, const
   emxArray_real_T *xr, const emxArray_real_T *yr, const emxArray_real_T *xm,
-  const emxArray_real_T *ym, unsigned char interp_mode);
+  const emxArray_real_T *ym, unsigned char interp_mode, double prior_fact);
 
 #endif
 

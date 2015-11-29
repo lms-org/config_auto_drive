@@ -5,7 +5,7 @@
 // File: mrdivide.h
 //
 // MATLAB Coder version            : 3.0
-// C/C++ source code generated on  : 07-Oct-2015 12:34:33
+// C/C++ source code generated on  : 29-Nov-2015 11:30:09
 //
 #ifndef __MRDIVIDE_H__
 #define __MRDIVIDE_H__
@@ -20,8 +20,7 @@
 #include "kalman_filter_lr_types.h"
 
 // Function Declarations
-extern void mrdivide(const emxArray_real_T *A, const emxArray_real_T *B,
-                     emxArray_real_T *y);
+extern void mrdivide(emxArray_real_T *A, const emxArray_real_T *B);
 
 #endif
 

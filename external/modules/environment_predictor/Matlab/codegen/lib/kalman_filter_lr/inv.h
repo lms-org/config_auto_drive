@@ -2,13 +2,13 @@
 // Academic License - for use in teaching, academic research, and meeting
 // course requirements at degree granting institutions only.  Not for
 // government, commercial, or other organizational use.
-// File: lusolve.h
+// File: inv.h
 //
 // MATLAB Coder version            : 3.0
-// C/C++ source code generated on  : 07-Oct-2015 12:34:33
+// C/C++ source code generated on  : 29-Nov-2015 11:30:09
 //
-#ifndef __LUSOLVE_H__
-#define __LUSOLVE_H__
+#ifndef __INV_H__
+#define __INV_H__
 
 // Include Files
 #include <math.h>
@@ -20,12 +20,12 @@
 #include "kalman_filter_lr_types.h"
 
 // Function Declarations
-extern void lusolve(const emxArray_real_T *A, emxArray_real_T *B);
+extern void inv(const emxArray_real_T *x, emxArray_real_T *y);
 
 #endif
 
 //
-// File trailer for lusolve.h
+// File trailer for inv.h
 //
 // [EOF]
 //

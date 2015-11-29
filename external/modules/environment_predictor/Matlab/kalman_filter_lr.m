@@ -1,4 +1,4 @@
-function [r, Pk] = kalman_filter_lr (r, delta_x, delta_y, delta_phi, Pk, Q, R_fakt, delta, xl, yl, xr, yr, xm, ym, interp_mode) %#codegen
+function [r, Pk] = kalman_filter_lr (r, delta_x, delta_y, delta_phi, Pk, Q, R_fakt, delta, xl, yl, xr, yr, xm, ym, interp_mode, prior_fact) %#codegen
 
 % "kalman_filter_lr" 
 % 
@@ -63,6 +63,14 @@ y_tilde = z - zm;
 K = Pk*H'/(H*Pk*H' + R);
 r = r + K*y_tilde;
 Pk = (eye(numel(r)) - K*H)*Pk;
+
+% Lukas: zusätzlicher prior 
+if prior_fact > 0
+    HH = inv(Pk + prior_fact*Q);
+    Pk = Pk*HH*(prior_fact*Q);
+    r = (prior_fact*Q)*HH*r;
+end
+
 
 
 %% Zustandsbegrenzungen

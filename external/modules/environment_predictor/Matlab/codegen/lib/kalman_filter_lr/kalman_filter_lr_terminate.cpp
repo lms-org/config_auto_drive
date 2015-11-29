@@ -5,7 +5,7 @@
 // File: kalman_filter_lr_terminate.cpp
 //
 // MATLAB Coder version            : 3.0
-// C/C++ source code generated on  : 07-Oct-2015 12:34:33
+// C/C++ source code generated on  : 29-Nov-2015 11:30:09
 //
 
 // Include Files

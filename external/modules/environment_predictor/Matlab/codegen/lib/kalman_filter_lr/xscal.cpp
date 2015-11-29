@@ -5,7 +5,7 @@
 // File: xscal.cpp
 //
 // MATLAB Coder version            : 3.0
-// C/C++ source code generated on  : 07-Oct-2015 12:34:33
+// C/C++ source code generated on  : 29-Nov-2015 11:30:09
 //
 
 // Include Files
@@ -24,10 +24,10 @@
 //
 void xscal(int n, double a, emxArray_real_T *x, int ix0)
 {
-  int i10;
+  int i11;
   int k;
-  i10 = (ix0 + n) - 1;
-  for (k = ix0; k <= i10; k++) {
+  i11 = (ix0 + n) - 1;
+  for (k = ix0; k <= i11; k++) {
     x->data[k - 1] *= a;
   }
 }

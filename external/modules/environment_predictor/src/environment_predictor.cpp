@@ -119,9 +119,10 @@ bool EnvironmentPredictor::cycle() {
         deltaPhi = car->deltaPhi();
     }
     */
+    float prioFact = config().get<float>("prioFact",1000);
     kalman_filter_lr(zustandsVector,deltaX,deltaY,deltaPhi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
-                     r_fakt,partLength,lx,ly,rx,ry,mx,my,1);
+                     r_fakt,partLength,lx,ly,rx,ry,mx,my,1,prioFact);
     createOutput();
     //destroy stuff
     emxDestroyArray_real_T(rx);

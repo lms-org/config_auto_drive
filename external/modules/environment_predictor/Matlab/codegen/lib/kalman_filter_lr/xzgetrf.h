@@ -2,13 +2,13 @@
 // Academic License - for use in teaching, academic research, and meeting
 // course requirements at degree granting institutions only.  Not for
 // government, commercial, or other organizational use.
-// File: eye.h
+// File: xzgetrf.h
 //
 // MATLAB Coder version            : 3.0
 // C/C++ source code generated on  : 29-Nov-2015 11:30:09
 //
-#ifndef __EYE_H__
-#define __EYE_H__
+#ifndef __XZGETRF_H__
+#define __XZGETRF_H__
 
 // Include Files
 #include <math.h>
@@ -20,12 +20,13 @@
 #include "kalman_filter_lr_types.h"
 
 // Function Declarations
-extern void eye(double varargin_1, emxArray_real_T *I);
+extern void xzgetrf(int m, int n, emxArray_real_T *A, int lda, emxArray_int32_T *
+                    ipiv, int *info);
 
 #endif
 
 //
-// File trailer for eye.h
+// File trailer for xzgetrf.h
 //
 // [EOF]
 //

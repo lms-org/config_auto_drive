@@ -2,11 +2,11 @@
     <modulesToEnable>
         <module logLevel="WARN">image_hint_generator</module>
         <module logLevel="ERROR">image_hint_transformer</module>
-        <module logLevel="ERROR">image_hint_transformer_obstacle</module>
+        <module logLevel="DEBUG">image_hint_transformer_obstacle</module>
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
-        <module logLevel="DEBUG">trajectory_creator</module>
+        <module logLevel="WARN">trajectory_creator</module>
         <module logLevel="ERROR">trajectory_point_creator</module>
         <module logLevel="ERROR">environment_filter</module>
         <module logLevel="WARN">trajectory_point_controller</module>
@@ -79,11 +79,13 @@
     <module>
         <name>image_hint_generator</name>
         <channelMapping priority="10" from="HINTS" to="HINTS"/>
+        <channelMapping priority="10" from="HINTS_OBSTACLE" to="HINTS_OBSTACLE"/>
         <channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
         <channelMapping priority="10" from="MIDDLE_LANE" to="MIDDLE_LANE"/>
         <config>
-            <searchForObstacles>false</searchForObstacles>
+            <searchForObstacles>true</searchForObstacles>
             <searchForCrossing>false</searchForCrossing>
+            <numerOfSegmentsLines>1</numerOfSegmentsLines>
         </config>
         <config name="defaultEPParameter" src="imaging/defaultEdgePointParam.lconf"/>
         <config name="defaultLPParameter" src="imaging/defaultLinePointParam.lconf"/>
@@ -123,6 +125,7 @@
             <elementCount>10</elementCount>
             <r_fakt>250</r_fakt>
             <kov>15</kov>
+            <prioFact>5000</prioFact>
             <kovAbnahme>0.2</kovAbnahme>
             <elementLength>0.2</elementLength>
             <enableMove>false</enableMove>
@@ -146,12 +149,12 @@
     <module>
         <name>image_hint_worker_lane</name>
         <realName>image_hint_worker</realName>
-        <channelMapping from="HINTS" to="HINTS"/>
+        <channelMapping priority="2" from="HINTS" to="HINTS"/>
     </module>
     <module>
         <name>image_hint_worker_obstacle</name>
         <realName>image_hint_worker</realName>
-        <channelMapping from="HINTS" to="HINTS_OBSTACLE"/>
+        <channelMapping priority="2"  from="HINTS" to="HINTS_OBSTACLE"/>
         <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_OBSTACLE"/>
     </module>
     <module>

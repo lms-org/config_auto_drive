@@ -5,7 +5,7 @@
 // File: main.cpp
 //
 // MATLAB Coder version            : 3.0
-// C/C++ source code generated on  : 07-Oct-2015 12:34:33
+// C/C++ source code generated on  : 29-Nov-2015 11:30:09
 //
 
 //***********************************************************************
@@ -176,7 +176,7 @@ static void main_kalman_filter_lr()
 
   // Call the entry-point 'kalman_filter_lr'.
   kalman_filter_lr(r, delta_x, delta_y, delta_phi, Pk, Q, R_fakt, delta, xl, yl,
-                   xr, yr, xm, ym, argInit_uint8_T());
+                   xr, yr, xm, ym, argInit_uint8_T(), argInit_real_T());
   emxDestroyArray_real_T(ym);
   emxDestroyArray_real_T(xm);
   emxDestroyArray_real_T(yr);

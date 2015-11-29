@@ -5,7 +5,7 @@
  * File: _coder_kalman_filter_lr_mex.cpp
  *
  * MATLAB Coder version            : 3.0
- * C/C++ source code generated on  : 07-Oct-2015 12:34:33
+ * C/C++ source code generated on  : 29-Nov-2015 11:30:09
  */
 
 /* Include Files */
@@ -14,7 +14,7 @@
 
 /* Function Declarations */
 static void kalman_filter_lr_mexFunction(int32_T nlhs, mxArray *plhs[2], int32_T
-  nrhs, const mxArray *prhs[15]);
+  nrhs, const mxArray *prhs[16]);
 
 /* Function Definitions */
 
@@ -22,14 +22,14 @@ static void kalman_filter_lr_mexFunction(int32_T nlhs, mxArray *plhs[2], int32_T
  * Arguments    : int32_T nlhs
  *                const mxArray *plhs[2]
  *                int32_T nrhs
- *                const mxArray *prhs[15]
+ *                const mxArray *prhs[16]
  * Return Type  : void
  */
 static void kalman_filter_lr_mexFunction(int32_T nlhs, mxArray *plhs[2], int32_T
-  nrhs, const mxArray *prhs[15])
+  nrhs, const mxArray *prhs[16])
 {
   int32_T n;
-  const mxArray *inputs[15];
+  const mxArray *inputs[16];
   const mxArray *outputs[2];
   int32_T b_nlhs;
   emlrtStack st = { NULL, NULL, NULL };
@@ -37,8 +37,8 @@ static void kalman_filter_lr_mexFunction(int32_T nlhs, mxArray *plhs[2], int32_T
   st.tls = emlrtRootTLSGlobal;
 
   /* Check for proper number of arguments. */
-  if (nrhs != 15) {
-    emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:WrongNumberOfInputs", 5, 12, 15, 4,
+  if (nrhs != 16) {
+    emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:WrongNumberOfInputs", 5, 12, 16, 4,
                         16, "kalman_filter_lr");
   }
 

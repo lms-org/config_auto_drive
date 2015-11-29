@@ -76,7 +76,6 @@ void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLan
 
     lms::imaging::detection::StreetObstacle::StreetObstacleParam sopRight;
     lms::imaging::detection::StreetObstacle::StreetObstacleParam sopLeft;
-    sopRight.minPointCount = 3;
     sopRight.edge = true;
     sopRight.target = target.get();
     sopRight.gaussBuffer = gaussBuffer;
@@ -89,7 +88,7 @@ void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLan
     sopLeft.obstacleLeft = true;
     obstacleLeft->parameter = sopLeft;
     hintContainerObstacle->add(obstacleRight);
-    hintContainerObstacle->add(obstacleLeft);
+    //hintContainerObstacle->add(obstacleLeft);
 
 }
 
@@ -198,7 +197,7 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
         const vertex2f distanceOrthNorm = tangentMain.rotateAntiClockwise90deg();
 
         //number of points per segment
-        int numerOfSegments = 2;
+        int numerOfSegments = config().get<int>("numerOfSegmentsLines",1);
         for(int i = 0; i <numerOfSegments; i++){
             lms::math::vertex2f tangent = tangentMain*distance*((float)i)/numerOfSegments;
 

@@ -5,4 +5,5 @@ Used for fast prototyping :)
 
 #Requirements
 Eigen: http://neuro.debian.net/pkgs/libeigen3-dev.html
+Kalman:  https://github.com/mherb/kalman
 sfml: TODO
