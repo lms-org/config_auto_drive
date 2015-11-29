@@ -3,18 +3,14 @@
         <!--clock enabled="true" unit="hz" value="10" /-->
 	</execution>
     <modulesToEnable>
-        <if notSet="sense_link">
+        <if notSet="mavlink">
             <module logLevel="DEBUG">importer_senseboard2015</module>
             <module logLevel="DEBUG">car_to_senseboard2015</module>
             <module logLevel="DEBUG">sensor_tracker</module>
         </if>
-        <if set="sense_link">
-            <module logLevel="INFO">usb_sense_link</module>
-            <module logLevel="INFO">usb_sense_link_fs</module>
-            <module logLevel="DEBUG">car_to_sense_link</module>
-            <if set="sensor_logger">
-                <module logLevel="INFO">senselink_csvlogger</module>
-            </if>
+        <if set="mavlink">
+            <module logLevel="INFO">mavlink_usb_importer</module>
+            <module logLevel="INFO">car_to_mavlink</module>
         </if>
 	</modulesToEnable>	
 	<module>
@@ -37,24 +33,9 @@
 	    <config name="velocity" src="sensor/velocity.lconf" />
 	</module>
     <module>
-        <name>usb_sense_link</name>
+        <name>mavlink_usb_importer</name>
         <config>
-            <path>/dev/senseboard2016</path>
-            <init_sleep>0</init_sleep>
-            <sensorChannels>SENSOR_DATA</sensorChannels>
-            <!--<actuatorChannels>ACTUATOR_DATA</actuatorChannels>-->
-            <SENSOR_DATA>*</SENSOR_DATA>
-        </config>
-    </module>
-    <module>
-        <name>usb_sense_link_fs</name>
-        <realName>usb_sense_link</realName>
-        <config>
-            <path>/dev/senseboard2016-fs</path>
-            <init_sleep>0</init_sleep>
-            <!--<sensorChannels>SENSOR_DATA</sensorChannels>
-            <SENSOR_DATA>*</SENSOR_DATA>-->
-            <actuatorChannels>ACTUATOR_DATA</actuatorChannels>
+            <path>/dev/ttyACM0</path>
         </config>
     </module>
 	<module>
@@ -62,7 +43,7 @@
             <channelMapping priority="10" from="CAR" to="CAR"/>
 	</module>
     <module>
-        <name>car_to_sense_link</name>
+        <name>car_to_mavlink</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
     </module>
     <module>
