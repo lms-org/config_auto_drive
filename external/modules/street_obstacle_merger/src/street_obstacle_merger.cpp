@@ -49,7 +49,7 @@ bool StreetObjectMerger::cycle() {
 
 
     getObstacles(*envInput,obstaclesNew);
-    getObstacles(*envOutput,obstaclesOld);
+    //getObstacles(*envOutput,obstaclesOld);
 
     logger.debug("cycle")<<"number of old obstacles" << obstaclesOld.objects.size();
 
