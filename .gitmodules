@@ -97,3 +97,6 @@
 [submodule "external/services/warp_service"]
 	path = external/services/warp_service
 	url = https://github.com/lms-org/warp_service.git
+[submodule "external/modules/environment_predictor"]
+	path = external/modules/environment_predictor
+	url = https://github.com/tum-phoenix/environment_predictor
