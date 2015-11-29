@@ -22,6 +22,12 @@
             <module logLevel="WARN">image_converter_scaledown</module>
         </if>
     </modulesToEnable>
+    <service>
+        <name>warp_service</name>
+        <!-- camera/cali.lconf - new car -->
+        <!-- camera/cali_cc15_auto.lconf - old car -->
+        <config src="camera/cali_cc15_auto.lconf" />
+    </service>
     <module>
         <name>street_obstacle_merger</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
