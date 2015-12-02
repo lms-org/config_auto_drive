@@ -78,6 +78,12 @@
         <name>trajectory_point_controller</name>
         <channelMapping from="POINT" to="TRAJECTORY_POINT"/>
         <config>
+            <useMPCcontroller>1</useMPCcontroller>
+            <weight_y>3</weight_y>
+            <weight_phi>3</weight_phi>
+            <weight_steering_front>0.03</weight_steering_front>
+            <weight_steering_rear>3</weight_steering_rear>
+            <!-- old stuff: -->
             <aggro>0.95</aggro>
             <regler>2</regler>
         </config>
