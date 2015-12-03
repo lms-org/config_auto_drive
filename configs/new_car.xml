@@ -18,6 +18,10 @@
         <name>car_to_mavlink</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
     </module>
+    <service>
+        <name>warp_service</name>
+        <config src="camera/cali.lconf" />
+    </service>
     <include src="cam.xml"/>
 
 </framework>

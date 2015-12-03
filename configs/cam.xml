@@ -40,7 +40,7 @@
         <config src="camera/ueye_small.lconf" />
         <config>
             <timeout>2000</timeout>
-        <config>
+        </config>
     </module>
     <module>
         <name>image_converter</name>

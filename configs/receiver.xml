@@ -20,7 +20,11 @@
     </module>
     <module>
         <name>socket_data_receiver</name>
-        <config src="socket_data/pc_socket_data_receiver.lconf" />
+        <config>
+            <dataChannels>IMAGE_GREY_SCALE,CAR,TRAJECTORY</dataChannels>
+            <ip>localhost</ip>
+            <port>65001</port>
+        </config>
     </module>
     <module>
         <name>car_to_matlab</name>

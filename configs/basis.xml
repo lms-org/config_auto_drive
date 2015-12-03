@@ -2,7 +2,7 @@
     <modulesToEnable>
         <module logLevel="WARN">image_hint_generator</module>
         <module logLevel="ERROR">image_hint_transformer</module>
-        <module logLevel="DEBUG">image_hint_transformer_obstacle</module>
+        <module logLevel="WARN">image_hint_transformer_obstacle</module>
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
@@ -18,7 +18,7 @@
         </if>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
-            <module logLevel="WARN">socket_data_sender</module>
+            <module logLevel="DEBUG">socket_data_sender</module>
             <module logLevel="WARN">image_converter_scaledown</module>
         </if>
     </modulesToEnable>
@@ -43,7 +43,10 @@
     </module>
     <module>
         <name>socket_data_sender</name>
-        <config src="socket_data/car_socket_data_sender.lconf" />
+        <config>
+            <ip>localhost</ip>
+            <port>65001</port>
+        </config>
     </module>
     <module>
         <name>car_tracker</name>
