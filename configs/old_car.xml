@@ -23,5 +23,9 @@
             <config name="servo_rear" src="sensor/servo_rear.lconf" />
             <config name="velocity" src="sensor/velocity.lconf" />
         </module>
+        <service>
+            <name>warp_service</name>
+            <config src="camera/cali_cc15_auto.lconf" />
+        </service>
         <include src="cam.xml"/>
 </framework>

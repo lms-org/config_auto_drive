@@ -1,0 +1,8 @@
+<framework>
+        <service>
+            <name>warp_service</name>
+            <!-- camera/cali.lconf - new car -->
+            <!-- camera/cali_cc15_auto.lconf - old car -->
+            <config src="camera/cali_cc15_auto.lconf" />
+        </service>
+</framework>
