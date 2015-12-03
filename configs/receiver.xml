@@ -13,7 +13,7 @@
         <name>warp_service</name>
         <!-- camera/cali.lconf - new car -->
         <!-- camera/cali_cc15_auto.lconf - old car -->
-        <config src="camera/cali.lconf" />
+        <config src="camera/cali_cc15_auto.lconf" />
     </service>
     <module>
         <name>socket_datatype_definer</name>
@@ -21,7 +21,7 @@
     <module>
         <name>socket_data_receiver</name>
         <config>
-            <dataChannels>IMAGE_GREY_SCALE,CAR,TRAJECTORY</dataChannels>
+            <dataChannels>IMAGE_GREY_SCALE,CAR,TRAJECTORY_LINE</dataChannels>
             <ip>localhost</ip>
             <port>65001</port>
         </config>
