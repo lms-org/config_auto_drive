@@ -1,5 +1,0 @@
-dataChannels = IMAGE_GREY_SCALE, TRAJECTORY_LINE, CAR
-#ip = localhost
-#ip = 192.168.0.112
-ip =10.183.126.76
-port = 65002

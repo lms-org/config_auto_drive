@@ -2,7 +2,7 @@
     <modulesToEnable>
         <module logLevel="WARN">image_hint_generator</module>
         <module logLevel="ERROR">image_hint_transformer</module>
-        <module logLevel="DEBUG">image_hint_transformer_obstacle</module>
+        <module logLevel="WARN">image_hint_transformer_obstacle</module>
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
@@ -18,16 +18,10 @@
         </if>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
-            <module logLevel="WARN">socket_data_sender</module>
+            <module logLevel="DEBUG">socket_data_sender</module>
             <module logLevel="WARN">image_converter_scaledown</module>
         </if>
     </modulesToEnable>
-    <service>
-        <name>warp_service</name>
-        <!-- camera/cali.lconf - new car -->
-        <!-- camera/cali_cc15_auto.lconf - old car -->
-        <config src="camera/cali_cc15_auto.lconf" />
-    </service>
     <module>
         <name>street_obstacle_merger</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
@@ -49,7 +43,10 @@
     </module>
     <module>
         <name>socket_data_sender</name>
-        <config src="socket_data/car_socket_data_sender.lconf" />
+        <config>
+            <ip>localhost</ip>
+            <port>65001</port>
+        </config>
     </module>
     <module>
         <name>car_tracker</name>
@@ -78,6 +75,12 @@
         <name>trajectory_point_controller</name>
         <channelMapping from="POINT" to="TRAJECTORY_POINT"/>
         <config>
+            <useMPCcontroller>1</useMPCcontroller>
+            <weight_y>3</weight_y>
+            <weight_phi>3</weight_phi>
+            <weight_steering_front>0.03</weight_steering_front>
+            <weight_steering_rear>3</weight_steering_rear>
+            <!-- old stuff: -->
             <aggro>0.95</aggro>
             <regler>2</regler>
         </config>
@@ -129,10 +132,10 @@
         <channelMapping from="ROAD_OUTPUT" to="MIDDLE_LANE"/>
         <config>
             <elementCount>10</elementCount>
-            <r_fakt>250</r_fakt>
+            <r_fakt>150</r_fakt>
             <kov>15</kov>
             <prioFact>5000</prioFact>
-            <kovAbnahme>0.2</kovAbnahme>
+            <kovAbnahme>0.15</kovAbnahme>
             <elementLength>0.2</elementLength>
             <enableMove>false</enableMove>
             <logState>false</logState>

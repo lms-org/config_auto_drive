@@ -11,12 +11,12 @@ bool ImageObjectRenderer::initialize() {
     drawObjectStrings = config().getArray<std::string>("envObjects");
 
     //create the image you want to draw on
-    image = datamanager()->writeChannel<lms::imaging::Image>(this,"IMAGE");
+    image = writeChannel<lms::imaging::Image>("IMAGE");
     image->resize(imageWidth,imageHeight,lms::imaging::Format::BGRA);
     graphics = new lms::imaging::BGRAImageGraphics(*image);
 
     for(std::string &obj: drawObjectStrings){
-        drawObjects.push_back(datamanager()->readChannel<lms::Any>(this,obj));
+        drawObjects.push_back(readChannel<lms::Any>(obj));
     }
     return true;
 }

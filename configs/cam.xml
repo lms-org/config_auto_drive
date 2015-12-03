@@ -38,6 +38,9 @@
         <name>ueye_importer</name>
         <channelMapping from="CAMERA_IMAGE" to="IMAGE" />
         <config src="camera/ueye_small.lconf" />
+        <config>
+            <timeout>2000</timeout>
+        </config>
     </module>
     <module>
         <name>image_converter</name>

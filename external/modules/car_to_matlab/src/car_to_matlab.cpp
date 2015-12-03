@@ -8,8 +8,8 @@
 
 bool CarToMatlab::initialize() {
     car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
-    server = new socket_connection::SocketServer(logger);
-    server->start(getConfig()->get<int>("port",55555));
+    server = new socket_connection::SocketConnectionHandler(logger);
+    server->openPortForRequests(getConfig()->get<int>("port",55555));
     return true;
 }
 
@@ -28,8 +28,8 @@ bool CarToMatlab::cycle() {
     ss<<"velocity:"<<car->velocity()<<"#";
     ss<<"test_value:" << rand()%10 << "#";
 
-    if(server->hasClients()){
-        server->sendMessageToAllClients(ss.str().c_str(),ss.str().size(),false);
+    if(server->hasConnections()){
+        server->sendMessageToAllConnections(ss.str().c_str(),ss.str().size(),false);
     }
 
     return true;
