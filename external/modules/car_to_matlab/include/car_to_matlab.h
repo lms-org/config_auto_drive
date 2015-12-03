@@ -5,7 +5,7 @@
 #include "comm/senseboard.h"
 #include "lms/extra/time.h"
 #include "sensor_utils/car.h"
-#include "socket_connection/socket_server.h"
+#include "socket_connection/socket_connection_handler.h"
 class CarToMatlab : public lms::Module,public socket_connection::SocketListener {
     struct DeltaState{
         DeltaState():valid(false),x(0),y(0),phi(0){
@@ -27,7 +27,7 @@ public:
 
 private:
     lms::ReadDataChannel<sensor_utils::Car> car;
-    socket_connection::SocketServer *server;
+    socket_connection::SocketConnectionHandler *server;
 };
 
 #endif /* CAR_TO_MATLAB_H */

@@ -1,0 +1,23 @@
+<framework>
+    <modulesToEnable>
+        <module logLevel="INFO">mavlink_usb_importer</module>
+        <module logLevel="INFO">car_to_mavlink</module>
+    </modulesToEnable>
+
+    <module>
+        <name>mavlink_usb_importer</name>
+        <config>
+            <path>/dev/ttyACM0</path>
+        </config>
+    </module>
+        <module>
+            <name>car_to_senseboard2015</name>
+            <channelMapping priority="10" from="CAR" to="CAR"/>
+        </module>
+    <module>
+        <name>car_to_mavlink</name>
+        <channelMapping priority="10" from="CAR" to="CAR"/>
+    </module>
+    <include src="cam.xml"/>
+
+</framework>
