@@ -96,18 +96,19 @@ void StreetObjectMerger::filter(street_environment::EnvironmentObstacles &obstac
             //if the obstacle can't be found by the sensors we won't decrease the counter, we just translate it every step and remove it later on
             continue;
         }
-
         //Not that smart :D
-        if(obstacles.objects[i]->timesFound()>10){
-            obstacles.objects[i]->found(10-obstacles.objects[i]->timesFound());
+        /*
+        if(obstacles.objects[i]->trust()>10){
+            obstacles.objects[i]->trustIt(10);
         }
-        obstacles.objects[i]->found(-1);
+        */
+        obstacles.objects[i]->trustIt(-2);//TODO magic number
     }
 
     //TODO hier könnte man sich auch etwas besseres einfallen lassen
     for(uint i = 0; i < obstacles.objects.size(); i++){
         logger.debug("objectpos: ")<<obstacles.objects[i]->position().x<<" "<<obstacles.objects[i]->position().y;
-        if(obstacles.objects[i]->timesFound() <= 0 || obstacles.objects[i]->position().x < -0.35){
+        if(obstacles.objects[i]->trust() <= 0 || obstacles.objects[i]->position().x < -0.35){
             obstacles.objects.erase(obstacles.objects.begin() + i);
         }
     }
@@ -126,13 +127,12 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
                 obstaclesOld.objects[i]->updatePosition(pos);
                 //TODO create merged object
                 //TODO increase some "times validated counter"
-                obstaclesOld.objects[i]->found(2); //+2 as we remove one in filter
+                obstaclesOld.objects[i]->trustIt(obstaclesNew.objects[k]->trust());
                 break;
             }
         }
         if(!merged){
             //Basic value
-            obstaclesNew.objects[k]->found(5);
             obstaclesOld.objects.push_back(obstaclesNew.objects[k]);
         }
     }
