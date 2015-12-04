@@ -10,7 +10,14 @@ set (HEADERS
 )
 include_directories(
     "include"
+
+	# Eigen3 include paths
     "/usr/include/eigen3"
+	"/usr/local/include/eigen3"
+
+	# Kalman Lib paths
+	"/usr/include"
+	"/usr/local/include"
 )
 
 add_library (car_tracker MODULE ${SOURCES} ${HEADERS})

@@ -94,3 +94,6 @@
 [submodule "external/modules/rgb_lights_controller"]
 	path = external/modules/rgb_lights_controller
 	url = https://github.com/tum-phoenix/rgb_lights_controller
+[submodule "external/modules/environment_kalman_lukas"]
+	path = external/modules/environment_kalman_lukas
+	url = https://github.com/lkskstlr/environment_kalman_lukas.git

@@ -1,0 +1,67 @@
+# Install script for directory: /Users/lukas/phoenix_lms/config_auto_drive/external/modules
+
+# Set the install prefix
+if(NOT DEFINED CMAKE_INSTALL_PREFIX)
+  set(CMAKE_INSTALL_PREFIX "/usr/local")
+endif()
+string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
+
+# Set the install configuration name.
+if(NOT DEFINED CMAKE_INSTALL_CONFIG_NAME)
+  if(BUILD_TYPE)
+    string(REGEX REPLACE "^[^A-Za-z0-9_]+" ""
+           CMAKE_INSTALL_CONFIG_NAME "${BUILD_TYPE}")
+  else()
+    set(CMAKE_INSTALL_CONFIG_NAME "")
+  endif()
+  message(STATUS "Install configuration: \"${CMAKE_INSTALL_CONFIG_NAME}\"")
+endif()
+
+# Set the component getting installed.
+if(NOT CMAKE_INSTALL_COMPONENT)
+  if(COMPONENT)
+    message(STATUS "Install component: \"${COMPONENT}\"")
+    set(CMAKE_INSTALL_COMPONENT "${COMPONENT}")
+  else()
+    set(CMAKE_INSTALL_COMPONENT)
+  endif()
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for each subdirectory.
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/audio_input/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/camera_importer/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/car_to_image/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/car_to_matlab/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/car_to_sense_link/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/car_to_senseboard2015/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/car_tracker/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/environment_filter/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/environment_logger/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/environment_predictor/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/image_converter/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/image_hint_generator/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/image_hint_transformer/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/image_hint_worker/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/image_loader/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/image_logger/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/image_object_renderer/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/image_proxy/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/parking/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/rgb_lights_controller/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/senselink_csvlogger/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/sensor_tracker/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/socket_data/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/socket_datatype_definer/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/sound_controller/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/street_obstacle_ir_detector/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/street_obstacle_merger/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/trajectory_creator/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/trajectory_point_controller/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/trajectory_point_creator/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/ueye_importer/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/usb_sense_link/cmake_install.cmake")
+  include("/Users/lukas/phoenix_lms/config_auto_drive/build2/external/modules/velocity_controller/cmake_install.cmake")
+
+endif()
+
