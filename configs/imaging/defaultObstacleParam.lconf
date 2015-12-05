@@ -1,3 +1,5 @@
-targetThres = 80
-numerOfSegmentsOrth =3
+targetThres = 20
+numerOfSegmentsOrth =4
 minDistanceBetweenSearchPoints = 0.1
+sobelThreshold = 100
+minPointCount = 1;

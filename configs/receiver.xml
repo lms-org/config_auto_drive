@@ -6,16 +6,25 @@
     <modulesToEnable>
         <module logLevel="DEBUG">socket_data_receiver</module>
         <module logLevel="DEBUG">image_converter_scaleup</module>
-        <module logLevel="Error">socket_datatype_definer</module>
+        <module logLevel="ERROR">socket_datatype_definer</module>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
     </modulesToEnable>
+    <service>
+        <name>warp_service</name>
+        <!-- camera/cali.lconf - new car -->
+        <!-- camera/cali_cc15_auto.lconf - old car -->
+        <config src="camera/cali_cc15_auto.lconf" />
+    </service>
     <module>
         <name>socket_datatype_definer</name>
     </module>
     <module>
         <name>socket_data_receiver</name>
-        <libpath>socket_data/receiver</libpath>
-        <config src="socket_data/pc_socket_data_receiver.lconf" />
+        <config>
+            <dataChannels>IMAGE_GREY_SCALE,CAR,TRAJECTORY_LINE</dataChannels>
+            <ip>localhost</ip>
+            <port>65001</port>
+        </config>
     </module>
     <module>
         <name>car_to_matlab</name>

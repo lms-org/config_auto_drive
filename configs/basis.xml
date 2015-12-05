@@ -2,11 +2,11 @@
     <modulesToEnable>
         <module logLevel="WARN">image_hint_generator</module>
         <module logLevel="ERROR">image_hint_transformer</module>
-        <module logLevel="ERROR">image_hint_transformer_obstacle</module>
+        <module logLevel="WARN">image_hint_transformer_obstacle</module>
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
-        <module logLevel="DEBUG">trajectory_creator</module>
+        <module logLevel="WARN">trajectory_creator</module>
         <module logLevel="ERROR">trajectory_point_creator</module>
         <module logLevel="ERROR">environment_filter</module>
         <module logLevel="WARN">trajectory_point_controller</module>
@@ -18,7 +18,7 @@
         </if>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
-            <module logLevel="WARN">socket_data_sender</module>
+            <module logLevel="DEBUG">socket_data_sender</module>
             <module logLevel="WARN">image_converter_scaledown</module>
         </if>
     </modulesToEnable>
@@ -27,6 +27,7 @@
         <channelMapping priority="10" from="CAR" to="CAR"/>
         <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_OBSTACLE_RAW"/>
         <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_OBSTACLE"/>
+        <config src="visible_areas.lconf"/>
     </module>
     <module>
         <name>car_to_matlab</name>
@@ -42,8 +43,10 @@
     </module>
     <module>
         <name>socket_data_sender</name>
-        <libpath>socket_data/sender</libpath>
-        <config src="socket_data/car_socket_data_sender.lconf" />
+        <config>
+            <ip>localhost</ip>
+            <port>65001</port>
+        </config>
     </module>
     <module>
         <name>car_tracker</name>
@@ -72,6 +75,12 @@
         <name>trajectory_point_controller</name>
         <channelMapping from="POINT" to="TRAJECTORY_POINT"/>
         <config>
+            <useMPCcontroller>1</useMPCcontroller>
+            <weight_y>3</weight_y>
+            <weight_phi>3</weight_phi>
+            <weight_steering_front>0.03</weight_steering_front>
+            <weight_steering_rear>3</weight_steering_rear>
+            <!-- old stuff: -->
             <aggro>0.95</aggro>
             <regler>2</regler>
         </config>
@@ -79,11 +88,13 @@
     <module>
         <name>image_hint_generator</name>
         <channelMapping priority="10" from="HINTS" to="HINTS"/>
+        <channelMapping priority="10" from="HINTS_OBSTACLE" to="HINTS_OBSTACLE"/>
         <channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
         <channelMapping priority="10" from="MIDDLE_LANE" to="MIDDLE_LANE"/>
         <config>
-            <searchForObstacles>false</searchForObstacles>
+            <searchForObstacles>true</searchForObstacles>
             <searchForCrossing>false</searchForCrossing>
+            <numerOfSegmentsLines>1</numerOfSegmentsLines>
         </config>
         <config name="defaultEPParameter" src="imaging/defaultEdgePointParam.lconf"/>
         <config name="defaultLPParameter" src="imaging/defaultLinePointParam.lconf"/>
@@ -121,9 +132,10 @@
         <channelMapping from="ROAD_OUTPUT" to="MIDDLE_LANE"/>
         <config>
             <elementCount>10</elementCount>
-            <r_fakt>250</r_fakt>
+            <r_fakt>150</r_fakt>
             <kov>15</kov>
-            <kovAbnahme>0.2</kovAbnahme>
+            <prioFact>5000</prioFact>
+            <kovAbnahme>0.15</kovAbnahme>
             <elementLength>0.2</elementLength>
             <enableMove>false</enableMove>
             <logState>false</logState>
@@ -146,12 +158,12 @@
     <module>
         <name>image_hint_worker_lane</name>
         <realName>image_hint_worker</realName>
-        <channelMapping from="HINTS" to="HINTS"/>
+        <channelMapping priority="2" from="HINTS" to="HINTS"/>
     </module>
     <module>
         <name>image_hint_worker_obstacle</name>
         <realName>image_hint_worker</realName>
-        <channelMapping from="HINTS" to="HINTS_OBSTACLE"/>
+        <channelMapping priority="2"  from="HINTS" to="HINTS_OBSTACLE"/>
         <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_OBSTACLE"/>
     </module>
     <module>

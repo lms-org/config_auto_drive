@@ -97,3 +97,15 @@
 [submodule "external/modules/environment_kalman_lukas"]
 	path = external/modules/environment_kalman_lukas
 	url = https://github.com/lkskstlr/environment_kalman_lukas.git
+[submodule "external/services/warp_service"]
+	path = external/services/warp_service
+	url = https://github.com/lms-org/warp_service.git
+[submodule "external/modules/environment_predictor"]
+	path = external/modules/environment_predictor
+	url = https://github.com/tum-phoenix/environment_predictor
+[submodule "external/modules/mavlink_usb_importer"]
+	path = external/modules/mavlink_usb_importer
+	url = https://github.com/tum-phoenix/mavlink_usb_importer
+[submodule "external/modules/mavlink_helper"]
+	path = external/modules/mavlink_helper
+	url = https://github.com/tum-phoenix/mavlink_helper
