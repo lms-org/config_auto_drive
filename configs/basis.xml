@@ -23,6 +23,19 @@
         </if>
     </modulesToEnable>
     <module>
+            <name>parking</name>
+            <config>
+                <k>0.05</k> <!-- safety distance zur Ecke der zweiten Box-->
+                <d>0.03</d> <!-- safety distance zur ersten Box -->
+                <wheelbase>0.21</wheelbase> <!-- Radstand-->
+                <carLength>0.32</carLength>
+                <carWidth>0.2</carWidth>
+                <carLength>0.32</carLength>
+                <maxSteeringAngle>25</maxSteeringAngle> <!-- in Grad-->
+                <distanceMid2Lidar>0.04</distanceMid2Lidar>
+            </config>
+    </module>
+    <module>
         <name>street_obstacle_merger</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
         <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_OBSTACLE_RAW"/>
