@@ -109,3 +109,6 @@
 [submodule "external/modules/mavlink_helper"]
 	path = external/modules/mavlink_helper
 	url = https://github.com/tum-phoenix/mavlink_helper
+[submodule "external/modules/channel_serializer"]
+	path = external/modules/channel_serializer
+	url = https://github.com/lms-org/channel_serializer.git
