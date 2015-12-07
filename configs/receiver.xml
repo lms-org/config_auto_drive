@@ -22,7 +22,7 @@
         <name>socket_data_receiver</name>
         <config>
             <dataChannels>IMAGE_GREY_SCALE,CAR,TRAJECTORY_LINE</dataChannels>
-            <ip>localhost</ip>
+            <ip>192.168.43.190</ip>
             <port>65001</port>
         </config>
     </module>

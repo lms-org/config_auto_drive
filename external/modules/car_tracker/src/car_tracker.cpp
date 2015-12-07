@@ -6,7 +6,7 @@
 
 
 bool CarTracker::initialize() {
-    car = datamanager()->writeChannel<sensor_utils::Car>(this,"CAR");
+    car = writeChannel<sensor_utils::Car>("CAR");
     firstRun = true;   
 
     /* state definition:

@@ -2,6 +2,9 @@
     <modulesToEnable>
         <module logLevel="INFO">mavlink_usb_importer</module>
         <module logLevel="INFO">car_to_mavlink</module>
+        <if set="mavlink_logger">
+            <module logLevel="INFO">mavlink_logger</module>
+        </if>
     </modulesToEnable>
 
     <module>
@@ -10,13 +13,19 @@
             <path>/dev/ttyACM0</path>
         </config>
     </module>
-        <module>
-            <name>car_to_senseboard2015</name>
-            <channelMapping priority="10" from="CAR" to="CAR"/>
-        </module>
     <module>
         <name>car_to_mavlink</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
+    </module>
+    <module>
+        <name>mavlink_logger</name>
+        <realName>channel_logger</realName>
+        <config>
+            <dataChannels>MAVLINK_IN</dataChannels>
+        </config>
+        <config user="odroid">
+            <directory>/home/odroid/data/mavlink</directory>
+        </config>
     </module>
     <service>
         <name>warp_service</name>

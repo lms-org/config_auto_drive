@@ -94,6 +94,9 @@
 [submodule "external/modules/rgb_lights_controller"]
 	path = external/modules/rgb_lights_controller
 	url = https://github.com/tum-phoenix/rgb_lights_controller
+[submodule "external/modules/environment_kalman_lukas"]
+	path = external/modules/environment_kalman_lukas
+	url = https://github.com/lkskstlr/environment_kalman_lukas.git
 [submodule "external/services/warp_service"]
 	path = external/services/warp_service
 	url = https://github.com/lms-org/warp_service.git
@@ -106,3 +109,6 @@
 [submodule "external/modules/mavlink_helper"]
 	path = external/modules/mavlink_helper
 	url = https://github.com/tum-phoenix/mavlink_helper
+[submodule "external/modules/channel_serializer"]
+	path = external/modules/channel_serializer
+	url = https://github.com/lms-org/channel_serializer.git

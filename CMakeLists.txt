@@ -37,7 +37,7 @@ add_custom_target(show_configs SOURCES ${CONFIG_FILES_LCONF} ${CONFIG_FILES_XML}
 add_subdirectory(LMS/lms)
 
 #Add shared headers
-file(GLOB_RECURSE SHARED_HEADER **/CMakeSharedHeaders.txt)
+file(GLOB_RECURSE SHARED_HEADER **/CMakeSharedHeaders.txt ${CMAKE_CURRENT_BINARY_DIR}/**/CMakeSharedHeaders.txt)
 if (SHARED_HEADER)
         foreach(filepath ${SHARED_HEADER})
                 get_filename_component(FOLDER ${filepath} DIRECTORY)
