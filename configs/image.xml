@@ -15,7 +15,7 @@
             <config>
                 <directory>/home/phibedy/Seafile/CaroloCup 2016 Testdaten/20151205_bosch_altes_auto</directory>
                 <format>pgm</format>
-                <filepattern>%04i.pgm</filepattern>
+                <filePattern>%04i.pgm</filePattern>
                 <minCounter>2800</minCounter>
                 <maxCounter>-1</maxCounter>
                 <loadSingleFile>false</loadSingleFile>
@@ -69,9 +69,9 @@
                 <output_format>GREY</output_format>
             </config>
         </module>
-        <include src="basis.xml" />
-        <if notSet="norender">
-            <include src="render.xml"/>
-        </if>
+    </if>
+    <include src="basis.xml" />
+    <if notSet="norender">
+        <include src="render.xml"/>
     </if>
 </framework>
