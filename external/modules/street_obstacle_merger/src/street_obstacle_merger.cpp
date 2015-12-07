@@ -120,6 +120,9 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
     for(uint k = 0; k < obstaclesNew.objects.size();k++){
         bool merged = false;
         for(uint i = 0; i < obstaclesOld.objects.size();i++){
+            if(obstaclesNew.objects[k]->getType() != obstaclesOld.objects[k]->getType()){
+                continue;
+            }
             merged = obstaclesOld.objects[i]->match(*obstaclesNew.objects[k].get());
             if(merged){
                 lms::math::vertex2f pos = obstaclesNew.objects[k]->position()+obstaclesOld.objects[i]->position();
@@ -143,11 +146,10 @@ void StreetObjectMerger::getObstacles(const street_environment::EnvironmentObjec
         if(obj->getType() == street_environment::Obstacle::TYPE){
             //that cast ignores, that the obj was const
             std::shared_ptr<street_environment::Obstacle> obst = std::static_pointer_cast<street_environment::Obstacle>(obj);
-            output.objects.push_back(obst); //could that cause a segfault?
+            output.objects.push_back(obst);
         }else if(obj->getType() == street_environment::Crossing::TYPE){
-            //TODO
-            //std::shared_ptr<street_environment::Obstacle> obst = std::static_pointer_cast<street_environment::Crossing>(obj);
-            //output.objects.push_back(obst);
+            std::shared_ptr<street_environment::Obstacle> crossing = std::static_pointer_cast<street_environment::Crossing>(obj);
+            output.objects.push_back(crossing);
         }
     }
 }

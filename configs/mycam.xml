@@ -5,5 +5,5 @@
             <!-- camera/cali_cc15_auto.lconf - old car -->
             <config src="camera/cali_cc15_auto.lconf" />
         </service>
-        <include src="cam.xml"/>
+        <include src="image.xml"/>
 </framework>

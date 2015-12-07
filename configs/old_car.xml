@@ -27,5 +27,5 @@
             <name>warp_service</name>
             <config src="camera/cali_cc15_auto.lconf" />
         </service>
-        <include src="cam.xml"/>
+        <include src="image.xml"/>
 </framework>
