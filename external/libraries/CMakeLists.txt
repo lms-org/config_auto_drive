@@ -4,6 +4,8 @@ if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/CMakeData.txt")
 include("CMakeData.txt")
 endif()
 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
 if(COMPILE_AT_FIRST)
     foreach (dec ${COMPILE_AT_FIRST})
         message("Compile library at first ${dec}" )
