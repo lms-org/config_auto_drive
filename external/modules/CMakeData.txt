@@ -1,4 +1,4 @@
 #if MODULES is set, only the given directories will be compiled 
 #set(MODULES )
 #if N_MODULES is set, all directories except the given once
-#set(N_MODULES )
+set(N_MODULES ${EXCLUDES})
