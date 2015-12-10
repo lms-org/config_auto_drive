@@ -23,6 +23,9 @@
             <module logLevel="WARN">image_converter_scaledown</module>
         </if>
     </modulesToEnable>
+    <service>
+        <name>phoenix_CC2016_service</name>
+    </service>
     <module>
             <name>parking</name>
             <config>
