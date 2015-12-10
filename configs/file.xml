@@ -1,7 +1,7 @@
 <framework>
 	<execution>
         <clock enabled="true" unit="hz" value="100" />
-	<executionType>ONLY_MAIN_THREAD</executionType>
+        <mainThread />
 	</execution>
     <if notSet="norender">
         <include src="render.xml"/>

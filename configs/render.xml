@@ -61,17 +61,17 @@
 	</module>
 	<module>
 		<name>ogre_window_manager</name>
-		<executionType>ONLY_MAIN_THREAD</executionType>
+        <mainThread />
 	</module>
         <module>
                 <name>car_to_image</name>
-                <executionType>ONLY_MAIN_THREAD</executionType>
+                <mainThread />
                 <channelMapping from="IMAGE" to = "GLOBAL_CAR_IMAGE"/>
         </module>
         <module>
                 <name>image_renderer_global_car</name>
                 <realName>image_renderer</realName>
-                <executionType>ONLY_MAIN_THREAD</executionType>
+                <mainThread />
                 <channelMapping from="IMAGE" to="GLOBAL_CAR_IMAGE"/>
                 <config>
                     <WINDOW>GLOBAL_CAR</WINDOW>
@@ -89,27 +89,27 @@
 	<module>
 		<name>image_renderer_grey</name>
 		<realName>image_renderer</realName>
-		<executionType>ONLY_MAIN_THREAD</executionType>
-                <channelMapping from="IMAGE" to="GREY_IMAGE"/>
+        <mainThread />
+        <channelMapping from="IMAGE" to="GREY_IMAGE"/>
 	</module>
 	<module>
 		<name>image_renderer_debug</name>
                 <realName>image_renderer</realName>
-		<executionType>ONLY_MAIN_THREAD</executionType>
+                <mainThread />
                 <channelMapping from="IMAGE" to="DEBUG_IMAGE"/>
                 <channelMapping priority="2" from="WINDOW" to="WINDOW"/>
 	</module>
         <module>
                 <name>image_renderer_debug_obstacle</name>
                 <realName>image_renderer</realName>
-                <executionType>ONLY_MAIN_THREAD</executionType>
+                <mainThread />
                 <channelMapping from="IMAGE" to="DEBUG_IMAGE_OBSTACLE"/>
                 <channelMapping priority="2" from="WINDOW" to="WINDOW"/>
         </module>
 	<module>
 	    <name>image_renderer_trans</name>
             <realName>image_renderer</realName>
-		<executionType>ONLY_MAIN_THREAD</executionType>
+            <mainThread />
                 <channelMapping from="IMAGE" to="TRANS_IMAGE"/>
                 <channelMapping priority="1" from="WINDOW" to="TRANSLATED"/>
 		<config>
@@ -119,13 +119,13 @@
 	<module>
 		<name>image_renderer_image_object</name>
                 <realName>image_renderer</realName>
-		<executionType>ONLY_MAIN_THREAD</executionType>
+                <mainThread />
                 <channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
                 <channelMapping priority="2" from="WINDOW" to="TRANSLATED"/>
 	</module>
 	<module>
 		<name>ogre_input</name>
-		<executionType>ONLY_MAIN_THREAD</executionType>
+        <mainThread />
 		<config>
 			<WINDOW>TRANSLATED</WINDOW>
 			<key>
