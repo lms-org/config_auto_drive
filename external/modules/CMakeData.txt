@@ -1,7 +1,7 @@
 #if MODULES is set, only the given directories will be compiled 
 #set(MODULES )
 #if N_MODULES is set, all directories except the given once
-set(N_MODULES audio_output sfml_sound_player)
+set(N_MODULES audio_output sfml_sound_player ${EXCLUDES})
 
 if(APPLE)
     # Skip modules known to be not working on OS X
