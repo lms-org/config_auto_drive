@@ -4,9 +4,9 @@
 #include "lms/datamanager.h"
 #include "lms/messaging.h"
 bool CarToSenseboard2015::initialize() {
-    controlData = datamanager()->writeChannel<Comm::SensorBoard::ControlData>(this,"CONTROL_DATA");
-    sensorData = datamanager()->writeChannel<Comm::SensorBoard::SensorData>(this,"SENSOR_DATA");
-    car = datamanager()->readChannel<sensor_utils::Car>(this,"CAR");
+    controlData = writeChannel<Comm::SensorBoard::ControlData>("CONTROL_DATA");
+    sensorData = writeChannel<Comm::SensorBoard::SensorData>("SENSOR_DATA");
+    car = readChannel<sensor_utils::Car>("CAR");
     lastRcState = false;
     return true;
 }

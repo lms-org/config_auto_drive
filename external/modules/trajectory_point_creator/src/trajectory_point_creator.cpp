@@ -2,9 +2,8 @@
 #include "lms/datamanager.h"
 
 bool TrajectoryPointCreator::initialize() {
-   toFollow = datamanager()->readChannel<lms::math::polyLine2f>(this,"LINE");
-   trajectoryPoint = datamanager()->writeChannel<std::pair<lms::math::vertex2f,lms::math::vertex2f>>(this,"POINT");
-   config = getConfig();
+   toFollow = readChannel<lms::math::polyLine2f>("LINE");
+   trajectoryPoint = writeChannel<street_environment::TrajectoryPoint>("POINT");
    return true;
 }
 
@@ -13,7 +12,7 @@ bool TrajectoryPointCreator::deinitialize() {
 }
 
 bool TrajectoryPointCreator::cycle() {
-    const float distanceSearched = config->get<float>("distanceSearched", 0.50);
+    const float distanceSearched = config().get<float>("distanceSearched", 0.50);
 
     bool found = false;
     if(toFollow->points().size() < 1){
@@ -37,14 +36,14 @@ bool TrajectoryPointCreator::cycle() {
             //we to the bot-coords the length, that is still to go in absolute direction to 0,0
             //TODO point isn't on the trajectory but I think it could be fine
             //x-Pos
-            trajectoryPoint->first.x = bot.x + toGoX*cos(angle);
+            trajectoryPoint->position.x = bot.x + toGoX*cos(angle);
             //y-Pos
-            trajectoryPoint->first.y = bot.y + toGoX*sin(angle);
+            trajectoryPoint->position.y = bot.y + toGoX*sin(angle);
 
             //x-Dir
-            trajectoryPoint->second.x = cos(angle);
+            trajectoryPoint->directory.x = cos(angle);
             //y-Dir
-            trajectoryPoint->second.y = sin(angle);
+            trajectoryPoint->directory.y = sin(angle);
             found = true;
             break;
         }
@@ -52,13 +51,13 @@ bool TrajectoryPointCreator::cycle() {
     if(!found){
         //if we find nothing, we just want to drive forward
         //x-Pos
-        trajectoryPoint->first.x = distanceSearched;
+        trajectoryPoint->position.x = distanceSearched;
         //y-Pos
-        trajectoryPoint->first.y = 0;
+        trajectoryPoint->position.y = 0;
         //x-Dir
-        trajectoryPoint->second.x = 1;
+        trajectoryPoint->directory.x = 1;
         //y-Dir
-        trajectoryPoint->second.y = 0;
+        trajectoryPoint->directory.y = 0;
     }
     return true;
 }

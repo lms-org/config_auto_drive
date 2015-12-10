@@ -58,7 +58,7 @@
             <channelMapping from="CAMERA_IMAGE" to="IMAGE" />
             <config src="camera/ueye_small.lconf" />
             <config>
-                <timeout>2000</timeout>
+                <initTimeout>2000</initTimeout>
             </config>
         </module>
         <module>
