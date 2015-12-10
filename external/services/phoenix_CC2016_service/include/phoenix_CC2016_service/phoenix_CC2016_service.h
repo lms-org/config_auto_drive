@@ -10,7 +10,7 @@ enum class RemoteControlState{
 
 };
 enum class CCDriveMode{
-    IDLE,PARKIN, FOH, FMH
+    IDLE,PARKING, FOH, FMH
 };
 
 /**
