@@ -10,6 +10,7 @@
 #include "lms/imaging_detection/street_crossing.h"
 #include "lms/imaging_detection/street_obstacle.h"
 #include "lms/imaging/warp.h"
+#include "phoenix_CC2016_service/phoenix_CC2016_service.h"
 
 bool ImageHintGenerator::initialize() {
     gaussBuffer = new lms::imaging::Image();
@@ -46,11 +47,14 @@ bool ImageHintGenerator::cycle() {
             return true;
         }
         createHintsFromMiddleLane(*middleLane);
-
-        if(config().get<bool>("searchForObstacles",false)){
-            createHintForObstacle(*middleLane);
-        }else if(config().get<bool>("searchForCrossing",false)){
-            createHintForCrossing(*middleLane);
+        if(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->isValid()){
+            if(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->driveMode() == phoenix_CC2016_service::CCDriveMode::FMH){
+                if(config().get<bool>("searchForObstacles",false)){
+                    createHintForObstacle(*middleLane);
+                }else if(config().get<bool>("searchForCrossing",false)){
+                    createHintForCrossing(*middleLane);
+                }
+            }
         }
 
     return true;

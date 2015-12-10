@@ -34,6 +34,11 @@ public:
     CCDriveMode driveMode() const;
     int batteryVoltage() const;
     lms::extra::PrecisionTime lastUpdate() const;
+    /**
+     * @brief isValid
+     * @return true if the lastUpdate was in time
+     */
+    bool isValid() const;
     //system-methods
     bool init() override;
     void destroy() override;

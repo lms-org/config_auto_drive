@@ -41,6 +41,10 @@ lms::extra::PrecisionTime Phoenix_CC2016Service::lastUpdate() const{
     return m_lastUpdate;
 }
 
+bool Phoenix_CC2016Service::isValid() const{
+    return lms::extra::PrecisionTime::since(m_lastUpdate).toFloat<std::milli>()< config().get<int>("updateInMilliS", 100);
+}
+
 void Phoenix_CC2016Service::destroy() {
     //Don't worry about me, I am just cleaning
 }
