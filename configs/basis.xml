@@ -24,7 +24,8 @@
         </if>
     </modulesToEnable>
     <service>
-        <name>phoenix_CC2016_service</name>
+        <name>PHOENIX_SERVICE</name>
+        <realName>phoenix_CC2016_service</realName>
     </service>
     <module>
             <name>parking</name>
