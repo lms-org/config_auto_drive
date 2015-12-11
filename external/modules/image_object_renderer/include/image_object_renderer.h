@@ -8,6 +8,7 @@
 #include "lms/imaging/image.h"
 #include "street_environment/road.h"
 #include "street_environment/obstacle.h"
+#include "street_environment/trajectory.h"
 #include "street_environment/crossing.h"
 
 class ImageObjectRenderer : public lms::Module {
@@ -30,7 +31,7 @@ private:
     void drawObstacle(const street_environment::Obstacle *obstacle);
     void drawPolyLine(const lms::math::polyLine2f *lane);
     void drawVertex2f(const lms::math::vertex2f &v);
-    void drawVertex4f(const std::pair<lms::math::vertex2f,lms::math::vertex2f> &v);
+    void drawTrajectoryPoint(const street_environment::TrajectoryPoint &v);
     void drawObject(const street_environment::EnvironmentObject *eo,bool customColori);
     /**
      * @brief setColor

@@ -28,6 +28,38 @@ bool CarTracker::deinitialize() {
     return true;
 }
 
+void CarTracker::updateFromVehicle(){
+    float dt=lms::extra::PrecisionTime::since(last).toFloat();
+    float velocity = car->velocity();
+    float steeringFront = car->steeringFront();
+    float steeringRear = car->steeringRear();
+
+    float distance = velocity*dt;
+    float radstand = config().get<float>("radstand",0.26);
+
+
+    //Man geht davon aus, dass die x,y-Abweichung, wegen kleiner Schritte, durch die Vorderräder gering ist.
+    float dx = distance*cos(steeringRear);
+    float dy = distance*sin(steeringRear);
+    float dphi = distance/radstand*sin(steeringFront-steeringRear)/cos(steeringRear);
+
+    //set values for UKF
+    u.dx() = dx;
+    u.dy() = dy;
+    u.dtheta() = dphi;
+
+    //TODO remove code after using u
+    float angle = car->viewDirection().angle()+dphi;
+    lms::math::vertex2f pos;
+    //rotate in absolute position
+    pos.x = dx;
+    pos.y = dy;
+    pos = pos.rotate(-angle);
+    pos += car->position();
+    car->updatePosition(pos,lms::math::vertex2f(cos(angle),sin(angle)));
+    car->updateVelocity(car->targetSpeed(),lms::math::vertex2f(cos(angle),sin(angle)));
+}
+
 bool CarTracker::cycle() {
     if(firstRun){
         last = lms::extra::PrecisionTime::now();
@@ -35,15 +67,21 @@ bool CarTracker::cycle() {
         return true;
     }
 
+    if(config().get<bool>("updateFromVehicle",true)){
+        updateFromVehicle();
+        return true; //TODO remove after setting values using UKF
+    }else{
+        //TODO set u from ego-motion
+        // define control input
+        u.dx() = 0;
+        u.dy() = 0;
+        u.dtheta() = 0;
+    }
+
    /************************
     * UKF start ************
     ************************/
-
-    // define control input
-    u.dx() = 0;
-    u.dy() = 0;
-    u.dtheta() = 0;
-    u.dt() = lms::extra::PrecisionTime::since(last).toFloat<std::milli>()/1000;; // time since UKF was last called (parameter, masked as control input)
+    u.dt() = lms::extra::PrecisionTime::since(last).toFloat(); // time since UKF was last called (parameter, masked as control input)
 
     // simulate system
     x = sys.f(x, u);
@@ -66,6 +104,7 @@ bool CarTracker::cycle() {
      * UKF end **************
      ************************/
 
+    //TODO update car velocity/pos etc.
 
 
     last = lms::extra::PrecisionTime::now();
@@ -79,46 +118,3 @@ bool CarTracker::cycle() {
 
     return true;
 }
-
-//void CarTracker::getFromVehicle(DeltaState &d){
-//    //get needed values
-//    float velocity = car->velocity();
-//    float steeringFront = car->steeringFront();
-//    float steeringRear = car->steeringRear();
-
-//    float distance = velocity*deltaTime;
-//    float radstand = getConfig()->get<float>("radstand",0.26);
-
-//    //Man geht davon aus, dass die x,y-Abweichung, wegen kleiner Schritte, durch die Vorderräder gering ist.
-//    d.x = distance*cos(steeringRear);
-//    d.y = distance*sin(steeringRear);
-//    d.phi = distance/radstand*sin(steeringFront-steeringRear)/cos(steeringRear);
-
-//    /*
-//    //Betrachte beide Achsen getrennt. Der Abstand zwischen den Rädern ist somit in einem Schritt nicht konstant!
-//    lms::math::vertex2f rear(distance*cos(steeringRear),distance*sin(steeringRear));
-//    lms::math::vertex2f front(distance*cos(steeringFront)+radstand,distance*sin(steeringFront));;
-//    lms::math::vertex2f delta = front-rear;
-//    //Man mittelt den Wert mit der Vorderachse (TODO macht das überhaupt sinn?)
-
-//    d.x = rear.x;
-//    d.y = rear.y;
-//    d.phi = delta.angle();
-//    */
-
-
-//}
-
-//void CarTracker::getFromTrajectory(DeltaState &d){
-//    (void)d;
-//    //TODO
-//}
-
-//void CarTracker::getFromMouseSensors(DeltaState &d){
-//    (void)d;
-//    //TODO
-//}
-//void CarTracker::getFromImu(DeltaState &d){
-//    (void)d;
-//    //TODO
-//}

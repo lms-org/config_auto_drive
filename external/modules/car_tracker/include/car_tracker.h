@@ -33,10 +33,7 @@ private:
 
     Kalman::UnscentedKalmanFilter<State <T>> ukf; //UKF
 
-//    void getFromVehicle(DeltaState &d);
-//    void getFromTrajectory(DeltaState &d);
-//    void getFromMouseSensors(DeltaState &d);
-//    void getFromImu(DeltaState &d);
+    void updateFromVehicle();
 
     lms::extra::PrecisionTime last;
     bool firstRun;

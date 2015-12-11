@@ -1,5 +1,6 @@
 #include "image_object_renderer.h"
 #include "lms/imaging_detection/line.h"
+#include "street_environment/start_line.h"
 
 #include "lms/imaging/warp.h"
 
@@ -42,9 +43,9 @@ bool ImageObjectRenderer::cycle() {
                     (dO.getWithType<street_environment::EnvironmentObjects>()->objects)){
                     drawObject(eo.get(), customColor);
             }
-        }else if(dO.castableTo<std::pair<lms::math::vertex2f,lms::math::vertex2f>>()){
+        }else if(dO.castableTo<street_environment::TrajectoryPoint>()){
             logger.debug("")<< "drawing 4f";
-            drawVertex4f(*(dO.getWithType<std::pair<lms::math::vertex2f,lms::math::vertex2f>>()));
+            drawTrajectoryPoint(*(dO.getWithType<street_environment::TrajectoryPoint>()));
         }else{
             logger.warn("cycle")<<"No valid type for "<<dO.name();
         }
@@ -58,24 +59,33 @@ void ImageObjectRenderer::drawVertex2f(const lms::math::vertex2f &v){
     graphics->drawCross(x,y,5);
 }
 
-void ImageObjectRenderer::drawVertex4f(const std::pair<lms::math::vertex2f,lms::math::vertex2f> &v){
-    drawVertex2f(lms::math::vertex2f(v.first.x,v.first.y));
+void ImageObjectRenderer::drawTrajectoryPoint(const street_environment::TrajectoryPoint &v){
+    drawVertex2f(lms::math::vertex2f(v.position.x,v.position.y));
+    //TODO draw direction
 }
 
 void ImageObjectRenderer::drawObject(const street_environment::EnvironmentObject *eo, bool customColor){
-    //TODO not sure if this works
     if(eo->getType() == 0){
         const street_environment::RoadLane &lane = eo->getAsReference<const street_environment::RoadLane>();
         drawPolyLine(&lane);
     }else if(eo->getType() == 1){
-        if(!customColor){
-            setColor("OBSTACLE");
-        }
         const street_environment::Obstacle &obst = eo->getAsReference<const street_environment::Obstacle>();
+        if(!customColor){
+            if(obst.trust() > config().get<int>("obstacleTrustThreshold",0)){
+                setColor("OBSTACLE_DETECTED");
+            }else{
+                setColor("DEFAULT_OBSTACLE");
+            }
+        }
         drawObstacle(&obst);
     }else if(eo->getType() == 2){
+        setColor("CROSSING");
         const street_environment::Crossing &crossing = eo->getAsReference<const street_environment::Crossing>();
         drawObstacle(&crossing);
+    }else if(eo->getType() == 3){
+        const street_environment::StartLine &start = eo->getAsReference<const street_environment::StartLine>();
+        setColor("START_LINE");
+        drawObstacle(&start);
     }
 }
 
@@ -105,11 +115,11 @@ void ImageObjectRenderer::drawPolyLine(const lms::math::polyLine2f *lane){
 bool ImageObjectRenderer::setColor(std::string toDrawName){
     const lms::ModuleConfig* m_config = nullptr;
     bool customColor = false;
-    if(!hasConfig(toDrawName)){
-        m_config = &config();
+    if(hasConfig(toDrawName)){
+        m_config = &config(toDrawName);
         customColor = true;
       }else{
-        m_config = &config(toDrawName);
+        m_config = &config();
     }
     lms::imaging::ARGBColor color=lms::imaging::ARGBColor(m_config->get<int>("colorR"),
                                                            m_config->get<int>("colorG"),m_config->get<int>("colorB"));
