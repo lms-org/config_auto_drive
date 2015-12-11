@@ -7,7 +7,6 @@
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
         <module logLevel="WARN">trajectory_creator</module>
-        <module logLevel="ERROR">trajectory_point_creator</module>
         <module logLevel="ERROR">environment_filter</module>
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">velocity_controller</module>
@@ -90,7 +89,7 @@
     </module>
     <module>
         <name>trajectory_point_controller</name>
-        <channelMapping from="POINT" to="TRAJECTORY_POINT"/>
+        <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
             <useMPCcontroller>1</useMPCcontroller>
             <weight_y>3</weight_y>
@@ -119,15 +118,7 @@
         <config name="defaultObstacleParameter" src="imaging/defaultObstacleParam.lconf"/>
     </module>
     <module>
-        <name>sensor_tracker</name>
-    </module>
-    <module>
-        <name>trajectory_point_creator</name>
-        <channelMapping from="LINE" to="TRAJECTORY_LINE"/>
-        <channelMapping from="POINT" to="TRAJECTORY_POINT"/>
-        <config>
-            <distanceSearched>0.4</distanceSearched>
-        </config>
+        <name>sensor_tracker</name><!--Brauchen wir den noch?-->
     </module>
     <module>
         <name>trajectory_creator</name>
