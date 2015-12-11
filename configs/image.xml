@@ -3,7 +3,7 @@
         <if set="1hz">
             <clock enabled="true" unit="hz" value="1" />
         </if>
-        <executionType>ONLY_MAIN_THREAD</executionType>
+        <mainThread />
     </execution>
     <if set="files">
         <modulesToEnable>
