@@ -36,6 +36,9 @@ bool ImageHintGenerator::deinitialize() {
     return false;
 }
 bool ImageHintGenerator::cycle() {
+    //TODO just for testing --------------
+    getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->update(phoenix_CC2016_service::RemoteControlState::ACTIVE,phoenix_CC2016_service::CCDriveMode::FMH,8);
+    //------------------------------------
     hintContainerLane->clear();
     hintContainerObstacle->clear();
     //set the gaussbuffer

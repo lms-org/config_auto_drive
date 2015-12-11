@@ -2,6 +2,7 @@
 #include "lms/datamanager.h"
 #include "street_environment/obstacle.h"
 #include "street_environment/crossing.h"
+#include "street_environment/start_line.h"
 
 bool StreetObjectMerger::initialize() {
     envInput = readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_INPUT");
@@ -91,7 +92,7 @@ void StreetObjectMerger::filter(street_environment::EnvironmentObstacles &obstac
     for(uint i = 0; i < obstacles.objects.size();i++){
         if(!inVisibleArea(obstacles.objects[i]->position().x,
                 obstacles.objects[i]->position().y)){
-            logger.error("OBJTECT CANT BE FOUND")<<obstacles.objects[i]->position().x<<" "<<
+            logger.debug("filter")<<"object isn't in visible space "<<obstacles.objects[i]->name() <<obstacles.objects[i]->position().x<<" "<<
                     obstacles.objects[i]->position().y;
             //if the obstacle can't be found by the sensors we won't decrease the counter, we just translate it every step and remove it later on
             continue;
@@ -102,7 +103,11 @@ void StreetObjectMerger::filter(street_environment::EnvironmentObstacles &obstac
             obstacles.objects[i]->trustIt(10);
         }
         */
-        obstacles.objects[i]->trustIt(-2);//TODO magic number
+        obstacles.objects[i]->trustIt(-config().get<int>("obstacleTrustThresholdReducer",0));
+        //min trust is zero
+        if(obstacles.objects[i]->trust()<0){
+            obstacles.objects[i]->trustIt(-obstacles.objects[i]->trust());
+        }
     }
 
     //TODO hier könnte man sich auch etwas besseres einfallen lassen
@@ -120,7 +125,7 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
     for(uint k = 0; k < obstaclesNew.objects.size();k++){
         bool merged = false;
         for(uint i = 0; i < obstaclesOld.objects.size();i++){
-            if(obstaclesNew.objects[k]->getType() != obstaclesOld.objects[k]->getType()){
+            if(obstaclesNew.objects[k]->getType() != obstaclesOld.objects[i]->getType()){
                 continue;
             }
             merged = obstaclesOld.objects[i]->match(*obstaclesNew.objects[k].get());
@@ -150,6 +155,9 @@ void StreetObjectMerger::getObstacles(const street_environment::EnvironmentObjec
         }else if(obj->getType() == street_environment::Crossing::TYPE){
             std::shared_ptr<street_environment::Obstacle> crossing = std::static_pointer_cast<street_environment::Crossing>(obj);
             output.objects.push_back(crossing);
+        }else if(obj->getType() == street_environment::StartLine::TYPE){
+            std::shared_ptr<street_environment::StartLine> startLine = std::static_pointer_cast<street_environment::StartLine>(obj);
+            output.objects.push_back(startLine);
         }
     }
 }

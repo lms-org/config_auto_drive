@@ -20,29 +20,44 @@
 	<module>
 		<name>image_object_renderer</name>
 		<channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
+                <config src="street_utils/obstacle.lconf"/>
                 <config>
                     <envObjects>MIDDLE_LANE,TRAJECTORY_LINE,ENVIRONMENT_OBSTACLE,TRAJECTORY_POINT</envObjects>
-
-		    <!--The default Color, TODO add colors for points, lines etc -->
-		    <colorR>255</colorR>
+                    <!--The default Color, TODO add colors for points, lines etc -->
+                    <colorR>255</colorR>
 		    <colorG>255</colorG>
 		    <colorB>0</colorB>
-		</config>
+                </config>
+                <config name="START_LINE">
+                    <colorR>0</colorR>
+                    <colorG>255</colorG>
+                    <colorB>0</colorB>
+                </config>
+                <config name="CROSSING">
+                    <colorR>0</colorR>
+                    <colorG>0</colorG>
+                    <colorB>255</colorB>
+                </config>
                 <config name="MIDDLE_LANE">
 		    <colorR>255</colorR>
 		    <colorG>123</colorG>
 		    <colorB>120</colorB>
-		</config>
+                </config>
 		<config name="ENVIRONMENT_ROAD_FILTERED">
 		    <colorR>0</colorR>
 		    <colorG>0</colorG>
 		    <colorB>255</colorB>
 		</config>
-		<config name="OBSTACLE">
-		    <colorR>50</colorR>
-		    <colorG>200</colorG>
-		    <colorB>100</colorB>
-		</config>
+                <config name="DEFAULT_OBSTACLE">
+                    <colorR>250</colorR>
+                    <colorG>145</colorG>
+                    <colorB>145</colorB>
+                </config>
+                <config name="OBSTACLE_DETECTED">
+                    <colorR>255</colorR>
+                    <colorG>0</colorG>
+                    <colorB>0</colorB>
+                </config>
 		<config name="TRAJECTORY_LINE">
 		    <colorR>255</colorR>
 		    <colorG>255</colorG>
@@ -57,7 +72,7 @@
 		    <colorR>255</colorR>
 		    <colorG>0</colorG>
 		    <colorB>123</colorB>
-		</config>
+                </config>
 	</module>
 	<module>
 		<name>ogre_window_manager</name>
