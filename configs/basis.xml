@@ -13,8 +13,7 @@
         <module logLevel="WARN">image_proxy</module>
         <module logLevel="WARN">street_obstacle_merger</module>
         <module logLevel="WARN">parking</module>
-        <if notSet="sense_link">
-            <module logLevel="WARN">car_tracker</module>
+        <module logLevel="WARN">car_tracker</module>
         </if>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
