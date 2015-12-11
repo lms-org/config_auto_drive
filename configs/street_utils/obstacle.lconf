@@ -1,0 +1,5 @@
+obstacleTrustThreshold=100
+startLineTrustThreshold=100
+#number that will be substracted if the obstacle wasn't found
+obstacleTrustThresholdReducer=2
+startLineTrustThresholdReducer=2

@@ -1,0 +1,10 @@
+#
+car_width=0.3
+car_length=0.6
+car_rear_diameter=0.07
+car_rear_distance=0.2
+#come pixel values
+#TODO
+car_image_blocked_middle =380
+car_image_blocked_width = 100
+car_image_blocked_height = 100

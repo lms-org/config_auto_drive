@@ -64,13 +64,14 @@ bool ImageHintGenerator::cycle() {
 }
 
 void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLane &middle ){
+    //TODO use cached Crossing to find them
     lms::imaging::detection::ImageHint<lms::imaging::detection::StreetCrossing> *crossing = new lms::imaging::detection::ImageHint<lms::imaging::detection::StreetCrossing>();
     lms::imaging::detection::StreetCrossing::StreetCrossingParam scp;
     scp.target = target.get();
     scp.gaussBuffer = gaussBuffer;
     scp.fromConfig(&config("defaultLPParameter"));
     for(const lms::math::vertex2f &v:middle.points()){
-        if(v.length() > 0.5 && v.length() < 1.2){
+        if(v.length() > 0.3 && v.length() < 1.2){
             scp.middleLine.points().push_back(v);
         }
     }
@@ -79,6 +80,7 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
 }
 
 void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLane &middle ){
+    //TODO use cached obstacles to find them
     lms::imaging::detection::ImageHint<lms::imaging::detection::StreetObstacle> *obstacleRight = new lms::imaging::detection::ImageHint<lms::imaging::detection::StreetObstacle>();
     lms::imaging::detection::ImageHint<lms::imaging::detection::StreetObstacle> *obstacleLeft = new lms::imaging::detection::ImageHint<lms::imaging::detection::StreetObstacle>();
 
