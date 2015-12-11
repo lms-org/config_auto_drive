@@ -5,7 +5,7 @@
 bool senselink_csvlogger::initialize() {
     logger.info("initialize") << "Open senselink_csvlogger";
     sensors = datamanager()->readChannel<sense_link::Sensors>(this, "SENSOR_DATA");
-    prefix = getConfig()->get<std::string>("prefix") + "_" + lms::extra::currentTimeString();
+    prefix = getConfig()->get<std::string>("prefix") + "_" + lms::currentTimeString();
     offset = lms::extra::PrecisionTime::now();
     cycleCounter = 0;
     return true;

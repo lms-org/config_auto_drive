@@ -1,7 +1,6 @@
 #include "car_to_senseboard2015.h"
 #include <cmath>
 #include <algorithm>
-#include "lms/datamanager.h"
 #include "lms/messaging.h"
 bool CarToSenseboard2015::initialize() {
     controlData = writeChannel<Comm::SensorBoard::ControlData>("CONTROL_DATA");

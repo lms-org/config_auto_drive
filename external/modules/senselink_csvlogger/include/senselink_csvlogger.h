@@ -1,7 +1,6 @@
 #ifndef SENSELINK_CSVLOGGER_H
 #define SENSELINK_CSVLOGGER_H
 
-#include <lms/datamanager.h>
 #include <lms/module.h>
 #include <lms/extra/time.h>
 #include <unordered_map>

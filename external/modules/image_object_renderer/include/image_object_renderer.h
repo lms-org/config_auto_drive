@@ -3,7 +3,6 @@
 
 #include "lms/module.h"
 #include "lms/imaging/image.h"
-#include "lms/datamanager.h"
 #include "lms/imaging/graphics.h"
 #include "lms/imaging_detection/image_hint.h"
 #include "lms/imaging/image.h"

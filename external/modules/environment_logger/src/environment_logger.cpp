@@ -1,7 +1,6 @@
 #include "environment_logger.h"
 #include <cmath>
 #include <algorithm>
-#include "lms/datamanager.h"
 #include <fstream>
 #include "lms/math/vertex.h"
 bool EnvironmentLogger::initialize() {

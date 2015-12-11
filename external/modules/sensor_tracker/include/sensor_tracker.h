@@ -7,6 +7,7 @@
 #include "street_environment/road.h"
 #include "comm/senseboard.h"
 #include "sensor_utils/line_depth_environment.h"
+#include "lms/extra/time.h"
 
 class SensorTracker : public lms::Module {
 public:

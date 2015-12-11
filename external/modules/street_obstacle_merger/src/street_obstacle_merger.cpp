@@ -1,5 +1,4 @@
 #include "street_obstacle_merger.h"
-#include "lms/datamanager.h"
 #include "street_environment/obstacle.h"
 #include "street_environment/crossing.h"
 

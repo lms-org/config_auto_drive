@@ -1,5 +1,4 @@
 #include "street_obstacle_ir_detector.h"
-#include "lms/datamanager.h"
 
 bool StreetObstacleIRDetector::initialize() {
     config = getConfig();

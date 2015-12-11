@@ -1,7 +1,6 @@
 #ifndef SOBEL_THRESHOLD_GENERATOR_H
 #define SOBEL_THRESHOLD_GENERATOR_H
 
-#include <lms/datamanager.h>
 #include <lms/module.h>
 #include "lms/imaging/image.h"
 

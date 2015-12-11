@@ -1,7 +1,6 @@
 #ifndef SOCKET_DATATYPE_DEFINER_H
 #define SOCKET_DATATYPE_DEFINER_H
 
-#include <lms/datamanager.h>
 #include <lms/module.h>
 
 /**

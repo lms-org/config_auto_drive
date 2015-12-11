@@ -2,7 +2,6 @@
 #include <algorithm>
 #include "car_to_image.h"
 #include "lms/imaging/graphics.h"
-#include "lms/datamanager.h"
 #include "sensor_utils/car.h"
 
 bool CarToImage::initialize() {

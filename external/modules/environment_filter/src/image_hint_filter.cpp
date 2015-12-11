@@ -1,7 +1,6 @@
 #include "image_hint_filter.h"
 #include <cmath>
 #include <algorithm>
-#include "lms/datamanager.h"
 
 bool EnvironmentFilter::initialize() {
     input = datamanager()->readChannel<street_environment::EnvironmentObjects>(this, "ENVIRONMENT_INPUT");

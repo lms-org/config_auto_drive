@@ -1,5 +1,4 @@
 #include "trajectory_point_creator.h"
-#include "lms/datamanager.h"
 
 bool TrajectoryPointCreator::initialize() {
    toFollow = readChannel<lms::math::polyLine2f>("LINE");

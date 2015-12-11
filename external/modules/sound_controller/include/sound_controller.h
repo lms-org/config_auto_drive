@@ -1,7 +1,6 @@
 #ifndef SOUND_CONTROLLER_H
 #define SOUND_CONTROLLER_H
 
-#include <lms/datamanager.h>
 #include <lms/module.h>
 #include "sound_player/sound_player_utils.h"
 

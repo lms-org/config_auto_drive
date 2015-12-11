@@ -2,7 +2,6 @@
 #define IMAGE_HINT_TRANSFORMER_H
 
 #include "lms/module.h"
-#include "lms/datamanager.h"
 #include "lms/imaging_detection/image_hint.h"
 #include "street_environment/road.h"
 #include "lms/imaging_detection/line_point.h"
