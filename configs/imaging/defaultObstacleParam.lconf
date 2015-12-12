@@ -2,4 +2,4 @@ targetThres = 20
 numerOfSegmentsOrth =4
 minDistanceBetweenSearchPoints = 0.1
 sobelThreshold = 200
-minPointCount = 1;
+minPointCount = 1

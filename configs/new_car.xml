@@ -1,9 +1,10 @@
 <framework>
-    <modulesToEnable>
-        <module logLevel="INFO">mavlink_usb_importer</module>
-        <module logLevel="INFO">car_to_mavlink</module>
+    <modulesToEnable logLevel="DEBUG">
+        <module>mavlink_usb_importer</module>
+        <module>data_to_mavlink</module>
+        <module>mavlink_to_data</module>
         <if set="mavlink_logger">
-            <module logLevel="INFO">mavlink_logger</module>
+            <module>mavlink_logger</module>
         </if>
     </modulesToEnable>
 
@@ -12,10 +13,16 @@
         <config>
             <path>/dev/ttyACM0</path>
         </config>
+        <config user="odroid">
+            <path>/dev/senseboard2016</path>
+        </config>
     </module>
     <module>
-        <name>car_to_mavlink</name>
+        <name>mavlink_to_data</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
+    </module>
+    <module>
+        <name>data_to_mavlink</name>
     </module>
     <module>
         <name>mavlink_logger</name>

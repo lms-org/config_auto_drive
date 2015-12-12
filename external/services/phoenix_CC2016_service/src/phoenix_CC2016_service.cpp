@@ -14,9 +14,11 @@ bool Phoenix_CC2016Service::init() {
 
 void Phoenix_CC2016Service::update(RemoteControlState rcState, CCDriveMode driveMode, int batteryVoltage){
     updateRcState(rcState);
-    m_driveMode = driveMode;
+    m_driveMode = CCDriveMode::FMH;
+    //TODO m_driveMode = driveMode;
     m_batteryVoltage = batteryVoltage;
     m_lastUpdate = lms::extra::PrecisionTime::now();
+    //logger.debug("update");
 }
 
 void Phoenix_CC2016Service::updateRcState(RemoteControlState state){
@@ -42,6 +44,7 @@ lms::extra::PrecisionTime Phoenix_CC2016Service::lastUpdate() const{
 }
 
 bool Phoenix_CC2016Service::isValid() const{
+    //std::cout<<"isValid Ph-Service: "<<lms::extra::PrecisionTime::since(m_lastUpdate).toFloat<std::milli>()<<std::endl;
     return lms::extra::PrecisionTime::since(m_lastUpdate).toFloat<std::milli>()< config().get<int>("updateInMilliS", 100);
 }
 

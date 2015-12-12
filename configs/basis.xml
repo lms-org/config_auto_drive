@@ -9,14 +9,13 @@
         <module logLevel="WARN">trajectory_creator</module>
         <module logLevel="ERROR">environment_filter</module>
         <module logLevel="WARN">trajectory_point_controller</module>
-        <module logLevel="WARN">velocity_controller</module>
         <module logLevel="WARN">image_proxy</module>
-        <module logLevel="DEBUG">street_obstacle_merger</module>
+        <module logLevel="WARN">street_obstacle_merger</module>
         <module logLevel="WARN">parking</module>
         <module logLevel="WARN">car_tracker</module>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
-            <module logLevel="DEBUG">socket_data_sender</module>
+            <module logLevel="WARN">socket_data_sender</module>
             <module logLevel="WARN">image_converter_scaledown</module>
         </if>
     </modulesToEnable>
@@ -75,23 +74,10 @@
         </config>
     </module>
     <module>
-        <name>velocity_controller</name>
-        <channelMapping from="ROAD" to="ENVIRONMENT_ROAD_MERGED"/>
-        <config>
-            <launchControllEnabled>false</launchControllEnabled>
-            <maxSpeed>1.0</maxSpeed>
-            <minCurveSpeed>1.0</minCurveSpeed>
-            <forcastLength>0.5</forcastLength>
-            <maxDeltaTInMs>100</maxDeltaTInMs>
-            <maxAcc>4</maxAcc>
-            <minAcc>-6</minAcc>
-        </config>
-    </module>
-    <module>
         <name>trajectory_point_controller</name>
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
-            <useMPCcontroller>1</useMPCcontroller>
+            <useMPCcontroller>0</useMPCcontroller>
             <weight_y>3</weight_y>
             <weight_phi>3</weight_phi>
             <weight_steering_front>0.03</weight_steering_front>
@@ -99,6 +85,12 @@
             <!-- old stuff: -->
             <aggro>0.95</aggro>
             <regler>2</regler>
+            <!--velocity-controller -->
+            <maxSpeed>3.0</maxSpeed>
+            <minCurveSpeed>1.5</minCurveSpeed>
+            <forcastLength>0.5</forcastLength>
+            <maxDeltaTInMs>100</maxDeltaTInMs>
+            <maxCurvation>1.2</maxCurvation>
         </config>
     </module>
     <module>
@@ -108,9 +100,10 @@
         <channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
         <channelMapping priority="10" from="MIDDLE_LANE" to="MIDDLE_LANE"/>
         <config>
-            <searchForObstacles>false</searchForObstacles>
+            <searchForObstacles>true</searchForObstacles>
             <searchForCrossing>true</searchForCrossing>
             <numerOfSegmentsLines>1</numerOfSegmentsLines>
+            <lineOffset>0.1</lineOffset>
         </config>
         <config name="defaultEPParameter" src="imaging/defaultEdgePointParam.lconf"/>
         <config name="defaultLPParameter" src="imaging/defaultLinePointParam.lconf"/>

@@ -27,8 +27,8 @@ bool ImageHintGenerator::initialize() {
 }
 
 void ImageHintGenerator::configsChanged(){
-    defaultLinePointParameter.fromConfig(&config("defaultLPParameter"));
     defaultLinePointParameter.fromConfig(&config("defaultEPParameter"));
+    defaultLinePointParameter.fromConfig(&config("defaultLPParameter"));
 
 }
 
@@ -57,7 +57,11 @@ bool ImageHintGenerator::cycle() {
                 }else if(config().get<bool>("searchForCrossing",false)){
                     createHintForCrossing(*middleLane);
                 }
+            }else{
+                logger.debug("cycle")<<"Not in FMH: "<<static_cast<int>(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->driveMode());
             }
+        }else{
+            logger.debug("cycle")<<"PHOENIX_SERVICE isn't valid! WASDB";
         }
 
     return true;
@@ -68,8 +72,10 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     lms::imaging::detection::ImageHint<lms::imaging::detection::StreetCrossing> *crossing = new lms::imaging::detection::ImageHint<lms::imaging::detection::StreetCrossing>();
     lms::imaging::detection::StreetCrossing::StreetCrossingParam scp;
     scp.target = target.get();
-    scp.gaussBuffer = gaussBuffer;
+    scp.gaussBuffer = gaussBuffer;;
+    scp.fromConfig(&config("defaultEPParameter"));
     scp.fromConfig(&config("defaultLPParameter"));
+    scp.fromConfig(&config("defaultLineParameter"));
     for(const lms::math::vertex2f &v:middle.points()){
         if(v.length() > 0.3 && v.length() < 1.2){
             scp.middleLine.points().push_back(v);
@@ -89,7 +95,9 @@ void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLan
     sopRight.edge = true;
     sopRight.target = target.get();
     sopRight.gaussBuffer = gaussBuffer;
+    sopRight.fromConfig(&config("defaultEPParameter"));
     sopRight.fromConfig(&config("defaultLPParameter"));
+    sopRight.fromConfig(&config("defaultLineParameter"));
     sopRight.fromConfig(&config("defaultObstacleParameter"));
     sopRight.obstacleLeft = false;
     float minObstacleDistanceFromVehicle = config().get<float>("minObstacleDistanceFromVehicle",0.3);
@@ -195,7 +203,7 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
     using lms::math::vertex2f;
     using lms::math::vertex2i;
     //distance between lines and offset for search
-    float lineOffset = 0.1;
+    float lineOffset = config().get<float>("lineOffset",0.1);
     float lineDistance = 0.4-lineOffset;
     lms::imaging::detection::ImageHint<lms::imaging::detection::PointLine> *hintLeft = new lms::imaging::detection::ImageHint<lms::imaging::detection::PointLine>();
     hintLeft->name = "LEFT_LANE";

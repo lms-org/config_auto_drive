@@ -2,4 +2,5 @@ stepLengthMax = 10
 stepLengthMin = 2
 maxLength = 300
 approxEdge = false
-lineWidthTransMultiplier = 1
+lineWidthTransMultiplier = 0.4
+fixedSearchAngle = false
