@@ -16,7 +16,6 @@ public:
     void configsChanged() override;
 private:
     void createHintsFromMiddleLane(const street_environment::RoadLane &middle );
-    void createHintForObstacleUsingSinglePoints(const street_environment::RoadLane &middle );
     void createHintForCrossing(const street_environment::RoadLane &middle );
     void createHintForObstacle(const street_environment::RoadLane &middle );
     lms::ReadDataChannel<street_environment::RoadLane> middleLane;

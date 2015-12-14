@@ -1,5 +1,5 @@
-obstacleTrustThreshold=100
-startLineTrustThreshold=100
+obstacleTrustThreshold=0.6
+startLineTrustThreshold=0.6
+crossingTrustThreshold=0.6
 #number that will be substracted if the obstacle wasn't found
-obstacleTrustThresholdReducer=2
-startLineTrustThresholdReducer=2
+trustReducer=0.1

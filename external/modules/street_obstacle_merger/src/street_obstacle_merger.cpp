@@ -68,9 +68,6 @@ bool StreetObjectMerger::cycle() {
     merge(obstaclesNew,obstaclesOld);
     logger.debug("cycle")<<"number of obstacles (after merge)" << obstaclesOld.objects.size();
 
-    //Remove invalid obstacles
-    filter(obstaclesOld);
-    logger.debug("cycle")<<"number of obstacles (after filter)" << obstaclesOld.objects.size();
     //create new env output
     createOutput(obstaclesOld);
     logger.debug("cycle")<<"number of obstacles (output)" << envOutput->objects.size();
@@ -86,40 +83,10 @@ void StreetObjectMerger::createOutput(street_environment::EnvironmentObstacles &
     }
 }
 
-void StreetObjectMerger::filter(street_environment::EnvironmentObstacles &obstacles){
-    //Decrease foundCounter
-    for(uint i = 0; i < obstacles.objects.size();i++){
-        if(!inVisibleArea(obstacles.objects[i]->position().x,
-                obstacles.objects[i]->position().y)){
-            logger.debug("filter")<<"object isn't in visible space "<<obstacles.objects[i]->name() <<obstacles.objects[i]->position().x<<" "<<
-                    obstacles.objects[i]->position().y;
-            //if the obstacle can't be found by the sensors we won't decrease the counter, we just translate it every step and remove it later on
-            continue;
-        }
-        //Not that smart :D
-        /*
-        if(obstacles.objects[i]->trust()>10){
-            obstacles.objects[i]->trustIt(10);
-        }
-        */
-        obstacles.objects[i]->trustIt(-config().get<int>("obstacleTrustThresholdReducer",0));
-        //min trust is zero
-        if(obstacles.objects[i]->trust()<0){
-            obstacles.objects[i]->trustIt(-obstacles.objects[i]->trust());
-        }
-    }
-
-    //TODO hier könnte man sich auch etwas besseres einfallen lassen
-    for(uint i = 0; i < obstacles.objects.size(); i++){
-        logger.debug("objectpos: ")<<obstacles.objects[i]->position().x<<" "<<obstacles.objects[i]->position().y;
-        if(obstacles.objects[i]->trust() <= 0 || obstacles.objects[i]->position().x < -0.35){
-            obstacles.objects.erase(obstacles.objects.begin() + i);
-        }
-    }
-}
-
 
 void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstaclesNew,street_environment::EnvironmentObstacles &obstaclesOld){
+    std::vector<int> verifiedOld;
+    int oldSize = obstaclesOld.objects.size();
     //check if obstacles can be merged
     for(uint k = 0; k < obstaclesNew.objects.size();k++){
         bool merged = false;
@@ -133,14 +100,50 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
                 pos = pos*0.5;
                 obstaclesOld.objects[i]->updatePosition(pos);
                 //TODO create merged object
-                //TODO increase some "times validated counter"
-                obstaclesOld.objects[i]->trustIt(obstaclesNew.objects[k]->trust());
+                //TODO set new trust-value
+                float newTrust = obstaclesOld.objects[i]->trust() + obstaclesNew.objects[k]->trust();
+                if(newTrust < 0)
+                    newTrust = 0;
+                else if(newTrust > 1)
+                    newTrust = 1;
+                obstaclesOld.objects[i]->setTrust(newTrust);
+                verifiedOld.push_back(i);
                 break;
             }
         }
         if(!merged){
             //Basic value
             obstaclesOld.objects.push_back(obstaclesNew.objects[k]);
+        }
+    }
+
+    //Decrease trust in obstacles that weren't found
+    for(int i = 0; i < oldSize; i++){
+        if(std::find(verifiedOld.begin(), verifiedOld.end(), i) == verifiedOld.end()){
+           if(!inVisibleArea(obstaclesOld.objects[i]->position().x,
+                        obstaclesOld.objects[i]->position().y))
+               continue;//obstacle can't be found
+
+            //old obstacle wasn't found
+            float dt = obstaclesOld.objects[i]->getDeltaTrust();
+            if(dt < 0){
+                dt *= 2;
+            }else{
+                dt = -config().get<float>("trustReducer",0.1);
+            }
+            float newTrust = obstaclesOld.objects[i]->trust();
+            if(newTrust < 0)
+                newTrust = 0;
+            else if(newTrust > 1)
+                newTrust = 1;
+
+            //TODO pos.x isn't nice at all
+            if(obstaclesOld.objects[i]->trust() <= 0 || obstaclesOld.objects[i]->position().x < -0.35){
+                obstaclesOld.objects.erase(obstaclesOld.objects.begin() + i);
+            }else{
+                obstaclesOld.objects[i]->setTrust(newTrust);
+            }
+
         }
     }
 }

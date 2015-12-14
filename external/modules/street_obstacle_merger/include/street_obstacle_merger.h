@@ -19,7 +19,6 @@ private:
      * @param obstaclesOld
      */
     void merge(street_environment::EnvironmentObstacles &obstaclesNew,street_environment::EnvironmentObstacles &obstaclesOld);
-    void filter(street_environment::EnvironmentObstacles &obstacles);
     void createOutput(street_environment::EnvironmentObstacles &obstaclesOld);
 
 
