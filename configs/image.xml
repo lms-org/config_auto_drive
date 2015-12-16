@@ -13,7 +13,7 @@
             <name>image_loader</name>
             <channelMapping from="IMAGE" to="GREY_IMAGE_PRE" />
             <config>
-                <directory>/home/phibedy/Seafile/CaroloCup 2016 Testdaten/20151205_bosch_altes_auto</directory>
+                <directory>/home/phibedy/CC2016/20151205_bosch_altes_auto</directory>
                 <format>pgm</format>
                 <filePattern>%04i.pgm</filePattern>
                 <minCounter>2800</minCounter>
