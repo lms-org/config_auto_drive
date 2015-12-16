@@ -51,7 +51,8 @@ bool ImageHintGenerator::cycle() {
             if(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->driveMode() == phoenix_CC2016_service::CCDriveMode::FMH){
                 if(config().get<bool>("searchForObstacles",false)){
                     createHintForObstacle(*middleLane);
-                }else if(config().get<bool>("searchForCrossing",false)){
+                }
+                if(config().get<bool>("searchForCrossing",false)){
                     createHintForCrossing(*middleLane);
                 }
             }else{
