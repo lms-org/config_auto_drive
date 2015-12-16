@@ -88,37 +88,38 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
     std::vector<int> verifiedOld;
     int oldSize = obstaclesOld.objects.size();
     //check if obstacles can be merged
-    for(uint k = 0; k < obstaclesNew.objects.size();k++){
+    for(street_environment::ObstaclePtr obstNew :  obstaclesNew.objects){
         bool merged = false;
-        for(uint i = 0; i < obstaclesOld.objects.size();i++){
-            if(obstaclesNew.objects[k]->getType() != obstaclesOld.objects[i]->getType()){
+        for(int i = 0; i < obstaclesOld.objects.size(); i++){
+            street_environment::ObstaclePtr obstOld = obstaclesOld.objects[i];
+            if(obstNew->getType() != obstOld->getType()){
                 continue;
             }
-            merged = obstaclesOld.objects[i]->match(*obstaclesNew.objects[k].get());
+            merged = obstOld->match(*obstNew);
             if(merged){
-                lms::math::vertex2f pos = obstaclesNew.objects[k]->position()+obstaclesOld.objects[i]->position();
+                lms::math::vertex2f pos = obstNew->position()+obstOld->position();
+                //TODO mit trust gewichten
                 pos = pos*0.5;
-                obstaclesOld.objects[i]->updatePosition(pos);
+                obstOld->updatePosition(pos);
                 //TODO create merged object
                 //TODO set new trust-value
-                float newTrust = obstaclesOld.objects[i]->trust() + obstaclesNew.objects[k]->trust();
+                float newTrust = obstOld->trust() + obstNew->trust();
                 if(newTrust < 0)
                     newTrust = 0;
                 else if(newTrust > 1)
                     newTrust = 1;
-                obstaclesOld.objects[i]->setTrust(newTrust);
+                obstOld->setTrust(newTrust);
                 verifiedOld.push_back(i);
                 break;
             }
         }
         if(!merged){
             //Basic value
-            obstaclesOld.objects.push_back(obstaclesNew.objects[k]);
+            obstaclesOld.objects.push_back(obstNew);
         }
     }
-
     //Decrease trust in obstacles that weren't found
-    for(int i = 0; i < oldSize; i++){
+    for(int i = 0; i < oldSize;i++){
         if(std::find(verifiedOld.begin(), verifiedOld.end(), i) == verifiedOld.end()){
            if(!inVisibleArea(obstaclesOld.objects[i]->position().x,
                         obstaclesOld.objects[i]->position().y))
@@ -140,6 +141,8 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
             //TODO pos.x isn't nice at all
             if(obstaclesOld.objects[i]->trust() <= 0 || obstaclesOld.objects[i]->position().x < -0.35){
                 obstaclesOld.objects.erase(obstaclesOld.objects.begin() + i);
+                i--;//decrease the index
+                oldSize--;//decrease the old size as we removed one object
             }else{
                 obstaclesOld.objects[i]->setTrust(newTrust);
             }

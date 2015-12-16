@@ -22,6 +22,10 @@
     <service>
         <name>PHOENIX_SERVICE</name>
         <realName>phoenix_CC2016_service</realName>
+            <config>
+                <stateFromConfig>true</stateFromConfig>
+                <updateInMilliS>-1</updateInMilliS>
+            </config>
     </service>
     <module>
             <name>parking</name>

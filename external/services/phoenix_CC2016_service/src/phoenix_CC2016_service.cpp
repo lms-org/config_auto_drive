@@ -8,17 +8,23 @@ bool Phoenix_CC2016Service::init() {
     m_oldState = RemoteControlState::DISCONNECTED;
     m_driveMode = CCDriveMode::IDLE;
     m_batteryVoltage = 8;
-    m_lastUpdate = lms::extra::PrecisionTime::ZERO;
+    m_lastUpdate = lms::Time::ZERO;
+    if(config().get<bool>("stateFromConfig",false))
+        updateFromConfig();
     return true;
+}
+void Phoenix_CC2016Service::updateFromConfig(){
+    //call it twice to set rcStateChanged to false
+    update(RemoteControlState::IDLE,CCDriveMode::FMH,8);
+    update(RemoteControlState::IDLE,CCDriveMode::FMH,8);
+    logger.error("updateFromConfig");
 }
 
 void Phoenix_CC2016Service::update(RemoteControlState rcState, CCDriveMode driveMode, int batteryVoltage){
     updateRcState(rcState);
-    m_driveMode = CCDriveMode::FMH;
-    //TODO m_driveMode = driveMode;
+    m_driveMode = driveMode;
     m_batteryVoltage = batteryVoltage;
-    m_lastUpdate = lms::extra::PrecisionTime::now();
-    //logger.debug("update");
+    m_lastUpdate = lms::Time::now();
 }
 
 void Phoenix_CC2016Service::updateRcState(RemoteControlState state){
@@ -39,13 +45,16 @@ CCDriveMode Phoenix_CC2016Service::driveMode() const{
 int Phoenix_CC2016Service::batteryVoltage() const{
     return m_batteryVoltage;
 }
-lms::extra::PrecisionTime Phoenix_CC2016Service::lastUpdate() const{
+lms::Time Phoenix_CC2016Service::lastUpdate() const{
     return m_lastUpdate;
 }
 
 bool Phoenix_CC2016Service::isValid() const{
     //std::cout<<"isValid Ph-Service: "<<lms::extra::PrecisionTime::since(m_lastUpdate).toFloat<std::milli>()<<std::endl;
-    return lms::extra::PrecisionTime::since(m_lastUpdate).toFloat<std::milli>()< config().get<int>("updateInMilliS", 100);
+    if(config().get<int>("updateInMilliS", 100) == -1){
+        return true;
+    }
+    return lms::Time::since(m_lastUpdate).toFloat<std::milli>()< config().get<int>("updateInMilliS", 100);
 }
 
 void Phoenix_CC2016Service::destroy() {

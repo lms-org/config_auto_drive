@@ -2,7 +2,7 @@
 #define PHOENIX_CC2016_SERVICE_H
 
 #include <lms/service.h>
-#include <lms/extra/time.h>
+#include <lms/time.h>
 namespace phoenix_CC2016_service {
 
 enum class RemoteControlState{
@@ -24,7 +24,7 @@ class Phoenix_CC2016Service : public lms::Service {
      * @brief batteryVolate in mv
      */
     int m_batteryVoltage;
-    lms::extra::PrecisionTime m_lastUpdate;
+    lms::Time m_lastUpdate;
 
 public:
     void update(RemoteControlState rcState, CCDriveMode driveMode, int batteryVoltage);
@@ -33,7 +33,8 @@ public:
     RemoteControlState rcState() const;
     CCDriveMode driveMode() const;
     int batteryVoltage() const;
-    lms::extra::PrecisionTime lastUpdate() const;
+    lms::Time lastUpdate() const;
+    void updateFromConfig();
     /**
      * @brief isValid
      * @return true if the lastUpdate was in time
