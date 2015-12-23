@@ -112,3 +112,9 @@
 [submodule "external/modules/channel_serializer"]
 	path = external/modules/channel_serializer
 	url = https://github.com/lms-org/channel_serializer.git
+[submodule "external/services/timestamp_interpolator_service"]
+	path = external/services/timestamp_interpolator_service
+	url = https://github.com/tum-phoenix/timestamp_interpolator_service.git
+[submodule "external/modules/ego_estimator"]
+	path = external/modules/ego_estimator
+	url = https://github.com/tum-phoenix/ego_estimator.git
