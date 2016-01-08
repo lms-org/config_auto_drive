@@ -13,7 +13,8 @@
             <name>image_loader</name>
             <channelMapping from="IMAGE" to="GREY_IMAGE_PRE" />
             <config>
-                <directory>/home/phibedy/CC2016/img/20151212-211050</directory>
+                <directory>img/20151212-211420</directory>
+                <!--<directory>/home/phibedy/CC2016/img/20151212-211050</directory>-->
                 <format>pgm</format>
                 <filePattern>%04i.pgm</filePattern>
                 <minCounter>0</minCounter>
