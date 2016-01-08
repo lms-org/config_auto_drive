@@ -2,6 +2,7 @@
 #include "street_environment/obstacle.h"
 #include "street_environment/crossing.h"
 #include "street_environment/start_line.h"
+#include "area_of_detection/area_of_detection.h"
 
 bool StreetObjectMerger::initialize() {
     envInput = readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_INPUT");
@@ -10,26 +11,13 @@ bool StreetObjectMerger::initialize() {
     //We should have the roadlane and the car from the current cycle
     car = readChannel<sensor_utils::Car>("CAR");
     middle = readChannel<street_environment::RoadLane>("MIDDLE_LANE");
-
-    if(config().hasKey("visibleAreas")){
-        std::vector<std::string> sRects = config().getArray<std::string>("visibleAreas");
-        for(std::string &sRect: sRects){
-            lms::math::Rect r;
-            if(!config().hasKey(sRect+"_x") || !config().hasKey(sRect+"_y") ||!config().hasKey(sRect+"_w")||!config().hasKey(sRect+"_h")){
-                logger.error("initialize")<<"visibleArea not valid: "<< sRect;
-                return false;
-            }
-            r.x = config().get<float>(sRect+"_x");
-            r.y = config().get<float>(sRect+"_y");
-            r.width = config().get<float>(sRect+"_w");
-            r.height = config().get<float>(sRect+"_h");
-            visibleAreas.push_back(r);
-        }
-    }
+    //hack for drawing
+    visibleAreas_hack = writeChannel<std::vector<lms::math::Rect>>("VISIBLE_AREAS");
     return true;
 }
 
 bool StreetObjectMerger::inVisibleArea(float x, float y){
+    std::vector<lms::math::Rect> visibleAreas = getService<area_of_detection::AreaOfDetection>("AreaOfDetection")->visibleAreas();
     for(lms::math::Rect& r:visibleAreas){
         if(r.contains(x,y))
             return true;
@@ -42,6 +30,7 @@ bool StreetObjectMerger::deinitialize() {
 }
 
 bool StreetObjectMerger::cycle() {
+    *visibleAreas_hack = getService<area_of_detection::AreaOfDetection>("AreaOfDetection")->visibleAreas();
 
     //get vectors from environments
     street_environment::EnvironmentObstacles obstaclesNew;
@@ -63,10 +52,54 @@ bool StreetObjectMerger::cycle() {
         obst->kalman(*middle,0);
     }
 
+
+    //merge new obstacles
+    for(int i = 0; i < (int)obstaclesNew.objects.size(); i++){
+        std::shared_ptr<street_environment::Obstacle>  obst1 = obstaclesNew.objects[i];
+        int findCound = 0;
+        lms::math::vertex2f mergePos = obst1->position();
+        float orthMinRes = obst1->getStreetDistanceOrthogonal()-obst1->width()/2;
+        float orthMaxRes = obst1->getStreetDistanceOrthogonal()+obst1->width()/2;
+        for(int k = i+1; k < (int)obstaclesNew.objects.size(); ){
+            std::shared_ptr<street_environment::Obstacle>  obst2 = obstaclesNew.objects[k];
+            if(obst1->match(*obst2)){
+                findCound++;
+                mergePos +=  obst2->position();
+                float orthMin = obst1->getStreetDistanceOrthogonal()-obst1->width()/2;
+                if(orthMin < orthMinRes){
+                    orthMinRes = orthMin;
+                }
+                float orthMax = obst1->getStreetDistanceOrthogonal()+obst1->width()/2;
+                if(orthMax > orthMaxRes){
+                    orthMaxRes = orthMax;
+                }
+            }else{
+                k++;
+            }
+        }
+        if(findCound > 0){
+            mergePos=mergePos/findCound;
+            obst1->width(orthMaxRes-orthMinRes);
+        }
+    }
+
+    //kalman merged new obstacles
+    for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesNew.objects){
+        obst->kalman(*middle,0);
+    }
+
     logger.debug("cycle")<<"number of new obstacles (before merge)" << obstaclesNew.objects.size();
     //merge them
     merge(obstaclesNew,obstaclesOld);
     logger.debug("cycle")<<"number of obstacles (after merge)" << obstaclesOld.objects.size();
+
+    //TODO HACK
+    //kalman new obstacles
+    for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
+        if(fabs(obst->getStreetDistanceOrthogonal()) >0.3){
+            obst->setTrust(0.1);
+        }
+    }
 
     //create new env output
     createOutput(obstaclesOld);
@@ -90,13 +123,16 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
     //check if obstacles can be merged
     for(street_environment::ObstaclePtr obstNew :  obstaclesNew.objects){
         bool merged = false;
-        for(int i = 0; i < obstaclesOld.objects.size(); i++){
+        for(int i = 0; i < (int)obstaclesOld.objects.size(); i++){
             street_environment::ObstaclePtr obstOld = obstaclesOld.objects[i];
             if(obstNew->getType() != obstOld->getType()){
                 continue;
             }
             merged = obstOld->match(*obstNew);
             if(merged){
+                //TODO use kalman
+                //TODO set the width
+
                 lms::math::vertex2f pos = obstNew->position()+obstOld->position();
                 //TODO mit trust gewichten
                 pos = pos*0.5;

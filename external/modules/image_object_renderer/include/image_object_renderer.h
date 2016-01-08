@@ -18,6 +18,9 @@ public:
     bool cycle() override;
 private:
 
+    float translateY(float y);
+    float translateX(float x);
+
     std::vector<std::string> vertex4f;
     std::vector<std::string> drawObjectStrings;
     std::vector<lms::ReadDataChannel<lms::Any>> drawObjects;
@@ -33,6 +36,8 @@ private:
     void drawVertex2f(const lms::math::vertex2f &v);
     void drawTrajectoryPoint(const street_environment::TrajectoryPoint &v);
     void drawObject(const street_environment::EnvironmentObject *eo,bool customColori);
+    void drawRect(lms::math::Rect &r);
+    void drawLine(float x1, float y1, float x2, float y2);
     /**
      * @brief setColor
      * @param toDrawName

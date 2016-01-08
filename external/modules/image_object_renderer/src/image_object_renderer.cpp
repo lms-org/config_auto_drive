@@ -3,6 +3,7 @@
 #include "street_environment/start_line.h"
 
 #include "lms/imaging/warp.h"
+#include "area_of_detection/area_of_detection.h"
 
 bool ImageObjectRenderer::initialize() {
     //get all elements that you want to draw
@@ -20,6 +21,14 @@ bool ImageObjectRenderer::initialize() {
         drawObjects.push_back(readChannel<lms::Any>(obj));
     }
     return true;
+}
+
+float ImageObjectRenderer::translateY(float y){
+    return -y*image->width()/5+image->width()/2;
+}
+
+float ImageObjectRenderer::translateX(float x){
+    return x*image->height()/5;
 }
 
 bool ImageObjectRenderer::deinitialize() {
@@ -46,11 +55,33 @@ bool ImageObjectRenderer::cycle() {
         }else if(dO.castableTo<street_environment::TrajectoryPoint>()){
             logger.debug("")<< "drawing 4f";
             drawTrajectoryPoint(*(dO.getWithType<street_environment::TrajectoryPoint>()));
+        }else if(dO.castableTo<std::vector<lms::math::Rect>>()){
+            logger.debug("")<< "drawing rects";
+            for(lms::math::Rect r: *dO.getWithType<std::vector<lms::math::Rect>>()){
+                drawRect(r);
+            }
         }else{
             logger.warn("cycle")<<"No valid type for "<<dO.name();
         }
     }
     return true;
+}
+
+void ImageObjectRenderer::drawRect(lms::math::Rect &r){
+    drawLine(r.x,r.y,r.x,r.y+r.height);
+    drawLine(r.x+r.width,r.y,r.x+r.width,r.y+r.height);
+    drawLine(r.x,r.y+r.height,r.x+r.width,r.y+r.height);
+    drawLine(r.x,r.y,r.x+r.width,r.y);
+}
+
+
+void ImageObjectRenderer::drawLine(float x1, float y1, float x2, float y2){
+
+    int y1_ = -y1*image->width()/5+image->width()/2;
+    int x1_ = x1*image->height()/5;
+    int y2_ = -y2*image->width()/5+image->width()/2;
+    int x2_ = x2*image->height()/5;
+    graphics->drawLine(x1_,y1_,x2_,y2_);
 }
 
 void ImageObjectRenderer::drawVertex2f(const lms::math::vertex2f &v){

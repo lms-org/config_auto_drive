@@ -19,3 +19,4 @@ config/
 *.autosave
 CMakeLists.txt.*
 .idea
+ogre.log

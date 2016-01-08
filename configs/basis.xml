@@ -46,7 +46,6 @@
         <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_OBSTACLE_RAW"/>
         <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_OBSTACLE"/>
         <config src="street_utils/obstacle.lconf"/>
-        <config src="visible_areas.lconf"/>
     </module>
     <module>
         <name>car_to_matlab</name>
@@ -145,6 +144,8 @@
             <elementLength>0.2</elementLength>
             <enableMove>false</enableMove>
             <logState>false</logState>
+            <idle_prior_fact>10</idle_prior_fact>
+            <prior_fact>0</prior_fact>
         </config>
         <config user="odroid">
             <logPrefix>/home/odroid/data/env/env</logPrefix>

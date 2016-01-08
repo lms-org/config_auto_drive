@@ -29,7 +29,7 @@ private:
     lms::WriteDataChannel<street_environment::EnvironmentObjects> envOutput;
     lms::ReadDataChannel<street_environment::RoadLane> middle;
     lms::ReadDataChannel<sensor_utils::Car> car;
-    std::vector<lms::math::Rect> visibleAreas;
+    lms::WriteDataChannel<std::vector<lms::math::Rect>> visibleAreas_hack;
 
 
 };

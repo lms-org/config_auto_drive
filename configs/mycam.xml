@@ -5,5 +5,10 @@
             <!-- camera/cali_cc15_auto.lconf - old car -->
             <config src="camera/cali.lconf" />
         </service>
+        <service>
+            <name>AreaOfDetection</name>
+            <realName>area_of_detection</realName>
+            <config src="visible_areas.lconf"/>
+        </service>
         <include src="image.xml"/>
 </framework>

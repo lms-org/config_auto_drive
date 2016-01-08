@@ -59,7 +59,7 @@ bool ImageHintGenerator::cycle() {
                 logger.debug("cycle")<<"Not in FMH: "<<static_cast<int>(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->driveMode());
             }
         }else{
-            logger.debug("cycle")<<"PHOENIX_SERVICE isn't valid! WASDB";
+            logger.debug("cycle")<<"PHOENIX_SERVICE isn't valid!";
         }
 
     return true;
@@ -74,6 +74,8 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     scp.fromConfig(&config("defaultEPParameter"));
     scp.fromConfig(&config("defaultLPParameter"));
     scp.fromConfig(&config("defaultLineParameter"));
+    scp.lineWidthMax = scp.lineWidthMax*2;
+    //scp.lineWidthMin = scp.lineWidthMin*2;
     for(const lms::math::vertex2f &v:middle.points()){
         if(v.length() > 0.3 && v.length() < 1.2){
             scp.middleLine.points().push_back(v);

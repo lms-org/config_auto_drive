@@ -1,5 +1,5 @@
 visibleAreas = front
-front_x = 0.3
-front_y = -20
-front_w = 40
-front_h = 40
+front_x = 0.4
+front_y = -1
+front_w = 2
+front_h = 2
