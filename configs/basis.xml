@@ -86,6 +86,7 @@
             <weight_phi>10</weight_phi>
             <weight_steering_front>0.0005</weight_steering_front>
             <weight_steering_rear>10</weight_steering_rear>
+            <velocityFactor>0.0</velocityFactor>
             <!-- old stuff: -->
             <aggro>0.95</aggro>
             <regler>2</regler>
