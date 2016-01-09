@@ -90,6 +90,9 @@
             <aggro>0.95</aggro>
             <regler>2</regler>
             <!--velocity-controller -->
+            <PID_Kp>1</PID_Kp>
+            <PID_Ki>0</PID_Ki>
+            <PID_Kd>0</PID_Kd>
             <maxSpeed>3.0</maxSpeed>
             <minCurveSpeed>1.5</minCurveSpeed>
             <forcastLength>0.5</forcastLength>
