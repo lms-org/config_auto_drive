@@ -53,7 +53,7 @@ bool ImageObjectRenderer::cycle() {
                     drawObject(eo.get(), customColor);
             }
         }else if(dO.castableTo<street_environment::TrajectoryPoint>()){
-            logger.debug("")<< "drawing 4f";
+            logger.debug("")<< "drawing TrajectoryPoint";
             drawTrajectoryPoint(*(dO.getWithType<street_environment::TrajectoryPoint>()));
         }else if(dO.castableTo<std::vector<lms::math::Rect>>()){
             logger.debug("")<< "drawing rects";
@@ -74,6 +74,9 @@ void ImageObjectRenderer::drawRect(lms::math::Rect &r){
     drawLine(r.x,r.y,r.x+r.width,r.y);
 }
 
+void ImageObjectRenderer::drawLine(lms::math::vertex2f p1, lms::math::vertex2f p2){
+    drawLine(p1.x,p1.y,p2.x,p2.y);
+}
 
 void ImageObjectRenderer::drawLine(float x1, float y1, float x2, float y2){
 
@@ -82,6 +85,14 @@ void ImageObjectRenderer::drawLine(float x1, float y1, float x2, float y2){
     int y2_ = -y2*image->width()/5+image->width()/2;
     int x2_ = x2*image->height()/5;
     graphics->drawLine(x1_,y1_,x2_,y2_);
+}
+
+void ImageObjectRenderer::drawRect(float x, float y, float width, float height, bool filled){
+    //TODO
+    if(filled)
+        graphics->fillRect(x,y,width,height);
+    else
+        graphics->drawRect(x,y,width,height);
 }
 
 void ImageObjectRenderer::drawVertex2f(const lms::math::vertex2f &v){
@@ -96,6 +107,8 @@ void ImageObjectRenderer::drawTrajectoryPoint(const street_environment::Trajecto
 }
 
 void ImageObjectRenderer::drawObject(const street_environment::EnvironmentObject *eo, bool customColor){
+    float lineWidth = 0.01;
+    float lineWidthStep = 0.01;
     if(eo->getType() == 0){
         const street_environment::RoadLane &lane = eo->getAsReference<const street_environment::RoadLane>();
         drawPolyLine(&lane);
@@ -109,14 +122,23 @@ void ImageObjectRenderer::drawObject(const street_environment::EnvironmentObject
             }
         }
         drawObstacle(&obst);
-    }else if(eo->getType() == 2){
+    }else if(eo->getType() == street_environment::Crossing::TYPE){
         setColor("CROSSING");
         const street_environment::Crossing &crossing = eo->getAsReference<const street_environment::Crossing>();
-        drawObstacle(&crossing);
-    }else if(eo->getType() == 3){
+        lms::math::vertex2f toAdd  =crossing.viewDirection();
+        toAdd = toAdd.rotateAntiClockwise90deg() * 0.2;
+        for(float i = -lineWidth; i <= lineWidth; i += lineWidthStep){
+            drawLine(crossing.position()-toAdd+crossing.viewDirection()*i, crossing.position()+toAdd+crossing.viewDirection()*i);
+        }
+        //drawObstacle(&crossing);
+    }else if(eo->getType() == street_environment::StartLine::TYPE){
         const street_environment::StartLine &start = eo->getAsReference<const street_environment::StartLine>();
         setColor("START_LINE");
-        drawObstacle(&start);
+        lms::math::vertex2f toAdd  =start.viewDirection();
+        toAdd = toAdd.rotateAntiClockwise90deg() * 0.4;
+        for(float i = -lineWidth; i <= lineWidth; i += lineWidthStep){
+            drawLine(start.position()-toAdd+start.viewDirection()*i, start.position()+toAdd+start.viewDirection()*i);
+        }
     }
 }
 

@@ -37,7 +37,9 @@ private:
     void drawTrajectoryPoint(const street_environment::TrajectoryPoint &v);
     void drawObject(const street_environment::EnvironmentObject *eo,bool customColori);
     void drawRect(lms::math::Rect &r);
+    void drawRect(float x, float y, float width, float height, bool filled);//TODO
     void drawLine(float x1, float y1, float x2, float y2);
+    void drawLine(lms::math::vertex2f p1, lms::math::vertex2f p2);
     /**
      * @brief setColor
      * @param toDrawName

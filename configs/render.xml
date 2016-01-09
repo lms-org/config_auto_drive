@@ -34,9 +34,9 @@
                     <colorB>0</colorB>
                 </config>
                 <config name="CROSSING">
-                    <colorR>0</colorR>
+                    <colorR>255</colorR>
                     <colorG>0</colorG>
-                    <colorB>255</colorB>
+                    <colorB>0</colorB>
                 </config>
                 <config name="MIDDLE_LANE">
 		    <colorR>255</colorR>

@@ -140,15 +140,9 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
             }
             merged = obstOld->match(*obstNew);
             if(merged){
-                //TODO use kalman
-                //TODO set the width
                 obstOld->updatePosition(obstNew->position());
-                //lms::math::vertex2f pos = obstNew->position()+obstOld->position();
-                //TODO mit trust gewichten
-                //pos = pos*0.5;
-                //obstOld->updatePosition(pos);
-                //TODO create merged object
-                //TODO set new trust-value
+                obstOld->viewDirection(obstNew->viewDirection());//ok
+                obstOld->width(obstNew->width());
                 float newTrust = obstOld->trust() + obstNew->trust();
                 if(newTrust < 0)
                     newTrust = 0;
