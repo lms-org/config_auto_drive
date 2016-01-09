@@ -3,6 +3,7 @@
 #include "street_environment/crossing.h"
 #include "street_environment/start_line.h"
 #include "area_of_detection/area_of_detection.h"
+#include "phoenix_CC2016_service/phoenix_CC2016_service.h"
 
 bool StreetObjectMerger::initialize() {
     envInput = readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_INPUT");
@@ -30,6 +31,11 @@ bool StreetObjectMerger::deinitialize() {
 }
 
 bool StreetObjectMerger::cycle() {
+    //reset obstacles
+    if(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->rcStateChanged()){
+        envOutput->objects.clear();
+    }
+
     *visibleAreas_hack = getService<area_of_detection::AreaOfDetection>("AreaOfDetection")->visibleAreas();
 
     //get vectors from environments
