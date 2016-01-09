@@ -3,6 +3,7 @@
 
 #include <lms/module.h>
 #include "lms/imaging/image.h"
+#include "fisher_breaks.h"
 
 /**
  * @brief LMS module sobel_threshold_generator
@@ -14,10 +15,16 @@ public:
     bool cycle() override;
 
 private:
+    void resetFisherData();
+    void fisherHistogram(const uint8_t *imageIn, int nc, int nr, int startRow, int endRow);
+    bool pairCompare(const ValueCountPair &firstElem, const ValueCountPair &secondElem);
+
     lms::ReadDataChannel<lms::imaging::Image> target;
     lms::imaging::Image sobelBuffer;
-    //int kernelSobel[9] = {-2, -2, 0, -2, 0, 2, 0, 2, 2};
-    void sobelWithoutSqrt(const uint8_t *imageIn, uint8_t *imageOut,  int nc, int nr, int startRow, int endRow);
+
+    std::vector<int> fisherHistData;
+    ValueCountPairContainer fisherData;
+
 };
 
 #endif // SOBEL_THRESHOLD_GENERATOR_H
