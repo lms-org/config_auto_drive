@@ -58,21 +58,23 @@ bool StreetObjectMerger::cycle() {
         std::shared_ptr<street_environment::Obstacle>  obst1 = obstaclesNew.objects[i];
         int findCound = 0;
         lms::math::vertex2f mergePos = obst1->position();
-        float orthMinRes = obst1->getStreetDistanceOrthogonal()-obst1->width()/2;
-        float orthMaxRes = obst1->getStreetDistanceOrthogonal()+obst1->width()/2;
+        float orthMinRes = obst1->distanceOrth()-obst1->width()/2;
+        float orthMaxRes = obst1->distanceOrth()+obst1->width()/2;
         for(int k = i+1; k < (int)obstaclesNew.objects.size(); ){
             std::shared_ptr<street_environment::Obstacle>  obst2 = obstaclesNew.objects[k];
             if(obst1->match(*obst2)){
                 findCound++;
                 mergePos +=  obst2->position();
-                float orthMin = obst1->getStreetDistanceOrthogonal()-obst1->width()/2;
+                float orthMin = obst1->distanceOrth()-obst1->width()/2;
                 if(orthMin < orthMinRes){
                     orthMinRes = orthMin;
                 }
-                float orthMax = obst1->getStreetDistanceOrthogonal()+obst1->width()/2;
+                float orthMax = obst1->distanceOrth()+obst1->width()/2;
                 if(orthMax > orthMaxRes){
                     orthMaxRes = orthMax;
                 }
+                //remote it
+                obstaclesNew.objects.erase(obstaclesNew.objects.begin()+k);
             }else{
                 k++;
             }
@@ -96,7 +98,8 @@ bool StreetObjectMerger::cycle() {
     //TODO HACK
     //kalman new obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
-        if(fabs(obst->getStreetDistanceOrthogonal()) >0.3){
+        obst->kalman(*middle,0);
+        if(fabs(obst->distanceOrth()) >0.3){
             obst->setTrust(0.1);
         }
     }
@@ -132,11 +135,11 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
             if(merged){
                 //TODO use kalman
                 //TODO set the width
-
-                lms::math::vertex2f pos = obstNew->position()+obstOld->position();
+                obstOld->updatePosition(obstNew->position());
+                //lms::math::vertex2f pos = obstNew->position()+obstOld->position();
                 //TODO mit trust gewichten
-                pos = pos*0.5;
-                obstOld->updatePosition(pos);
+                //pos = pos*0.5;
+                //obstOld->updatePosition(pos);
                 //TODO create merged object
                 //TODO set new trust-value
                 float newTrust = obstOld->trust() + obstNew->trust();

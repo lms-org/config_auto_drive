@@ -103,7 +103,7 @@
         <channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
         <channelMapping priority="10" from="MIDDLE_LANE" to="MIDDLE_LANE"/>
         <config>
-            <searchForObstacles>true</searchForObstacles>
+            <searchForObstacles>false</searchForObstacles>
             <searchForCrossing>true</searchForCrossing>
             <numerOfSegmentsLines>1</numerOfSegmentsLines>
             <lineOffset>0.1</lineOffset>
