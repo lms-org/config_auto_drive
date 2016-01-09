@@ -43,10 +43,6 @@
             <create_subfolder_with_current_date>true</create_subfolder_with_current_date>
         </config>
     </module>
-    <service>
-        <name>warp_service</name>
-        <config src="camera/cali.lconf" />
-    </service>
-    <include src="image.xml"/>
+    <include src="mycam.xml"/>
 
 </framework>
