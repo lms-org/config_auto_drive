@@ -88,6 +88,7 @@ bool StreetObjectMerger::cycle() {
     //kalman merged new obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesNew.objects){
         obst->kalman(*middle,0);
+        //calculate the trust
     }
 
     logger.debug("cycle")<<"number of new obstacles (before merge)" << obstaclesNew.objects.size();

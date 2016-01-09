@@ -4,7 +4,7 @@
         <mainThread />
     </execution>
     <modulesToEnable>
-        <module logLevel="DEBUG">socket_data_receiver</module>
+        <module logLevel="INFO">socket_data_receiver</module>
         <module logLevel="DEBUG">image_converter_scaleup</module>
         <module logLevel="ERROR">socket_datatype_definer</module>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
@@ -22,8 +22,8 @@
         <name>socket_data_receiver</name>
         <config>
             <dataChannels>IMAGE_GREY_SCALE,CAR,TRAJECTORY_LINE</dataChannels>
-            <ip>192.168.0.112</ip>
-            <!--<ip>localhost</ip>-->
+            <!--ip>192.168.0.112</ip-->
+            <ip>localhost</ip>
             <port>65001</port>
         </config>
     </module>

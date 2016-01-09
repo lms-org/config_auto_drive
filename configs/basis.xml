@@ -15,7 +15,7 @@
         <module logLevel="WARN">car_tracker</module>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
-            <module logLevel="WARN">socket_data_sender</module>
+            <module logLevel="INFO">socket_data_sender</module>
             <module logLevel="WARN">image_converter_scaledown</module>
         </if>
     </modulesToEnable>
