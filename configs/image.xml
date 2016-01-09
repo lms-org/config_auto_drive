@@ -1,8 +1,5 @@
 <framework>
     <execution>
-        <if set="1hz">
-            <clock enabled="true" unit="hz" value="1" />
-        </if>
         <mainThread />
     </execution>
     <if set="files">
