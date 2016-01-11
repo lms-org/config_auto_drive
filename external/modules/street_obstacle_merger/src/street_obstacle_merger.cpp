@@ -46,6 +46,7 @@ bool StreetObjectMerger::cycle() {
     getObstacles(*envInput,obstaclesNew);
     getObstacles(*envOutput,obstaclesOld);
 
+    logger.debug("cycle")<<"number of new obstacles" << obstaclesNew.objects.size();
     logger.debug("cycle")<<"number of old obstacles" << obstaclesOld.objects.size();
 
     //update old obstacles
@@ -56,8 +57,8 @@ bool StreetObjectMerger::cycle() {
     //kalman new obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesNew.objects){
         obst->kalman(*middle,0);
+        logger.debug("TRUST START")<<obst->trust();
     }
-
 
     //merge new obstacles
     for(int i = 0; i < (int)obstaclesNew.objects.size(); i++){
@@ -71,15 +72,15 @@ bool StreetObjectMerger::cycle() {
             if(obst1->match(*obst2)){
                 findCound++;
                 mergePos +=  obst2->position();
-                float orthMin = obst1->distanceOrth()-obst1->width()/2;
+                float orthMin = obst2->distanceOrth()-obst2->width()/2;
                 if(orthMin < orthMinRes){
                     orthMinRes = orthMin;
                 }
-                float orthMax = obst1->distanceOrth()+obst1->width()/2;
+                float orthMax = obst2->distanceOrth()+obst2->width()/2;
                 if(orthMax > orthMaxRes){
                     orthMaxRes = orthMax;
                 }
-                //remote it
+                //remove it
                 obstaclesNew.objects.erase(obstaclesNew.objects.begin()+k);
             }else{
                 k++;
@@ -102,12 +103,17 @@ bool StreetObjectMerger::cycle() {
     merge(obstaclesNew,obstaclesOld);
     logger.debug("cycle")<<"number of obstacles (after merge)" << obstaclesOld.objects.size();
 
-    //TODO HACK
-    //kalman new obstacles
+    //kalman obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
         obst->kalman(*middle,0);
-        if(fabs(obst->distanceOrth()) >0.3){
+        if(fabs(obst->distanceOrth()) >0.3 && obst->trust() > 0.1){
             obst->setTrust(0.1);
+        }
+        if(fabs(obst->distanceOrth()) > 0.4){
+            obst->setTrust(0);
+        }
+        if(fabs(obst->distanceTang()) > 2){
+            obst->setTrust(0);
         }
     }
 
@@ -122,7 +128,10 @@ void StreetObjectMerger::createOutput(street_environment::EnvironmentObstacles &
     //clear old obstacles
     envOutput->objects.clear();
     for(uint i = 0; i < obstaclesOld.objects.size(); i++){
-        envOutput->objects.push_back(obstaclesOld.objects[i]);
+        if(obstaclesOld.objects[i]->trust() > 0){
+            logger.debug("keep it")<<obstaclesOld.objects[i]->trust();
+            envOutput->objects.push_back(obstaclesOld.objects[i]);
+        }
     }
 }
 
@@ -167,26 +176,17 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
 
             //old obstacle wasn't found
             float dt = obstaclesOld.objects[i]->getDeltaTrust();
-            if(dt < 0){
+            if(dt < -config().get<float>("trustReducer",0.1)){
                 dt *= 2;
             }else{
                 dt = -config().get<float>("trustReducer",0.1);
             }
-            float newTrust = obstaclesOld.objects[i]->trust();
+            float newTrust = obstaclesOld.objects[i]->trust()+dt;
             if(newTrust < 0)
                 newTrust = 0;
-            else if(newTrust > 1)
+            else if(newTrust > 1)//should not happen
                 newTrust = 1;
-
-            //TODO pos.x isn't nice at all
-            if(obstaclesOld.objects[i]->trust() <= 0 || obstaclesOld.objects[i]->position().x < -0.35){
-                obstaclesOld.objects.erase(obstaclesOld.objects.begin() + i);
-                i--;//decrease the index
-                oldSize--;//decrease the old size as we removed one object
-            }else{
-                obstaclesOld.objects[i]->setTrust(newTrust);
-            }
-
+             obstaclesOld.objects[i]->setTrust(newTrust);
         }
     }
 }
