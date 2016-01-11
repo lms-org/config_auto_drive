@@ -285,7 +285,7 @@ struct ValueCountPairContainerArray : std::vector<ValueCountPairContainer>
             FisherBreaks::MergeToLeft(vcpc, begin()[nrUsedContainers], begin()[nrUsedContainers+1]);
             begin()[nrUsedContainers].clear();
         }
-        assert(GetTotalCount(vcpc) == size);
+        assert(FisherBreaks::GetTotalCount(vcpc) == size);
     }
 };
 
