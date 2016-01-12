@@ -1,10 +1,12 @@
 set(SOURCES
     "src/sobel_threshold_generator.cpp"
     "src/interface.cpp"
+    "src/fisher_breaks.cpp"
 )
 
 set(HEADERS
     "include/sobel_threshold_generator.h"
+    "include/fisher_breaks.h"
 )
 
 include_directories(include)
