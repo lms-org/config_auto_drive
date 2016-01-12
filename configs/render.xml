@@ -34,28 +34,23 @@
                     <colorB>0</colorB>
                 </config>
                 <config name="CROSSING">
-                    <colorR>0</colorR>
+                    <colorR>255</colorR>
                     <colorG>0</colorG>
-                    <colorB>255</colorB>
+                    <colorB>0</colorB>
                 </config>
                 <config name="MIDDLE_LANE">
 		    <colorR>255</colorR>
 		    <colorG>123</colorG>
 		    <colorB>120</colorB>
                 </config>
-		<config name="ENVIRONMENT_ROAD_FILTERED">
-		    <colorR>0</colorR>
-		    <colorG>0</colorG>
-		    <colorB>255</colorB>
-		</config>
                 <config name="DEFAULT_OBSTACLE">
-                    <colorR>250</colorR>
-                    <colorG>145</colorG>
-                    <colorB>145</colorB>
+                    <colorR>0</colorR>
+                    <colorG>0</colorG>
+                    <colorB>255</colorB>
                 </config>
                 <config name="OBSTACLE_DETECTED">
                     <colorR>255</colorR>
-                    <colorG>0</colorG>
+                    <colorG>255</colorG>
                     <colorB>0</colorB>
                 </config>
 		<config name="TRAJECTORY_LINE">

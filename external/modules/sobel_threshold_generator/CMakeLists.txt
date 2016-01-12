@@ -1,5 +1,6 @@
 set(SOURCES
     "src/sobel_threshold_generator.cpp"
+    "src/fisher_breaks.cpp"
     "src/interface.cpp"
     "src/fisher_breaks.cpp"
 )

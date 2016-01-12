@@ -1,6 +1,5 @@
 <framework>
     <execution>
-        <clock enabled="true" unit="hz" value="100" />
         <mainThread />
     </execution>
     <modulesToEnable>
@@ -21,9 +20,9 @@
     <module>
         <name>socket_data_receiver</name>
         <config>
-            <dataChannels>IMAGE_GREY_SCALE,CAR,TRAJECTORY_LINE</dataChannels>
-            <!--ip>192.168.0.112</ip-->
-            <ip>localhost</ip>
+            <dataChannels>IMAGE_GREY_SCALE,CAR,TRAJECTORY_LINE,TRAJECTORY_POINT</dataChannels>
+            <ip>192.168.0.112</ip>
+            <!--ip>localhost</ip-->
             <port>65001</port>
         </config>
     </module>
