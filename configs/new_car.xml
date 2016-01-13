@@ -81,5 +81,4 @@
         </config>
     </module>
     <include src="mycam.xml"/>
-    <include src="ego.xml"/>
 </framework>

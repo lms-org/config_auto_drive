@@ -25,7 +25,7 @@
             <filter_init_var_omega>0.01</filter_init_var_omega>
 
             <!-- DEBUG -->
-            <state_log>true</state_log>
+            <state_log>false</state_log>
         </config>
     </module>
 

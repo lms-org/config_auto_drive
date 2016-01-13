@@ -202,4 +202,5 @@
             <singleFile>/data/projects/tum.phoenix/code/config_auto_drive/test_images/20150512-181426/0050.pgm</singleFile>
         </config>
     </module>
+    <include src="ego.xml"/>
 </framework>
