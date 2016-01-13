@@ -7,7 +7,7 @@
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
         <module logLevel="WARN">trajectory_creator</module>
-        <module logLevel="ERROR">environment_filter</module>
+        <!--module logLevel="ERROR">environment_filter</module--><!-- Brauchen wir nicht-->
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">image_proxy</module>
         <module logLevel="WARN">street_obstacle_merger</module>
@@ -138,7 +138,7 @@
     <module>
         <name>environment_predictor</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
-        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
+        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_RAW"/><!--ENVIRONMENT_ROAD_FILTERED-->
         <channelMapping from="ROAD_OUTPUT" to="MIDDLE_LANE"/>
         <config>
             <elementCount>10</elementCount>

@@ -49,6 +49,7 @@ bool StreetObjectMerger::cycle() {
     logger.debug("cycle")<<"number of new obstacles" << obstaclesNew.objects.size();
     logger.debug("cycle")<<"number of old obstacles" << obstaclesOld.objects.size();
 
+    logger.info("cycle")<<"translate old obstacles by: "<<car->movedDistance();
     //update old obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
         obst->kalman(*middle,car->movedDistance());
@@ -57,7 +58,6 @@ bool StreetObjectMerger::cycle() {
     //kalman new obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesNew.objects){
         obst->kalman(*middle,0);
-        logger.debug("TRUST START")<<obst->trust();
     }
 
     //merge new obstacles
