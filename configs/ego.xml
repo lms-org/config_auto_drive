@@ -1,5 +1,5 @@
 <framework>
-    <modulesToEnable logLevel="INFO">
+    <modulesToEnable logLevel="ERROR">
         <module>ego_estimator</module>
     </modulesToEnable>
 
