@@ -12,7 +12,6 @@
         <module logLevel="WARN">image_proxy</module>
         <module logLevel="INFO">street_obstacle_merger</module>
         <module logLevel="WARN">parking</module>
-        <module logLevel="WARN">car_tracker</module>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
             <module logLevel="INFO">socket_data_sender</module>
@@ -64,16 +63,6 @@
         <config>
             <ip>localhost</ip>
             <port>65001</port>
-        </config>
-    </module>
-    <module>
-        <name>car_tracker</name>
-    </module>
-    <module>
-        <name>environment_logger</name>
-        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD"/>
-        <config>
-            <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/logging_data</directory>
         </config>
     </module>
     <module>
