@@ -2,14 +2,19 @@
 #include <string>
 #include "lms/imaging/converter.h"
 #include <lms/imaging/image_factory.h>
-#include "lms/imaging/warp.h"
 #include "street_environment/road.h"
 #include "street_environment/crossing.h"
 #include "cmath"
 
+#include "kalman_filter_lr_emxAPI.h"
 #include "kalman_filter_lr.h"
+
 namespace local_course{
-MatlabKalman::MatlabKalman(lms::Config &config):logger(lms::logging::Logger("LOCAL_COURSE_MATLAB")) {
+MatlabKalman::MatlabKalman():logger(lms::logging::Logger("LOCAL_COURSE_MATLAB")) {
+}
+
+
+void MatlabKalman::configsChanged(const lms::Config &config){
     prior_fact = config.get<float>("prior_fact",0);
     partCount = config.get<int>("elementCount",10);
     partLength = config.get<float>("elementLength",0.2);
@@ -20,10 +25,11 @@ MatlabKalman::MatlabKalman(lms::Config &config):logger(lms::logging::Logger("LOC
     kovarianzMatrixDesZustandUebergangs = emxCreate_real_T(partCount,partCount);
     r_fakt=config.get<double>("r_fakt",20);
     resetData(config);
-    configsChanged();//TODO use it
 }
 
-void MatlabKalman::resetData(lms::Config &config){
+
+
+void MatlabKalman::resetData(const lms::Config &config){
     logger.info("resetData");
     clearMatrix(zustandsVector);
     zustandsVector->data[0] = config.get<float>("distanceToMiddle",0.2);
@@ -74,6 +80,9 @@ bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, flo
         prior_fact = config().get<float>("idle_prior_fact",1);
     }
     */
+
+    //TODO
+    prior_fact = 0;
     kalman_filter_lr(zustandsVector,dx,dy,dphi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      r_fakt,partLength,lx,ly,rx,ry,mx,my,1,prior_fact);
@@ -95,15 +104,15 @@ void MatlabKalman::logStateVector(std::ostream &logFile){
     logFile << std::endl;
 }
 
-lms::math::polyLine2f MatlabKalman::createOutput(){
+street_environment::RoadLane MatlabKalman::getOutput(){
     //create middle
     logger.debug("createOutput");
     street_environment::RoadLane output;
-    convertZustandToLane(output);
+    createOutput(output);
     return output;
 }
 
-void MatlabKalman::convertZustandToLane(street_environment::RoadLane &output){
+void MatlabKalman::createOutput(street_environment::RoadLane &output){
     //clear points
     logger.debug("convertZustandToLane ANFANG");
     output.points().clear();

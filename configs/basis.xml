@@ -1,4 +1,7 @@
 <framework>
+<execution>
+    <clock sleep="false" unit="ms" value="500" />
+</execution>
     <modulesToEnable>
         <module logLevel="WARN">image_hint_generator</module>
         <module logLevel="ERROR">image_hint_transformer</module>
@@ -25,6 +28,22 @@
                 <stateFromConfig>true</stateFromConfig>
                 <updateInMilliS>-1</updateInMilliS>
             </config>
+    </service>
+    <service>
+        <name>LOCAL_COURSE_SERVICE</name>
+        <realName>local_course</realName>
+        <config>
+            <elementCount>10</elementCount>
+            <r_fakt>150</r_fakt>
+            <kov>15</kov>
+            <prioFact>5000</prioFact>
+            <kovAbnahme>0.15</kovAbnahme>
+            <elementLength>0.2</elementLength>
+            <enableMove>false</enableMove>
+            <logState>false</logState>
+            <idle_prior_fact>10</idle_prior_fact>
+            <prior_fact>0</prior_fact>
+        </config>
     </service>
     <module>
             <name>parking</name>
@@ -129,18 +148,6 @@
         <channelMapping priority="10" from="CAR" to="CAR"/>
         <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_RAW"/><!--ENVIRONMENT_ROAD_FILTERED-->
         <channelMapping from="ROAD_OUTPUT" to="MIDDLE_LANE"/>
-        <config>
-            <elementCount>10</elementCount>
-            <r_fakt>150</r_fakt>
-            <kov>15</kov>
-            <prioFact>5000</prioFact>
-            <kovAbnahme>0.15</kovAbnahme>
-            <elementLength>0.2</elementLength>
-            <enableMove>false</enableMove>
-            <logState>false</logState>
-            <idle_prior_fact>10</idle_prior_fact>
-            <prior_fact>0</prior_fact>
-        </config>
         <config user="odroid">
             <logPrefix>/home/odroid/data/env/env</logPrefix>
         </config>

@@ -42,7 +42,13 @@ bool ImageObjectRenderer::cycle() {
         logger.debug("trying to draw: ")<< dO.name();
         bool customColor = setColor(dO.name());
         if(dO.castableTo<lms::math::polyLine2f>()){//lms::math::polyLine2f
-            drawPolyLine(dO.getWithType<lms::math::polyLine2f>());
+            if(config(dO.name()).get<std::string>("attr","") == "point"){
+                for(lms::math::vertex2f v: dO.getWithType<lms::math::polyLine2f>()->points()){
+                    drawVertex2f(v);
+                }
+            }else{
+                drawPolyLine(dO.getWithType<lms::math::polyLine2f>());
+            }
         }else if(dO.castableTo<lms::math::vertex2f>()){
             drawVertex2f(*dO.getWithType<lms::math::vertex2f>());
             logger.debug("")<< "drawing v2f";

@@ -4,6 +4,8 @@
 #include <lms/service.h>
 #include "lms/math/vertex.h"
 #include <vector>
+#include "matlab_kalman.h"
+#include "street_environment/road.h"
 
 namespace local_course {
 
@@ -11,6 +13,7 @@ namespace local_course {
  * @brief LMS service local_course
  **/
 class LocalCourse : public lms::Service {
+    MatlabKalman kalman;
     std::vector<lms::math::vertex2f> pointsToAdd;
 public:
     bool init() override;
@@ -19,8 +22,10 @@ public:
     void update(float d, float dy, float dphi);
     void addPoints(const std::vector<lms::math::vertex2f> &points);
     void addPoint(const lms::math::vertex2f &p);
-    void getCourse();
-    void getCourse(lms::Time time);
+    street_environment::RoadLane getCourse();
+    street_environment::RoadLane getCourse(lms::Time time);
+    void resetData();
+    std::vector<lms::math::vertex2f> getPointsToAdd();
 };
 
 } // namespace local_course

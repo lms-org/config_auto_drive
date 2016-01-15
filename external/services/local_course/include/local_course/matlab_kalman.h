@@ -1,14 +1,13 @@
 #ifndef LOCAL_COURSE_SERVICE_MATLAB_KALMAN
 #define LOCAL_COURSE_SERVICE_MATLAB_KALMAN
 
-
-#include "kalman_filter_lr_emxAPI.h"
 #include "lms/math/vertex.h"
 #include <vector>
 #include "lms/logger.h"
 #include "lms/config.h"
 #include "lms/math/polyline.h"
 #include "street_environment/road.h"
+struct emxArray_real_T;
 
 namespace local_course {
 class MatlabKalman{
@@ -25,17 +24,17 @@ class MatlabKalman{
     emxArray_real_T *kovarianzMatrixDesZustandes;
     emxArray_real_T *kovarianzMatrixDesZustandUebergangs;
     double r_fakt; //messgenauigkeit
-    lms::math::polyLine2f createOutput();
-    void convertZustandToLane(street_environment::RoadLane &line);
+    void createOutput(street_environment::RoadLane &line);
 
     void printMat(emxArray_real_T *mat);
 
 public:
-    MatlabKalman(lms::Config &config);
-    void configsChanged();
-    void resetData(lms::Config &config);
+    MatlabKalman();
+    void configsChanged(const lms::Config &config);
+    void resetData(const lms::Config &config);
     void logStateVector(std::ostream &logFile);
     bool update(std::vector<lms::math::vertex2f> points, float dx, float dy, float dphi);
+    street_environment::RoadLane getOutput();
 
 
 };
