@@ -69,7 +69,7 @@
         <name>trajectory_point_controller</name>
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
-            <useMPCcontroller>0</useMPCcontroller> <!-- solange dlib auf dem odroid nicht funktioniert -->
+            <useMPCcontroller>1</useMPCcontroller> 
             <weight_y>20</weight_y>
             <weight_phi>10</weight_phi>
             <weight_steering_front>0.0005</weight_steering_front>
