@@ -1,0 +1,35 @@
+<framework>
+
+        <execution>
+                <clock enabled="true" unit="ms" value="10" watchDog="2"/>
+        </execution>
+
+    <modulesToEnable logLevel="INFO">
+        <module logLevel="DEBUG">parking</module>
+    </modulesToEnable>
+
+    <module>
+            <name>parking</name>
+            <channelMapping priority="20" from="CAR" to="CAR"/>
+            <config>
+                <k>0.03</k> <!-- safety distance zur Ecke der zweiten Box-->
+                <d>0.10</d> <!-- safety distance zur ersten Box -->
+                <wheelbase>0.21</wheelbase> <!-- Racar->putState(state);cardstand-->
+                <carLength>0.32</carLength>
+                <carWidth>0.2</carWidth>
+                <gradientThreshold>0.1</gradientThreshold>
+                <maxSteeringAngle>18</maxSteeringAngle> <!-- in Grad-->
+                <distanceMid2Lidar>0.1</distanceMid2Lidar>
+            </config>
+    </module>
+
+
+    <include src="ego.xml" />
+    <include src="mavlink.xml" />
+    <!--<service>
+        <name>warp_service</name>
+        <config src="camera/cali.lconf" />
+    </service>-->
+
+
+</framework>
