@@ -30,9 +30,9 @@
             <!-- IMU -->
             <imu_0>IMU</imu_0>
             <!-- VARIANCES (@1khz) -->
-            <imu_0_acc_cov_xx><!--0.01-->0.5</imu_0_acc_cov_xx>
-            <imu_0_acc_cov_yy><!--0.015-->0.5</imu_0_acc_cov_yy>
-            <imu_0_gyro_cov_zz>0.0025</imu_0_gyro_cov_zz>
+            <imu_0_acc_cov_xx>0.5</imu_0_acc_cov_xx>
+            <imu_0_acc_cov_yy>1.5</imu_0_acc_cov_yy>
+            <imu_0_gyro_cov_zz>0.025</imu_0_gyro_cov_zz>
 
             <!-- BIASES -->
             <imu_0_acc_bias_x>-0.0127</imu_0_acc_bias_x>
@@ -44,7 +44,7 @@
 
             <!-- HALL SENSOR -->
             <odometer_0>HALL</odometer_0>
-            <odometer_0_velo_cov_xx>0.035</odometer_0_velo_cov_xx>
+            <odometer_0_velo_cov_xx>0.1</odometer_0_velo_cov_xx>
 
             <!-- MOUSE FRONT -->
             <odometer_1>MOTION_FRONT</odometer_1>
@@ -81,5 +81,4 @@
         </config>
     </module>
     <include src="mycam.xml"/>
-    <include src="ego.xml"/>
 </framework>

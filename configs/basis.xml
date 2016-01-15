@@ -7,12 +7,11 @@
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
         <module logLevel="WARN">trajectory_creator</module>
-        <module logLevel="ERROR">environment_filter</module>
+        <!--module logLevel="ERROR">environment_filter</module--><!-- Brauchen wir nicht-->
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">image_proxy</module>
-        <module logLevel="WARN">street_obstacle_merger</module>
+        <module logLevel="INFO">street_obstacle_merger</module>
         <module logLevel="WARN">parking</module>
-        <module logLevel="WARN">car_tracker</module>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
             <module logLevel="INFO">socket_data_sender</module>
@@ -64,16 +63,6 @@
         <config>
             <ip>localhost</ip>
             <port>65001</port>
-        </config>
-    </module>
-    <module>
-        <name>car_tracker</name>
-    </module>
-    <module>
-        <name>environment_logger</name>
-        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD"/>
-        <config>
-            <directory>/home/phibedy/Dokumente/programmieren/lms_repos/config_auto_drive/logging_data</directory>
         </config>
     </module>
     <module>
@@ -138,7 +127,7 @@
     <module>
         <name>environment_predictor</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
-        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
+        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_RAW"/><!--ENVIRONMENT_ROAD_FILTERED-->
         <channelMapping from="ROAD_OUTPUT" to="MIDDLE_LANE"/>
         <config>
             <elementCount>10</elementCount>
@@ -202,4 +191,5 @@
             <singleFile>/data/projects/tum.phoenix/code/config_auto_drive/test_images/20150512-181426/0050.pgm</singleFile>
         </config>
     </module>
+    <include src="ego.xml"/>
 </framework>

@@ -107,11 +107,14 @@ void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLan
         }
     }
     obstacleRight->parameter = sopRight;
-    sopLeft = sopRight;
-    sopLeft.obstacleLeft = true;
-    obstacleLeft->parameter = sopLeft;
     hintContainerObstacle->add(obstacleRight);
-    hintContainerObstacle->add(obstacleLeft);
+    if(config().get<bool>("searchObstacleLeft",false)){
+        sopLeft = sopRight;
+        sopLeft.obstacleLeft = true;
+        obstacleLeft->parameter = sopLeft;
+        hintContainerObstacle->add(obstacleLeft);
+    }
+
 
 }
 
