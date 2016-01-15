@@ -119,4 +119,5 @@
 	path = external/modules/ego_estimator
 	url = https://github.com/tum-phoenix/ego_estimator.git
 [submodule "external/services/usb_reset_service"]
-	path = https://github.com/tum-phoenix/usb_reset_service.git
+	path = external/services/usb_reset_service
+	url = https://github.com/tum-phoenix/usb_reset_service.git
