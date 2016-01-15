@@ -1,0 +1,2 @@
+Kreis fitten durch den Fahrbahnverlauf, 
+war alles nur zum Ausprobieren für die Trajektoriengenerierung
