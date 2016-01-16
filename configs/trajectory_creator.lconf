@@ -9,5 +9,9 @@ safetyD = 0.1
 dt = 0.01
 m = 20
 kappa_ratio = 0
+#Simple trajectory values
 minDistanceToCrossing = 0.5
+obstacleLength = 1
+distanceObstacleBeforeChangeLine = 1
+street_width = 0.8
 
