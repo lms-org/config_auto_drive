@@ -9,6 +9,13 @@
         </if>
     </modulesToEnable>
 
+    <service>
+        <name>USB_RESET</name>
+        <realName>usb_reset_service</realName>
+        <config>
+            <path>/usr/bin/usb-reset</path>
+        </config>
+    </service>
     <module>
         <name>mavlink_usb_importer</name>
         <config>
