@@ -2,7 +2,7 @@
 #set(SERVICES )
 
 # If N_SERVICES is set, all directories except
-#set(N_SERVICES )
+set(N_SERVICES ${EXCLUDES})
 
 #if SERVIES_COMPILE_AT_FIRST compiles those libs at first
 #set(SERVICES_COMPILE_AT_FIRST )
