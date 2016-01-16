@@ -8,4 +8,3 @@ if(APPLE)
     set(N_MODULES ${N_MODULES} ogre_input ogre_window_manager image_renderer importer_senseboard2015)
     message(WARNING "Skipping libraries on OS X: ${N_MODULES}")
 endif(APPLE)
-
