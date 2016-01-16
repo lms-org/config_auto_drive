@@ -68,16 +68,11 @@
         <config>
             <dataChannels>MAVLINK_IN</dataChannels>
         </config>
-        <config user="odroid">
-            <directory>/home/odroid/data/mavlink</directory>
-        </config>
     </module>
     <module>
         <name>mavlink_csv_logger</name>
         <config user="odroid">
-            <directory>/home/odroid/data/mavlink_csv</directory>
             <channel>MAVLINK_IN</channel>
-            <create_subfolder_with_current_date>true</create_subfolder_with_current_date>
         </config>
     </module>
 </framework>
