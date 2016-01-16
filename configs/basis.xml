@@ -2,6 +2,10 @@
 <execution>
     <clock sleep="false" unit="ms" value="500" />
 </execution>
+
+<logging>
+    <filter tagPrefix="LOCAL_COURSE_SERVICE" logLevel="ERROR"/>
+</logging>
     <modulesToEnable>
         <module logLevel="WARN">image_hint_generator</module>
         <module logLevel="ERROR">image_hint_transformer</module>
@@ -10,11 +14,11 @@
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
         <module logLevel="WARN">trajectory_creator</module>
-        <!--module logLevel="ERROR">environment_filter</module--><!-- Brauchen wir nicht-->
+        <module logLevel="ERROR">street_obstacle_ir_detector</module>
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">image_proxy</module>
         <module logLevel="INFO">street_obstacle_merger</module>
-        <module logLevel="WARN">parking</module>
+        <!--module logLevel="WARN">parking</module-->
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
             <module logLevel="INFO">socket_data_sender</module>
@@ -57,6 +61,15 @@
                 <maxSteeringAngle>25</maxSteeringAngle> <!-- in Grad-->
                 <distanceMid2Lidar>0.04</distanceMid2Lidar>
             </config>
+    </module>
+    <module>
+        <name>street_obstacle_ir_detector</name>
+        <config>
+            <obstacleMinDistance>0.01</obstacleMinDistance>
+            <obstacleTriggerDistance>0.1</obstacleTriggerDistance>
+            <obstacleWidth>0.1</obstacleWidth>
+        </config>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_RAW"/>
     </module>
     <module>
         <name>street_obstacle_merger</name>

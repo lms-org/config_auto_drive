@@ -27,6 +27,7 @@
             <!-- DEBUG -->
             <state_log>false</state_log>
         </config>
+        <channelMapping priority="100" from="CAR" to="CAR" />
     </module>
 
 </framework>

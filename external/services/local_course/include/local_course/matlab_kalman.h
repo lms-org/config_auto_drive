@@ -11,7 +11,7 @@ struct emxArray_real_T;
 
 namespace local_course {
 class MatlabKalman{
-    lms::logging::Logger logger;
+    lms::logging::Logger &logger;
     emxArray_real_T *zustandsVector;
     int partCount;
     double partLength;
@@ -29,7 +29,7 @@ class MatlabKalman{
     void printMat(emxArray_real_T *mat);
 
 public:
-    MatlabKalman();
+    MatlabKalman(lms::logging::Logger &logger);
     void configsChanged(const lms::Config &config);
     void resetData(const lms::Config &config);
     void logStateVector(std::ostream &logFile);

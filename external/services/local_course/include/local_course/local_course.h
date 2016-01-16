@@ -16,6 +16,7 @@ class LocalCourse : public lms::Service {
     MatlabKalman kalman;
     std::vector<lms::math::vertex2f> pointsToAdd;
 public:
+    LocalCourse();
     bool init() override;
     void destroy() override;
 

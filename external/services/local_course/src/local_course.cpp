@@ -2,6 +2,11 @@
 
 namespace local_course {
 
+
+LocalCourse::LocalCourse():kalman(logger){
+
+}
+
 bool LocalCourse::init() {
     kalman.configsChanged(config());
     return true;

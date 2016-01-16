@@ -10,7 +10,7 @@
 #include "kalman_filter_lr.h"
 
 namespace local_course{
-MatlabKalman::MatlabKalman():logger(lms::logging::Logger("LOCAL_COURSE_MATLAB")) {
+MatlabKalman::MatlabKalman(lms::logging::Logger &logger_):logger(logger_) {
 }
 
 
