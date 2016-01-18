@@ -5,7 +5,7 @@
 bool VelocityController::initialize() {
     road = readChannel<street_environment::RoadLane>("MIDDLE_LANE");
     car = writeChannel<sensor_utils::Car>("CAR");
-    lastCall = lms::extra::PrecisionTime::now()-lms::extra::PrecisionTime::fromMillis(config().get<float>("maxDeltaTInMs")*10);
+    lastCall = lms::Time::now()-lms::Time::fromMillis(config().get<float>("maxDeltaTInMs")*10);
     driving = false;
     return true;
 }
@@ -80,7 +80,7 @@ bool VelocityController::cycle() {
     car->putState(s);
 
     logger.debug("info") << "end-velocity: " << car->targetSpeed();
-    lastCall = lms::extra::PrecisionTime::now();
+    lastCall = lms::Time::now();
     return true;
 }
 
@@ -118,7 +118,7 @@ bool VelocityController::defaultDrive(sensor_utils::Car::State &state){
 
 
 bool VelocityController::launchControll(float newVelocity,float currentVelocity,sensor_utils::Car::State &state){
-    float deltaT = lms::extra::PrecisionTime::since(lastCall).toFloat();
+    float deltaT = lastCall.since().toFloat();
     //beim Start wird das z.B. angenommen
     if(deltaT*1000 > config().get<float>("maxDeltaTInMs",100)){
         deltaT = config().get<int>("defaultDeltaTInMs",10)*1000;

@@ -22,7 +22,7 @@ private:
      * @brief driving true the car is driving
      */
     bool driving;
-    lms::extra::PrecisionTime lastCall;
+    lms::Time lastCall;
     /**
      * @brief launchControll
      * @param newVeolocity
