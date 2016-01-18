@@ -1,0 +1,28 @@
+<framework>
+    <include src="render_common.xml"/>
+    <modulesToEnable logLevel="ERROR">
+        <module>sdl_image_renderer_grey</module>
+        <module>sdl_image_renderer_trans</module>
+    </modulesToEnable>
+    
+    <service>
+        <name>sdl_service</name>
+    </service>
+    
+    <module>
+        <name>sdl_image_renderer_grey</name>
+        <realName>sdl_image_renderer</realName>
+        <config>
+            <title>GREY_IMAGE</title>
+            <channels>GREY_IMAGE,DEBUG_IMAGE,DEBUG_IMAGE_OBSTACLE</channels>
+        </config>
+    </module>
+    <module>
+        <name>sdl_image_renderer_trans</name>
+        <realName>sdl_image_renderer</realName>
+        <config>
+            <title>TRANS_IMAGE</title>
+            <channels>TRANS_IMAGE,IMAGE_OBJECT_IMAGE</channels>
+        </config>
+    </module>
+</framework>
