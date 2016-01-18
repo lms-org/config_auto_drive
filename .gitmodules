@@ -121,3 +121,9 @@
 [submodule "external/services/usb_reset_service"]
 	path = external/services/usb_reset_service
 	url = https://github.com/tum-phoenix/usb_reset_service.git
+[submodule "external/services/sdl_service"]
+	path = external/services/sdl_service
+	url = https://github.com/lms-org/sdl_service
+[submodule "external/modules/sdl_image_renderer"]
+	path = external/modules/sdl_image_renderer
+	url = https://github.com/lms-org/sdl_image_renderer

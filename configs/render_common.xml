@@ -1,0 +1,90 @@
+<framework>
+    <modulesToEnable logLevel="ERROR">
+        <module>image_object_renderer</module>
+        <module>image_converter_trans</module>
+        <!--module>image_renderer_global_car</module>
+        <module>car_to_image</module>
+        -->
+    </modulesToEnable>
+    <module>
+        <name>image_object_renderer</name>
+        <channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
+        <config src="street_utils/obstacle.lconf"/>
+        <config>
+            <envObjects>MIDDLE_LANE,TRAJECTORY_LINE,ENVIRONMENT_OBSTACLE,TRAJECTORY_POINT,VISIBLE_AREAS,DEBUG_POINTS</envObjects>
+            <!--The default Color, TODO add colors for points, lines etc -->
+            <colorR>255</colorR>
+            <colorG>255</colorG>
+            <colorB>0</colorB>
+        </config>DEBUG_POINTS
+        <config name="DEBUG_POINTS">
+            <attr>point</attr>
+            <colorR>255</colorR>
+            <colorG>0</colorG>
+            <colorB>125</colorB>
+        </config>
+        <config name="START_LINE">
+            <colorR>0</colorR>
+            <colorG>255</colorG>
+            <colorB>0</colorB>
+        </config>
+        <config name="CROSSING">
+            <colorR>255</colorR>
+            <colorG>0</colorG>
+            <colorB>0</colorB>
+        </config>
+        <config name="MIDDLE_LANE">
+            <colorR>255</colorR>
+            <colorG>123</colorG>
+            <colorB>120</colorB>
+        </config>
+        <config name="DEFAULT_OBSTACLE">
+            <colorR>0</colorR>
+            <colorG>0</colorG>
+            <colorB>255</colorB>
+        </config>
+        <config name="OBSTACLE_DETECTED">
+            <colorR>255</colorR>
+            <colorG>255</colorG>
+            <colorB>0</colorB>
+        </config>
+        <config name="TRAJECTORY_LINE">
+            <colorR>255</colorR>
+            <colorG>255</colorG>
+            <colorB>0</colorB>
+        </config>
+        <config name="TRAJECTORY_POINT">
+            <colorR>255</colorR>
+            <colorG>0</colorG>
+            <colorB>0</colorB>
+        </config>
+        <config name="SENSOR_LINE">
+            <colorR>255</colorR>
+            <colorG>0</colorG>
+            <colorB>123</colorB>
+        </config>
+    </module>
+    <module>
+        <name>image_converter_trans</name>
+        <realName>image_converter</realName>
+        <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
+        <channelMapping from="OUTPUT_IMAGE" to="TRANS_IMAGE"/>
+        <config>
+            <filter>imageV2C</filter>
+        </config>
+    </module>
+    <module>
+        <name>car_to_image</name>
+        <mainThread />
+        <channelMapping from="IMAGE" to = "GLOBAL_CAR_IMAGE"/>
+    </module>
+    <module>
+        <name>image_renderer_global_car</name>
+        <realName>image_renderer</realName>
+        <mainThread />
+        <channelMapping from="IMAGE" to="GLOBAL_CAR_IMAGE"/>
+        <config>
+            <WINDOW>GLOBAL_CAR</WINDOW>
+        </config>
+    </module>
+</framework>
