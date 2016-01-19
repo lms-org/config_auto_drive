@@ -10,6 +10,7 @@
         <module logLevel="WARN">image_hint_generator</module>
         <module logLevel="ERROR">image_hint_transformer</module>
         <module logLevel="WARN">image_hint_transformer_obstacle</module>
+        <module logLevel="INFO">lap_time</module>
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
@@ -49,6 +50,10 @@
             <prior_fact>0</prior_fact>
         </config>
     </service>
+    <module>
+        <name>lap_time</name>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE"/>
+    </module>
     <module>
             <name>parking</name>
             <config>

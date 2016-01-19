@@ -3,8 +3,8 @@
 #include <algorithm>
 
 bool EnvironmentFilter::initialize() {
-    input = datamanager()->readChannel<street_environment::EnvironmentObjects>(this, "ENVIRONMENT_INPUT");
-    output = datamanager()->writeChannel<street_environment::EnvironmentObjects>(this, "ENVIRONMENT_OUTPUT");
+    input = readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_INPUT");
+    output = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_OUTPUT");
     return true;
 }
 
@@ -19,9 +19,10 @@ bool EnvironmentFilter::cycle() {
     //street_environment::RoadLane filtered;
     for(const std::shared_ptr<street_environment::EnvironmentObject> &obj : input->objects){
         if(obj->name().find("LANE") != std::string::npos){
-            std::shared_ptr<street_environment::RoadLane> lane = obj->getCopyAsPtr<street_environment::RoadLane>();
-            filterLane(*lane.get());
-            output->objects.push_back(lane);
+            //copy lane
+            street_environment::RoadLanePtr newLane(new street_environment::RoadLane(*std::static_pointer_cast<street_environment::RoadLane>(obj)));
+            filterLane(*newLane.get());
+            output->objects.push_back(newLane);
         }else{
             //TODO Done somewhere else
             output->objects.push_back(obj);
