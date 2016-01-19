@@ -9,4 +9,4 @@ set(HEADERS
 
 include_directories(include)
 add_library(lap_time MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(lap_time PRIVATE lmscore)
+target_link_libraries(lap_time PRIVATE lmscore sensor_utils street_environment)
