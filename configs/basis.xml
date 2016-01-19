@@ -108,10 +108,10 @@
         <config>
             <useMPCcontroller>1</useMPCcontroller> 
             <weight_y>20</weight_y>
-            <weight_phi>10</weight_phi>
+            <weight_phi>9</weight_phi>
             <weight_steering_front>0.0005</weight_steering_front>
-            <weight_steering_rear>10</weight_steering_rear>
-            <velocityFactor>0.0</velocityFactor>
+            <weight_steering_rear>8</weight_steering_rear>
+            <velocityFactor>-0.3</velocityFactor>
             <!-- old stuff: -->
             <aggro>0.95</aggro>
             <regler>2</regler>
