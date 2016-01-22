@@ -25,6 +25,8 @@ private:
     std::vector<int> fisherHistData;
     ValueCountPairContainer fisherData;
 
+    int cycleCount;
+
 };
 
 #endif // SOBEL_THRESHOLD_GENERATOR_H

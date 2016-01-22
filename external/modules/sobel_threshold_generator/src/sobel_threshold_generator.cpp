@@ -10,6 +10,8 @@ bool SobelThresholdGenerator::initialize() {
     p.second = 0;
     fisherData.assign(100, p);
 
+    cycleCount = 0;
+
     resetFisherData();
 
     return true;
@@ -20,6 +22,10 @@ bool SobelThresholdGenerator::deinitialize() {
 }
 
 bool SobelThresholdGenerator::cycle() {
+
+    ++cycleCount;
+
+    if (cycleCount == 20) {
 
     /*
      * Grundidee:
@@ -45,25 +51,18 @@ bool SobelThresholdGenerator::cycle() {
         int startRow = target->height()/4;
         int endRow = target->height()/2;
 
-        //int startCol = 100;
-        //int endCol = 600;
-
         fisherHistogram(I, target->width(), target->height(), startRow, endRow);
-
-        /*for (int i=0; i < 100; ++i)
-        {
-            std::cout << "value: " << fisherData[i].first << ", count: " << fisherData[i].second << std::endl;
-        }*/
 
         LimitsContainer resultingbreaksArray;
         FisherBreaks::ClassifyJenksFisherFromValueCountPairs(resultingbreaksArray, 2, fisherData);
 
         int sobelThreshold = 10*resultingbreaksArray.at(1);
-        logger.debug("sobel") << "sobelThreshold = " << sobelThreshold;
+        logger.error("sobel") << "sobelThreshold = " << sobelThreshold;
 
     }
 
-    //logger.timeEnd("sobel");
+
+    }
 
     return true;
 }
