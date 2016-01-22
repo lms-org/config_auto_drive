@@ -40,7 +40,7 @@
         <realName>local_course</realName>
         <config>
             <elementCount>10</elementCount>
-            <r_fakt>150</r_fakt>
+            <r_fakt>30</r_fakt>
             <kov>15</kov>
             <prioFact>5000</prioFact>
             <kovAbnahme>0.15</kovAbnahme>
