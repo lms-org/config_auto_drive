@@ -42,7 +42,7 @@
             <elementCount>10</elementCount>
             <r_fakt>30</r_fakt>
             <kov>15</kov>
-            <prioFact>5000</prioFact>
+            <prioFact>0</prioFact>
             <kovAbnahme>0.15</kovAbnahme>
             <elementLength>0.2</elementLength>
             <enableMove>false</enableMove>
