@@ -19,6 +19,7 @@
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">image_proxy</module>
         <module logLevel="INFO">street_obstacle_merger</module>
+        <module logLevel="INFO">sobel_threshold_generator</module>
         <!--module logLevel="WARN">parking</module-->
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
@@ -53,6 +54,11 @@
     <module>
         <name>lap_time</name>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE"/>
+    </module>
+
+    <module>
+        <name>sobel_threshold_generator</name>
+        <channelMapping from="IMAGE" to="GREY_IMAGE"/>
     </module>
     <module>
             <name>parking</name>
