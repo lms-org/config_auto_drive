@@ -26,6 +26,7 @@ public:
     street_environment::RoadLane getCourse();
     street_environment::RoadLane getCourse(lms::Time time);
     void resetData();
+    void configsChanged() override;
     std::vector<lms::math::vertex2f> getPointsToAdd();
 };
 

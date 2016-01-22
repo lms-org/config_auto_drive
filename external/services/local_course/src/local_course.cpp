@@ -16,6 +16,10 @@ void LocalCourse::destroy() {
     //TODO
 }
 
+void LocalCourse::configsChanged(){
+    kalman.configsChanged(config());
+}
+
 
 void LocalCourse::update(float dx, float dy, float dphi){
     kalman.update(pointsToAdd,dx,dy,dphi);

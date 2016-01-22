@@ -15,8 +15,8 @@ bool Phoenix_CC2016Service::init() {
 }
 void Phoenix_CC2016Service::updateFromConfig(){
     //call it twice to set rcStateChanged to false
-    update(RemoteControlState::IDLE,CCDriveMode::FMH,8);
-    update(RemoteControlState::IDLE,CCDriveMode::FMH,8);
+    update(RemoteControlState::DISCONNECTED,CCDriveMode::FMH,8);
+    update(RemoteControlState::DISCONNECTED,CCDriveMode::FMH,8);
     logger.error("updateFromConfig");
 }
 
