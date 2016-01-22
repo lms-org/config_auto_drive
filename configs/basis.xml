@@ -125,6 +125,7 @@
             <forcastLength>0.5</forcastLength>
             <maxDeltaTInMs>100</maxDeltaTInMs>
             <maxCurvation>1.2</maxCurvation>
+            <distanceBetweenTrajectoryPoints>0.05</distanceBetweenTrajectoryPoints>
         </config>
     </module>
     <module>
@@ -168,6 +169,9 @@
         <channelMapping from="ROAD_OUTPUT" to="MIDDLE_LANE"/>
         <config user="odroid">
             <logPrefix>/home/odroid/data/env/env</logPrefix>
+        </config>
+        <config>
+            <translateEnvironment>false</translateEnvironment>
         </config>
     </module>
     <module>

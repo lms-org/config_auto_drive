@@ -5,6 +5,7 @@
         
         <module>image_renderer_grey</module>
         <module>image_renderer_debug</module>
+        <module>image_renderer_debug_obstacle</module>
         <module>image_renderer_image_object</module>
         <module>image_renderer_trans</module>
         
