@@ -57,7 +57,7 @@ bool SobelThresholdGenerator::cycle() {
         FisherBreaks::ClassifyJenksFisherFromValueCountPairs(resultingbreaksArray, 2, fisherData);
 
         int sobelThreshold = 10*resultingbreaksArray.at(1);
-        logger.error("sobel") << "sobelThreshold = " << sobelThreshold;
+        logger.info("sobel") << "sobelThreshold = " << sobelThreshold;
 
     }
 
