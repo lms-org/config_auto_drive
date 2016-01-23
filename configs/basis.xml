@@ -1,6 +1,6 @@
 <framework>
 <execution>
-    <clock sleep="false" unit="ms" value="500" />
+    <clock sleep="false" unit="ms" value="10" watchDog="4"/>
 </execution>
 
 <logging>
