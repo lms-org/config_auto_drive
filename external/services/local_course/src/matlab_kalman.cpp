@@ -19,7 +19,15 @@ void MatlabKalman::configsChanged(const lms::Config &config){
     partCount = config.get<int>("elementCount",10);
     partLength = config.get<float>("elementLength",0.2);
     zustandsVector = emxCreate_real_T(partCount,1);
-
+    if(stateTransitionMatrix != nullptr){
+        emxDestroyArray_real_T(stateTransitionMatrix);
+    }
+    if(kovarianzMatrixDesZustandes != nullptr){
+        emxDestroyArray_real_T(kovarianzMatrixDesZustandes);
+    }
+    if(kovarianzMatrixDesZustandUebergangs != nullptr){
+        emxDestroyArray_real_T(kovarianzMatrixDesZustandUebergangs);
+    }
     stateTransitionMatrix = emxCreate_real_T(partCount,partCount);
     kovarianzMatrixDesZustandes = emxCreate_real_T(partCount,partCount);
     kovarianzMatrixDesZustandUebergangs = emxCreate_real_T(partCount,partCount);
