@@ -18,6 +18,7 @@
                 <velocitySearching>1.0</velocitySearching>
                 <velocityEntering>0.5</velocityEntering>
                 <velocityCorrecting>0.5</velocityCorrecting>
+                <decelerationStopping>3.0</decelerationStopping>
                 <!-- weitere Parameter -->
                 <correctingDistance>0.04</correctingDistance> <!-- letzter Zug in der Parklücke "Krabbengang"-->
                 <xDistanceCorrection>0.09</xDistanceCorrection> <!-- Korrektur für hohe Geschwindigkeiten beim Rückwärtsfahren -->
