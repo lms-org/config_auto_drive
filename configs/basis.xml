@@ -1,6 +1,6 @@
 <framework>
 <execution>
-    <clock sleep="false" unit="ms" value="500" />
+    <clock sleep="false" unit="ms" value="10" watchDog="4"/>
 </execution>
 
 <logging>
@@ -112,10 +112,12 @@
         <name>trajectory_point_controller</name>
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
+            <distanceRegelpunkt>0.5</distanceRegelpunkt>
+            <yawRateBoost>0.0</yawRateBoost>
             <useMPCcontroller>1</useMPCcontroller> 
             <weight_y>20</weight_y>
-            <weight_phi>9</weight_phi>
-            <weight_steering_front>0.0005</weight_steering_front>
+            <weight_phi>5</weight_phi>
+            <weight_steering_front>0.0001</weight_steering_front>
             <weight_steering_rear>8</weight_steering_rear>
             <velocityFactor>-0.3</velocityFactor>
             <!-- old stuff: -->

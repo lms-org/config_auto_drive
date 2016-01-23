@@ -1,6 +1,7 @@
 #include "load_control.h"
 
 bool LoadControl::initialize() {
+    carState = writeChannel<sensor_utils::Car::State>("CAR_STATE");
     return true;
 }
 
@@ -9,5 +10,6 @@ bool LoadControl::deinitialize() {
 }
 
 bool LoadControl::cycle() {
+    //TODO set the data for carState
     return true;
 }
