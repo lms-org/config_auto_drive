@@ -16,7 +16,7 @@ bool StreetObstacleIRDetector::cycle() {
         std::shared_ptr<sensor_utils::DistanceSensor> lidar = sensors->sensor<sensor_utils::DistanceSensor>("LIDAR");
         float totalDistance = lidar->totalX();
         float obstacleMinDistance = config().get<float>("obstacleMinDistance",0.01);
-        float obstacleTriggerDistance = config().get<float>("obstacleTriggerDistance",0.1);
+        float obstacleTriggerDistance = config().get<float>("obstacleTriggerDistance",0.20);
         float obstacleWidth = config().get<float>("obstacleWidth",0.1);
 
         if(totalDistance > obstacleMinDistance &&totalDistance < obstacleTriggerDistance){

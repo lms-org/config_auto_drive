@@ -132,8 +132,8 @@
             <forcastLength>1</forcastLength>
             <weightMultiplieer>1</weightMultiplieer>
             <maxAngle>0.6</maxAngle>
-            <minSpeed>1.5</minSpeed>
-            <maxSpeed>3.0</maxSpeed>
+            <minSpeed>1.2</minSpeed>
+            <maxSpeed>2.3</maxSpeed>
 
         </config>
     </module>
@@ -180,7 +180,7 @@
             <logPrefix>/home/odroid/data/env/env</logPrefix>
         </config>
         <config>
-            <translateEnvironment>false</translateEnvironment>
+            <translateEnvironment>true</translateEnvironment>
         </config>
     </module>
     <module>
