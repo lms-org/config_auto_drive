@@ -1,5 +1,5 @@
 searchAngle = 0
 searchLength = 0
-sobelThreshold = 260
+sobelThreshold = 200
 verify = false
 preferVerify = false
