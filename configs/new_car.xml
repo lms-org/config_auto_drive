@@ -1,4 +1,7 @@
 <framework>
+<execution>
+    <clock sleep="false" unit="ms" value="11"/>
+</execution>
     <include src="mavlink.xml"/>
     <include src="mycam.xml"/>
 </framework>

@@ -1,8 +1,4 @@
 <framework>
-<execution>
-    <clock sleep="false" unit="ms" value="10" watchDog="4"/>
-</execution>
-
 <logging>
     <filter tagPrefix="LOCAL_COURSE_SERVICE" logLevel="ERROR"/>
 </logging>
