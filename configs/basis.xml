@@ -143,7 +143,7 @@
         <channelMapping priority="10" from="MIDDLE_LANE" to="MIDDLE_LANE"/>
         <config>
             <searchForObstacles>true</searchForObstacles>
-            <searchForCrossing>true</searchForCrossing>
+            <searchForCrossing>false</searchForCrossing>
             <numerOfSegmentsLines>1</numerOfSegmentsLines>
             <lineOffset>0.1</lineOffset>
         </config>
@@ -178,7 +178,7 @@
             <logPrefix>/home/odroid/data/env/env</logPrefix>
         </config>
         <config>
-            <translateEnvironment>true</translateEnvironment>
+            <translateEnvironment>false</translateEnvironment>
         </config>
     </module>
     <module>
