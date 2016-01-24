@@ -75,6 +75,7 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     scp.fromConfig(&config("defaultLPParameter"));
     scp.fromConfig(&config("defaultLineParameter"));
     scp.lineWidthMax = scp.lineWidthMax*2;
+    scp.boxDepthSearchLength = config("defaultObstacleParam").get<float>("boxDepthSearchLength",20);
     //scp.lineWidthMin = scp.lineWidthMin*2;
     for(const lms::math::vertex2f &v:middle.points()){
         if(v.length() > 0.3 && v.length() < 1.2){
