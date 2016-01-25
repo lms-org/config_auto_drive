@@ -124,11 +124,9 @@
             <PID_Ki>0</PID_Ki>
             <PID_Kd>0</PID_Kd>
             <!--default velo-->
-            <distanceBetweenTrajectoryPoints>0.05</distanceBetweenTrajectoryPoints>
             <minForcastLength>0</minForcastLength>
             <targetForcastLength>0.8</targetForcastLength>
             <forcastLength>1</forcastLength>
-            <weightMultiplieer>1</weightMultiplieer>
             <maxAngle>0.6</maxAngle>
             <minSpeed>1.2</minSpeed>
             <maxSpeed>2.3</maxSpeed>
