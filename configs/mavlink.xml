@@ -60,6 +60,9 @@
 
             <!-- LIDAR -->
             <distance_0>LIDAR</distance_0>
+            <LIDAR_x>0</LIDAR_x>
+            <LIDAR_y>-7</LIDAR_y>
+            <LIDAR_dir>-90</LIDAR_dir>
             <!-- TOF FRONT -->
             <distance_1>TOF_FRONT</distance_1>
             <!-- TOF_REAR -->
