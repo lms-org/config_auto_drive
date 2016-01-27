@@ -76,6 +76,7 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     scp.fromConfig(&config("defaultLineParameter"));
     scp.lineWidthMax = scp.lineWidthMax*2;
     scp.boxDepthSearchLength = config("defaultCrossingParameter").get<float>("boxDepthSearchLength",20);
+    scp.boxPointsNeeded = config("boxPointsNeeded").get<float>("boxPointsNeeded",3);
     const float crossingStartDistance = config("defaultCrossingParameter").get<float>("crossingStartDistance",0.3);
     const float crossingMaxSearchDistance = config("defaultCrossingParameter").get<float>("crossingMaxSearchDistance",1);
     //scp.lineWidthMin = scp.lineWidthMin*2;
