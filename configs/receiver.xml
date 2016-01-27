@@ -12,7 +12,7 @@
         <name>warp_service</name>
         <!-- camera/cali.lconf - new car -->
         <!-- camera/cali_cc15_auto.lconf - old car -->
-        <config src="camera/cali_last_old_one.lconf" />
+        <config src="camera/cali_bmw.lconf" />
     </service>
     <module>
         <name>socket_datatype_definer</name>

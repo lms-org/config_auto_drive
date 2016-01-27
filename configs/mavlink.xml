@@ -1,5 +1,5 @@
 <framework>
-    <modulesToEnable logLevel="INFO">
+    <modulesToEnable logLevel="WARN">
         <module>mavlink_usb_importer</module>
         <module>data_to_mavlink</module>
         <module>mavlink_to_data</module>
