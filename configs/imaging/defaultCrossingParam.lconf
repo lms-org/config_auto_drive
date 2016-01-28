@@ -1,0 +1,3 @@
+boxDepthSearchLength = 20
+crossingStartDistance=0.35
+crossingMaxSearchDistance=1

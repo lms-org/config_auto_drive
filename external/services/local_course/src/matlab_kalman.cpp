@@ -11,6 +11,10 @@
 
 namespace local_course{
 MatlabKalman::MatlabKalman(lms::logging::Logger &logger_):logger(logger_) {
+    zustandsVector = nullptr;
+    stateTransitionMatrix = nullptr;
+    kovarianzMatrixDesZustandes = nullptr;
+    kovarianzMatrixDesZustandUebergangs = nullptr;
 }
 
 
@@ -18,8 +22,19 @@ void MatlabKalman::configsChanged(const lms::Config &config){
     prior_fact = config.get<float>("prior_fact",0);
     partCount = config.get<int>("elementCount",10);
     partLength = config.get<float>("elementLength",0.2);
+    if(zustandsVector != nullptr){
+        emxDestroyArray_real_T(zustandsVector);
+    }
+    if(stateTransitionMatrix != nullptr){
+        emxDestroyArray_real_T(stateTransitionMatrix);
+    }
+    if(kovarianzMatrixDesZustandes != nullptr){
+        emxDestroyArray_real_T(kovarianzMatrixDesZustandes);
+    }
+    if(kovarianzMatrixDesZustandUebergangs != nullptr){
+        emxDestroyArray_real_T(kovarianzMatrixDesZustandUebergangs);
+    }
     zustandsVector = emxCreate_real_T(partCount,1);
-
     stateTransitionMatrix = emxCreate_real_T(partCount,partCount);
     kovarianzMatrixDesZustandes = emxCreate_real_T(partCount,partCount);
     kovarianzMatrixDesZustandUebergangs = emxCreate_real_T(partCount,partCount);

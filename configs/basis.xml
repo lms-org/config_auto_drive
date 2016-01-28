@@ -1,8 +1,4 @@
 <framework>
-<execution>
-    <clock sleep="false" unit="ms" value="10" watchDog="4"/>
-</execution>
-
 <logging>
     <filter tagPrefix="LOCAL_COURSE_SERVICE" logLevel="ERROR"/>
 </logging>
@@ -20,6 +16,7 @@
         <module logLevel="WARN">image_proxy</module>
         <module logLevel="INFO">street_obstacle_merger</module>
         <module logLevel="INFO">sobel_threshold_generator</module>
+        <module logLevel="WARN">obstacle_to_local_course</module>
         <!--module logLevel="WARN">parking</module-->
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
@@ -40,7 +37,7 @@
         <realName>local_course</realName>
         <config>
             <elementCount>10</elementCount>
-            <r_fakt>30</r_fakt>
+            <r_fakt>20</r_fakt>
             <kov>15</kov>
             <prioFact>0</prioFact>
             <kovAbnahme>0.15</kovAbnahme>
@@ -119,7 +116,7 @@
             <weight_phi>5</weight_phi>
             <weight_steering_front>0.0001</weight_steering_front>
             <weight_steering_rear>8</weight_steering_rear>
-            <velocityFactor>-0.3</velocityFactor>
+            <velocityFactor>0.0</velocityFactor>
             <!-- old stuff: -->
             <aggro>0.95</aggro>
             <regler>2</regler>
@@ -128,14 +125,15 @@
             <PID_Ki>0</PID_Ki>
             <PID_Kd>0</PID_Kd>
             <!--default velo-->
-            <distanceBetweenTrajectoryPoints>0.05</distanceBetweenTrajectoryPoints>
-            <minForcastLength>0</minForcastLength>
-            <targetForcastLength>0.8</targetForcastLength>
             <forcastLength>1</forcastLength>
-            <weightMultiplieer>1</weightMultiplieer>
-            <maxAngle>0.6</maxAngle>
-            <minSpeed>1.5</minSpeed>
-            <maxSpeed>3.0</maxSpeed>
+            <maxAngle>0.3</maxAngle>
+            <minSpeed>2</minSpeed>
+            <maxSpeed>3.5</maxSpeed>
+            <minForcastLength>0.0</minForcastLength>
+            <maxForcastLength>1</maxForcastLength>
+            <targetForcastLength>0.5</targetForcastLength>
+            <weightSlope>1</weightSlope>
+            <weightOffset>2</weightOffset>
 
         </config>
     </module>
@@ -155,6 +153,7 @@
         <config name="defaultLPParameter" src="imaging/defaultLinePointParam.lconf"/>
         <config name="defaultLineParameter" src="imaging/defaultLineParam.lconf"/>
         <config name="defaultObstacleParameter" src="imaging/defaultObstacleParam.lconf"/>
+        <config name="defaultCrossingParameter" src="imaging/defaultCrossingParam.lconf"/>
     </module>
     <module>
         <name>sensor_tracker</name><!--Brauchen wir den noch?-->
@@ -167,6 +166,14 @@
         <channelMapping priority="9" from="CAR" to="CAR"/>
         <config src="street_utils/obstacle.lconf"/>
         <config src="trajectory_creator.lconf"/>
+    </module>
+    <module>
+        <name>obstacle_to_local_course</name>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE"/>
+        <config>
+            <obstacleMinTrust>0.8</obstacleMinTrust>
+            <virtualCrossingPoints>2</virtualCrossingPoints>
+        </config>
     </module>
     <module>
         <name>environment_filter</name>

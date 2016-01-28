@@ -75,11 +75,32 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     scp.fromConfig(&config("defaultLPParameter"));
     scp.fromConfig(&config("defaultLineParameter"));
     scp.lineWidthMax = scp.lineWidthMax*2;
+    scp.boxDepthSearchLength = config("defaultCrossingParameter").get<float>("boxDepthSearchLength",20);
+    scp.boxPointsNeeded = config("boxPointsNeeded").get<float>("boxPointsNeeded",3);
+    const float crossingStartDistance = config("defaultCrossingParameter").get<float>("crossingStartDistance",0.3);
+    const float crossingMaxSearchDistance = config("defaultCrossingParameter").get<float>("crossingMaxSearchDistance",1);
     //scp.lineWidthMin = scp.lineWidthMin*2;
-    for(const lms::math::vertex2f &v:middle.points()){
-        if(v.length() > 0.3 && v.length() < 1.2){
-            scp.middleLine.points().push_back(v);
+    float currentDistance = 0;
+    float distanceToStart = crossingStartDistance;
+    bool foundFirst = false;
+    for(int i = 1; i<(int) middle.points().size(); i++){
+        lms::math::vertex2f v1 = middle.points()[i-1];
+        lms::math::vertex2f v2 = middle.points()[i];
+        currentDistance += v1.distance(v2);
+        //Man geht segmentweise vor
+        distanceToStart-=v1.distance(v2);
+        if(currentDistance < crossingStartDistance || currentDistance > crossingMaxSearchDistance){
+            continue;
         }
+        if(!foundFirst){
+            lms::math::vertex2f d = v2-v1;
+            d= d.normalize()*distanceToStart;
+            scp.middleLine.points().push_back(v2+d);
+            foundFirst = true;
+           // logger.error("START")<<v2+d<< v2;
+        }
+        scp.middleLine.points().push_back(v2);
+
     }
     crossing->parameter = scp;
     hintContainerObstacle->add(crossing);

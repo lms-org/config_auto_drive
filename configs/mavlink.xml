@@ -1,5 +1,5 @@
 <framework>
-    <modulesToEnable logLevel="INFO">
+    <modulesToEnable logLevel="WARN">
         <module>mavlink_usb_importer</module>
         <module>data_to_mavlink</module>
         <module>mavlink_to_data</module>
@@ -60,6 +60,9 @@
 
             <!-- LIDAR -->
             <distance_0>LIDAR</distance_0>
+            <LIDAR_x>0</LIDAR_x>
+            <LIDAR_y>-7</LIDAR_y>
+            <LIDAR_dir>-90</LIDAR_dir>
             <!-- TOF FRONT -->
             <distance_1>TOF_FRONT</distance_1>
             <!-- TOF_REAR -->

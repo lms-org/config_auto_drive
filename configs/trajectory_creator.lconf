@@ -15,4 +15,5 @@ obstacleLength = 1
 distanceObstacleBeforeChangeLine = 1
 street_width = 0.8
 distanceBetweenTrajectoryPoints = 0.3
+maxStopTimeAtCrossing = 10
 

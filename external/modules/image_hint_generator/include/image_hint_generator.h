@@ -5,7 +5,6 @@
 #include "lms/imaging_detection/image_hint.h"
 #include "street_environment/road.h"
 #include "lms/imaging_detection/line_point.h"
-#include "lms/type/module_config.h"
 #include <vector>
 
 class ImageHintGenerator : public lms::Module {
