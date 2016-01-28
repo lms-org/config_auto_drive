@@ -2,7 +2,6 @@
 #define CAR_TO_IMAGE_H
 
 #include "lms/module.h"
-#include "comm/senseboard.h"
 #include "lms/extra/time.h"
 #include "sensor_utils/car.h"
 #include "lms/imaging/image.h"

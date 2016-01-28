@@ -2,7 +2,6 @@
 #define CAR_TO_MATLAB_H
 
 #include "lms/module.h"
-#include "comm/senseboard.h"
 #include "lms/extra/time.h"
 #include "sensor_utils/car.h"
 #include "socket_connection/socket_connection_handler.h"
