@@ -21,8 +21,8 @@ void LocalCourse::configsChanged(){
 }
 
 
-void LocalCourse::update(float dx, float dy, float dphi){
-    kalman.update(pointsToAdd,dx,dy,dphi);
+void LocalCourse::update(float dx, float dy, float dphi, float measurementUncertainty){
+    kalman.update(pointsToAdd,dx,dy,dphi, measurementUncertainty);
     pointsToAdd.clear();
 }
 
