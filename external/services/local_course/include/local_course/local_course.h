@@ -20,7 +20,7 @@ public:
     bool init() override;
     void destroy() override;
 
-    void update(float d, float dy, float dphi);
+    void update(float dx, float dy, float dphi, float measurementUncertainty);
     void addPoints(const std::vector<lms::math::vertex2f> &points);
     void addPoint(const lms::math::vertex2f &p);
     street_environment::RoadLane getCourse();
