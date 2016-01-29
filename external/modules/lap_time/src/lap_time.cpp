@@ -5,6 +5,8 @@ bool LapTime::initialize() {
     start = lms::Time::ZERO;
     crossingStartLine = false;
     distanceDriven = 0;
+    maxSpeed = 0;
+    minSpeed = 1000;
     return true;
 }
 
@@ -29,6 +31,13 @@ bool LapTime::cycle() {
     //reset it
     crossingStartLine = false;
     distanceDriven += car->deltaPosition().length();
+    if(car->velocity() > maxSpeed){
+        maxSpeed = car->velocity();
+    }
+    if(car->velocity() < minSpeed){
+        minSpeed = car->velocity();
+    }
+
     return true;
 }
 
@@ -38,6 +47,9 @@ void LapTime::crossedStartLine(){
         logger.info("crossedStartLine")<<"Lap-time: "<< lapTime.toFloat() <<"s";
         logger.info("crossedStartLine")<<"Distance driven: "<< distanceDriven <<"n";
         logger.info("crossedStartLine")<<"Mean velocity: "<< distanceDriven/lapTime.toFloat() <<"m/s";
+        logger.info("crossedStartLine")<<"Min velocity: "<< minSpeed <<"m/s";
+        logger.info("crossedStartLine")<<"Max velocity: "<< maxSpeed <<"m/s";
+
     }else{
         logger.info("startRace");
     }

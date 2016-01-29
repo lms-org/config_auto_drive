@@ -1,4 +1,4 @@
-targetThres = 140
+targetThres = 80
 numerOfSegmentsOrth =4
 minDistanceBetweenSearchPoints = 0.1
 sobelThreshold = 150

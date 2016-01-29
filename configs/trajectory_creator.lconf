@@ -12,8 +12,9 @@ kappa_ratio = 0
 #Simple trajectory values
 minDistanceToCrossing = 0.5
 obstacleLength = 1
-distanceObstacleBeforeChangeLine = 1
+distanceObstacleBeforeChangeLine = 0
 street_width = 0.8
-distanceBetweenTrajectoryPoints = 0.3
+distanceBetweenTrajectoryPoints = 0.1
 maxStopTimeAtCrossing = 10
+trajectoryStartDistance = 0.3
 
