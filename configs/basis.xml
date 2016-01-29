@@ -36,8 +36,10 @@
         <name>LOCAL_COURSE_SERVICE</name>
         <realName>local_course</realName>
         <config>
-            <elementCount>10</elementCount>
-            <r_fakt>20</r_fakt>
+            <elementCount>12</elementCount>
+            <r_fakt_min>15</r_fakt_min>
+            <r_fakt_max>150</r_fakt_max>
+            <r_fakt_maxVelocity>4.0</r_fakt_maxVelocity>
             <kov>15</kov>
             <prioFact>0</prioFact>
             <kovAbnahme>0.15</kovAbnahme>
@@ -109,7 +111,7 @@
         <name>trajectory_point_controller</name>
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
-            <distanceRegelpunkt>0.5</distanceRegelpunkt>
+            <distanceRegelpunkt>0.9</distanceRegelpunkt>
             <yawRateBoost>0.0</yawRateBoost>
             <useMPCcontroller>1</useMPCcontroller> 
             <weight_y>20</weight_y>
@@ -127,13 +129,13 @@
             <!--default velo-->
             <forcastLength>1</forcastLength>
             <maxAngle>0.3</maxAngle>
-            <minSpeed>2</minSpeed>
-            <maxSpeed>3.5</maxSpeed>
+            <minSpeed>2.9</minSpeed>
+            <maxSpeed>4.2</maxSpeed>
             <minForcastLength>0.0</minForcastLength>
             <maxForcastLength>1</maxForcastLength>
-            <targetForcastLength>0.5</targetForcastLength>
+            <targetForcastLength>1</targetForcastLength>
             <weightSlope>1</weightSlope>
-            <weightOffset>2</weightOffset>
+            <weightOffset>3</weightOffset>
 
         </config>
     </module>

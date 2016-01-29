@@ -14,6 +14,8 @@ class LapTime : public lms::Module {
     bool crossingStartLine;
     lms::Time start;
     float distanceDriven;
+    float maxSpeed;
+    float minSpeed;
 public:
     bool initialize() override;
     bool deinitialize() override;
