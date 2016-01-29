@@ -48,7 +48,6 @@ void MatlabKalman::resetData(const lms::Config &config){
     logger.info("resetData");
     clearMatrix(zustandsVector);
     zustandsVector->data[0] = config.get<float>("distanceToMiddle",0.2);
-    zustandsVector->data[5] = 3;
     asEinheitsMatrix(stateTransitionMatrix, 1);
     asEinheitsMatrix(kovarianzMatrixDesZustandes, 1);
     asEinheitsMatrix(kovarianzMatrixDesZustandUebergangs, config.get<float>("kov",15));

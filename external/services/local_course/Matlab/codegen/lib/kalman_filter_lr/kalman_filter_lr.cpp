@@ -1339,15 +1339,16 @@ void kalman_filter_lr(emxArray_real_T *r, double delta_x, double delta_y, double
   //  Krümmungen
   //  bezogen auf Mittellinie, 0.72 entspricht einem minimalen Innenradius von 1m 
   i5 = r->size[0];
+  float cut = 0.72;
   for (i = 2; i - 2 < (int)((double)i5 + -2.0); i++) {
-    if ((-0.75 >= r->data[i]) || rtIsNaN(r->data[i])) {
-      minval = -0.75;
+    if ((-cut >= r->data[i]) || rtIsNaN(r->data[i])) {
+      minval = -cut;
     } else {
       minval = r->data[i];
     }
 
-    if ((0.75 <= minval) || rtIsNaN(minval)) {
-      r->data[i] = 0.75;
+    if ((cut <= minval) || rtIsNaN(minval)) {
+      r->data[i] = cut;
     } else {
       r->data[i] = minval;
     }
