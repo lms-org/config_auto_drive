@@ -33,7 +33,7 @@ public:
     void configsChanged(const lms::Config &config);
     void resetData(const lms::Config &config);
     void logStateVector(std::ostream &logFile);
-    bool update(std::vector<lms::math::vertex2f> points, float dx, float dy, float dphi);
+    bool update(std::vector<lms::math::vertex2f> points, float dx, float dy, float dphi, float measurementUncertainty);
     street_environment::RoadLane getOutput();
 
 

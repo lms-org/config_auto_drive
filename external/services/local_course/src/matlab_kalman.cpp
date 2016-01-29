@@ -48,6 +48,7 @@ void MatlabKalman::resetData(const lms::Config &config){
     logger.info("resetData");
     clearMatrix(zustandsVector);
     zustandsVector->data[0] = config.get<float>("distanceToMiddle",0.2);
+    zustandsVector->data[5] = 3;
     asEinheitsMatrix(stateTransitionMatrix, 1);
     asEinheitsMatrix(kovarianzMatrixDesZustandes, 1);
     asEinheitsMatrix(kovarianzMatrixDesZustandUebergangs, config.get<float>("kov",15));
@@ -60,7 +61,7 @@ void MatlabKalman::resetData(const lms::Config &config){
     }
 }
 
-bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, float dy, float dphi) {
+bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, float dy, float dphi, float measurementUncertainty) {
 
     //länge der später zu berechnenden Abschnitten
     //convert data to lines
@@ -100,7 +101,7 @@ bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, flo
     prior_fact = 0;
     kalman_filter_lr(zustandsVector,dx,dy,dphi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
-                     r_fakt,partLength,lx,ly,rx,ry,mx,my,1,prior_fact);
+                     measurementUncertainty,partLength,lx,ly,rx,ry,mx,my,1,prior_fact);
     //destroy stuff
     emxDestroyArray_real_T(rx);
     emxDestroyArray_real_T(ry);
