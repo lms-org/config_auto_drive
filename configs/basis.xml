@@ -17,7 +17,6 @@
         <module logLevel="INFO">street_obstacle_merger</module>
         <module logLevel="INFO">sobel_threshold_generator</module>
         <module logLevel="WARN">obstacle_to_local_course</module>
-        <!--module logLevel="WARN">parking</module-->
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
             <module logLevel="INFO">socket_data_sender</module>
@@ -59,19 +58,7 @@
         <name>sobel_threshold_generator</name>
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
     </module>
-    <module>
-            <name>parking</name>
-            <config>
-                <k>0.05</k> <!-- safety distance zur Ecke der zweiten Box-->
-                <d>0.03</d> <!-- safety distance zur ersten Box -->
-                <wheelbase>0.21</wheelbase> <!-- Radstand-->
-                <carLength>0.32</carLength>
-                <carWidth>0.2</carWidth>
-                <carLength>0.32</carLength>
-                <maxSteeringAngle>25</maxSteeringAngle> <!-- in Grad-->
-                <distanceMid2Lidar>0.04</distanceMid2Lidar>
-            </config>
-    </module>
+    
     <module>
         <name>street_obstacle_ir_detector</name>
         <config>
@@ -189,7 +176,7 @@
             <logPrefix>/home/odroid/data/env/env</logPrefix>
         </config>
         <config>
-            <translateEnvironment>false</translateEnvironment>
+            <translateEnvironment>true</translateEnvironment>
         </config>
     </module>
     <module>
