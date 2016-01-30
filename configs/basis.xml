@@ -98,8 +98,9 @@
         <name>trajectory_point_controller</name>
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
-            <velocity_x_values>0,2,6</velocity_x_values>
-            <velocity_y_values>2,2,6</velocity_y_values>
+            <!--MPC-controller-->
+            <mpcLookupVelocityX>0,2,6</mpcLookupVelocityX>
+            <mpcLookupVelocityY>2,2,6</mpcLookupVelocity>
             <distanceRegelpunkt>0.9</distanceRegelpunkt>
             <yawRateBoost>0.0</yawRateBoost>
             <useMPCcontroller>1</useMPCcontroller> 
@@ -108,9 +109,14 @@
             <weight_steering_front>0.0001</weight_steering_front>
             <weight_steering_rear>8</weight_steering_rear>
             <!--velocity-controller -->
+            <!-- stop on crossing-->
             <PID_Kp>1</PID_Kp>
             <PID_Ki>0</PID_Ki>
             <PID_Kd>0</PID_Kd>
+            <!-- trajecotryPoint-->
+            <m_trajectoryPointDistanceLookupX>1,2,3.5</m_trajectoryPointDistanceLookupX>
+            <m_trajectoryPointDistanceLookupY>0.4,0.5,0.8</m_trajectoryPointDistanceLookupY>
+
             <!--default velo-->
             <forcastLength>1</forcastLength>
             <maxAngle>0.3</maxAngle>
