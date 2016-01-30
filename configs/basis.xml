@@ -100,7 +100,7 @@
         <config>
             <!--MPC-controller-->
             <mpcLookupVelocityX>0,2,6</mpcLookupVelocityX>
-            <mpcLookupVelocityY>2,2,6</mpcLookupVelocity>
+            <mpcLookupVelocityY>2,2,6</mpcLookupVelocityY>
             <distanceRegelpunkt>0.9</distanceRegelpunkt>
             <yawRateBoost>0.0</yawRateBoost>
             <useMPCcontroller>1</useMPCcontroller> 
@@ -114,8 +114,8 @@
             <PID_Ki>0</PID_Ki>
             <PID_Kd>0</PID_Kd>
             <!-- trajecotryPoint-->
-            <m_trajectoryPointDistanceLookupX>1,2,3.5</m_trajectoryPointDistanceLookupX>
-            <m_trajectoryPointDistanceLookupY>0.4,0.5,0.8</m_trajectoryPointDistanceLookupY>
+            <trajectoryPointDistanceLookupX>1,2,3.5</trajectoryPointDistanceLookupX>
+            <trajectoryPointDistanceLookupY>0.4,0.5,0.8</trajectoryPointDistanceLookupY>
 
             <!--default velo-->
             <forcastLength>1</forcastLength>
@@ -182,7 +182,7 @@
             <logPrefix>/home/odroid/data/env/env</logPrefix>
         </config>
         <config>
-            <translateEnvironment>true</translateEnvironment>
+            <translateEnvironment>false</translateEnvironment>
         </config>
     </module>
     <module>
