@@ -1,7 +1,7 @@
 <framework>       
 
     <modulesToEnable>
-        <module logLevel="DEBUG">parking</module>
+        <module logLevel="ERROR">parking</module>
     </modulesToEnable>
 
     <module>
@@ -9,38 +9,42 @@
             <channelMapping priority="20" from="CAR" to="CAR"/>
             <config>
                 <!-- line fit auf den Punkten der Mittellinie -->
-                <lineFitStartPoint>3</lineFitStartPoint>
-                <lineFitEndPoint>5</lineFitEndPoint>
+                <lineFitStartPoint>4</lineFitStartPoint>
+                <lineFitEndPoint>9</lineFitEndPoint>
                 <!-- Abmessungen einer validen Parklücke -->
                 <minParkingSpaceSize>0.4</minParkingSpaceSize>
                 <maxParkingSpaceSize>0.6</maxParkingSpaceSize>
                 <!-- Geschwindigkeiten -->
-                <velocitySearching>1.0</velocitySearching>
-                <velocityEntering>0.5</velocityEntering>
-                <velocityCorrecting>0.5</velocityCorrecting>
-                <decelerationStopping>3.0</decelerationStopping>
+                <velocitySearching>3.0</velocitySearching>
+                <velocityEntering>0.6</velocityEntering>
+                <velocityCorrecting>0.6</velocityCorrecting>
+                <decelerationStopping>0.0</decelerationStopping>
+                <velocityApproaching>2.0</velocityApproaching>
                 <!-- weitere Parameter -->
-                <correctingDistance>0.05</correctingDistance> <!-- letzter Zug in der Parklücke "Krabbengang"-->
+                <correctingDistance>0.07</correctingDistance> <!-- letzter Zug in der Parklücke "Krabbengang"-->
+                <correcting2Distance>0.03</correcting2Distance>
                 <stopCorrectingDistanceY>0.62</stopCorrectingDistanceY>
-                <xDistanceCorrection>0.0</xDistanceCorrection> <!-- Korrektur für hohe Geschwindigkeiten beim Rückwärtsfahren -->
+                <xDistanceCorrection>-0.23</xDistanceCorrection> <!-- Korrektur für hohe Geschwindigkeiten beim Rückwärtsfahren -->
                 <useYmeasurementOfSecondBox>false</useYmeasurementOfSecondBox> <!-- lateralen Abstand zur 2. Box messen (true) oder als worst case annehmen (false) -->
                 <y0_worstCase>0.23</y0_worstCase>
                 <numberOfY0measurements>20</numberOfY0measurements> <!-- Wenn useYmeasurementOfSecondBox=true, wird der Median aus so vielen Werten gebildet-->
                 <k>0.02</k> <!-- safety distance zur Ecke der zweiten Box-->
-                <d>0.11</d> <!-- safety distance zur ersten Box -->
+                <d>0.10</d> <!-- safety distance zur ersten Box -->
                 <wheelbase>0.21</wheelbase>
                 <carLength>0.32</carLength>
                 <carWidth>0.2</carWidth>
+                <alphaOffset>0.13</alphaOffset>
                 <!-- Parklückensuche -->
+                <searchingPhiFactor>-0.05</searchingPhiFactor>
                 <lidarMeasurementsPerSecond>300</lidarMeasurementsPerSecond>
                 <gradientThreshold>0.1</gradientThreshold> <!-- Für größere Werte wird eine Kante erkannt -->
                 <maxDistanceLidar>0.75</maxDistanceLidar> <!-- Lidar cut-off distance -->
-                <maxSteeringAngle>22</maxSteeringAngle> <!-- in Grad-->
+                <maxSteeringAngle>24</maxSteeringAngle> <!-- in Grad-->
                 <distanceMidLidarX>0.09</distanceMidLidarX> <!-- Abstand Lidar zu Mitte Fahrzeug in x-Richtung -->
                 <distanceMidLidarY>0.08</distanceMidLidarY> <!-- Abstand Lidar zu Mitte Fahrzeug in y-Richtung -->
                 <minVelocityBeforeDrivingBackwards>0.3</minVelocityBeforeDrivingBackwards>
                 <!-- DEBUG -->
-                <debugPrintEdges>false</debugPrintEdges>
+                <debugPrintEdges>true</debugPrintEdges>
             </config>
     </module>
 

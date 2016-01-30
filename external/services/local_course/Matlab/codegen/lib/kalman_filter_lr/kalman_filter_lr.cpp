@@ -27,27 +27,27 @@
 //   * r: Zustandsvektor = [y0, phi0, kappa_1, kappa_2, ... , kappa_(n-1)]
 //   --> y0: y-Wert des ersten Punktes (x-Wert ist immer 0)
 //   --> phi0: Anfangssteigung zwischen erstem und zweitem Punkt
-//   --> kappa_i: Krümmungen an den entsprechenden Punkten (Krümmungsdefinition: 1/R,
-//       wobei R der Radius des Kreises ist, auf dem der betrachtete Punkt, sein Vorgänger
+//   --> kappa_i: KrÃ¼mmungen an den entsprechenden Punkten (KrÃ¼mmungsdefinition: 1/R,
+//       wobei R der Radius des Kreises ist, auf dem der betrachtete Punkt, sein VorgÃ¤nger
 //       und sein Nachfolger liegen)
-//   * delta_x, delta_y, delta_phi: skalare Werte für die Eigenbewegung des Fahrzeugs seit dem letzten Aufruf des Filters (im KOSY des letzten Aufrufs);
+//   * delta_x, delta_y, delta_phi: skalare Werte fÃ¼r die Eigenbewegung des Fahrzeugs seit dem letzten Aufruf des Filters (im KOSY des letzten Aufrufs);
 //     ist delta_x = delta_y = delta_phi = 0, wird die Berechnung einer state-transition Matrix deaktiviert
 //   * Pk: Kovarianzmatrix des Zustands dim[n x n], mit n = Dimension des Zustandsvektors
-//   * Q: Kovarianzmatrix des Zustandsübergangs (Prozessrauschen) dim[n x n] (symmetrische Matrix, mit weg von der
-//       Diagonalen abnehmenden Eintraegen -> wie stark hängen die Krümmungen an den verschiedenen Punkten zusammen?)
+//   * Q: Kovarianzmatrix des ZustandsÃ¼bergangs (Prozessrauschen) dim[n x n] (symmetrische Matrix, mit weg von der
+//       Diagonalen abnehmenden Eintraegen -> wie stark hÃ¤ngen die KrÃ¼mmungen an den verschiedenen Punkten zusammen?)
 //   * R_fakt: Varianz der Messwerte (Messrauschen)
-//   * delta: Abstand zwischen aufeinanderfolgenden Punkten (delta*n ergibt die Länge des praedizierten Fahrstreifens)
-//   * xl, yl: Vektoren mit den Messwerten für die linke Spur
-//   * xr, yr: Vektoren mit den Messwerten für die rechte Spur
-//   * xm, ym: Vektoren mit den Messwerten für die Mittellinie
-//   * interp_mode: 0 für lineare Interpolation der Krümmungen bei state transition, 1 für quadratische Interpolation
+//   * delta: Abstand zwischen aufeinanderfolgenden Punkten (delta*n ergibt die LÃ¤nge des praedizierten Fahrstreifens)
+//   * xl, yl: Vektoren mit den Messwerten fÃ¼r die linke Spur
+//   * xr, yr: Vektoren mit den Messwerten fÃ¼r die rechte Spur
+//   * xm, ym: Vektoren mit den Messwerten fÃ¼r die Mittellinie
+//   * interp_mode: 0 fÃ¼r lineare Interpolation der KrÃ¼mmungen bei state transition, 1 fÃ¼r quadratische Interpolation
 //
 //   ----Grober Ablauf des Algorithmus----
 //   1. Projektion der Punkte von der Mittellinie nach links bzw. rechts
 //   2. Fuer jeden Messpunkt: Berechnung des kleinsten Abstands zum aktuell praedizierten Strassenverlauf
 //   3. Assemblierung der Jakobimatrix fuer die Projektion aus dem Zustandsraum von r auf x-y-Koordinaten
 //   4. Kalman-Filter anwenden
-//   5. Zustandsbegrenzungen einbringen (mathematisch unschön aber praktisch funktionierts)
+//   5. Zustandsbegrenzungen einbringen (mathematisch unschÃ¶n aber praktisch funktionierts)
 // Arguments    : emxArray_real_T *r
 //                double delta_x
 //                double delta_y
@@ -996,7 +996,7 @@ void kalman_filter_lr(emxArray_real_T *r, double delta_x, double delta_y, double
   emxFree_real_T(&b_A);
   emxFree_real_T(&Hm);
 
-  //  Lukas: zusätzlicher prior
+  //  Lukas: zusÃ¤tzlicher prior
   if (prior_fact > 0.0) {
     emxInit_real_T(&b_Pk, 2);
     i5 = b_Pk->size[0] * b_Pk->size[1];
@@ -1336,7 +1336,7 @@ void kalman_filter_lr(emxArray_real_T *r, double delta_x, double delta_y, double
   emxFree_real_T(&A);
 
   // % Zustandsbegrenzungen
-  //  Krümmungen
+  //  KrÃ¼mmungen
   //  bezogen auf Mittellinie, 0.72 entspricht einem minimalen Innenradius von 1m 
   i5 = r->size[0];
   float cut = 0.72;
@@ -1355,14 +1355,15 @@ void kalman_filter_lr(emxArray_real_T *r, double delta_x, double delta_y, double
   }
 
   //  y-Wert des ersten Punktes
-  if ((0.5 <= r->data[0]) || rtIsNaN(r->data[0])) {
-    minval = 0.5;
+  float cut_y = 0.7;
+  if ((cut_y <= r->data[0]) || rtIsNaN(r->data[0])) {
+    minval = cut_y;
   } else {
     minval = r->data[0];
   }
 
-  if ((-0.5 >= minval) || rtIsNaN(minval)) {
-    r->data[0] = -0.5;
+  if ((-cut_y >= minval) || rtIsNaN(minval)) {
+    r->data[0] = -cut_y;
   } else {
     r->data[0] = minval;
   }
