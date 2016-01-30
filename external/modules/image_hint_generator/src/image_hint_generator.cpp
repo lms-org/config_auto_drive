@@ -156,15 +156,22 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
     lms::imaging::detection::ImageHint<lms::imaging::detection::PointLine> *hintMiddle = new lms::imaging::detection::ImageHint<lms::imaging::detection::PointLine>();
     hintMiddle->name = "MIDDLE_LANE";
     lms::imaging::detection::LinePoint::LinePointParam lpp = defaultLinePointParameter;
+
+    const float maxSearchLength = config().get<float>("maxSearchLength",1);
+    float currentSearchLength = 0;
     for(int i = 1; i < (int)middle.points().size(); i++){
         const vertex2f bot = middle.points()[i-1];
         const vertex2f top = middle.points()[i];
+        currentSearchLength += bot.distance(top);
+        if(currentSearchLength > maxSearchLength){
+            break;
+        }
         const vertex2f tangentMain = (top-bot).normalize();
         const float distance = (top-bot).length();
         const vertex2f distanceOrthNorm = tangentMain.rotateAntiClockwise90deg();
 
         //number of points per segment
-        int numerOfSegments = config().get<int>("numerOfSegmentsLines",1);
+        const int numerOfSegments = config().get<int>("numerOfSegmentsLines",1);
         for(int i = 0; i <numerOfSegments; i++){
             lms::math::vertex2f tangent = tangentMain*distance*((float)i)/numerOfSegments;
 

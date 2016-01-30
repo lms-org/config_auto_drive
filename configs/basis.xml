@@ -1,4 +1,8 @@
 <framework>
+
+<execution>
+    <!--clock sleep="true" unit="ms" value="100"/-->
+</execution>
 <logging>
     <filter tagPrefix="LOCAL_COURSE_SERVICE" logLevel="ERROR"/>
 </logging>
@@ -9,7 +13,7 @@
         <module logLevel="INFO">lap_time</module>
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
-        <module logLevel="WARN">environment_predictor</module>
+        <module logLevel="INFO">environment_predictor</module>
         <module logLevel="INFO">trajectory_creator</module>
         <module logLevel="ERROR">street_obstacle_ir_detector</module>
         <module logLevel="WARN">trajectory_point_controller</module>
@@ -35,8 +39,8 @@
         <name>LOCAL_COURSE_SERVICE</name>
         <realName>local_course</realName>
         <config>
-            <elementCount>12</elementCount>
-            <r_fakt_min>15</r_fakt_min>
+            <elementCount>10</elementCount>
+            <r_fakt_min>20</r_fakt_min>
             <r_fakt_max>150</r_fakt_max>
             <r_fakt_maxVelocity>4.0</r_fakt_maxVelocity>
             <kov>15</kov>
@@ -99,8 +103,8 @@
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
             <!--MPC-controller-->
-            <mpcLookupVelocityX>0,2,6</mpcLookupVelocityX>
-            <mpcLookupVelocityY>2,2,6</mpcLookupVelocityY>
+            <mpcLookupVelocityX>2.5,6</mpcLookupVelocityX>
+            <mpcLookupVelocityY>2.5,5</mpcLookupVelocityY>
             <distanceRegelpunkt>0.9</distanceRegelpunkt>
             <yawRateBoost>0.0</yawRateBoost>
             <useMPCcontroller>1</useMPCcontroller> 
@@ -114,18 +118,20 @@
             <PID_Ki>0</PID_Ki>
             <PID_Kd>0</PID_Kd>
             <!-- trajecotryPoint-->
-            <trajectoryPointDistanceLookupX>1,2,3.5</trajectoryPointDistanceLookupX>
-            <trajectoryPointDistanceLookupY>0.4,0.5,0.8</trajectoryPointDistanceLookupY>
+            <trajectoryPointDistanceLookupX>1.8,3.0</trajectoryPointDistanceLookupX>
+            <trajectoryPointDistanceLookupY>0.6,0.6</trajectoryPointDistanceLookupY>
 
             <!--default velo-->
+
+            <viewDirOnlyFromTrajectory>true</viewDirOnlyFromTrajectory>
             <forcastLength>1</forcastLength>
-            <maxAngle>0.3</maxAngle>
-            <minSpeed>2.9</minSpeed>
-            <maxSpeed>4.2</maxSpeed>
-            <minForcastLength>0.0</minForcastLength>
-            <maxForcastLength>1</maxForcastLength>
-            <targetForcastLength>1</targetForcastLength>
-            <weightSlope>1</weightSlope>
+            <maxAngle>0.4</maxAngle>
+            <minSpeed>2.0</minSpeed>
+            <maxSpeed>3.0</maxSpeed>
+            <minForcastLength>0.4</minForcastLength>
+            <maxForcastLength>1.4</maxForcastLength>
+            <targetForcastLength>1.0</targetForcastLength>
+            <weightSlope>2</weightSlope>
             <weightOffset>3</weightOffset>
 
         </config>
@@ -140,6 +146,7 @@
             <searchForObstacles>true</searchForObstacles>
             <searchForCrossing>true</searchForCrossing>
             <numerOfSegmentsLines>1</numerOfSegmentsLines>
+            <maxSearchLength>1.6</maxSearchLength>
             <lineOffset>0.1</lineOffset>
         </config>
         <config name="defaultEPParameter" src="imaging/defaultEdgePointParam.lconf"/>
@@ -157,6 +164,12 @@
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
         <channelMapping priority="9" from="CAR" to="CAR"/>
+        <config>
+            <angleD>0.35</angleD>
+            <obstacleResolution>0.05</obstacleResolution>
+            <minDistanceBetweenTrajectoryPoints>0.2</minDistanceBetweenTrajectoryPoints>
+            <distanceObstacleBeforeChangeLine>1</distanceObstacleBeforeChangeLine>
+        </config>
         <config src="street_utils/obstacle.lconf"/>
         <config src="trajectory_creator.lconf"/>
     </module>
@@ -170,7 +183,7 @@
     </module>
     <module>
         <name>environment_filter</name>
-        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_RAW"/>
+        <channelMapping from="ENVIRONMENT_ItoGoXNPUT" to="ENVIRONMENT_ROAD_RAW"/>
         <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
     </module>
     <module>
