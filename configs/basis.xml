@@ -198,7 +198,7 @@
             <logPrefix>/home/odroid/data/env/env</logPrefix>
         </config>
         <config>
-            <translateEnvironment>true</translateEnvironment>
+            <translateEnvironment>false</translateEnvironment>
         </config>
     </module>
     <module>

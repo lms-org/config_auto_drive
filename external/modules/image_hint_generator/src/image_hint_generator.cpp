@@ -77,9 +77,15 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     scp.lineWidthMax = scp.lineWidthMax*2;
     scp.boxDepthSearchLength = config("defaultCrossingParameter").get<float>("boxDepthSearchLength",20);
     scp.boxPointsNeeded = config("boxPointsNeeded").get<float>("boxPointsNeeded",3);
+    for(const lms::math::vertex2f &v:middle.points()){
+        scp.middleLine.points().push_back(v);
+    }
+    /*
+     * Not needed as we added a blackList to edgePoint
     const float crossingStartDistance = config("defaultCrossingParameter").get<float>("crossingStartDistance",0.3);
     const float crossingMaxSearchDistance = config("defaultCrossingParameter").get<float>("crossingMaxSearchDistance",1);
     //scp.lineWidthMin = scp.lineWidthMin*2;
+
     float currentDistance = 0;
     float distanceToStart = crossingStartDistance;
     bool foundFirst = false;
@@ -102,6 +108,7 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
         scp.middleLine.points().push_back(v2);
 
     }
+    */
     crossing->parameter = scp;
     hintContainerObstacle->add(crossing);
 }
@@ -121,11 +128,8 @@ void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLan
     sopRight.fromConfig(&config("defaultLineParameter"));
     sopRight.fromConfig(&config("defaultObstacleParameter"));
     sopRight.obstacleLeft = false;
-    float minObstacleDistanceFromVehicle = config().get<float>("minObstacleDistanceFromVehicle",0.3);
     for(const lms::math::vertex2f &v:middle.points()){
-        if(v.x >= minObstacleDistanceFromVehicle){
-            sopRight.middleLine.points().push_back(v);
-        }
+        sopRight.middleLine.points().push_back(v);
     }
     obstacleRight->parameter = sopRight;
     hintContainerObstacle->add(obstacleRight);
@@ -198,7 +202,7 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
             //set lineWidth
 
             //could make problems if the values are to small
-            lpp.lineWidthMin = searchLength/lineDistance * whiteLineWidthMin;
+            lpp.lineWidthMin = searchLength/lineDistance * whiteLineWidthMin; //Längenabhängigkeit der Suchstreifen
             lpp.lineWidthMax = searchLength/lineDistance * whiteLineWidthMax;
 
             logger.debug("cycle") <<"searchLength pix: "<<searchLength <<" "<< leftI.x << " "<< leftI.y;
