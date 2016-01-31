@@ -1369,14 +1369,15 @@ void kalman_filter_lr(emxArray_real_T *r, double delta_x, double delta_y, double
   }
 
   //  Startwinkel
-  if ((0.79 <= r->data[1]) || rtIsNaN(r->data[1])) {
-    minval = 0.79;
+  float cutPhi = M_PI/2;
+  if ((cutPhi <= r->data[1]) || rtIsNaN(r->data[1])) {
+    minval = cutPhi;
   } else {
     minval = r->data[1];
   }
 
-  if ((-0.79 >= minval) || rtIsNaN(minval)) {
-    r->data[1] = -0.79;
+  if ((-cutPhi >= minval) || rtIsNaN(minval)) {
+    r->data[1] = -cutPhi;
   } else {
     r->data[1] = minval;
   }

@@ -13,8 +13,8 @@
         <module logLevel="INFO">lap_time</module>
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
-        <module logLevel="INFO">environment_predictor</module>
-        <module logLevel="INFO">trajectory_creator</module>
+        <module logLevel="WARN">environment_predictor</module>
+        <module logLevel="WARN">trajectory_creator</module>
         <module logLevel="ERROR">street_obstacle_ir_detector</module>
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">image_proxy</module>
@@ -41,7 +41,7 @@
         <config>
             <elementCount>10</elementCount>
             <r_fakt_min>20</r_fakt_min>
-            <r_fakt_max>150</r_fakt_max>
+            <r_fakt_max>50</r_fakt_max>
             <r_fakt_maxVelocity>4.0</r_fakt_maxVelocity>
             <kov>15</kov>
             <prioFact>0</prioFact>
@@ -67,6 +67,7 @@
         <name>street_obstacle_ir_detector</name>
         <config>
             <obstacleMinDistance>0.01</obstacleMinDistance>
+            <obstacleInitTrust>0.5</obstacleInitTrust>
             <obstacleTriggerDistance>0.1</obstacleTriggerDistance>
             <obstacleWidth>0.1</obstacleWidth>
         </config>
@@ -112,6 +113,7 @@
             <weight_phi>5</weight_phi>
             <weight_steering_front>0.0001</weight_steering_front>
             <weight_steering_rear>8</weight_steering_rear>
+            <maxParallelAusweichen>0.2</maxParallelAusweichen>
             <!--velocity-controller -->
             <!-- stop on crossing-->
             <PID_Kp>1</PID_Kp>
@@ -123,11 +125,11 @@
 
             <!--default velo-->
 
-            <viewDirOnlyFromTrajectory>true</viewDirOnlyFromTrajectory>
+            <viewDirOnlyFromTrajectory>false</viewDirOnlyFromTrajectory>
             <forcastLength>1</forcastLength>
             <maxAngle>0.4</maxAngle>
             <minSpeed>2.0</minSpeed>
-            <maxSpeed>3.0</maxSpeed>
+            <maxSpeed>2.0</maxSpeed>
             <minForcastLength>0.4</minForcastLength>
             <maxForcastLength>1.4</maxForcastLength>
             <targetForcastLength>1.0</targetForcastLength>
@@ -165,10 +167,11 @@
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
         <channelMapping priority="9" from="CAR" to="CAR"/>
         <config>
+            <simpleTraj>false</simpleTraj>
             <angleD>0.35</angleD>
             <obstacleResolution>0.05</obstacleResolution>
             <minDistanceBetweenTrajectoryPoints>0.2</minDistanceBetweenTrajectoryPoints>
-            <distanceObstacleBeforeChangeLine>1</distanceObstacleBeforeChangeLine>
+            <distanceObstacleBeforeChangeLine>0.5</distanceObstacleBeforeChangeLine>
         </config>
         <config src="street_utils/obstacle.lconf"/>
         <config src="trajectory_creator.lconf"/>
@@ -195,7 +198,7 @@
             <logPrefix>/home/odroid/data/env/env</logPrefix>
         </config>
         <config>
-            <translateEnvironment>false</translateEnvironment>
+            <translateEnvironment>true</translateEnvironment>
         </config>
     </module>
     <module>

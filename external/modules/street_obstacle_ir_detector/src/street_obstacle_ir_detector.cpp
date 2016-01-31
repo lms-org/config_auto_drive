@@ -23,6 +23,7 @@ bool StreetObstacleIRDetector::cycle() {
             //found some obstacles in reach
             std::shared_ptr<street_environment::Obstacle> obstacle(new street_environment::Obstacle());
             obstacle->updatePosition(lms::math::vertex2f(lidar->totalX(),lidar->totalY()+obstacleWidth/2));
+            obstacle->setTrust(config().get<float>("obstacleInitTrust",0.5));
             env->objects.push_back(obstacle);
         }else{
             //no obstacle in reach
