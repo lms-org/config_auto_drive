@@ -5,6 +5,7 @@
 #include "sensor_utils/car.h"
 #include "street_environment/street_environment.h"
 #include "street_environment/obstacle.h"
+#include "street_environment/crossing.h"
 #include "lms/math/math.h"
 
 class StreetObjectMerger : public lms::Module {
@@ -31,6 +32,7 @@ private:
     lms::ReadDataChannel<sensor_utils::Car> car;
     lms::WriteDataChannel<std::vector<lms::math::Rect>> visibleAreas_hack;
 
+    void checkAngleCrossingRoad(street_environment::Obstacle &crossing);
 
 };
 

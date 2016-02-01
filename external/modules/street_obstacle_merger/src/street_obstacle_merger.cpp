@@ -42,7 +42,6 @@ bool StreetObjectMerger::cycle() {
     street_environment::EnvironmentObstacles obstaclesNew;
     street_environment::EnvironmentObstacles obstaclesOld;
 
-
     getObstacles(*envInput,obstaclesNew);
     getObstacles(*envOutput,obstaclesOld);
 
@@ -114,6 +113,10 @@ bool StreetObjectMerger::cycle() {
         }
         if(fabs(obst->distanceTang()) > 2){
             obst->setTrust(0);
+        }
+        if(obst->getType() == street_environment::Crossing::TYPE)
+        {
+            checkAngleCrossingRoad(*obst);
         }
     }
 
@@ -210,4 +213,33 @@ void StreetObjectMerger::getObstacles(const street_environment::EnvironmentObjec
             output.objects.push_back(startLine);
         }
     }
+}
+
+void StreetObjectMerger::checkAngleCrossingRoad(street_environment::Obstacle& crossing)
+{
+    float offset = 0.4;
+    float currentDis = 0;
+
+    for(int i = 1; i < static_cast<int>(middle->points().size()); i++)
+    {
+        float deltaDis = middle->points()[i-1].distance(middle->points()[i]);
+        currentDis += deltaDis;
+
+        if(currentDis + deltaDis > crossing.distanceTang())
+        {
+            lms::math::vertex2f viewDirectionStreet = middle->points()[i]-middle->points()[i-1];
+
+            float deltaAngle = viewDirectionStreet.angleBetween(crossing.viewDirection());
+
+            if(deltaAngle > offset)
+            {
+                std::cout << "delete crossing: " << deltaAngle<< ","<< viewDirectionStreet.angle() << "," << crossing.viewDirection().angle() << std::endl;
+                crossing.setTrust(0.0);
+            }
+
+            return;
+        }
+
+    }
+
 }
