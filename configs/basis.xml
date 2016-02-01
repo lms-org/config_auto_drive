@@ -19,7 +19,7 @@
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">image_proxy</module>
         <module logLevel="INFO">street_obstacle_merger</module>
-        <module logLevel="INFO">sobel_threshold_generator</module>
+        <!--module logLevel="INFO">sobel_threshold_generator</module-->
         <module logLevel="WARN">obstacle_to_local_course</module>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
