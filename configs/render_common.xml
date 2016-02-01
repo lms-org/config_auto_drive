@@ -11,7 +11,7 @@
         <channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
         <config src="street_utils/obstacle.lconf"/>
         <config>
-            <envObjects>MIDDLE_LANE,DEBUG_TRAJECTORY,ENVIRONMENT_OBSTACLE,TRAJECTORY_POINT,VISIBLE_AREAS,DEBUG_POINTS</envObjects>
+            <envObjects>MIDDLE_LANE,DEBUG_TRAJECTORY, DEBUG_TRAJECTORY_2,ENVIRONMENT_OBSTACLE,TRAJECTORY_POINT,VISIBLE_AREAS,DEBUG_POINTS</envObjects>
             <!--The default Color, TODO add colors for points, lines etc -->
             <colorR>255</colorR>
             <colorG>255</colorG>
