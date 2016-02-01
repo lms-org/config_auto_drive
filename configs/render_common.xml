@@ -48,7 +48,7 @@
             <colorG>255</colorG>
             <colorB>0</colorB>
         </config>
-        <config name="TRAJECTORY_LINE">
+        <config name="DEBUG_TRAJECTORY">
             <colorR>255</colorR>
             <colorG>255</colorG>
             <colorB>0</colorB>
