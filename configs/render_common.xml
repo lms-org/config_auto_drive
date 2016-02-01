@@ -33,6 +33,11 @@
             <colorG>0</colorG>
             <colorB>0</colorB>
         </config>
+        <config name="CROSSING_NOT_TRUSTED">
+            <colorR>255</colorR>
+            <colorG>50</colorG>
+            <colorB>50</colorB>
+        </config>
         <config name="MIDDLE_LANE">
             <colorR>255</colorR>
             <colorG>123</colorG>
