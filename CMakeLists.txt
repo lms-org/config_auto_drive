@@ -46,6 +46,12 @@ if (SHARED_HEADER)
 	endforeach()
 endif()
 
+#Clion bug that doesn't add usr/local/include usr/local/lib
+if(APPLE)
+include_directories(usr/local/include)
+set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} usr/local/lib)
+endif()
+
 #compile libs/modules
 add_subdirectory(external)
 
