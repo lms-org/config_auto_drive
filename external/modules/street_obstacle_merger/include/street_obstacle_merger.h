@@ -32,7 +32,7 @@ private:
     lms::ReadDataChannel<sensor_utils::Car> car;
     lms::WriteDataChannel<std::vector<lms::math::Rect>> visibleAreas_hack;
 
-    void checkAngleCrossingRoad(street_environment::Obstacle &crossing);
+    void checkAngle(street_environment::ObstaclePtr obst);
 
 };
 

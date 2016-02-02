@@ -114,9 +114,8 @@ bool StreetObjectMerger::cycle() {
         if(fabs(obst->distanceTang()) > 2){
             obst->setTrust(0);
         }
-        if(obst->getType() == street_environment::Crossing::TYPE)
-        {
-            checkAngleCrossingRoad(*obst);
+        if(obst->getType() == street_environment::Crossing::TYPE || obst->getType() == street_environment::StartLine::TYPE){
+            checkAngle(obst);
         }
     }
 
@@ -215,29 +214,19 @@ void StreetObjectMerger::getObstacles(const street_environment::EnvironmentObjec
     }
 }
 
-void StreetObjectMerger::checkAngleCrossingRoad(street_environment::Obstacle& crossing)
-{
-    float offset = 0.4;
+void StreetObjectMerger::checkAngle(street_environment::ObstaclePtr obst){
+    float maxAngleBetweenCrossingAndRoad = config().get<float>("maxAngleBetweenCrossingAndRoad",0.4);
+    //TODO not sure if we should use itfloat maxAngleBetweenObstacleAndRoad = config().get<float>("maxAngleBetweenCrossingAndRoad",0.4);
     float currentDis = 0;
-
-    for(int i = 1; i < static_cast<int>(middle->points().size()); i++)
-    {
-        float deltaDis = middle->points()[i-1].distance(middle->points()[i]);
-        currentDis += deltaDis;
-
-        if(currentDis + deltaDis > crossing.distanceTang())
-        {
-            lms::math::vertex2f viewDirectionStreet = middle->points()[i]-middle->points()[i-1];
-
-            float deltaAngle = viewDirectionStreet.angleBetween(crossing.viewDirection());
-
-            if(deltaAngle > offset)
-            {
-                std::cout << "delete crossing: " << deltaAngle<< ","<< viewDirectionStreet.angle() << "," << crossing.viewDirection().angle() << std::endl;
-                crossing.setTrust(0.0);
+    for(int i = 1; i < static_cast<int>(middle->points().size()); i++){
+        lms::math::vertex2f streetDir = middle->points()[i]-middle->points()[i-1];
+        currentDis += streetDir.length();
+        if(currentDis > obst->distanceTang()){
+            float deltaAngle = streetDir.angleBetween(obst->viewDirection());
+            if(deltaAngle > maxAngleBetweenCrossingAndRoad){
+                logger.debug("crossing not trusted") << "angle to road: "<< deltaAngle<< " roadAngle: "<<streetDir.angle() << " crossingViewDir "<<obst->viewDirection();
+                obst->setTrust(0.0);
             }
-
-            return;
         }
 
     }
