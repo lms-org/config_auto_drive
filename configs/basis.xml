@@ -7,6 +7,7 @@
     <filter tagPrefix="LOCAL_COURSE_SERVICE" logLevel="ERROR"/>
 </logging>
     <modulesToEnable>
+        <module logLevel="WARN">pause_runtime</module>
         <module logLevel="WARN">image_hint_generator</module>
         <module logLevel="ERROR">image_hint_transformer</module>
         <module logLevel="WARN">image_hint_transformer_obstacle</module>
@@ -57,7 +58,9 @@
         <name>lap_time</name>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE"/>
     </module>
-
+    <module>
+        <name>pause_runtime</name>
+    </module>
     <module>
         <name>sobel_threshold_generator</name>
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
