@@ -41,9 +41,6 @@
         <realName>local_course</realName>
         <config>
             <elementCount>10</elementCount>
-            <r_fakt_min>20</r_fakt_min>
-            <r_fakt_max>50</r_fakt_max>
-            <r_fakt_maxVelocity>4.0</r_fakt_maxVelocity>
             <kov>15</kov>
             <prioFact>0</prioFact>
             <kovAbnahme>0.15</kovAbnahme>
@@ -199,6 +196,9 @@
         <channelMapping from="ROAD_OUTPUT" to="MIDDLE_LANE"/>
         <config user="odroid">
             <logPrefix>/home/odroid/data/env/env</logPrefix>
+            <r_fakt_min>20</r_fakt_min>
+            <r_fakt_max>50</r_fakt_max>
+            <r_fakt_maxVelocity>4.0</r_fakt_maxVelocity>
         </config>
         <config>
             <translateEnvironment>false</translateEnvironment>
