@@ -1,11 +1,16 @@
 <framework>
     <modulesToEnable logLevel="WARN">
-        <module>mavlink_usb_importer</module>
+        <if notSet="files">
+            <module>mavlink_usb_importer</module>
+        </if>
         <module>data_to_mavlink</module>
         <module>mavlink_to_data</module>
         <if set="mavlink_logger">
             <module>mavlink_logger</module>
             <module>mavlink_csv_logger</module>
+        </if>
+        <if set="files">
+            <module>mavlink_player</module>
         </if>
     </modulesToEnable>
 
@@ -15,6 +20,10 @@
         <config>
             <path>/usr/bin/usb-reset</path>
         </config>
+    </service>
+    <service>
+        <name>TIMESTAMP_INTERPOLATOR</name>
+        <realName>timestamp_interpolator_service</realName>
     </service>
     <module>
         <name>mavlink_usb_importer</name>
@@ -84,5 +93,9 @@
         <config user="odroid">
             <channel>MAVLINK_IN</channel>
         </config>
+    </module>
+    <module>
+        <name>mavlink_player</name>
+        <realName>channel_loader</realName>
     </module>
 </framework>
