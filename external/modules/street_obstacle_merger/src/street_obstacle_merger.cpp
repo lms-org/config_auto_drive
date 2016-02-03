@@ -228,7 +228,5 @@ void StreetObjectMerger::checkAngle(street_environment::ObstaclePtr obst){
                 obst->setTrust(0.0);
             }
         }
-
     }
-
 }
