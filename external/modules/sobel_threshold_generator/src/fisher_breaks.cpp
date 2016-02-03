@@ -44,7 +44,8 @@ struct JenksFisher  // captures the intermediate data and methods for the calcul
             assert(!i || vcpc[i].first > vcpc[i-1].first); // PRECONDITION: the value sequence must be strictly increasing
 
             w   = vcpc[i].second;
-            assert(w > 0); // PRECONDITION: all weights must be positive
+            // TODO: re-enable assertion
+            // assert(w > 0); // PRECONDITION: all weights must be positive
 
             cw  += w;
             assert(cw > w || !i); // No overflow? No loss of precision?
