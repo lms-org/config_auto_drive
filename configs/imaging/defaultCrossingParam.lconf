@@ -1,3 +1,5 @@
 boxDepthSearchLength = 10
 crossingStartDistance=0.35
 crossingMaxSearchDistance=2
+inlierThresholdRANSAC=4.0
+maxIterationsRANSAC=100

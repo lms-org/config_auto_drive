@@ -77,6 +77,8 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     scp.lineWidthMax = scp.lineWidthMax*2;
     scp.boxDepthSearchLength = config("defaultCrossingParameter").get<float>("boxDepthSearchLength",20);
     scp.boxPointsNeeded = config("boxPointsNeeded").get<float>("boxPointsNeeded",3);
+    scp.maxIterationsRANSAC = config("defaultCrossingParameter").get<int>("maxIterationsRANSAC",100);
+    scp.inlierThresholdRANSAC = config("defaultCrossingParameter").get<double>("inlierThresholdRANSAC",4.0);
     for(const lms::math::vertex2f &v:middle.points()){
         scp.middleLine.points().push_back(v);
     }
