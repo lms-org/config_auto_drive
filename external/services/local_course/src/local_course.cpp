@@ -57,6 +57,8 @@ street_environment::RoadLane LocalCourse::getCourse(){
 street_environment::RoadLane LocalCourse::getCourse(lms::Time time){
     (void)time;
     //TODO
+    street_environment::RoadLane r;
+    return r;
 }
 
 } // namespace local_course

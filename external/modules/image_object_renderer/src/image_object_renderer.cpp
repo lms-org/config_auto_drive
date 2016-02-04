@@ -66,11 +66,28 @@ bool ImageObjectRenderer::cycle() {
             for(lms::math::Rect r: *dO.getWithType<std::vector<lms::math::Rect>>()){
                 drawRect(r);
             }
+        }else if(dO.castableTo<street_environment::Trajectory>()){
+            logger.debug("")<< "drawing trajectory";
+            drawTrajectory(*dO.getWithType<street_environment::Trajectory>());
         }else{
-            logger.warn("cycle")<<"No valid type for "<<dO.name();
+            logger.error("cycle")<<"No valid type for "<<dO.name();
         }
     }
     return true;
+}
+
+
+void ImageObjectRenderer::drawTrajectory(const street_environment::Trajectory &tra){
+    for(int i = 1; i <(int)tra.size(); i++){
+        if(tra[i-1].velocity == 0){
+            lms::imaging::ARGBColor color=lms::imaging::ARGBColor(0,0,0);
+            graphics->setColor(color);
+        }else{
+            lms::imaging::ARGBColor color=lms::imaging::ARGBColor(0,255,0);
+            graphics->setColor(color);
+        }
+        drawLine(tra[i-1].position.x,tra[i-1].position.y,tra[i].position.x,tra[i].position.y);
+    }
 }
 
 void ImageObjectRenderer::drawRect(lms::math::Rect &r){

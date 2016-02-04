@@ -40,6 +40,7 @@ private:
     void drawRect(float x, float y, float width, float height, bool filled);//TODO
     void drawLine(float x1, float y1, float x2, float y2);
     void drawLine(lms::math::vertex2f p1, lms::math::vertex2f p2);
+    void drawTrajectory(const street_environment::Trajectory &tra);
     /**
      * @brief setColor
      * @param toDrawName

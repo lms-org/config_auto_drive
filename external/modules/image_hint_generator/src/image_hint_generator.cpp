@@ -177,9 +177,6 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
             if(!lms::imaging::V2C(&top,&topI)){
                 continue;
             }
-            logger.error("")<<leftI;
-            logger.error("")<<rightI;
-            logger.error("")<<middleI;
 
             float angleLeft = (leftI-rightI).angle();
             float searchLength = (leftI-topI).length();
