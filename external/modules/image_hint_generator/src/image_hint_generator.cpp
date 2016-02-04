@@ -82,35 +82,6 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     for(const lms::math::vertex2f &v:middle.points()){
         scp.middleLine.points().push_back(v);
     }
-    /*
-     * Not needed as we added a blackList to edgePoint
-    const float crossingStartDistance = config("defaultCrossingParameter").get<float>("crossingStartDistance",0.3);
-    const float crossingMaxSearchDistance = config("defaultCrossingParameter").get<float>("crossingMaxSearchDistance",1);
-    //scp.lineWidthMin = scp.lineWidthMin*2;
-
-    float currentDistance = 0;
-    float distanceToStart = crossingStartDistance;
-    bool foundFirst = false;
-    for(int i = 1; i<(int) middle.points().size(); i++){
-        lms::math::vertex2f v1 = middle.points()[i-1];
-        lms::math::vertex2f v2 = middle.points()[i];
-        currentDistance += v1.distance(v2);
-        //Man geht segmentweise vor
-        distanceToStart-=v1.distance(v2);
-        if(currentDistance < crossingStartDistance || currentDistance > crossingMaxSearchDistance){
-            continue;
-        }
-        if(!foundFirst){
-            lms::math::vertex2f d = v2-v1;
-            d= d.normalize()*distanceToStart;
-            scp.middleLine.points().push_back(v2+d);
-            foundFirst = true;
-           // logger.error("START")<<v2+d<< v2;
-        }
-        scp.middleLine.points().push_back(v2);
-
-    }
-    */
     crossing->parameter = scp;
     hintContainerObstacle->add(crossing);
 }
@@ -193,11 +164,22 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
             vertex2i middleI;
             vertex2i topI;
 
-
-            lms::imaging::V2C(&left,&leftI);
-            lms::imaging::V2C(&right,&rightI);
-            lms::imaging::V2C(&middle,&middleI);
-            lms::imaging::V2C(&top,&topI);
+        //TODO
+            if(!lms::imaging::V2C(&left,&leftI)){
+                continue;
+            }
+            if(!lms::imaging::V2C(&right,&rightI)){
+                continue;
+            }
+            if(!lms::imaging::V2C(&middle,&middleI)){
+                continue;
+            }
+            if(!lms::imaging::V2C(&top,&topI)){
+                continue;
+            }
+            logger.error("")<<leftI;
+            logger.error("")<<rightI;
+            logger.error("")<<middleI;
 
             float angleLeft = (leftI-rightI).angle();
             float searchLength = (leftI-topI).length();
@@ -210,7 +192,6 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
             logger.debug("cycle") <<"searchLength pix: "<<searchLength <<" "<< leftI.x << " "<< leftI.y;
             searchLength = searchLength/lineDistance*lineOffset*2;
             logger.debug("cycle")<<"angleLeft: " <<angleLeft << " length: "<<searchLength;
-
             lpp.searchLength = searchLength;
             //add hints
             //add left
