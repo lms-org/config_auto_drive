@@ -9,6 +9,7 @@ bool SobelThresholdGenerator::initialize() {
     p.first = 0.0;
     p.second = 0;
     fisherData.assign(100, p);
+    calculateThreshold = true;
 
     cycleCount = 0;
 
@@ -23,9 +24,7 @@ bool SobelThresholdGenerator::deinitialize() {
 
 bool SobelThresholdGenerator::cycle() {
 
-    ++cycleCount;
 
-    if (cycleCount == 20) {
 
     /*
      * Grundidee:
@@ -33,33 +32,36 @@ bool SobelThresholdGenerator::cycle() {
      * 2. auf diesem Histogramm den Fisher Breaks Algorithmus anwenden (der clustert (analog zu K-Means für 1D-Daten) die Werte in 2 Kategorien und
      * liefert den Punkt, von dem die beiden cluster-Zentren maximal weit entfernt sind => Threshold für Sobel)
      *
-     */
+     */   
 
-    //logger.time("sobel");
+    if (calculateThreshold)
+    {
 
-    resetFisherData();
+        sobelBuffer.resize(target->width(), target->height(), target->format());
 
-    sobelBuffer.resize(target->width(), target->height(), target->format());
+        if (target->width() > 0) {
 
-    if (target->width() > 0) {
+            calculateThreshold = false;
 
-        const uint8_t *I = target->data(); //uint8
+            resetFisherData();
 
-        //Bildausschnitt festlegen
-        //int startRow = 120;
-        //int endRow = 250;
-        int startRow = target->height()/4;
-        int endRow = target->height()/2;
+            const uint8_t *I = target->data(); //uint8
 
-        fisherHistogram(I, target->width(), target->height(), startRow, endRow);
+            //Bildausschnitt festlegen
+            //int startRow = 120;
+            //int endRow = 250;
+            int startRow = target->height()/4;
+            int endRow = target->height()/2;
 
-        LimitsContainer resultingbreaksArray;
-        FisherBreaks::ClassifyJenksFisherFromValueCountPairs(resultingbreaksArray, 2, fisherData);
+            fisherHistogram(I, target->width(), target->height(), startRow, endRow);
 
-        int sobelThreshold = 10*resultingbreaksArray.at(1);
-        logger.info("sobel") << "sobelThreshold = " << sobelThreshold;
+            LimitsContainer resultingbreaksArray;
+            FisherBreaks::ClassifyJenksFisherFromValueCountPairs(resultingbreaksArray, 2, fisherData);
 
-    }
+            int sobelThreshold = 10*resultingbreaksArray.at(1);
+            logger.info("sobel") << "sobelThreshold = " << sobelThreshold;
+
+        }
 
 
     }
