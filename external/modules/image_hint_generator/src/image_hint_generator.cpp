@@ -48,7 +48,7 @@ bool ImageHintGenerator::cycle() {
         }
         createHintsFromMiddleLane(*middleLane);
         if(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->isValid()){
-            if(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->driveMode() == phoenix_CC2016_service::CCDriveMode::FMH){
+            if(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->driveMode() == phoenix_CC2016_service::CCDriveMode::FMH || true){//TODO #IMPORTANT
                 if(config().get<bool>("searchForObstacles",false)){
                     createHintForObstacle(*middleLane);
                 }

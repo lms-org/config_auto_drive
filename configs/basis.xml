@@ -22,7 +22,7 @@
         <module logLevel="INFO">street_obstacle_merger</module>
         <module logLevel="INFO">sobel_threshold_generator</module>
         <module logLevel="WARN">obstacle_to_local_course</module>
-        <module logLevel="DEBUG">course_state_estimator</module>
+        <module logLevel="WARN">course_state_estimator</module>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
             <module logLevel="INFO">socket_data_sender</module>
