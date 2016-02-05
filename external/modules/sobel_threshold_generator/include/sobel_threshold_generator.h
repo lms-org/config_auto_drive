@@ -26,6 +26,7 @@ private:
     ValueCountPairContainer fisherData;
 
     int cycleCount;
+    bool calculateThreshold;
 
 };
 
