@@ -42,6 +42,7 @@ private:
     Eigen::Vector3f emissionProbabilitiesStraight();
     float calculateCurvature(float minDistance, float maxDistance);
     lms::math::vertex2f interpolateRoadAtDistance(float distanceIn);
+    lms::math::vertex2f interpolateTangentRoadAtDistance(float distanceIn);
     street_environment::RoadState getStateFromIndex(int index);
 
 };

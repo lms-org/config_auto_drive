@@ -438,3 +438,72 @@ lms::math::vertex2f CourseStateEstimator::interpolateRoadAtDistance(float distan
     return result;
 }
 
+lms::math::vertex2f CourseStateEstimator::interpolateTangentRoadAtDistance(float distanceIn){
+    lms::math::vertex2f result;
+    result.x = 1;
+    result.y = 0;
+
+    int nPointsRoad = road->points().size();
+    float lengthEnvModelSegment = road->polarPartLength;
+
+    float distanceInClean = distanceIn;
+
+    //check if environment model has needed range
+    float maxDistanceEnvModel =  lengthEnvModelSegment * (nPointsRoad-1);
+    if (distanceInClean >= maxDistanceEnvModel)
+    {
+        logger.warn("distanceIn is bigger than max distance of environment model");
+        distanceInClean = maxDistanceEnvModel;
+        result = road->points()[nPointsRoad-1] - road->points()[nPointsRoad-2];
+        return result.normalize();
+
+    }
+    if (distanceInClean < 0)
+    {
+        logger.warn("distanceIn smaller 0");
+        distanceInClean = 0;
+    }
+
+    // get the point
+    if (fmod(distanceInClean, lengthEnvModelSegment) == 0)
+    {
+        // by chance got one point
+        int idPoint = round(distanceInClean/lengthEnvModelSegment);
+        result = road->points()[idPoint+1] - road->points()[idPoint-1];
+        return result.normalize();
+    }
+
+    int idPointBefore = floor(distanceInClean/lengthEnvModelSegment);
+
+    if ((idPointBefore < 0) || (idPointBefore > nPointsRoad - 2))
+    {
+
+        if (idPointBefore < 0)
+        {
+            logger.warn("the id of the point selected is smaller 0");
+            idPointBefore = 0;
+        }
+        if (idPointBefore > nPointsRoad - 2)
+        {
+            logger.warn("the id of the point selected is to big: ") << idPointBefore;
+            logger.warn("nPointsRoad: ") << nPointsRoad;
+            idPointBefore = nPointsRoad - 2;
+        }
+    }
+
+    lms::math::vertex2f pointBefore = road->points()[idPointBefore];
+    lms::math::vertex2f pointAfter = road->points()[idPointBefore+1]; // not going out of bounds should be automatically detected before
+
+    result = pointAfter - pointBefore;
+
+    return result.normalize();
+}
+
+lms::math::vertex2f CourseStateEstimator::interpolateNormalRoadAtDistance(float distanceIn){
+    lms::math::vertex2f tangent = lms::math::interpolateNormalRoadAtDistance(distanceIn);
+    lms::math::vertex2f normal;
+    normal.x = - tangent.y;
+    normal.y = tangent.x;
+
+    return normal.normalize();
+}
