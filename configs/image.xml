@@ -14,7 +14,7 @@
                 <!--<directory>/home/phibedy/CC2016/img/20151212-211050</directory>-->
                 <format>pgm</format>
                 <filePattern>%04i.pgm</filePattern>
-                <minCounter>200</minCounter>
+                <minCounter>620</minCounter>
                 <maxCounter>-1</maxCounter>
                 <loadSingleFile>false</loadSingleFile>
                 <singleFile>/tmp/test.pgm</singleFile>

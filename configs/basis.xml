@@ -15,14 +15,14 @@
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
-        <module logLevel="WARN">trajectory_creator</module>
+        <module logLevel="ERROR">trajectory_creator</module>
         <module logLevel="ERROR">street_obstacle_ir_detector</module>
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">image_proxy</module>
         <module logLevel="INFO">street_obstacle_merger</module>
         <module logLevel="INFO">sobel_threshold_generator</module>
         <module logLevel="WARN">obstacle_to_local_course</module>
-        <module logLevel="DEBUG">course_state_estimator</module>
+        <module logLevel="ERROR">course_state_estimator</module>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
             <module logLevel="INFO">socket_data_sender</module>
@@ -146,7 +146,7 @@
         <config>
             <searchForObstacles>true</searchForObstacles>
             <searchForCrossing>true</searchForCrossing>
-            <numerOfSegmentsLines>1</numerOfSegmentsLines>
+            <numerOfSegmentsLines>2</numerOfSegmentsLines>
             <maxSearchLength>4.0</maxSearchLength>
             <lineOffset>0.1</lineOffset>
         </config>
@@ -166,6 +166,10 @@
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
         <channelMapping priority="9" from="CAR" to="CAR"/>
         <config>
+            <velocity_straight>6</velocity_straight>
+            <curve_maxVelocity>3</curve_maxVelocity>
+            <curve_minVelocity>2</curve_minVelocity>
+            <aOrthMax>2.9</aOrthMax>
             <simpleTraj>true</simpleTraj>
             <angleD>0.35</angleD>
             <obstacleResolution>0.05</obstacleResolution>
@@ -191,7 +195,7 @@
     <module>
         <name>environment_predictor</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
-        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_RAW"/><!--ENVIRONMENT_ROAD_FILTERED-->
+        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_RAW"/>
         <channelMapping from="ROAD_OUTPUT" to="MIDDLE_LANE"/>
         <config user="odroid">
             <logPrefix>/home/odroid/data/env/env</logPrefix>
@@ -252,6 +256,7 @@
     <module>
         <name>course_state_estimator</name>
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
         <config>
             <observationProbability1>0.8</observationProbability1>
             <observationProbability2>0.7</observationProbability2>

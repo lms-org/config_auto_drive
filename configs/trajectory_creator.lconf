@@ -1,9 +1,9 @@
 kj = 1
-kT = 100
+kT = 10
 ks = 1
 kd = 1
 dT = 0.1
-safetyS = 0.2
+safetyS = 0.4
 safetyD = 0.1
 dt = 0.01
 m = 20

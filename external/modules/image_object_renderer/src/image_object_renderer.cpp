@@ -87,6 +87,7 @@ void ImageObjectRenderer::drawTrajectory(const street_environment::Trajectory &t
             graphics->setColor(color);
         }
         drawLine(tra[i-1].position.x,tra[i-1].position.y,tra[i].position.x,tra[i].position.y);
+        drawVertex2f(tra[i-1].position);
     }
 }
 

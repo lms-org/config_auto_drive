@@ -32,13 +32,15 @@ private:
     float distance3;
     float distance4;
 
+    float curvaturePT1 = 0;
+
     lms::ReadDataChannel<street_environment::RoadLane> road;
 
     void mapObservations();
     void update();//TODO toller Name
     void mapObservationProbability(const float& curvature, Eigen::Vector2f& probability, float observationProbability);
+    Eigen::Vector3f emissionProbabilitiesStraight();
     float calculateCurvature(float minDistance, float maxDistance);
-    lms::math::vertex2f interpolateRoadAtDistance(float distanceIn);
     street_environment::RoadState getStateFromIndex(int index);
 
 };
