@@ -348,93 +348,10 @@ float CourseStateEstimator::calculateCurvature(float minDistance, float maxDista
     }
 
     //calc all points
-    lms::math::vertex2f nearestPoint = interpolateRoadAtDistance(minDistance);
-    lms::math::vertex2f midPoint = interpolateRoadAtDistance((minDistance+maxDistance)/2);
-    lms::math::vertex2f farthestPoint = interpolateRoadAtDistance(maxDistance);
+    lms::math::vertex2f nearestPoint = road->interpolateAtDistance(minDistance);
+    lms::math::vertex2f midPoint = road->interpolateAtDistance((minDistance+maxDistance)/2);
+    lms::math::vertex2f farthestPoint = road->interpolateAtDistance(maxDistance);
 
     // calc. curvature opf the circle with signum
     return lms::math::circleCurvature(nearestPoint, midPoint, farthestPoint);
 }
-
-
-lms::math::vertex2f CourseStateEstimator::interpolateRoadAtDistance(float distanceIn){
-    lms::math::vertex2f result;
-
-    int nPointsRoad = road->points().size();
-    float lengthEnvModelSegment = road->polarPartLength;
-
-    float distanceInClean = distanceIn;
-
-    //check if environment model has needed range
-    float maxDistanceEnvModel =  lengthEnvModelSegment * (nPointsRoad-1);
-    if (distanceInClean >= maxDistanceEnvModel)
-    {
-        logger.warn("distanceIn is bigger than max distance of environment model");
-        distanceInClean = maxDistanceEnvModel;
-        result = road->points()[nPointsRoad-1];
-        return result;
-
-    }
-    if (distanceInClean < 0)
-    {
-        logger.warn("distanceIn smaller 0");
-        distanceInClean = 0;
-    }
-
-    // get the point
-    if (fmod(distanceInClean, lengthEnvModelSegment) == 0)
-    {
-        // by chance got one point
-        int idPoint = round(distanceInClean/lengthEnvModelSegment);
-        result = road->points()[idPoint];
-//        logger.warn("perfect hit: i point:  ") << idPoint << ",  distance in: " << distanceInClean;
-        return result;
-    }
-
-    // is between two points
-//    logger.warn("distanceIn   ") << distanceInClean;
-    int idPointBefore = floor(distanceInClean/lengthEnvModelSegment);
-
-    if ((idPointBefore < 0) || (idPointBefore > nPointsRoad - 2))
-    {
-
-        if (idPointBefore < 0)
-        {
-            logger.warn("the id of the point selected is smaller 0");
-            idPointBefore = 0;
-        }
-        if (idPointBefore > nPointsRoad - 2)
-        {
-            logger.warn("the id of the point selected is to big: ") << idPointBefore;
-            logger.warn("nPointsRoad: ") << nPointsRoad;
-            idPointBefore = nPointsRoad - 2;
-        }
-    }
-
-    lms::math::vertex2f pointBefore = road->points()[idPointBefore];
-    lms::math::vertex2f pointAfter = road->points()[idPointBefore+1]; // not going out of bounds should be automatically detected before
-
-
-    float fractionFirst =1 - (distanceInClean - idPointBefore*lengthEnvModelSegment)/lengthEnvModelSegment;
-
-    if ((fractionFirst < 0))
-    {
-        logger.warn("fraction should be bigger 0");
-        fractionFirst = 0;
-    }
-    if ((fractionFirst > 1))
-    {
-        logger.warn("fraction should be smaller 1");
-        fractionFirst = 1;
-    }
-
-
-
-    result.x = fractionFirst*pointBefore.x + (1-fractionFirst)*pointAfter.x;
-    result.y = fractionFirst*pointBefore.y + (1-fractionFirst)*pointAfter.y;
-
-    //logger.warn("i: ") << idPointBefore << ",  distance in: " << distanceInClean << ",  fraction first: " << fractionFirst <<",  x: " << result.x <<",  y= " << result.y << ", point before: x:" << pointBefore.x << ", y:" << pointBefore.y <<",  point0:x " << road->points()[0].x << ", y:" << road->points()[0].y;
-
-    return result;
-}
-

@@ -41,7 +41,6 @@ private:
     void mapObservationProbability(const float& curvature, Eigen::Vector2f& probability, float observationProbability);
     Eigen::Vector3f emissionProbabilitiesStraight();
     float calculateCurvature(float minDistance, float maxDistance);
-    lms::math::vertex2f interpolateRoadAtDistance(float distanceIn);
     street_environment::RoadState getStateFromIndex(int index);
 
 };
