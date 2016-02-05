@@ -76,12 +76,12 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     scp.fromConfig(&config("defaultLineParameter"));
     scp.lineWidthMax = scp.lineWidthMax*2;
     scp.boxDepthSearchLength = config("defaultCrossingParameter").get<float>("boxDepthSearchLength",20);
+    scp.obstacleRightOffset = config("defaultCrossingParameter").get<float>("obstacleRightOffset",0.1);
+    scp.obstacleSobelThreshold = config("defaultCrossingParameter").get<float>("obstacleSobelThreshold",100);
     scp.boxPointsNeeded = config("boxPointsNeeded").get<float>("boxPointsNeeded",3);
     scp.maxIterationsRANSAC = config("defaultCrossingParameter").get<int>("maxIterationsRANSAC",100);
     scp.inlierThresholdRANSAC = config("defaultCrossingParameter").get<double>("inlierThresholdRANSAC",4.0);
-    for(const lms::math::vertex2f &v:middle.points()){
-        scp.middleLine.points().push_back(v);
-    }
+    scp.middleLine = middle.getWithDistanceBetweenPoints(config().get<float>("crossingSearchPointDistance",0.1));
     crossing->parameter = scp;
     hintContainerObstacle->add(crossing);
 }
