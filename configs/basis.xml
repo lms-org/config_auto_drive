@@ -120,6 +120,9 @@
             <PID_Kp>1</PID_Kp>
             <PID_Ki>0</PID_Ki>
             <PID_Kd>0</PID_Kd>
+            <maxVelocityCrossing>2.0</maxVelocityCrossing>
+            <distanceToStop>1.0</distanceToStop>
+            <crossingSaftyZone>0.05</crossingSaftyZone>
             <!-- trajecotryPoint-->
             <trajectoryPointDistanceLookupX>1.8,3.0</trajectoryPointDistanceLookupX>
             <trajectoryPointDistanceLookupY>0.6,0.6</trajectoryPointDistanceLookupY>
