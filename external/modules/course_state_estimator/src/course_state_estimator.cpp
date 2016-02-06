@@ -4,7 +4,18 @@ bool CourseStateEstimator::initialize() {
     environment = readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT");
     roadStates= writeChannel<street_environment::RoadStates>("ROAD_STATES");
 
-    road = readChannel<street_environment::RoadLane>("ROAD");
+    road = readChannel<street_environment::RoadLane>("ROAD");  
+
+    probabilityStates << 1.0,1.0,1.0;
+    probabilityStates /= probabilityStates.sum();
+    return true;
+}
+
+bool CourseStateEstimator::deinitialize() {
+    return true;
+}
+
+bool CourseStateEstimator::cycle() {
 
     observationProbability1 = config().get<float>("observationProbability1", 0.8);
     observationProbability2 = config().get<float>("observationProbability2", 0.7);
@@ -17,22 +28,11 @@ bool CourseStateEstimator::initialize() {
     curvatureThreshold = config().get<float>("curvatureThreshold", 0.2);
 
     float transitionProbability = config().get<float>("transitionProbability", 0.01);
-    std::cout << transitionProbability << std::endl;
 
     transition << 1-transitionProbability, 0, transitionProbability,
                   transitionProbability, 1-transitionProbability, 0,
                   0, transitionProbability, 1-transitionProbability;
 
-    probabilityStates << 1.0,1.0,1.0;
-    probabilityStates /= probabilityStates.sum();
-    return true;
-}
-
-bool CourseStateEstimator::deinitialize() {
-    return true;
-}
-
-bool CourseStateEstimator::cycle() {
     for(street_environment::EnvironmentObjectPtr envPtr: environment->objects){
         lms::math::polyLine2f allPoints;
         if(envPtr->getType() == street_environment::RoadLane::TYPE){
@@ -285,15 +285,45 @@ street_environment::RoadState CourseStateEstimator::getStateFromIndex(int index)
 void CourseStateEstimator::update()
 {
 
-    //update curvature
-    float pt1_parameter = config().get<float>("curvaturePT1_parameter", 0.05);
-    curvaturePT1 = pt1_parameter*calculateCurvature(0.2, 1.2) + (1-pt1_parameter)*curvaturePT1;
+    if (config().get<bool>("useKalmanCurvature", true))
+    {
+        //update curvature
+        float curv = 0.0;
+        for (uint i=4; i <= 6; ++i)
+        {
+            curv += road->polarDarstellung[i];
+        }
+        curv /= 3.0;
+
+        //Unterscheidung ob "innnen" oder "aussen" in der Kurve
+        if (curv > 0) //Linkskurve
+        {
+            curv = curv/(1.0 + 0.2*curv);
+        }
+        else
+        {
+            curv = curv/(1.0 - 0.2*curv);
+        }
+
+        curvaturePT1 = curv;
+
+    }
+    else
+    {
+        //update curvature
+        float pt1_parameter = config().get<float>("curvaturePT1_parameter", 0.05);
+        curvaturePT1 = pt1_parameter*calculateCurvature(0.2, 1.2) + (1-pt1_parameter)*curvaturePT1;
+
+
+    }
 
     mapObservations();
     probabilityStates = transition*probabilityStates;
     probabilityStates = probabilityStates.cwiseProduct(observation);
-    probabilityStates = probabilityStates.cwiseProduct(emissionProbabilitiesStraight());
+    if (config().get<bool>("useProbabilitiesStraight", false)) probabilityStates = probabilityStates.cwiseProduct(emissionProbabilitiesStraight());
     probabilityStates /= probabilityStates.sum();
+
+
 }
 
 void CourseStateEstimator::mapObservations()
