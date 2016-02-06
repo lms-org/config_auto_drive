@@ -19,6 +19,7 @@ class LocalCourse : public lms::Service {
     int outlierStartingState;
     float outlierPercentile;
     float outlierPercentileMultiplier;
+    int resetCounter;
 
 public:
     LocalCourse();

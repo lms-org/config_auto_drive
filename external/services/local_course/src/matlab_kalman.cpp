@@ -66,7 +66,7 @@ void MatlabKalman::resetData(const lms::Config &config){
 
 bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, float dy, float dphi, float measurementUncertainty) {
 
-    if (++resetCounter < 10) measurementUncertainty = 10.0;
+    if (++resetCounter < 20) measurementUncertainty = 10.0;
 
     //länge der später zu berechnenden Abschnitten
     //convert data to lines
