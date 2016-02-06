@@ -28,6 +28,8 @@ class MatlabKalman{
 
     void printMat(emxArray_real_T *mat);
 
+    int resetCounter;
+
 public:
     MatlabKalman(lms::logging::Logger &logger);
     void configsChanged(const lms::Config &config);

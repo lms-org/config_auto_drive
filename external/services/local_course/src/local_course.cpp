@@ -18,6 +18,9 @@ void LocalCourse::destroy() {
 
 void LocalCourse::configsChanged(){
     kalman.configsChanged(config());
+
+    useThresholding = config().get<bool>("useThresholding", true);
+
     outlierStartingState = config().get<int>("outlierStartingPoint", 1);
     outlierPercentile = config().get<float>("outlierPercentile", 0.5);
     outlierPercentileMultiplier = config().get<float>("outlierPercentileMultiplier", 3.0);
@@ -28,69 +31,132 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
     //remove outliers
     street_environment::RoadLane lane = kalman.getOutput(); //calculate xy points of lane
 
-    std::vector< std::pair<int, float> > data; //index of nearest state-point and distance to it
-    std::pair<int, float> pair(0, 10000.0);
-    data.assign(pointsToAdd.size(), pair);
-
-    float dst;
-    float lambda;
-
-    for (int s = 0; s < lane.points().size(); ++s)
+    if (useThresholding)
     {
-        for (int m = 0; m < pointsToAdd.size(); ++m)
+
+        std::vector< std::tuple<int,float, float> > thresholdData;
+        std::tuple<int,float, float>  d (0,1000.0, 0); //index, distance, lambda
+        thresholdData.assign(pointsToAdd.size(), d);
+
+        float dst;
+        float lambda;
+        float delta = 0.2; //length of a lane segment
+
+        for (int s = 0; s < lane.points().size(); ++s)
         {
-            dst = pointsToAdd[m].distance(lane.points()[s]);
-            if (dst < data.at(m).second)
+            for (int m = 0; m < pointsToAdd.size(); ++m)
             {
-                data.at(m).first = s; //index of state-point nearest to the measurement point
-                data.at(m).second = dst;
-            }
-
-            if (s>0)
-            {
-                distanceLinePoint(lane.points()[s-1], lane.points()[s], pointsToAdd[m], &dst, &lambda);
-
-                if (dst < data.at(m).second && lambda > 0 && lambda < 1)
+                dst = pointsToAdd[m].distance(lane.points()[s]);
+                if (dst < std::get<1>(thresholdData.at(m)))
                 {
-                    data.at(m).first = s-1;
+                    std::get<0>(thresholdData.at(m)) = s;
+                    std::get<1>(thresholdData.at(m)) = dst;
+                }
+
+                if (s>0)
+                {
+                    distanceLinePoint(lane.points()[s-1], lane.points()[s], pointsToAdd[m], &dst, &lambda);
+
+                    if (dst < std::get<1>(thresholdData.at(m)) && lambda > 0 && lambda < 1)
+                    {
+                        std::get<0>(thresholdData.at(m)) = s;
+                        std::get<1>(thresholdData.at(m)) = dst;
+                        std::get<2>(thresholdData.at(m)) = lambda;
+                    }
+                }
+            }
+        }
+
+        std::vector<int> indices;
+
+        for (int i = 0; i < thresholdData.size(); ++i)
+        {
+
+            //thresholding
+            float s = delta * (std::get<0>(thresholdData.at(i)) + std::get<2>(thresholdData.at(i))); //arc length
+            float maxAllowedDistance = thresholdFunction(s);
+            if (std::get<1>(thresholdData.at(i)) > maxAllowedDistance)
+            {
+                indices.push_back(i);
+            }
+        }
+
+        std::sort(indices.begin(), indices.end());
+
+        for (int i = indices.size()-1; i >= 0; --i)
+        {
+            pointsToAdd.erase(pointsToAdd.begin() + indices[i]);
+        }
+
+    }
+    else
+    {
+        std::vector< std::pair<int, float> > data; //index of nearest state-point and distance to it
+
+        std::pair<int, float> pair(0, 10000.0);
+        data.assign(pointsToAdd.size(), pair);
+
+        float dst;
+        float lambda;
+
+        for (int s = 0; s < lane.points().size(); ++s)
+        {
+            for (int m = 0; m < pointsToAdd.size(); ++m)
+            {
+                dst = pointsToAdd[m].distance(lane.points()[s]);
+                if (dst < data.at(m).second)
+                {
+                    data.at(m).first = s; //index of state-point nearest to the measurement point
                     data.at(m).second = dst;
+                }
+
+                if (s>0)
+                {
+                    distanceLinePoint(lane.points()[s-1], lane.points()[s], pointsToAdd[m], &dst, &lambda);
+
+                    if (dst < data.at(m).second && lambda > 0 && lambda < 1)
+                    {
+                        data.at(m).first = s-1;
+                        data.at(m).second = dst;
+                    }
+                }
+            }
+        }
+
+        std::vector<float> observations;
+        std::vector<int> indices;
+
+        for (int i = 0; i < data.size(); ++i)
+        {
+            if (data[i].first >= outlierStartingState)
+            {
+                observations.push_back(data[i].second);
+            }
+        }
+
+        if (observations.size() > 0)
+        {
+            float perc = outlierPercentile;
+            std::nth_element(observations.begin(), observations.begin() + perc*observations.size(), observations.end());
+            float percVal = observations[perc*observations.size()];
+            float maxDistance = outlierPercentileMultiplier*percVal;
+
+
+            for (int i = 0; i <data.size();)
+            {
+                if (data[i].first >= outlierStartingState && data[i].second > maxDistance)
+                {
+                    pointsToAdd.erase(pointsToAdd.begin() + i);
+                    data.erase(data.begin() + i);
+
+                }else{
+                    i++;
                 }
             }
         }
     }
 
-    std::vector<float> observations;
-    for (int i = i; i < data.size(); ++i)
-    {
-        if (data[i].first >= outlierStartingState)
-        {
-            observations.push_back(data[i].second);
-        }
-    }
 
-    if (observations.size() > 0)
-    {
-        float perc = outlierPercentile;
-        std::nth_element(observations.begin(), observations.begin() + perc*observations.size(), observations.end());
-        float percVal = observations[perc*observations.size()];
-        float maxDistance = outlierPercentileMultiplier*percVal;
-
-        if(data.size() != pointsToAdd.size()){
-            //fail
-        }
-
-        for (int i = 0; i <data.size();)
-        {
-            if (data[i].first >= outlierStartingState && data[i].second > maxDistance)
-            {
-                pointsToAdd.erase(pointsToAdd.begin() + i);
-                data.erase(data.begin() + i);
-
-            }else{
-                i++;
-            }
-        }
-    }
 
     kalman.update(pointsToAdd,dx,dy,dphi, measurementUncertainty);
     pointsAdded = pointsToAdd;
@@ -134,6 +200,15 @@ street_environment::RoadLane LocalCourse::getCourse(lms::Time time){
     //TODO
     street_environment::RoadLane r;
     return r;
+}
+
+float LocalCourse::thresholdFunction(float s)
+{
+
+    float thresholdingSlope = config().get<float>("thresholdingSlope", 0.1/1.5);
+
+    //s = arc length along lane model
+    return s*thresholdingSlope;
 }
 
 void LocalCourse::distanceLinePoint(lms::math::vertex2f P, lms::math::vertex2f Q, lms::math::vertex2f M, float *dst, float *lambda)

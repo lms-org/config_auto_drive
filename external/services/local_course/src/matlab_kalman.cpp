@@ -15,6 +15,7 @@ MatlabKalman::MatlabKalman(lms::logging::Logger &logger_):logger(logger_) {
     stateTransitionMatrix = nullptr;
     kovarianzMatrixDesZustandes = nullptr;
     kovarianzMatrixDesZustandUebergangs = nullptr;
+    resetCounter = 0;
 }
 
 
@@ -54,6 +55,8 @@ void MatlabKalman::resetData(const lms::Config &config){
     asEinheitsMatrix(kovarianzMatrixDesZustandUebergangs, config.get<float>("kov",15));
     //clearMatrix(kovarianzMatrixDesZustandUebergangs);
 
+    resetCounter = 0;
+
     for(int x = 0; x < partCount; x++){
         for(int y = 0; y < partCount; y++){
             if (x != 0 && y != 0) kovarianzMatrixDesZustandUebergangs->data[y*partCount+x]=config.get<float>("kov",15)*(1-pow(config.get<float>("kovAbnahme",0.2),1/fabs(x-y)));
@@ -62,6 +65,8 @@ void MatlabKalman::resetData(const lms::Config &config){
 }
 
 bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, float dy, float dphi, float measurementUncertainty) {
+
+    if (++resetCounter < 10) measurementUncertainty = 10.0;
 
     //länge der später zu berechnenden Abschnitten
     //convert data to lines
