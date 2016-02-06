@@ -27,11 +27,14 @@ bool CourseStateEstimator::cycle() {
 
     curvatureThreshold = config().get<float>("curvatureThreshold", 0.2);
 
-    float transitionProbability = config().get<float>("transitionProbability", 0.01);
+    float transitionProbability1 = config().get<float>("transitionProbabilityStraightToStraightCurve", 0.01);
+    float transitionProbability2 = config().get<float>("transitionProbabilityStraightCurveToCurve", 0.01);
+    float transitionProbability3 = config().get<float>("transitionProbabilityCurveToStraight", 0.01);
 
-    transition << 1-transitionProbability, 0, transitionProbability,
-                  transitionProbability, 1-transitionProbability, 0,
-                  0, transitionProbability, 1-transitionProbability;
+    //! straight straight-curve curve
+    transition << 1-transitionProbability1,  0,                        transitionProbability3,
+                  transitionProbability1,    1-transitionProbability2, 0,
+                  0,                         transitionProbability2,   1-transitionProbability3;
 
     for(street_environment::EnvironmentObjectPtr envPtr: environment->objects){
         lms::math::polyLine2f allPoints;
@@ -53,9 +56,9 @@ bool CourseStateEstimator::cycle() {
     update();
 
 
-    //logger.debug("States:") << probabilityStates(0) << " " << probabilityStates(1) << " " << probabilityStates(2);
+    logger.debug("States:") << probabilityStates(0) << " " << probabilityStates(1) << " " << probabilityStates(2);
     Eigen::Vector3f probsStraight = CourseStateEstimator::emissionProbabilitiesStraight();
-    //logger.debug("obs prob:") << probsStraight(0) << " "<< probsStraight(1) << " "<< probsStraight(2);
+    logger.debug("obs prob:") << probsStraight(0) << " "<< probsStraight(1) << " "<< probsStraight(2);
     roadStates->states.clear();
     for(int i = 0; i < probabilityStates.rows(); i++){
         roadStates->states.push_back(getStateFromIndex(i));
@@ -316,7 +319,6 @@ void CourseStateEstimator::update()
 
 
     }
-
     mapObservations();
     probabilityStates = transition*probabilityStates;
     probabilityStates = probabilityStates.cwiseProduct(observation);
