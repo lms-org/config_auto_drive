@@ -44,7 +44,7 @@
             <elementCount>10</elementCount>
             <kov>15</kov>
             <prioFact>0</prioFact>
-            <kovAbnahme>0.15</kovAbnahme>
+            <kovAbnahme>0.05</kovAbnahme>
             <elementLength>0.2</elementLength>
             <enableMove>false</enableMove>
             <logState>false</logState>

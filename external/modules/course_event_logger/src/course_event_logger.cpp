@@ -25,7 +25,7 @@ bool CourseEventLogger::cycle() {
         //print s to x,y
         eventCsv<<car->position().x<<","<< car->position().y<<","<<s;
     }
-    courseCsv<<car->position().x<<","<< car->position().y<<","<<car->velocity()<<car->targetSpeed();
+    courseCsv<<car->position().x<<","<< car->position().y<<","<<car->velocity()<< "," <<car->targetSpeed() << std::endl;
 
     return true;
 }
