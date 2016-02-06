@@ -41,6 +41,8 @@
         <name>LOCAL_COURSE_SERVICE</name>
         <realName>local_course</realName>
         <config>
+            <useThresholding>true</useThresholding>
+            <thresholdingSlope>0.08</thresholdingSlope>
             <outlierStartingPoint>2</outlierStartingPoint>
             <outlierPercentile>0.5</outlierPercentile>
             <outlierPercentileMultiplier>3.0</outlierPercentileMultiplier>
