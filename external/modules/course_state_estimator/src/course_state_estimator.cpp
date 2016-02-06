@@ -56,9 +56,9 @@ bool CourseStateEstimator::cycle() {
     update();
 
 
-    //logger.debug("States:") << probabilityStates(0) << " " << probabilityStates(1) << " " << probabilityStates(2);
+    logger.debug("States:") << probabilityStates(0) << " " << probabilityStates(1) << " " << probabilityStates(2);
     Eigen::Vector3f probsStraight = CourseStateEstimator::emissionProbabilitiesStraight();
-    //logger.debug("obs prob:") << probsStraight(0) << " "<< probsStraight(1) << " "<< probsStraight(2);
+    logger.debug("obs prob:") << probsStraight(0) << " "<< probsStraight(1) << " "<< probsStraight(2);
     roadStates->states.clear();
     for(int i = 0; i < probabilityStates.rows(); i++){
         roadStates->states.push_back(getStateFromIndex(i));
@@ -319,7 +319,6 @@ void CourseStateEstimator::update()
 
 
     }
-
     mapObservations();
     probabilityStates = transition*probabilityStates;
     probabilityStates = probabilityStates.cwiseProduct(observation);
