@@ -266,6 +266,8 @@
             <distance4>1.4</distance4>
             <curvatureThreshold>0.2</curvatureThreshold>
             <transitionProbability>0.1</transitionProbability>
+            <useKalmanCurvature>true</useKalmanCurvature>
+            <useProbabilitiesStraight>false</useProbabilitiesStraight>
          </config>
     </module>
     <include src="ego.xml"/>
