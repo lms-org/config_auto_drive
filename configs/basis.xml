@@ -41,9 +41,9 @@
         <name>LOCAL_COURSE_SERVICE</name>
         <realName>local_course</realName>
         <config>
-            <outlierStartingPoint>2</outlierStartingPoint>
+            <outlierStartingPoint>6</outlierStartingPoint>
             <outlierPercentile>0.5</outlierPercentile>
-            <outlierPercentileMultiplier>3.0</outlierPercentileMultiplier>
+            <outlierPercentileMultiplier>5.0</outlierPercentileMultiplier>
             <elementCount>10</elementCount>
             <kov>15</kov>
             <prioFact>0</prioFact>
@@ -120,12 +120,12 @@
             <maxParallelAusweichen>0.2</maxParallelAusweichen>
             <!--velocity-controller -->
             <!-- stop on crossing-->
-            <PID_Kp>1</PID_Kp>
+            <PID_Kp>0.5</PID_Kp>
             <PID_Ki>0</PID_Ki>
             <PID_Kd>0</PID_Kd>
             <maxVelocityCrossing>2.0</maxVelocityCrossing>
             <distanceToStop>1.0</distanceToStop>
-            <crossingSaftyZone>0.05</crossingSaftyZone>
+            <crossingSaftyZone>0.2</crossingSaftyZone>
             <!-- trajecotryPoint-->
             <trajectoryPointDistanceLookupX>1.8,3.0</trajectoryPointDistanceLookupX>
             <trajectoryPointDistanceLookupY>0.6,0.6</trajectoryPointDistanceLookupY>
@@ -173,7 +173,7 @@
             <curve_maxVelocity>2.0</curve_maxVelocity>
             <curve_minVelocity>2.0</curve_minVelocity>
             <aOrthMax>1.7</aOrthMax>
-            <simpleTraj>false</simpleTraj>
+            <simpleTraj>true</simpleTraj>
             <angleD>0.35</angleD>
             <obstacleResolution>0.05</obstacleResolution>
             <minDistanceBetweenTrajectoryPoints>0.2</minDistanceBetweenTrajectoryPoints>

@@ -139,7 +139,7 @@ void ImageObjectRenderer::drawObject(const street_environment::EnvironmentObject
     }else if(eo->getType() == 1){
         const street_environment::Obstacle &obst = eo->getAsReference<const street_environment::Obstacle>();
         if(!customColor){
-            if(obst.trust() > config().get<float>("obstacleTrustThreshold",0)){
+            if(obst.trust() > config().get<float>("obstacleTrustThreshold",0.5)){
                 setColor("OBSTACLE_DETECTED");
             }else{
                 setColor("DEFAULT_OBSTACLE");
