@@ -42,6 +42,8 @@
         <realName>local_course</realName>
         <config>
             <outlierStartingPoint>2</outlierStartingPoint>
+            <outlierPercentile>0.5</outlierPercentile>
+            <outlierPercentileMultiplier>3.0</outlierPercentileMultiplier>
             <elementCount>10</elementCount>
             <kov>15</kov>
             <prioFact>0</prioFact>
