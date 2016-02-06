@@ -43,11 +43,11 @@
         <config>
             <outlierStartingPoint>6</outlierStartingPoint>
             <outlierPercentile>0.5</outlierPercentile>
-            <outlierPercentileMultiplier>5.0</outlierPercentileMultiplier>
+            <outlierPercentileMultiplier>3.0</outlierPercentileMultiplier>
             <elementCount>10</elementCount>
             <kov>15</kov>
             <prioFact>0</prioFact>
-            <kovAbnahme>0.05</kovAbnahme>
+            <kovAbnahme>0.15</kovAbnahme>
             <elementLength>0.2</elementLength>
             <enableMove>false</enableMove>
             <logState>false</logState>
@@ -93,7 +93,7 @@
         <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="OUTPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
         <config>
-            <scaleDown>5</scaleDown>
+            <scaleDown>1</scaleDown>
         </config>
     </module>
     <module>
@@ -120,10 +120,10 @@
             <maxParallelAusweichen>0.2</maxParallelAusweichen>
             <!--velocity-controller -->
             <!-- stop on crossing-->
-            <PID_Kp>0.5</PID_Kp>
+            <PID_Kp>0.4</PID_Kp>
             <PID_Ki>0</PID_Ki>
             <PID_Kd>0</PID_Kd>
-            <maxVelocityCrossing>2.0</maxVelocityCrossing>
+            <maxVelocityCrossing>1.0</maxVelocityCrossing>
             <distanceToStop>1.0</distanceToStop>
             <crossingSaftyZone>0.2</crossingSaftyZone>
             <!-- trajecotryPoint-->
@@ -168,7 +168,7 @@
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
         <channelMapping priority="9" from="CAR" to="CAR"/>
-        <config>
+        <config name="FMH">
             <velocity_straight>3.0</velocity_straight>
             <curve_maxVelocity>2.0</curve_maxVelocity>
             <curve_minVelocity>2.0</curve_minVelocity>
@@ -177,7 +177,22 @@
             <angleD>0.35</angleD>
             <obstacleResolution>0.05</obstacleResolution>
             <minDistanceBetweenTrajectoryPoints>0.2</minDistanceBetweenTrajectoryPoints>
-            <distanceObstacleBeforeChangeLine>0.5</distanceObstacleBeforeChangeLine>
+            <distanceObstacleBeforeChangeLine>1</distanceObstacleBeforeChangeLine>
+            <obstacleLength>0.7</obstacleLength>
+        </config>
+        <config>
+        <velocity_straight>3.0</velocity_straight>
+          <curve_maxVelocity>2.5</curve_maxVelocity>
+          <curve_minVelocity>2.0</curve_minVelocity>
+          <curveStraight_maxVelocity>2.0</curveStraight_maxVelocity>
+          <curveStraight_minVelocity>1.5</curveStraight_minVelocity>
+          <pt1Velocity>0.8</pt1Velocity>
+          <aOrthMax>3.5</aOrthMax>
+          <simpleTraj>true</simpleTraj>
+          <angleD>0.35</angleD>
+          <obstacleResolution>0.05</obstacleResolution>
+          <minDistanceBetweenTrajectoryPoints>0.2</minDistanceBetweenTrajectoryPoints>
+          <distanceObstacleBeforeChangeLine>0.5</distanceObstacleBeforeChangeLine>
         </config>
         <config src="street_utils/obstacle.lconf"/>
         <config src="trajectory_creator.lconf"/>
@@ -261,16 +276,18 @@
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
         <config>
-            <observationProbability1>0.8</observationProbability1>
+        <observationProbability1>0.8</observationProbability1>
             <observationProbability2>0.999</observationProbability2>
             <distance1>0.4</distance1>
             <distance2>0.8</distance2>
             <distance3>0.8</distance3>
             <distance4>1.4</distance4>
             <curvatureThreshold>0.2</curvatureThreshold>
-            <transitionProbability>0.1</transitionProbability>
+            <transitionProbabilityStraightToStraightCurve>0.2</transitionProbabilityStraightToStraightCurve>
+            <transitionProbabilityStraightCurveToCurve>0.2</transitionProbabilityStraightCurveToCurve>
+            <transitionProbabilityCurveToStraight>0.00000001</transitionProbabilityCurveToStraight>
             <useKalmanCurvature>true</useKalmanCurvature>
-            <useProbabilitiesStraight>false</useProbabilitiesStraight>
+            <useProbabilitiesStraight>true</useProbabilitiesStraight>
          </config>
     </module>
     <include src="ego.xml"/>
