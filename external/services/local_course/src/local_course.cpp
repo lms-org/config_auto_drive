@@ -19,8 +19,6 @@ void LocalCourse::destroy() {
 void LocalCourse::configsChanged(){
     kalman.configsChanged(config());
 
-    useThresholding = config().get<bool>("useThresholding", true);
-
     outlierStartingState = config().get<int>("outlierStartingPoint", 1);
     outlierPercentile = config().get<float>("outlierPercentile", 0.5);
     outlierPercentileMultiplier = config().get<float>("outlierPercentileMultiplier", 3.0);
@@ -31,7 +29,7 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
     //remove outliers
     street_environment::RoadLane lane = kalman.getOutput(); //calculate xy points of lane
 
-    if (useThresholding)
+    if (config().get<bool>("useThresholding", true))
     {
 
         std::vector< std::tuple<int,float, float> > thresholdData;

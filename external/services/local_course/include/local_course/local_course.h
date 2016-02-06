@@ -17,7 +17,6 @@ class LocalCourse : public lms::Service {
     std::vector<lms::math::vertex2f> pointsToAdd;
     std::vector<lms::math::vertex2f> pointsAdded;
     int outlierStartingState;
-    bool useThresholding;
     float outlierPercentile;
     float outlierPercentileMultiplier;
 
