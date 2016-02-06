@@ -264,16 +264,18 @@
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
         <config>
-            <observationProbability1>0.8</observationProbability1>
+        <observationProbability1>0.8</observationProbability1>
             <observationProbability2>0.999</observationProbability2>
             <distance1>0.4</distance1>
             <distance2>0.8</distance2>
             <distance3>0.8</distance3>
             <distance4>1.4</distance4>
             <curvatureThreshold>0.2</curvatureThreshold>
-            <transitionProbability>0.1</transitionProbability>
+            <transitionProbabilityStraightToStraightCurve>0.2</transitionProbabilityStraightToStraightCurve>
+            <transitionProbabilityStraightCurveToCurve>0.2</transitionProbabilityStraightCurveToCurve>
+            <transitionProbabilityCurveToStraight>0.00000001</transitionProbabilityCurveToStraight>
             <useKalmanCurvature>true</useKalmanCurvature>
-            <useProbabilitiesStraight>false</useProbabilitiesStraight>
+            <useProbabilitiesStraight>true</useProbabilitiesStraight>
          </config>
     </module>
     <include src="ego.xml"/>
