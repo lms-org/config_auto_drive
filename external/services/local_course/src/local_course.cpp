@@ -19,6 +19,8 @@ void LocalCourse::destroy() {
 void LocalCourse::configsChanged(){
     kalman.configsChanged(config());
     outlierStartingState = config().get<int>("outlierStartingPoint", 1);
+    outlierPercentile = config().get<float>("outlierPercentile", 0.5);
+    outlierPercentileMultiplier = config().get<float>("outlierPercentileMultiplier", 3.0);
 }
 
 
@@ -68,10 +70,10 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
 
     if (observations.size() > 0)
     {
-        float perc = 0.5;
+        float perc = outlierPercentile;
         std::nth_element(observations.begin(), observations.begin() + perc*observations.size(), observations.end());
         float percVal = observations[perc*observations.size()];
-        float maxDistance = 3*percVal;
+        float maxDistance = outlierPercentileMultiplier*percVal;
 
         if(data.size() != pointsToAdd.size()){
             //fail
