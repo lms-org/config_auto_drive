@@ -41,6 +41,7 @@
         <name>LOCAL_COURSE_SERVICE</name>
         <realName>local_course</realName>
         <config>
+            <outlierStartingPoint>2</outlierStartingPoint>
             <elementCount>10</elementCount>
             <kov>15</kov>
             <prioFact>0</prioFact>
