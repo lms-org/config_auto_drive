@@ -126,9 +126,6 @@
 
             <!--default velo-->
             <forcastLength>1</forcastLength>
-            <maxAngle>0.4</maxAngle>
-            <minSpeed>2.0</minSpeed>
-            <maxSpeed>2.0</maxSpeed>
             <minForcastLength>0.4</minForcastLength>
             <maxForcastLength>1.4</maxForcastLength>
             <targetForcastLength>1.0</targetForcastLength>
@@ -146,7 +143,7 @@
         <config>
             <searchForObstacles>true</searchForObstacles>
             <searchForCrossing>true</searchForCrossing>
-            <numerOfSegmentsLines>2</numerOfSegmentsLines>
+            <numerOfSegmentsLines>1</numerOfSegmentsLines>
             <maxSearchLength>4.0</maxSearchLength>
             <lineOffset>0.1</lineOffset>
         </config>
@@ -166,11 +163,11 @@
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
         <channelMapping priority="9" from="CAR" to="CAR"/>
         <config>
-            <velocity_straight>4.5</velocity_straight>
+            <velocity_straight>3.5</velocity_straight>
             <curve_maxVelocity>3.0</curve_maxVelocity>
-            <curve_minVelocity>2.7</curve_minVelocity>
+            <curve_minVelocity>2.0</curve_minVelocity>
             <aOrthMax>1.7</aOrthMax>
-            <simpleTraj>true</simpleTraj>
+            <simpleTraj>false</simpleTraj>
             <angleD>0.35</angleD>
             <obstacleResolution>0.05</obstacleResolution>
             <minDistanceBetweenTrajectoryPoints>0.2</minDistanceBetweenTrajectoryPoints>
