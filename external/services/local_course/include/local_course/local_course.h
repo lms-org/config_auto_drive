@@ -15,6 +15,11 @@ namespace local_course {
 class LocalCourse : public lms::Service {
     MatlabKalman kalman;
     std::vector<lms::math::vertex2f> pointsToAdd;
+    std::vector<lms::math::vertex2f> pointsAdded;
+    int outlierStartingState;
+    float outlierPercentile;
+    float outlierPercentileMultiplier;
+
 public:
     LocalCourse();
     bool init() override;
@@ -28,6 +33,8 @@ public:
     void resetData();
     void configsChanged() override;
     std::vector<lms::math::vertex2f> getPointsToAdd();
+    std::vector<lms::math::vertex2f> getPointsAdded();
+    void distanceLinePoint(lms::math::vertex2f P, lms::math::vertex2f Q, lms::math::vertex2f M, float *dst, float *lambda);
 };
 
 } // namespace local_course

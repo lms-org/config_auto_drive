@@ -41,10 +41,13 @@
         <name>LOCAL_COURSE_SERVICE</name>
         <realName>local_course</realName>
         <config>
+            <outlierStartingPoint>2</outlierStartingPoint>
+            <outlierPercentile>0.5</outlierPercentile>
+            <outlierPercentileMultiplier>3.0</outlierPercentileMultiplier>
             <elementCount>10</elementCount>
             <kov>15</kov>
             <prioFact>0</prioFact>
-            <kovAbnahme>0.15</kovAbnahme>
+            <kovAbnahme>0.05</kovAbnahme>
             <elementLength>0.2</elementLength>
             <enableMove>false</enableMove>
             <logState>false</logState>
@@ -120,6 +123,9 @@
             <PID_Kp>1</PID_Kp>
             <PID_Ki>0</PID_Ki>
             <PID_Kd>0</PID_Kd>
+            <maxVelocityCrossing>2.0</maxVelocityCrossing>
+            <distanceToStop>1.0</distanceToStop>
+            <crossingSaftyZone>0.05</crossingSaftyZone>
             <!-- trajecotryPoint-->
             <trajectoryPointDistanceLookupX>1.8,3.0</trajectoryPointDistanceLookupX>
             <trajectoryPointDistanceLookupY>0.6,0.6</trajectoryPointDistanceLookupY>
@@ -163,8 +169,8 @@
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
         <channelMapping priority="9" from="CAR" to="CAR"/>
         <config>
-            <velocity_straight>3.5</velocity_straight>
-            <curve_maxVelocity>3.0</curve_maxVelocity>
+            <velocity_straight>3.0</velocity_straight>
+            <curve_maxVelocity>2.0</curve_maxVelocity>
             <curve_minVelocity>2.0</curve_minVelocity>
             <aOrthMax>1.7</aOrthMax>
             <simpleTraj>false</simpleTraj>
@@ -263,6 +269,8 @@
             <distance4>1.4</distance4>
             <curvatureThreshold>0.2</curvatureThreshold>
             <transitionProbability>0.1</transitionProbability>
+            <useKalmanCurvature>true</useKalmanCurvature>
+            <useProbabilitiesStraight>false</useProbabilitiesStraight>
          </config>
     </module>
     <include src="ego.xml"/>

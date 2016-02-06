@@ -8,7 +8,7 @@ LocalCourse::LocalCourse():kalman(logger){
 }
 
 bool LocalCourse::init() {
-    kalman.configsChanged(config());
+    configsChanged();
     return true;
 }
 
@@ -18,16 +18,91 @@ void LocalCourse::destroy() {
 
 void LocalCourse::configsChanged(){
     kalman.configsChanged(config());
+    outlierStartingState = config().get<int>("outlierStartingPoint", 1);
+    outlierPercentile = config().get<float>("outlierPercentile", 0.5);
+    outlierPercentileMultiplier = config().get<float>("outlierPercentileMultiplier", 3.0);
 }
 
 
 void LocalCourse::update(float dx, float dy, float dphi, float measurementUncertainty){
+    //remove outliers
+    street_environment::RoadLane lane = kalman.getOutput(); //calculate xy points of lane
+
+    std::vector< std::pair<int, float> > data; //index of nearest state-point and distance to it
+    std::pair<int, float> pair(0, 10000.0);
+    data.assign(pointsToAdd.size(), pair);
+
+    float dst;
+    float lambda;
+
+    for (int s = 0; s < lane.points().size(); ++s)
+    {
+        for (int m = 0; m < pointsToAdd.size(); ++m)
+        {
+            dst = pointsToAdd[m].distance(lane.points()[s]);
+            if (dst < data.at(m).second)
+            {
+                data.at(m).first = s; //index of state-point nearest to the measurement point
+                data.at(m).second = dst;
+            }
+
+            if (s>0)
+            {
+                distanceLinePoint(lane.points()[s-1], lane.points()[s], pointsToAdd[m], &dst, &lambda);
+
+                if (dst < data.at(m).second && lambda > 0 && lambda < 1)
+                {
+                    data.at(m).first = s-1;
+                    data.at(m).second = dst;
+                }
+            }
+        }
+    }
+
+    std::vector<float> observations;
+    for (int i = i; i < data.size(); ++i)
+    {
+        if (data[i].first >= outlierStartingState)
+        {
+            observations.push_back(data[i].second);
+        }
+    }
+
+    if (observations.size() > 0)
+    {
+        float perc = outlierPercentile;
+        std::nth_element(observations.begin(), observations.begin() + perc*observations.size(), observations.end());
+        float percVal = observations[perc*observations.size()];
+        float maxDistance = outlierPercentileMultiplier*percVal;
+
+        if(data.size() != pointsToAdd.size()){
+            //fail
+        }
+
+        for (int i = 0; i <data.size();)
+        {
+            if (data[i].first >= outlierStartingState && data[i].second > maxDistance)
+            {
+                pointsToAdd.erase(pointsToAdd.begin() + i);
+                data.erase(data.begin() + i);
+                logger.error("REMOVING POINT")<<i;
+            }else{
+                i++;
+            }
+        }
+    }
+
     kalman.update(pointsToAdd,dx,dy,dphi, measurementUncertainty);
+    pointsAdded = pointsToAdd;
     pointsToAdd.clear();
 }
 
 std::vector<lms::math::vertex2f> LocalCourse::getPointsToAdd(){
     return pointsToAdd;
+}
+
+std::vector<lms::math::vertex2f> LocalCourse::getPointsAdded(){
+    return pointsAdded;
 }
 
 
@@ -39,12 +114,12 @@ void LocalCourse::resetData(){
 
 void LocalCourse::addPoints(const std::vector<lms::math::vertex2f> &points){
     for(const lms::math::vertex2f &v :points){
-        pointsToAdd.push_back(v);
+        if (!(isnan(v.x) || isnan(v.y)))  pointsToAdd.push_back(v);// TODO nan??
     }
 }
 
 void LocalCourse::addPoint(const lms::math::vertex2f &p){
-    pointsToAdd.push_back(p);
+    if (!(isnan(p.x) || isnan(p.y)))  pointsToAdd.push_back(p); // TODO nan??
 }
 
 
@@ -59,6 +134,23 @@ street_environment::RoadLane LocalCourse::getCourse(lms::Time time){
     //TODO
     street_environment::RoadLane r;
     return r;
+}
+
+void LocalCourse::distanceLinePoint(lms::math::vertex2f P, lms::math::vertex2f Q, lms::math::vertex2f M, float *dst, float *lambda)
+{
+    //calculate distance of M from the line connecting P and Q
+    //lambda = 0, if the orthogonal line from PQ to M goes through P
+    //lambda = 1, if the orthogonal line from PQ to M goes through Q
+    //lambda  [0, ... , 1] inbetween
+
+    lms::math::vertex2f V = Q - P;
+
+    *lambda = - (V.x*(P.x-M.x) + V.y*(P.y-M.y))/(V.x*V.x + V.y*V.y);
+    lms::math::vertex2f S = P + V*(*lambda);
+
+    *dst = sqrt((M.x-S.x)*(M.x-S.x) + (M.y-S.y)*(M.y-S.y));
+
+
 }
 
 } // namespace local_course

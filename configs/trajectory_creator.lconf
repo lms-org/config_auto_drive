@@ -1,5 +1,5 @@
 kj = 1
-kT = 10
+kT = 100000
 ks = 1
 kd = 1
 dT = 0.1
@@ -10,9 +10,10 @@ m = 20
 kappa_ratio = 0
 #Simple trajectory values
 #minDistance ist nicht wirklich eine Distanz
-minDistanceToCrossing = 0.3
+minDistanceToCrossing = 0.0
 obstacleLength = 0.7
 street_width = 0.8
 maxStopTimeAtCrossing = 10
 trajectoryStartDistance = 0.3
 trajectoryMaxLength = 1.4
+slowDownInFrontOfCrossing = 0.0
