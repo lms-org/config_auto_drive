@@ -166,10 +166,10 @@
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
         <channelMapping priority="9" from="CAR" to="CAR"/>
         <config>
-            <velocity_straight>6</velocity_straight>
-            <curve_maxVelocity>3</curve_maxVelocity>
-            <curve_minVelocity>2</curve_minVelocity>
-            <aOrthMax>2.9</aOrthMax>
+            <velocity_straight>4.5</velocity_straight>
+            <curve_maxVelocity>3.0</curve_maxVelocity>
+            <curve_minVelocity>2.7</curve_minVelocity>
+            <aOrthMax>1.7</aOrthMax>
             <simpleTraj>true</simpleTraj>
             <angleD>0.35</angleD>
             <obstacleResolution>0.05</obstacleResolution>
@@ -200,8 +200,8 @@
         <config user="odroid">
             <logPrefix>/home/odroid/data/env/env</logPrefix>
             <r_fakt_min>20</r_fakt_min>
-            <r_fakt_max>50</r_fakt_max>
-            <r_fakt_maxVelocity>4.0</r_fakt_maxVelocity>
+            <r_fakt_max>100</r_fakt_max>
+            <r_fakt_maxVelocity>5.0</r_fakt_maxVelocity>
         </config>
         <config>
             <translateEnvironment>false</translateEnvironment>
@@ -259,12 +259,12 @@
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
         <config>
             <observationProbability1>0.8</observationProbability1>
-            <observationProbability2>0.7</observationProbability2>
+            <observationProbability2>0.999</observationProbability2>
             <distance1>0.4</distance1>
             <distance2>0.8</distance2>
-            <distance3>1.2</distance3>
-            <distance4>1.6</distance4>
-            <curvatureThreshold>0.1</curvatureThreshold>
+            <distance3>0.8</distance3>
+            <distance4>1.4</distance4>
+            <curvatureThreshold>0.2</curvatureThreshold>
             <transitionProbability>0.1</transitionProbability>
          </config>
     </module>
