@@ -105,19 +105,6 @@ bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, flo
                      kovarianzMatrixDesZustandUebergangs,
                      measurementUncertainty,partLength,lx,ly,rx,ry,mx,my,1,prior_fact);
 
-    std::cout << "x: ";
-    for (int i = 0; i < mx->size[0]; ++i)
-    {
-        std::cout << mx->data[i] << ", ";
-    }
-    std::cout << std::endl;
-
-    std::cout << "y: ";
-    for (int i = 0; i < my->size[0]; ++i)
-    {
-        std::cout << my->data[i] << ", ";
-    }
-    std::cout << std::endl;
 
     //destroy stuff
     emxDestroyArray_real_T(rx);
@@ -126,12 +113,6 @@ bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, flo
     emxDestroyArray_real_T(ly);
     emxDestroyArray_real_T(mx);
     emxDestroyArray_real_T(my);
-
-    for(int i = 0; i < zustandsVector->size[0]; i++)
-    {
-        std::cout << zustandsVector->data[i] << ", ";
-    }
-    std::cout << std::endl;
 
     return true;
 }

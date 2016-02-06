@@ -85,7 +85,7 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
             {
                 pointsToAdd.erase(pointsToAdd.begin() + i);
                 data.erase(data.begin() + i);
-                logger.error("REMOVING POINT")<<i;
+
             }else{
                 i++;
             }
