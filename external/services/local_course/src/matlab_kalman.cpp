@@ -22,6 +22,7 @@ void MatlabKalman::configsChanged(const lms::Config &config){
     prior_fact = config.get<float>("prior_fact",0);
     partCount = config.get<int>("elementCount",10);
     partLength = config.get<float>("elementLength",0.2);
+
     if(zustandsVector != nullptr){
         emxDestroyArray_real_T(zustandsVector);
     }
@@ -71,6 +72,8 @@ bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, flo
     emxArray_real_T *mx = nullptr;
     emxArray_real_T *my = nullptr;
 
+
+
     //convert points
     convertToKalmanArray(points,&mx,&my);
     if(rx == nullptr){
@@ -101,6 +104,21 @@ bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, flo
     kalman_filter_lr(zustandsVector,dx,dy,dphi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      measurementUncertainty,partLength,lx,ly,rx,ry,mx,my,1,prior_fact);
+
+    std::cout << "x: ";
+    for (int i = 0; i < mx->size[0]; ++i)
+    {
+        std::cout << mx->data[i] << ", ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "y: ";
+    for (int i = 0; i < my->size[0]; ++i)
+    {
+        std::cout << my->data[i] << ", ";
+    }
+    std::cout << std::endl;
+
     //destroy stuff
     emxDestroyArray_real_T(rx);
     emxDestroyArray_real_T(ry);
@@ -108,6 +126,13 @@ bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, flo
     emxDestroyArray_real_T(ly);
     emxDestroyArray_real_T(mx);
     emxDestroyArray_real_T(my);
+
+    for(int i = 0; i < zustandsVector->size[0]; i++)
+    {
+        std::cout << zustandsVector->data[i] << ", ";
+    }
+    std::cout << std::endl;
+
     return true;
 }
 
@@ -116,6 +141,7 @@ void MatlabKalman::logStateVector(std::ostream &logFile){
     {
         logFile << "," << zustandsVector->data[i];
     }
+
     logFile << std::endl;
 }
 

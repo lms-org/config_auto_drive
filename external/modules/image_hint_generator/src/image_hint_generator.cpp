@@ -189,7 +189,7 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
             logger.debug("cycle") <<"searchLength pix: "<<searchLength <<" "<< leftI.x << " "<< leftI.y;
             searchLength = searchLength/lineDistance*lineOffset*2;
             logger.debug("cycle")<<"angleLeft: " <<angleLeft << " length: "<<searchLength;
-            lpp.searchLength = searchLength;
+            lpp.searchLength = searchLength + 15;
             //add hints
             //add left
             if(lpp.target->inside(leftI.x , leftI.y)){
