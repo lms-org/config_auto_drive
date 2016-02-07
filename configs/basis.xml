@@ -74,7 +74,7 @@
         <config>
             <obstacleMinDistance>0.01</obstacleMinDistance>
             <obstacleInitTrust>0.5</obstacleInitTrust>
-            <obstacleTriggerDistance>0.1</obstacleTriggerDistance>
+            <obstacleTriggerDistance>0.30</obstacleTriggerDistance>
             <obstacleWidth>0.1</obstacleWidth>
         </config>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_RAW"/>
@@ -234,7 +234,7 @@
     <module>
         <name>image_hint_transformer_obstacle</name>
         <realName>image_hint_transformer</realName>
-        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_RAW"/>
+        <channelMapping priority="1" from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_RAW"/>
         <channelMapping from="HINTS" to="HINTS_OBSTACLE"/>
 
     </module>

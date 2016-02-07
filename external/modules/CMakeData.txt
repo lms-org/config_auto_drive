@@ -1,8 +1,8 @@
 #if MODULES is set, only the given directories will be compiled 
 #set(MODULES )
 #if N_MODULES is set, all directories except the given once
-set(N_MODULES audio_output sfml_sound_player ${EXCLUDES})
-
+set(N_MODULES audio_output ${EXCLUDES})
+#sfml_sound_player
 if(APPLE)
     # Skip modules known to be not working on OS X
     set(N_MODULES ${N_MODULES} ogre_input ogre_window_manager image_renderer importer_senseboard2015)
