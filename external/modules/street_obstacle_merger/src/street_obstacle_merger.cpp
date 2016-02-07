@@ -216,7 +216,6 @@ void StreetObjectMerger::getObstacles(const street_environment::EnvironmentObjec
 
 void StreetObjectMerger::checkAngle(street_environment::ObstaclePtr obst){
     float maxAngleBetweenCrossingAndRoad = config().get<float>("maxAngleBetweenCrossingAndRoad",0.4);
-    //TODO not sure if we should use itfloat maxAngleBetweenObstacleAndRoad = config().get<float>("maxAngleBetweenCrossingAndRoad",0.4);
     float currentDis = 0;
     for(int i = 1; i < static_cast<int>(middle->points().size()); i++){
         lms::math::vertex2f streetDir = middle->points()[i]-middle->points()[i-1];
@@ -224,8 +223,10 @@ void StreetObjectMerger::checkAngle(street_environment::ObstaclePtr obst){
         if(currentDis > obst->distanceTang()){
             float deltaAngle = streetDir.angleBetween(obst->viewDirection());
             if(deltaAngle > maxAngleBetweenCrossingAndRoad){
-                logger.debug("crossing not trusted") << "angle to road: "<< deltaAngle<< " roadAngle: "<<streetDir.angle() << " crossingViewDir "<<obst->viewDirection();
+                logger.error("crossing not trusted")<<"crossingDistance: "<<obst->distanceTang()<<" "<< currentDis<<" roadPos: "<<i << "angle to road: "<< deltaAngle<< " roadAngle: "<<streetDir.angle() << " crossingViewDir "<<obst->viewDirection();
                 obst->setTrust(0.0);
+            }else{
+                break;
             }
         }
     }

@@ -20,3 +20,4 @@ config/
 CMakeLists.txt.*
 .idea
 ogre.log
+drive.sh
