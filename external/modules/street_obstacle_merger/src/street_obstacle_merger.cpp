@@ -45,6 +45,8 @@ bool StreetObjectMerger::cycle() {
     getObstacles(*envInput,obstaclesNew);
     getObstacles(*envOutput,obstaclesOld);
 
+    //TODO we could check the angle at the beginning checkAngle
+
     logger.debug("cycle")<<"number of new obstacles" << obstaclesNew.objects.size();
     logger.debug("cycle")<<"number of old obstacles" << obstaclesOld.objects.size();
 
@@ -223,7 +225,7 @@ void StreetObjectMerger::checkAngle(street_environment::ObstaclePtr obst){
         if(currentDis > obst->distanceTang()){
             float deltaAngle = streetDir.angleBetween(obst->viewDirection());
             if(deltaAngle > maxAngleBetweenCrossingAndRoad){
-                logger.error("crossing not trusted")<<"crossingDistance: "<<obst->distanceTang()<<" "<< currentDis<<" roadPos: "<<i << "angle to road: "<< deltaAngle<< " roadAngle: "<<streetDir.angle() << " crossingViewDir "<<obst->viewDirection();
+                logger.info("crossing/startline not trusted")<<"crossingDistance: "<<obst->distanceTang()<<" "<< currentDis<<" roadPos: "<<i << "angle to road: "<< deltaAngle<< " roadAngle: "<<streetDir.angle() << " crossingViewDir "<<obst->viewDirection();
                 obst->setTrust(0.0);
             }else{
                 break;
