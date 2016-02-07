@@ -108,16 +108,24 @@ bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, flo
     prior_fact = 0;
 
     //TODO don't limit changes
-    float y0_before = zustandsVector->data[0];
-    float phi0_before = zustandsVector->data[1];
+    float y0_before;
+    float phi0_before;
+    if (resetCounter > 20)
+    {
+        y0_before = zustandsVector->data[0];
+        phi0_before = zustandsVector->data[1];
+    }
 
     kalman_filter_lr(zustandsVector,dx,dy,dphi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
                      measurementUncertainty,partLength,lx,ly,rx,ry,mx,my,1,prior_fact);
 
     //TODO don't limit changes
-    if (fabs(zustandsVector->data[0] - y0_before) > 0.05 )     zustandsVector->data[0] = y0_before;
-    if (fabs(zustandsVector->data[1] - phi0_before) > 0.1 )    zustandsVector->data[1] = phi0_before;
+    if (resetCounter > 20)
+    {
+        if (fabs(zustandsVector->data[0] - y0_before) > 0.05 )     zustandsVector->data[0] = y0_before;
+        if (fabs(zustandsVector->data[1] - phi0_before) > 0.1 )    zustandsVector->data[1] = phi0_before;
+    }
 
     //destroy stuff
     emxDestroyArray_real_T(rx);
