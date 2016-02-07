@@ -15,7 +15,7 @@
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
-        <module logLevel="ERROR">trajectory_creator</module>
+        <module logLevel="WARN">trajectory_creator</module>
         <module logLevel="ERROR">street_obstacle_ir_detector</module>
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">image_proxy</module>
@@ -93,7 +93,7 @@
         <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="OUTPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
         <config>
-            <scaleDown>1</scaleDown>
+            <scaleDown>4</scaleDown>
         </config>
     </module>
     <module>
@@ -181,6 +181,7 @@
             <obstacleLength>0.7</obstacleLength>
         </config>
         <config>
+        <simpleTraj>true</simpleTraj>
         <velocity_straight>3.0</velocity_straight>
           <curve_maxVelocity>2.5</curve_maxVelocity>
           <curve_minVelocity>2.0</curve_minVelocity>
@@ -188,7 +189,6 @@
           <curveStraight_minVelocity>1.5</curveStraight_minVelocity>
           <pt1Velocity>0.8</pt1Velocity>
           <aOrthMax>3.5</aOrthMax>
-          <simpleTraj>true</simpleTraj>
           <angleD>0.35</angleD>
           <obstacleResolution>0.05</obstacleResolution>
           <minDistanceBetweenTrajectoryPoints>0.2</minDistanceBetweenTrajectoryPoints>
