@@ -19,6 +19,7 @@ class LocalCourse : public lms::Service {
     int outlierStartingState;
     float outlierPercentile;
     float outlierPercentileMultiplier;
+    int resetCounter;
 
 public:
     LocalCourse();
@@ -35,6 +36,7 @@ public:
     std::vector<lms::math::vertex2f> getPointsToAdd();
     std::vector<lms::math::vertex2f> getPointsAdded();
     void distanceLinePoint(lms::math::vertex2f P, lms::math::vertex2f Q, lms::math::vertex2f M, float *dst, float *lambda);
+    float thresholdFunction(float s);
 };
 
 } // namespace local_course
