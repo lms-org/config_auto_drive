@@ -18,8 +18,8 @@
                 <maxParkingSpaceSize>0.6</maxParkingSpaceSize>
 
                 <!-- Geschwindigkeiten -->
-                <velocitySearching>1.0</velocitySearching>
-                <velocityEntering>0.6</velocityEntering>
+                <velocitySearching>2.2</velocitySearching>
+                <velocityEntering>0.7</velocityEntering>
                 <velocityCorrecting>0.6</velocityCorrecting>
                 <decelerationStopping>0.0</decelerationStopping>
                 <velocityApproaching>0.6</velocityApproaching>
@@ -28,23 +28,24 @@
                 <xDistanceCorrection>-0.0</xDistanceCorrection> <!-- Korrektur für hohe Geschwindigkeiten beim Rückwärtsfahren -->
                 <brakingDistanceUntilSteering>0.15</brakingDistanceUntilSteering>
                 <alphaOffset>0.15</alphaOffset>
-                <y0_worstCase>0.25</y0_worstCase>
-                <k>0.02</k> <!-- safety distance zur Ecke der zweiten Box-->
-                <d>0.125</d> <!-- safety distance zur ersten Box -->
+                <y0_worstCase>0.23</y0_worstCase>
+                <k>0.03</k> <!-- safety distance zur Ecke der zweiten Box-->
+                <d>0.07</d> <!-- safety distance zur ersten Box -->
                 <maxSteeringAngle>24</maxSteeringAngle> <!-- in Grad-->
 
                 <!-- CORRECTING -->
-                <correctingDistance>0.04</correctingDistance> <!-- letzter Zug in der Parklücke "Krabbengang"-->
+                <correctingDistance>0.03</correctingDistance> <!-- letzter Zug in der Parklücke "Krabbengang"-->
                 <useSecondCorrecting>true</useSecondCorrecting>
                 <correctingSecondDistance>0.04</correctingSecondDistance>
+                <correctingThirdDistance>0.03</correctingThirdDistance>
 
                 <!-- SEARCHING -->
                 <medianFilterSize>5</medianFilterSize>
-                <searchingPhiFactor>-0.0</searchingPhiFactor> <!-- Korrekturwinkel falls das Auto schräg anfährt-->
+                <searchingPhiFactor>0.05</searchingPhiFactor> <!-- Korrekturwinkel falls das Auto schräg anfährt-->
                 <lidarMeasurementsPerSecond>300</lidarMeasurementsPerSecond>
-                <gradientThreshold>0.12</gradientThreshold> <!-- Für größere Werte wird eine Kante erkannt -->
+                <gradientThreshold>0.17</gradientThreshold> <!-- Für größere Werte wird eine Kante erkannt -->
                 <maxDistanceLidar>0.6</maxDistanceLidar> <!-- Lidar cut-off distance -->
-                <xMaxBeforeWorstCase>6.0</xMaxBeforeWorstCase>
+                <xMaxBeforeWorstCase>4.5</xMaxBeforeWorstCase>
                 <!--minDistanceLidar>0.09</minDistanceLidar--> <!-- wurde wegen median filter entfernt -->
 
                 <!-- WORST_CASE_BACKWARDS -->
@@ -52,12 +53,12 @@
                 <xMaxWorstCase>5.0</xMaxWorstCase>
 
                 <!-- weitere Parameter -->
-                <distanceMidLidarX>0.09</distanceMidLidarX> <!-- Abstand Lidar zu Mitte Fahrzeug in x-Richtung -->
+                <distanceMidLidarX>-0.03</distanceMidLidarX> <!-- Abstand Lidar zu Mitte Fahrzeug in x-Richtung -->
                 <distanceMidLidarY>0.08</distanceMidLidarY> <!-- Abstand Lidar zu Mitte Fahrzeug in y-Richtung -->
                 <minVelocityBeforeDrivingBackwards>0.3</minVelocityBeforeDrivingBackwards>
                 <wheelbase>0.21</wheelbase>
-                <carLength>0.35</carLength>
-                <carWidth>0.21</carWidth>
+                <carLength>0.36</carLength>
+                <carWidth>0.25</carWidth>
 
                 <!-- DEBUG -->
                 <debugPrintEdges>false</debugPrintEdges>
