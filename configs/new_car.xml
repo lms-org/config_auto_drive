@@ -4,5 +4,5 @@
 </execution>
     <include src="mavlink.xml"/>
     <include src="mycam.xml"/>
-    <include src="parken.xml" />
+    <include src="parking.xml" />
 </framework>
