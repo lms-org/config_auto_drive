@@ -48,7 +48,7 @@
             <outlierStartingPoint>2</outlierStartingPoint>
             <outlierPercentile>0.5</outlierPercentile>
             <outlierPercentileMultiplier>3.0</outlierPercentileMultiplier>
-            <elementCount>10</elementCount>
+            <elementCount>12</elementCount>
             <kovAbnahme>0.15</kovAbnahme>
             <elementLength>0.2</elementLength>
             <logState>false</logState>
