@@ -28,7 +28,7 @@ void LocalCourse::configsChanged(){
 }
 
 
-void LocalCourse::update(float dx, float dy, float dphi, float measurementUncertainty){
+void LocalCourse::update(float dx, float dy, float dphi, float measurementUncertainty, float priorFactor){
     //remove outliers
     street_environment::RoadLane lane = kalman.getOutput(); //calculate xy points of lane
 
@@ -163,7 +163,7 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
 
 
 
-    kalman.update(pointsToAdd,dx,dy,dphi, measurementUncertainty);
+    kalman.update(pointsToAdd,dx,dy,dphi, measurementUncertainty, priorFactor);
     pointsAdded = pointsToAdd;
     pointsToAdd.clear();
 }

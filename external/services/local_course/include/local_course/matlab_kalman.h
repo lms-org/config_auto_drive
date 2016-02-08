@@ -7,6 +7,8 @@
 #include "lms/config.h"
 #include "lms/math/polyline.h"
 #include "street_environment/road.h"
+#include "phoenix_CC2016_service/phoenix_CC2016_service.h"
+
 struct emxArray_real_T;
 
 namespace local_course {
@@ -35,7 +37,7 @@ public:
     void configsChanged(const lms::Config &config);
     void resetData(const lms::Config &config);
     void logStateVector(std::ostream &logFile);
-    bool update(std::vector<lms::math::vertex2f> points, float dx, float dy, float dphi, float measurementUncertainty);
+    bool update(std::vector<lms::math::vertex2f> points, float dx, float dy, float dphi, float measurementUncertainty, float priorFactor);
     street_environment::RoadLane getOutput();
 
 

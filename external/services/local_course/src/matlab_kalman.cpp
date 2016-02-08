@@ -64,7 +64,7 @@ void MatlabKalman::resetData(const lms::Config &config){
     }
 }
 
-bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, float dy, float dphi, float measurementUncertainty) {
+bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, float dy, float dphi, float measurementUncertainty, float priorFactor) {
 
     if (++resetCounter < 20) measurementUncertainty = 10.0;
 
@@ -104,9 +104,6 @@ bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, flo
     }
     */
 
-    //TODO
-    prior_fact = 0;
-
     //TODO don't limit changes
     float y0_before;
     float phi0_before;
@@ -118,7 +115,7 @@ bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, flo
 
     kalman_filter_lr(zustandsVector,dx,dy,dphi,kovarianzMatrixDesZustandes,
                      kovarianzMatrixDesZustandUebergangs,
-                     measurementUncertainty,partLength,lx,ly,rx,ry,mx,my,1,prior_fact);
+                     measurementUncertainty,partLength,lx,ly,rx,ry,mx,my,1,priorFactor);
 
     //TODO don't limit changes
     if (resetCounter > 20)
