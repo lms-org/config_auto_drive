@@ -1,6 +1,6 @@
 <framework>
 <execution>
-    <!--clock sleep="false" unit="ms" value="11"/-->
+    <!--clock sleep="false" unit="ms" value="11"/a-->
 </execution>
     <include src="mavlink.xml"/>
     <include src="mycam.xml"/>

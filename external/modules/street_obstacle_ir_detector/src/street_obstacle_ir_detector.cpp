@@ -1,4 +1,5 @@
 #include "street_obstacle_ir_detector.h"
+#include "phoenix_CC2016_service/phoenix_CC2016_service.h";
 
 bool StreetObstacleIRDetector::initialize() {
 
@@ -12,6 +13,11 @@ bool StreetObstacleIRDetector::deinitialize() {
 }
 
 bool StreetObstacleIRDetector::cycle() {
+    lms::ServiceHandle<phoenix_CC2016_service::Phoenix_CC2016Service> phoenixService = getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE");
+
+    if(phoenixService->driveMode() != phoenix_CC2016_service::CCDriveMode::FMH){
+        return true;
+    }
     if(sensors->hasSensor("LIDAR")){
         std::shared_ptr<sensor_utils::DistanceSensor> lidar = sensors->sensor<sensor_utils::DistanceSensor>("LIDAR");
         float distance = lidar->distance;

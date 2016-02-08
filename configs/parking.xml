@@ -28,17 +28,17 @@
                 <xDistanceCorrection>-0.0</xDistanceCorrection> <!-- Korrektur für hohe Geschwindigkeiten beim Rückwärtsfahren -->
                 <brakingDistanceUntilSteering>0.15</brakingDistanceUntilSteering>
                 <alphaOffset>0.15</alphaOffset>
-                <y0_worstCase>0.24</y0_worstCase>
+                <y0_worstCase>0.23</y0_worstCase>
                 <k>0.03</k> <!-- safety distance zur Ecke der zweiten Box-->
                 <d>0.09</d> <!-- safety distance zur ersten Box -->
                 <maxSteeringAngle>24</maxSteeringAngle> <!-- in Grad-->
 
                 <!-- CORRECTING -->
-                <correctingDistances>0.03, 0.03, 0.03</correctingDistances>
+                <correctingDistances>0.05, 0.04, 0.05,0.01</correctingDistances>
 
                 <!-- SEARCHING -->
                 <medianFilterSize>5</medianFilterSize>
-                <searchingPhiFactor>0.05</searchingPhiFactor> <!-- Korrekturwinkel falls das Auto schräg anfährt-->
+                <searchingPhiFactor>0.0</searchingPhiFactor> <!-- Korrekturwinkel falls das Auto schräg anfährt-->
                 <lidarMeasurementsPerSecond>300</lidarMeasurementsPerSecond>
                 <gradientThreshold>0.1</gradientThreshold> <!-- Für größere Werte wird eine Kante erkannt -->
                 <maxDistanceLidar>0.6</maxDistanceLidar> <!-- Lidar cut-off distance -->

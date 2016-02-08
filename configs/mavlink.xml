@@ -28,7 +28,7 @@
     <module>
         <name>mavlink_usb_importer</name>
         <config>
-            <path>/dev/ttyACM0</path>
+            <path>/dev/senseboard2016</path>
         </config>
         <config user="odroid">
             <path>/dev/senseboard2016</path>

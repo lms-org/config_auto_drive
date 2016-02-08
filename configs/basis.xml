@@ -187,7 +187,7 @@
             <obstacleLength>0.7</obstacleLength>
         </config>
         <config name="FOH">
-            <velocity_straight>3.5</velocity_straight>
+            <velocity_straight>4.5</velocity_straight>
             <curve_maxVelocity>2.5</curve_maxVelocity>
             <curve_minVelocity>2.0</curve_minVelocity>
             <curveStraight_maxVelocity>4.5</curveStraight_maxVelocity>
