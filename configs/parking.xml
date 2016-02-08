@@ -63,7 +63,4 @@
                 <debugPrintEdges>false</debugPrintEdges>
             </config>
     </module>
-
-    <include src="new_car.xml" />
-
 </framework>
