@@ -19,31 +19,28 @@
 
                 <!-- Geschwindigkeiten -->
                 <velocitySearching>2.2</velocitySearching>
-                <velocityEntering>0.7</velocityEntering>
-                <velocityCorrecting>0.6</velocityCorrecting>
+                <velocityEntering>0.8</velocityEntering>
+                <velocityCorrecting>0.8</velocityCorrecting>
                 <decelerationStopping>0.0</decelerationStopping>
-                <velocityApproaching>0.6</velocityApproaching>
+                <velocityApproaching>0.8</velocityApproaching>
 
                 <!-- ENTERING -->
                 <xDistanceCorrection>-0.0</xDistanceCorrection> <!-- Korrektur für hohe Geschwindigkeiten beim Rückwärtsfahren -->
                 <brakingDistanceUntilSteering>0.15</brakingDistanceUntilSteering>
                 <alphaOffset>0.15</alphaOffset>
-                <y0_worstCase>0.23</y0_worstCase>
+                <y0_worstCase>0.24</y0_worstCase>
                 <k>0.03</k> <!-- safety distance zur Ecke der zweiten Box-->
-                <d>0.07</d> <!-- safety distance zur ersten Box -->
+                <d>0.09</d> <!-- safety distance zur ersten Box -->
                 <maxSteeringAngle>24</maxSteeringAngle> <!-- in Grad-->
 
                 <!-- CORRECTING -->
-                <correctingDistance>0.03</correctingDistance> <!-- letzter Zug in der Parklücke "Krabbengang"-->
-                <useSecondCorrecting>true</useSecondCorrecting>
-                <correctingSecondDistance>0.04</correctingSecondDistance>
-                <correctingThirdDistance>0.03</correctingThirdDistance>
+                <correctingDistances>0.03, 0.03, 0.03</correctingDistances>
 
                 <!-- SEARCHING -->
                 <medianFilterSize>5</medianFilterSize>
                 <searchingPhiFactor>0.05</searchingPhiFactor> <!-- Korrekturwinkel falls das Auto schräg anfährt-->
                 <lidarMeasurementsPerSecond>300</lidarMeasurementsPerSecond>
-                <gradientThreshold>0.17</gradientThreshold> <!-- Für größere Werte wird eine Kante erkannt -->
+                <gradientThreshold>0.1</gradientThreshold> <!-- Für größere Werte wird eine Kante erkannt -->
                 <maxDistanceLidar>0.6</maxDistanceLidar> <!-- Lidar cut-off distance -->
                 <xMaxBeforeWorstCase>4.5</xMaxBeforeWorstCase>
                 <!--minDistanceLidar>0.09</minDistanceLidar--> <!-- wurde wegen median filter entfernt -->
@@ -64,4 +61,5 @@
                 <debugPrintEdges>false</debugPrintEdges>
             </config>
     </module>
+
 </framework>
