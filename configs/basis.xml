@@ -152,7 +152,7 @@
         <channelMapping priority="10" from="MIDDLE_LANE" to="MIDDLE_LANE"/>
         <config>
             <searchForObstacles>true</searchForObstacles>
-            <searchForCrossing>false</searchForCrossing>
+            <searchForCrossing>true</searchForCrossing>
             <numerOfSegmentsLines>1</numerOfSegmentsLines>
             <maxSearchLength>4.0</maxSearchLength>
             <lineOffset>0.1</lineOffset>
@@ -173,10 +173,10 @@
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
         <channelMapping priority="9" from="CAR" to="CAR"/>
         <config name="FMH">
-            <velocity_straight>4.0</velocity_straight>
+            <velocity_straight>3.5</velocity_straight>
             <curve_maxVelocity>3.0</curve_maxVelocity>
             <curve_minVelocity>2.0</curve_minVelocity>
-            <curveStraight_maxVelocity>3.5</curveStraight_maxVelocity>
+            <curveStraight_maxVelocity>3.0</curveStraight_maxVelocity>
             <curveStraight_minVelocity>2.0</curveStraight_minVelocity>
             <aOrthMax>2.5</aOrthMax>
             <simpleTraj>true</simpleTraj>
@@ -187,9 +187,9 @@
             <obstacleLength>0.7</obstacleLength>
         </config>
         <config name="FOH">
-            <velocity_straight>6.5</velocity_straight>
-            <curve_maxVelocity>4.5</curve_maxVelocity>
-            <curve_minVelocity>2.6</curve_minVelocity>
+            <velocity_straight>3.5</velocity_straight>
+            <curve_maxVelocity>2.5</curve_maxVelocity>
+            <curve_minVelocity>2.0</curve_minVelocity>
             <curveStraight_maxVelocity>4.5</curveStraight_maxVelocity>
             <curveStraight_minVelocity>3.0</curveStraight_minVelocity>
             <aOrthMax>3.5</aOrthMax>
@@ -203,7 +203,8 @@
         <config>
           <obstacleResolution>0.05</obstacleResolution>
           <minDistanceBetweenTrajectoryPoints>0.2</minDistanceBetweenTrajectoryPoints>
-          <obstacleSavetyDistance>0.5</obstacleSavetyDistance>
+          <obstacleSavetyDistance>1.0</obstacleSavetyDistance>
+          <simpleTraj>true</simpleTraj>
         </config>
         <config src="street_utils/obstacle.lconf"/>
         <config src="trajectory_creator.lconf"/>

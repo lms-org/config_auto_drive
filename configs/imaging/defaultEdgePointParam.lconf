@@ -1,6 +1,6 @@
 searchAngle = 0
 searchLength = 0
-sobelThreshold = 120
+sobelThreshold = 180
 verify = false
 preferVerify = false
 useBlackList = true

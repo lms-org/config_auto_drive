@@ -22,6 +22,7 @@ void Phoenix_CC2016Service::updateFromConfig(){
 
 void Phoenix_CC2016Service::update(RemoteControlState rcState, CCDriveMode driveMode, int batteryVoltage){
     updateRcState(rcState);
+    m_last_driveMode = m_driveMode;
     m_driveMode = driveMode;
     m_batteryVoltage = batteryVoltage;
     m_lastUpdate = lms::Time::now();
@@ -34,6 +35,10 @@ void Phoenix_CC2016Service::updateRcState(RemoteControlState state){
 
 bool Phoenix_CC2016Service::rcStateChanged() const{
     return m_oldState != m_state;
+}
+
+bool Phoenix_CC2016Service::driveModeChanged() const{
+    return m_last_driveMode != m_driveMode;
 }
 
 RemoteControlState Phoenix_CC2016Service::rcState() const{

@@ -13,8 +13,8 @@
         <!-- camera/cali.lconf - new car -->
         <!-- camera/cali_cc15_auto.lconf - old car -->
         <!--config src="camera/homography_bmw.lconf"/-->
-        <config src="camera/cali_20160204_helenefischer.lconf" />
-        <config src="camera/homography_20160204_helenefischer.lconf" />
+        <config src="camera/cali_cc2016_hansi.lconf" />
+        <config src="camera/homography_cc2016_hansi.lconf" />
     </service>
     <module>
         <name>socket_datatype_definer</name>

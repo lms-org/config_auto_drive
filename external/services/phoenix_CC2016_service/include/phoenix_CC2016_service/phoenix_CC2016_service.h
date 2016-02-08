@@ -20,6 +20,7 @@ class Phoenix_CC2016Service : public lms::Service {
     RemoteControlState m_state;
     RemoteControlState m_oldState;
     CCDriveMode m_driveMode;
+    CCDriveMode m_last_driveMode;
     /**
      * @brief batteryVolate in mv
      */
@@ -30,6 +31,7 @@ public:
     void update(RemoteControlState rcState, CCDriveMode driveMode, int batteryVoltage);
     void updateRcState(RemoteControlState state);
     bool rcStateChanged() const;
+    bool driveModeChanged() const;
     RemoteControlState rcState() const;
     CCDriveMode driveMode() const;
     int batteryVoltage() const;
