@@ -107,10 +107,10 @@ bool StreetObjectMerger::cycle() {
     //kalman obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
         obst->kalman(*middle,0);
-        if(fabs(obst->distanceOrth()) >0.3 && obst->trust() > 0.1){
+        if(fabs(obst->distanceOrth()) >0.4 && obst->trust() > 0.1){
             obst->setTrust(0.1);
         }
-        if(fabs(obst->distanceOrth()) > 0.4){
+        if(fabs(obst->distanceOrth()) > 0.6){
             obst->setTrust(0);
         }
         if(fabs(obst->distanceTang()) > 2){

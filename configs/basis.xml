@@ -125,8 +125,6 @@
             <PID_Kp>0.4</PID_Kp>
             <PID_Ki>0</PID_Ki>
             <PID_Kd>0</PID_Kd>
-            <maxVelocityCrossing>1.0</maxVelocityCrossing>
-            <distanceToStop>1.0</distanceToStop>
             <crossingSaftyZone>0.2</crossingSaftyZone>
             <!-- trajecotryPoint-->
             <trajectoryPointDistanceLookupX>1.8,3.0</trajectoryPointDistanceLookupX>
@@ -140,6 +138,11 @@
             <weightSlope>2</weightSlope>
             <weightOffset>3</weightOffset>
 
+            <!--stop at crossing -->
+            <maxVelocityCrossing>1.0</maxVelocityCrossing>
+            <distanceToStop>1.0</distanceToStop>
+            <stoppingDistance>0.35</stoppingDistance>
+
         </config>
     </module>
     <module>
@@ -150,7 +153,7 @@
         <channelMapping priority="10" from="MIDDLE_LANE" to="MIDDLE_LANE"/>
         <config>
             <searchForObstacles>true</searchForObstacles>
-            <searchForCrossing>true</searchForCrossing>
+            <searchForCrossing>false</searchForCrossing>
             <numerOfSegmentsLines>1</numerOfSegmentsLines>
             <maxSearchLength>4.0</maxSearchLength>
             <lineOffset>0.1</lineOffset>
