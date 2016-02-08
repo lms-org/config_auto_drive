@@ -109,8 +109,8 @@
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
             <!--MPC-controller-->
-            <mpcLookupVelocityX>2.5,6</mpcLookupVelocityX>
-            <mpcLookupVelocityY>2.5,5</mpcLookupVelocityY>
+            <mpcLookupVelocityX>1.0, 2.5, 6.0</mpcLookupVelocityX>
+            <mpcLookupVelocityY>1.0, 2.5, 5.0</mpcLookupVelocityY>
             <distanceRegelpunkt>0.9</distanceRegelpunkt>
             <yawRateBoost>0.0</yawRateBoost>
             <useMPCcontroller>1</useMPCcontroller> 
