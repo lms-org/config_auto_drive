@@ -6,6 +6,7 @@
 #include <vector>
 #include "matlab_kalman.h"
 #include "street_environment/road.h"
+#include "lms/math/lookup_table.h"
 
 namespace local_course {
 
@@ -20,6 +21,8 @@ class LocalCourse : public lms::Service {
     float outlierPercentile;
     float outlierPercentileMultiplier;
     int resetCounter;
+
+    lms::math::LookupTable<float,lms::math::LookupTableOrder::ASC> m_thresholdLookup;
 
 public:
     LocalCourse();
