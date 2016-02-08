@@ -49,11 +49,8 @@
             <outlierPercentile>0.5</outlierPercentile>
             <outlierPercentileMultiplier>3.0</outlierPercentileMultiplier>
             <elementCount>10</elementCount>
-            <kov>15</kov>
-            <prioFact>0</prioFact>
             <kovAbnahme>0.15</kovAbnahme>
             <elementLength>0.2</elementLength>
-            <enableMove>false</enableMove>
             <logState>false</logState>
             <idle_prior_fact>10</idle_prior_fact>
             <prior_fact>0</prior_fact>
