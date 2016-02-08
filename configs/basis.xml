@@ -42,6 +42,8 @@
         <realName>local_course</realName>
         <config>
             <useThresholding>true</useThresholding>
+            <thresholdLutX>0.0, 0.5, 1.5</thresholdLutX>
+            <thresholdLutY>0.1, 0.1, 0.1</thresholdLutY>
             <thresholdingSlope>0.08</thresholdingSlope>
             <outlierStartingPoint>2</outlierStartingPoint>
             <outlierPercentile>0.5</outlierPercentile>
