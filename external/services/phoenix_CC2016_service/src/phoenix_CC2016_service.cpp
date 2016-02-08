@@ -61,4 +61,25 @@ void Phoenix_CC2016Service::destroy() {
     //Don't worry about me, I am just cleaning
 }
 
+void Phoenix_CC2016Service::logRcStates() {
+    logger.info("RcStateChange") << m_oldState << " -> " << m_state;
+}
+
+std::ostream& operator << (std::ostream& os, RemoteControlState state) {
+    switch(state) {
+    case RemoteControlState::DISCONNECTED:
+        return os << "DISCONNECTED";
+    case RemoteControlState::REMOTE_CONTROL_STATUS_AUTONOMOUS:
+        return os << "AUTONOMOUS";
+    case RemoteControlState::REMOTE_CONTROL_STATUS_MANUAL:
+        return os << "MANUAL";
+    case RemoteControlState::REMOTE_CONTROL_STATUS_SEMI_AUTONOMOUS:
+        return os << "SEMI_AUTONOMOUS";
+    case RemoteControlState::UNKOWN:
+        return os << "UNKNOWN";
+    default:
+        return os << "WTF";
+    }
+}
+
 } // namespace phoenix_CC2016_service

@@ -22,6 +22,9 @@ void LocalCourse::configsChanged(){
     outlierStartingState = config().get<int>("outlierStartingPoint", 1);
     outlierPercentile = config().get<float>("outlierPercentile", 0.5);
     outlierPercentileMultiplier = config().get<float>("outlierPercentileMultiplier", 3.0);
+
+    m_thresholdLookup.vx = config().getArray<float>("thresholdLutX");
+    m_thresholdLookup.vy = config().getArray<float>("thresholdLutY");
 }
 
 
@@ -29,7 +32,7 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
     //remove outliers
     street_environment::RoadLane lane = kalman.getOutput(); //calculate xy points of lane
 
-    if (++resetCounter > 20)
+    if (++resetCounter > 40)
     {
 
         if (config().get<bool>("useThresholding", true))
@@ -207,11 +210,15 @@ street_environment::RoadLane LocalCourse::getCourse(lms::Time time){
 
 float LocalCourse::thresholdFunction(float s)
 {
-
-    float thresholdingSlope = config().get<float>("thresholdingSlope", 0.1/1.5);
-
     //s = arc length along lane model
-    return s*thresholdingSlope;
+
+    //kegel
+    //float thresholdingSlope = config().get<float>("thresholdingSlope", 0.1/1.5);
+    //return s*thresholdingSlope;
+
+    //lut
+    return m_thresholdLookup.linearSearch(s);
+
 }
 
 void LocalCourse::distanceLinePoint(lms::math::vertex2f P, lms::math::vertex2f Q, lms::math::vertex2f M, float *dst, float *lambda)
