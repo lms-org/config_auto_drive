@@ -35,6 +35,8 @@ public:
     int batteryVoltage() const;
     lms::Time lastUpdate() const;
     void updateFromConfig();
+
+    void logRcStates();
     /**
      * @brief isValid
      * @return true if the lastUpdate was in time
@@ -44,6 +46,8 @@ public:
     bool init() override;
     void destroy() override;
 };
+
+std::ostream& operator << (std::ostream& os, RemoteControlState state);
 
 } // namespace phoenix_CC2016_service
 
