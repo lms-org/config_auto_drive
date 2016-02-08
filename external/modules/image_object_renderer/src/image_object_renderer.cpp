@@ -139,7 +139,7 @@ void ImageObjectRenderer::drawObject(const street_environment::EnvironmentObject
     }else if(eo->getType() == 1){
         const street_environment::Obstacle &obst = eo->getAsReference<const street_environment::Obstacle>();
         if(!customColor){
-            if(obst.trust() > config().get<float>("obstacleTrustThreshold",0)){
+            if(obst.trust() > config().get<float>("obstacleTrustThreshold",0.5)){
                 setColor("OBSTACLE_DETECTED");
             }else{
                 setColor("DEFAULT_OBSTACLE");
@@ -148,13 +148,13 @@ void ImageObjectRenderer::drawObject(const street_environment::EnvironmentObject
         drawObstacle(&obst);
     }else if(eo->getType() == street_environment::Crossing::TYPE){
         const street_environment::Crossing &crossing = eo->getAsReference<const street_environment::Crossing>();
-        if(!customColor){
+        //if(!customColor){ //TODO
             if(crossing.trust() > config().get<float>("crossingTrustThreshold",0)){
                 setColor("CROSSING");
             }else{
                 setColor("CROSSING_NOT_TRUSTED");
             }
-        }
+        //}
         lms::math::vertex2f toAdd  =crossing.viewDirection();
         toAdd = toAdd.rotateAntiClockwise90deg() * 0.2;
         for(float i = -lineWidth; i <= lineWidth; i += lineWidthStep){

@@ -37,7 +37,7 @@
         <channelMapping from="INPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
         <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE"/>
         <config>
-            <scaleUp>5</scaleUp>
+            <scaleUp>4</scaleUp>
         </config>
     </module>
     <include src="render.xml"/>
