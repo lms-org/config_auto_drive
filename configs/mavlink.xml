@@ -12,6 +12,7 @@
         <if set="files">
             <module>mavlink_player</module>
         </if>
+        <!--module>rgb_lights_controller</module-->
     </modulesToEnable>
 
     <service>
@@ -25,6 +26,10 @@
         <name>TIMESTAMP_INTERPOLATOR</name>
         <realName>timestamp_interpolator_service</realName>
     </service>
+    <module>
+        <name>rgb_lights_controller</name>
+        <channelMapping from="STREET_OBJECTS" to="ENVIRONMENT_OBSTACLE"/>
+    </module>
     <module>
         <name>mavlink_usb_importer</name>
         <config>

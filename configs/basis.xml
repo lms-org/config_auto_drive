@@ -111,6 +111,8 @@
             <!--MPC-controller-->
             <mpcLookupVelocityX>1.0, 2.5, 6.0</mpcLookupVelocityX>
             <mpcLookupVelocityY>1.0, 2.5, 5.0</mpcLookupVelocityY>
+            <regelpunktMin>0.4</regelpunktMin>
+            <regelpunktSlope>0.1</regelpunktSlope>
             <distanceRegelpunkt>0.9</distanceRegelpunkt>
             <yawRateBoost>0.0</yawRateBoost>
             <useMPCcontroller>1</useMPCcontroller> 
@@ -134,11 +136,11 @@
 
             <!--stop at crossing -->
             <!-- stop on crossing-->
-            <PID_Kp>0.5</PID_Kp>
+            <PID_Kp>2</PID_Kp>
             <PID_Ki>0</PID_Ki>
             <PID_Kd>0</PID_Kd>
-            <crossingSaftyZone>0.3</crossingSaftyZone>
-            <maxVelocityCrossing>1.0</maxVelocityCrossing>
+            <crossingSaftyZone>0.05</crossingSaftyZone>
+            <maxVelocityCrossing>2.0</maxVelocityCrossing>
             <distanceToStop>2.0</distanceToStop>
             <stoppingDistance>0.35</stoppingDistance>
 
@@ -187,11 +189,11 @@
             <obstacleLength>0.7</obstacleLength>
         </config>
         <config name="FOH">
-            <velocity_straight>4.5</velocity_straight>
-            <curve_maxVelocity>2.5</curve_maxVelocity>
-            <curve_minVelocity>2.0</curve_minVelocity>
-            <curveStraight_maxVelocity>4.5</curveStraight_maxVelocity>
-            <curveStraight_minVelocity>3.0</curveStraight_minVelocity>
+            <velocity_straight>5.0</velocity_straight>
+            <curve_maxVelocity>2.8</curve_maxVelocity>
+            <curve_minVelocity>2.4</curve_minVelocity>
+            <curveStraight_maxVelocity>4.0</curveStraight_maxVelocity>
+            <curveStraight_minVelocity>2.8</curveStraight_minVelocity>
             <aOrthMax>3.5</aOrthMax>
             <simpleTraj>true</simpleTraj>
             <angleD>0.35</angleD>
