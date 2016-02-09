@@ -1,5 +1,6 @@
 #include "street_obstacle_ir_detector.h"
-#include "phoenix_CC2016_service/phoenix_CC2016_service.h";
+#include "phoenix_CC2016_service/phoenix_CC2016_service.h"
+#include "local_course/local_course.h"
 
 bool StreetObstacleIRDetector::initialize() {
 
@@ -14,9 +15,17 @@ bool StreetObstacleIRDetector::deinitialize() {
 
 bool StreetObstacleIRDetector::cycle() {
     lms::ServiceHandle<phoenix_CC2016_service::Phoenix_CC2016Service> phoenixService = getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE");
-
     if(phoenixService->driveMode() != phoenix_CC2016_service::CCDriveMode::FMH){
         return true;
+    }
+    //check if we are on the right side #HACK
+    lms::ServiceHandle<local_course::LocalCourse> localCourse = getService<local_course::LocalCourse>("LOCAL_COURSE_SERVICE");
+    if(localCourse.isValid()){
+        if(localCourse->getCourse().polarDarstellung[0] < 0){
+            return true;
+        }
+    }else{
+        logger.warn("No valid LocalCourse Service");
     }
     if(sensors->hasSensor("LIDAR")){
         std::shared_ptr<sensor_utils::DistanceSensor> lidar = sensors->sensor<sensor_utils::DistanceSensor>("LIDAR");
@@ -27,6 +36,7 @@ bool StreetObstacleIRDetector::cycle() {
         logger.debug("distance")<<distance;
 
         if(distance > obstacleMinDistance &&distance < obstacleTriggerDistance){
+            logger.error("distance")<<distance;
             //found some obstacles in reach
             std::shared_ptr<street_environment::Obstacle> obstacle(new street_environment::Obstacle());
             lms::math::vertex2f pos = lms::math::vertex2f(lidar->totalX(),lidar->totalY() - obstacleWidth/2);

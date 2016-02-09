@@ -82,6 +82,13 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     scp.maxIterationsRANSAC = config("defaultCrossingParameter").get<int>("maxIterationsRANSAC",100);
     scp.inlierThresholdRANSAC = config("defaultCrossingParameter").get<double>("inlierThresholdRANSAC",4.0);
     scp.middleLine = middle.getWithDistanceBetweenPoints(config().get<float>("crossingSearchPointDistance",0.1));
+    for(int i = 0; i < scp.middleLine.points().size();){
+        if(scp.middleLine.points()[i].length() < 0.3){
+            scp.middleLine.points().erase(scp.middleLine.points().begin()+i);
+        }else{
+            i++;
+        }
+    }
     crossing->parameter = scp;
     hintContainerObstacle->add(crossing);
 }
@@ -102,6 +109,8 @@ void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLan
     sopRight.fromConfig(&config("defaultObstacleParameter"));
     sopRight.obstacleLeft = false;
     for(const lms::math::vertex2f &v:middle.points()){
+        if(v.length() <= 0.4) //#HACK
+            continue;
         sopRight.middleLine.points().push_back(v);
     }
     obstacleRight->parameter = sopRight;

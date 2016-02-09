@@ -28,7 +28,7 @@
     <module>
         <name>mavlink_usb_importer</name>
         <config>
-            <path>/dev/senseboard2016</path>
+            <path>/dev/senseboard2016</path>w
         </config>
         <config user="odroid">
             <path>/dev/senseboard2016</path>

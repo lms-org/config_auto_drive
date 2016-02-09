@@ -3,4 +3,4 @@ numerOfSegmentsOrth =4
 minDistanceBetweenSearchPoints = 0.1
 sobelThreshold = 100
 minPointCount = 1
-boxDepthSearchLength= 20
+boxDepthSearchLength= 40
