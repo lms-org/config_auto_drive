@@ -11,14 +11,14 @@
 
                 <!-- line fit auf den Punkten der Mittellinie -->
                 <lineFitStartPoint>4</lineFitStartPoint>
-                <lineFitEndPoint>9</lineFitEndPoint>
+                <lineFitEndPoint>7</lineFitEndPoint>
 
                 <!-- Abmessungen einer validen Parklücke -->
                 <minParkingSpaceSize>0.5</minParkingSpaceSize>
                 <maxParkingSpaceSize>0.6</maxParkingSpaceSize>
 
                 <!-- Geschwindigkeiten -->
-                <velocitySearching>2.2</velocitySearching>
+                <velocitySearching>1.2</velocitySearching>
                 <velocityEntering>0.8</velocityEntering>
                 <velocityCorrecting>0.8</velocityCorrecting>
                 <decelerationStopping>0.0</decelerationStopping>
@@ -34,7 +34,7 @@
                 <maxSteeringAngle>24</maxSteeringAngle> <!-- in Grad-->
 
                 <!-- CORRECTING -->
-                <correctingDistances>0.05, 0.04, 0.05,0.01</correctingDistances>
+                <correctingDistances>0.04, 0.04, 0.01, 0.02</correctingDistances>
 
                 <!-- SEARCHING -->
                 <medianFilterSize>5</medianFilterSize>
