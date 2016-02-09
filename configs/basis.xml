@@ -71,7 +71,7 @@
     <module>
         <name>street_obstacle_ir_detector</name>
         <config>
-            <obstacleMinDistance>0.01</obstacleMinDistance>
+            <obstacleMinDistance>0.10</obstacleMinDistance>
             <obstacleInitTrust>0.5</obstacleInitTrust>
             <obstacleTriggerDistance>0.30</obstacleTriggerDistance>
             <obstacleWidth>0.1</obstacleWidth>
