@@ -1,6 +1,6 @@
 <framework>
 <execution>
-    <clock sleep="false" unit="ms" value="12" watchDog="200"/>
+    <clock sleep="false" unit="ms" value="20" watchDog="200"/>
 </execution>
     <include src="mavlink.xml"/>
     <include src="mycam.xml"/>

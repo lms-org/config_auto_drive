@@ -21,7 +21,7 @@ bool StreetObstacleIRDetector::cycle() {
     //check if we are on the right side #HACK
     lms::ServiceHandle<local_course::LocalCourse> localCourse = getService<local_course::LocalCourse>("LOCAL_COURSE_SERVICE");
     if(localCourse.isValid()){
-        if(localCourse->getCourse().polarDarstellung[0] < 0){
+        if(localCourse->getCourse().points()[3].y > 0){
             return true;
         }
     }else{

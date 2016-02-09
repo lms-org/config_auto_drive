@@ -120,11 +120,6 @@
             <weight_steering_rear>8</weight_steering_rear>
             <maxParallelAusweichen>0.2</maxParallelAusweichen>
             <!--velocity-controller -->
-            <!-- stop on crossing-->
-            <PID_Kp>1</PID_Kp>
-            <PID_Ki>0</PID_Ki>
-            <PID_Kd>0</PID_Kd>
-            <crossingSaftyZone>0.3</crossingSaftyZone>
             <!-- trajecotryPoint-->
             <trajectoryPointDistanceLookupX>1.8,3.0</trajectoryPointDistanceLookupX>
             <trajectoryPointDistanceLookupY>0.6,0.6</trajectoryPointDistanceLookupY>
@@ -138,8 +133,13 @@
             <weightOffset>3</weightOffset>
 
             <!--stop at crossing -->
+            <!-- stop on crossing-->
+            <PID_Kp>0.5</PID_Kp>
+            <PID_Ki>0</PID_Ki>
+            <PID_Kd>0</PID_Kd>
+            <crossingSaftyZone>0.3</crossingSaftyZone>
             <maxVelocityCrossing>1.0</maxVelocityCrossing>
-            <distanceToStop>1.0</distanceToStop>
+            <distanceToStop>2.0</distanceToStop>
             <stoppingDistance>0.35</stoppingDistance>
 
         </config>
