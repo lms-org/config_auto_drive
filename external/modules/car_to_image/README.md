@@ -1,3 +1,12 @@
-#car_to_image
+# car_to_image
+Draws the car-position on a image
 
-TODO: Don't remember what that module does
+## Data channels
+- IMAGE channel
+
+## Config
+
+## Dependencies
+ 
+ * imaging
+ * sensor_utils

@@ -7,6 +7,7 @@ bool EnvironmentLogger::initialize() {
     count = 0;
     input = readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_INPUT");
     directory = config().get<std::string>("directory");
+    //TODO use lms logging!
     return true;
 }
 
@@ -18,7 +19,9 @@ bool EnvironmentLogger::deinitialize() {
 bool EnvironmentLogger::cycle() {
     count++;
     for(std::shared_ptr<street_environment::EnvironmentObject> obj : input->objects){
-        //TODO check if valid
+        if(obj->getType() != street_environment::RoadLane::TYPE){
+            continue;
+        }
         const street_environment::RoadLane &lane = obj->getAsReference<const street_environment::RoadLane>();
         std::ofstream stream;
         stream.open(directory+"/"+"lines_"+std::to_string(count)+"_"+std::to_string((int)lane.type())+".csv");
