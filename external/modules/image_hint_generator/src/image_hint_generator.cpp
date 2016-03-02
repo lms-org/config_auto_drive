@@ -47,8 +47,9 @@ bool ImageHintGenerator::cycle() {
             return true;
         }
         createHintsFromMiddleLane(*middleLane);
-        if(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->isValid()){
-            if(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->driveMode() == phoenix_CC2016_service::CCDriveMode::FMH){
+        lms::ServiceHandle<phoenix_CC2016_service::Phoenix_CC2016Service> phoenixService = getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE");
+        if(phoenixService.isValid() && phoenixService->isValid()){
+            if(phoenixService->driveMode() == phoenix_CC2016_service::CCDriveMode::FMH){
                 if(config().get<bool>("searchForObstacles",false)){
                     createHintForObstacle(*middleLane);
                 }
@@ -82,7 +83,7 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     scp.maxIterationsRANSAC = config("defaultCrossingParameter").get<int>("maxIterationsRANSAC",100);
     scp.inlierThresholdRANSAC = config("defaultCrossingParameter").get<double>("inlierThresholdRANSAC",4.0);
     scp.middleLine = middle.getWithDistanceBetweenPoints(config().get<float>("crossingSearchPointDistance",0.1));
-    for(int i = 0; i < scp.middleLine.points().size();){
+    for(int i = 0; i < (int)scp.middleLine.points().size();){
         if(scp.middleLine.points()[i].length() < 0.3){
             scp.middleLine.points().erase(scp.middleLine.points().begin()+i);
         }else{
@@ -173,7 +174,7 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
             vertex2i middleI;
             vertex2i topI;
 
-        //TODO
+            //TODO error handling
             if(!lms::imaging::V2C(&left,&leftI)){
                 continue;
             }

@@ -11,7 +11,7 @@
         <module logLevel="WARN">image_hint_generator</module>
         <module logLevel="ERROR">image_hint_transformer</module>
         <module logLevel="WARN">image_hint_transformer_obstacle</module>
-        <module logLevel="INFO">lap_time</module>
+        <module logLevel="WARN">lap_time</module>
         <module logLevel="ERROR">image_hint_worker_lane</module>
         <module logLevel="ERROR">image_hint_worker_obstacle</module>
         <module logLevel="WARN">environment_predictor</module>
@@ -19,10 +19,10 @@
         <module logLevel="ERROR">street_obstacle_ir_detector</module>
         <module logLevel="WARN">trajectory_point_controller</module>
         <module logLevel="WARN">image_proxy</module>
-        <module logLevel="INFO">street_obstacle_merger</module>
+        <module logLevel="WARN">street_obstacle_merger</module>
         <module logLevel="INFO">sobel_threshold_generator</module>
         <module logLevel="WARN">obstacle_to_local_course</module>
-        <module logLevel="ERROR">te_estimator</module>
+        <module logLevel="ERROR">course_state_estimator</module>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
             <module logLevel="INFO">socket_data_sender</module>

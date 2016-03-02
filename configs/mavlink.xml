@@ -9,6 +9,10 @@
             <module>mavlink_logger</module>
             <module>mavlink_csv_logger</module>
         </if>
+        <if set="mavlink_debug">
+            <module>mavlink_debug_out</module>
+            <module>mavlink_debug_in</module>
+        </if>
         <if set="files">
             <module>mavlink_player</module>
         </if>
@@ -31,9 +35,19 @@
         <channelMapping from="STREET_OBJECTS" to="ENVIRONMENT_OBSTACLE"/>
     </module>
     <module>
+        <name>mavlink_debug_out</name>
+        <realName>mavlink_debug</realName>
+        <channelMapping from="CHANNEL" to="MAVLINK_OUT"/>
+    </module>
+    <module>
+        <name>mavlink_debug_in</name>
+        <realName>mavlink_debug</realName>
+        <channelMapping from="CHANNEL" to="MAVLINK_IN"/>
+    </module>
+    <module>
         <name>mavlink_usb_importer</name>
         <config>
-            <path>/dev/senseboard2016</path>w
+            <path>/dev/ttyACM0</path>
         </config>
         <config user="odroid">
             <path>/dev/senseboard2016</path>
