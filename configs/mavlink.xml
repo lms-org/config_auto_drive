@@ -16,7 +16,7 @@
         <if set="files">
             <module>mavlink_player</module>
         </if>
-        <!--module>rgb_lights_controller</module-->
+        <module>rgb_lights_controller</module>
     </modulesToEnable>
 
     <service>
@@ -33,6 +33,11 @@
     <module>
         <name>rgb_lights_controller</name>
         <channelMapping from="STREET_OBJECTS" to="ENVIRONMENT_OBSTACLE"/>
+        <config>
+            <pongSpeed>10</pongSpeed>
+            <snakeSpeed>20</snakeSpeed>
+            <rainbowSpeed>2</rainbowSpeed>
+        </config>
     </module>
     <module>
         <name>mavlink_debug_out</name>

@@ -57,7 +57,7 @@ bool ImageHintGenerator::cycle() {
                     createHintForCrossing(*middleLane);
                 }
             }else{
-                logger.debug("cycle")<<"Not in FMH: "<<static_cast<int>(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->driveMode());
+                logger.debug("cycle")<<"Not in FMH: "<<(int)phoenixService->driveMode();
             }
         }else{
             logger.debug("cycle")<<"PHOENIX_SERVICE isn't valid!";
@@ -101,6 +101,7 @@ void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLan
 
     lms::imaging::detection::StreetObstacle::StreetObstacleParam sopRight;
     lms::imaging::detection::StreetObstacle::StreetObstacleParam sopLeft;
+    sopRight.obstacleRight = true;
     sopRight.edge = true;
     sopRight.target = target.get();
     sopRight.gaussBuffer = gaussBuffer;
@@ -108,19 +109,20 @@ void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLan
     sopRight.fromConfig(&config("defaultLPParameter"));
     sopRight.fromConfig(&config("defaultLineParameter"));
     sopRight.fromConfig(&config("defaultObstacleParameter"));
-    sopRight.obstacleLeft = false;
     for(const lms::math::vertex2f &v:middle.points()){
         if(v.length() <= 0.4) //#HACK
             continue;
         sopRight.middleLine.points().push_back(v);
     }
-    obstacleRight->parameter = sopRight;
-    hintContainerObstacle->add(obstacleRight);
-    if(config().get<bool>("searchObstacleLeft",false)){
+    if(config().get<bool>("searchObstacleLeft",true)){
         sopLeft = sopRight;
-        sopLeft.obstacleLeft = true;
+        sopLeft.obstacleRight = false;
         obstacleLeft->parameter = sopLeft;
         hintContainerObstacle->add(obstacleLeft);
+    }
+    if(config().get<bool>("searchObstacleRight",true)){
+        obstacleRight->parameter = sopRight;
+        hintContainerObstacle->add(obstacleRight);
     }
 
 

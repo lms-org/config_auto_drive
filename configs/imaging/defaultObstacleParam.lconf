@@ -1,6 +1,6 @@
-targetThres = 100
+targetThres = 80
 numerOfSegmentsOrth =4
 minDistanceBetweenSearchPoints = 0.1
-sobelThreshold = 100
+sobelThreshold = 80
 minPointCount = 1
 boxDepthSearchLength= 40
