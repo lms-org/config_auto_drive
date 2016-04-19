@@ -175,8 +175,8 @@
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
         <channelMapping priority="9" from="CAR" to="CAR"/>
         <config name="FMH">
-            <velocity_straight>3.5</velocity_straight>
-            <curve_maxVelocity>3.0</curve_maxVelocity>
+            <velocity_straight>4.5</velocity_straight>
+            <curve_maxVelocity>3.5</curve_maxVelocity>
             <curve_minVelocity>2.0</curve_minVelocity>
             <curveStraight_maxVelocity>3.0</curveStraight_maxVelocity>
             <curveStraight_minVelocity>2.0</curveStraight_minVelocity>
