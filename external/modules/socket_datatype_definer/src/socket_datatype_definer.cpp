@@ -8,7 +8,7 @@
 bool SocketDatatypeDefiner::initialize() {
     readChannel<street_environment::Trajectory>("TRAJECTORY_LINE"); //TODO change it to trajectory
     readChannel<street_environment::TrajectoryPoint>("TRAJECTORY_POINT");
-    readChannel<sensor_utils::Car>("CAR");
+    readChannel<street_environment::Car>("CAR");
     readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_OBSTACLE");
     readChannel<street_environment::RoadLane>("MIDDLE_LANE");
     return true;

@@ -10,7 +10,7 @@ bool StreetObjectMerger::initialize() {
     envOutput = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_OUTPUT");
 
     //We should have the roadlane and the car from the current cycle
-    car = readChannel<sensor_utils::Car>("CAR");
+    car = readChannel<street_environment::Car>("CAR");
     middle = readChannel<street_environment::RoadLane>("MIDDLE_LANE");
     //hack for drawing
     visibleAreas_hack = writeChannel<std::vector<lms::math::Rect>>("VISIBLE_AREAS");

@@ -98,7 +98,7 @@ bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, flo
     }
 
     /* TODO
-    if(car->getPrioState().state == sensor_utils::Car::StateType::IDLE){
+    if(car->getPrioState().state == street_environment::Car::StateType::IDLE){
         //Auto steht an kreuzung, wir gehen davon aus, dass die Straße im Nahbereich gerade ist
         prior_fact = config().get<float>("idle_prior_fact",1);
     }

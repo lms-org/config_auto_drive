@@ -25,7 +25,7 @@ public:
 
 
 private:
-    lms::ReadDataChannel<sensor_utils::Car> car;
+    lms::ReadDataChannel<street_environment::Car> car;
     socket_connection::SocketConnectionHandler *server;
 };
 

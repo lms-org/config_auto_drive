@@ -22,7 +22,7 @@ public:
     bool cycle() override;
 
 private:
-    lms::ReadDataChannel<sensor_utils::Car> car;
+    lms::ReadDataChannel<street_environment::Car> car;
     lms::WriteDataChannel<lms::imaging::Image> image;
     float meterToPxl;
     int offsetX;

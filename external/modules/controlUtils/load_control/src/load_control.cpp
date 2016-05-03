@@ -1,7 +1,7 @@
 #include "load_control.h"
 
 bool LoadControl::initialize() {
-    carState = writeChannel<sensor_utils::Car::State>("CAR_STATE");
+    carState = writeChannel<street_environment::Car::State>("CAR_STATE");
     return true;
 }
 

@@ -10,7 +10,7 @@
  **/
 class LapTime : public lms::Module {
     lms::ReadDataChannel<street_environment::EnvironmentObjects> environment;
-    lms::ReadDataChannel<sensor_utils::Car> car;
+    lms::ReadDataChannel<street_environment::Car> car;
     bool crossingStartLine;
     lms::Time start;
     float distanceDriven;

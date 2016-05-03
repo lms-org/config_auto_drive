@@ -50,11 +50,12 @@ bool ImageHintGenerator::cycle() {
         lms::ServiceHandle<phoenix_CC2016_service::Phoenix_CC2016Service> phoenixService = getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE");
         if(phoenixService.isValid() && phoenixService->isValid()){
             if(phoenixService->driveMode() == phoenix_CC2016_service::CCDriveMode::FMH){
+                lms::math::polyLine2f mid = middleLane->startAt(0.4);
                 if(config().get<bool>("searchForObstacles",false)){
-                    createHintForObstacle(*middleLane);
+                    createHintForObstacle(mid);
                 }
                 if(config().get<bool>("searchForCrossing",false)){
-                    createHintForCrossing(*middleLane);
+                    createHintForCrossing(mid);
                 }
             }else{
                 logger.debug("cycle")<<"Not in FMH: "<<(int)phoenixService->driveMode();
@@ -66,7 +67,7 @@ bool ImageHintGenerator::cycle() {
     return true;
 }
 
-void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLane &middle ){
+void ImageHintGenerator::createHintForCrossing(const lms::math::polyLine2f &middle ){
     //TODO use cached Crossing to find them
     lms::imaging::detection::ImageHint<lms::imaging::detection::StreetCrossing> *crossing = new lms::imaging::detection::ImageHint<lms::imaging::detection::StreetCrossing>();
     lms::imaging::detection::StreetCrossing::StreetCrossingParam scp;
@@ -94,7 +95,7 @@ void ImageHintGenerator::createHintForCrossing(const street_environment::RoadLan
     hintContainerObstacle->add(crossing);
 }
 
-void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLane &middle ){
+void ImageHintGenerator::createHintForObstacle(const lms::math::polyLine2f &middle ){
     //TODO use cached obstacles to find them
     lms::imaging::detection::ImageHint<lms::imaging::detection::StreetObstacle> *obstacleRight = new lms::imaging::detection::ImageHint<lms::imaging::detection::StreetObstacle>();
     lms::imaging::detection::ImageHint<lms::imaging::detection::StreetObstacle> *obstacleLeft = new lms::imaging::detection::ImageHint<lms::imaging::detection::StreetObstacle>();
@@ -110,7 +111,7 @@ void ImageHintGenerator::createHintForObstacle(const street_environment::RoadLan
     sopRight.fromConfig(&config("defaultLineParameter"));
     sopRight.fromConfig(&config("defaultObstacleParameter"));
     for(const lms::math::vertex2f &v:middle.points()){
-        if(v.length() <= 0.4) //#HACK
+        if(v.length() <= 0.4)
             continue;
         sopRight.middleLine.points().push_back(v);
     }
@@ -148,7 +149,7 @@ void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::Roa
 
     const float maxSearchLength = config().get<float>("maxSearchLength",1);
     float currentSearchLength = 0;
-    for(int i = 1; i < (int)middle.points().size(); i++){
+    for(int i = 0; i < (int)middle.points().size(); i++){ //der 0te Punkt liegt links neben dem fahrzeug
         const vertex2f bot = middle.points()[i-1];
         const vertex2f top = middle.points()[i];
         currentSearchLength += bot.distance(top);

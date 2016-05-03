@@ -8,7 +8,7 @@
  * @brief LMS module save_control
  **/
 class SaveControl : public lms::Module {
-    lms::ReadDataChannel<sensor_utils::Car::State> debugRcCarState;
+    lms::ReadDataChannel<street_environment::Car::State> debugRcCarState;
     bool isRecording;
 public:
     bool initialize() override;

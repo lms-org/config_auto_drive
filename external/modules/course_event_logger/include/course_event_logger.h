@@ -8,7 +8,7 @@
  * @brief LMS module course_event_logger
  **/
 class CourseEventLogger : public lms::Module {
-    lms::ReadDataChannel<sensor_utils::Car> car;
+    lms::ReadDataChannel<street_environment::Car> car;
 
     std::ofstream courseCsv;
     std::ofstream eventCsv;

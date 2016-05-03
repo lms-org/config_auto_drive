@@ -1,7 +1,7 @@
 #include "save_control.h"
 
 bool SaveControl::initialize() {
-    debugRcCarState = readChannel<sensor_utils::Car::State>("RC_CAR_STATE");
+    debugRcCarState = readChannel<street_environment::Car::State>("RC_CAR_STATE");
     isRecording = false;
     return true;
 }

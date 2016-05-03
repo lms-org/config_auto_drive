@@ -15,8 +15,8 @@ public:
     void configsChanged() override;
 private:
     void createHintsFromMiddleLane(const street_environment::RoadLane &middle );
-    void createHintForCrossing(const street_environment::RoadLane &middle );
-    void createHintForObstacle(const street_environment::RoadLane &middle );
+    void createHintForCrossing(const lms::math::polyLine2f &middle );
+    void createHintForObstacle(const lms::math::polyLine2f &middle );
     lms::ReadDataChannel<street_environment::RoadLane> middleLane;
     lms::WriteDataChannel<lms::imaging::detection::HintContainer> hintContainerLane;
     lms::WriteDataChannel<lms::imaging::detection::HintContainer> hintContainerObstacle;
