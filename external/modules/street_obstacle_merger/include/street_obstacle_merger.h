@@ -30,7 +30,7 @@ private:
     lms::WriteDataChannel<street_environment::EnvironmentObjects> envOutput;
     lms::ReadDataChannel<street_environment::RoadLane> middle;
     lms::ReadDataChannel<street_environment::Car> car;
-    lms::WriteDataChannel<std::vector<lms::math::Rect>> visibleAreas_hack;
+    lms::WriteDataChannel<std::vector<lms::math::Rect>> visibleAreasToDraw;
 
     void checkAngle(street_environment::ObstaclePtr obst);
 

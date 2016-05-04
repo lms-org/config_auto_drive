@@ -12,8 +12,8 @@ bool StreetObjectMerger::initialize() {
     //We should have the roadlane and the car from the current cycle
     car = readChannel<street_environment::Car>("CAR");
     middle = readChannel<street_environment::RoadLane>("MIDDLE_LANE");
-    //hack for drawing
-    visibleAreas_hack = writeChannel<std::vector<lms::math::Rect>>("VISIBLE_AREAS");
+
+    visibleAreasToDraw = writeChannel<std::vector<lms::math::Rect>>("VISIBLE_AREAS");
     return true;
 }
 
@@ -36,7 +36,7 @@ bool StreetObjectMerger::cycle() {
         envOutput->objects.clear();
     }
 
-    *visibleAreas_hack = getService<area_of_detection::AreaOfDetection>("AreaOfDetection")->visibleAreas();
+    *visibleAreasToDraw = getService<area_of_detection::AreaOfDetection>("AreaOfDetection")->visibleAreas();
 
     //get vectors from environments
     street_environment::EnvironmentObstacles obstaclesNew;
