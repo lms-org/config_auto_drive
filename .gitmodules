@@ -70,9 +70,6 @@
 [submodule "external/modules/ueye_importer"]
 	path = external/modules/ueye_importer
 	url = https://github.com/Phibedy/ueye_importer.git
-[submodule "external/libraries/sense_link"]
-	path = external/libraries/sense_link
-	url = https://github.com/Bitfroest/sense_link.git
 [submodule "external/modules/usb_sense_link"]
 	path = external/modules/usb_sense_link
 	url = https://github.com/Bitfroest/usb_sense_link.git
