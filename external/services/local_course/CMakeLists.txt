@@ -22,7 +22,7 @@ include_directories(
 
 add_definitions(-DEIGEN_NO_DEBUG)
 
-include_directories(include)
+#include_directories(include)
 
 set(KALMAN "Matlab/codegen/lib/kalman_filter_lr")
 include_directories("include")

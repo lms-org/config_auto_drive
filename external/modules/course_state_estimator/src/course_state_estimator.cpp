@@ -287,37 +287,10 @@ street_environment::RoadState CourseStateEstimator::getStateFromIndex(int index)
 
 void CourseStateEstimator::update(){
 
-    if (false)//TODO//config().get<bool>("useKalmanCurvature", true))
-    {
-        //update curvature
-        float curv = 0.0;
-        for (uint i=4; i <= 6; ++i)
-        {
-            curv += road->polarDarstellung[i];
-        }
-        curv /= 3.0;
+    //update curvature
+    float pt1_parameter = config().get<float>("curvaturePT1_parameter", 0.05);
+    curvaturePT1 = pt1_parameter*calculateCurvature(0.2, 1.2) + (1-pt1_parameter)*curvaturePT1;
 
-        //Unterscheidung ob "innnen" oder "aussen" in der Kurve
-        if (curv > 0) //Linkskurve
-        {
-            curv = curv/(1.0 + 0.2*curv);
-        }
-        else
-        {
-            curv = curv/(1.0 - 0.2*curv);
-        }
-
-        curvaturePT1 = curv;
-
-    }
-    else
-    {
-        //update curvature
-        float pt1_parameter = config().get<float>("curvaturePT1_parameter", 0.05);
-        curvaturePT1 = pt1_parameter*calculateCurvature(0.2, 1.2) + (1-pt1_parameter)*curvaturePT1;
-
-
-    }
     mapObservations();
     probabilityStates = transition*probabilityStates;
     probabilityStates = probabilityStates.cwiseProduct(observation);
@@ -363,7 +336,7 @@ float CourseStateEstimator::calculateCurvature(float minDistance, float maxDista
 {
 
     int nPointsRoad = road->points().size();
-    float lengthEnvModelSegment = road->polarPartLength;
+    float lengthEnvModelSegment = 0.2; //TODO
 
     //check if environment model has needed range
     float maxDistanceEnvModel =  lengthEnvModelSegment * (nPointsRoad-1);

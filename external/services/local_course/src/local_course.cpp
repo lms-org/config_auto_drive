@@ -2,6 +2,7 @@
 
 #include <filter/line_line_x.h>
 #include <unistd.h>
+#include <filter/adam.h>
 
 namespace local_course {
 
@@ -166,14 +167,17 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
         }
     }
 
-    kalman.update(pointsToAdd,dx,dy,dphi, measurementUncertainty, priorFactor);
+    //kalman.update(pointsToAdd,dx,dy,dphi, measurementUncertainty, priorFactor);
     //Eigen::Matrix<double,Eigen::Dynamic,2> data(pointsToAdd.size(),2);
+    auto t = lms::Time::now();
     lineX->translate(dx,dy,dphi);
-    for(int i = 0; i < 50; i++){
+    for(int i = 0; i < 20; i++){
         for(int row = 0; row < (int)pointsToAdd.size(); row++){
             lineX->update(Eigen::Vector2d(pointsToAdd[row].x,pointsToAdd[row].y));
         }
     }
+    lineX->state(lineX->state.rows()-1) = lineX->state(lineX->state.rows()-2);
+    logger.error("SO LANGE DAUERT ES: ")<<t.since();
     pointsAdded = pointsToAdd;
     pointsToAdd.clear();
 }

@@ -153,6 +153,7 @@ street_environment::RoadLane MatlabKalman::getOutput(){
 }
 
 void MatlabKalman::createOutput(street_environment::RoadLane &output){
+    /*
     //clear points
     logger.debug("convertZustandToLane ANFANG");
     output.points().clear();
@@ -185,6 +186,7 @@ void MatlabKalman::createOutput(street_environment::RoadLane &output){
         logger.debug("points: ")<<"krümmung: "<<zustandsVector->data[i]<< " ,dw "<<dw<<" ,x:  " <<pi.x << " ,y: "<<pi.y;
         output.polarDarstellung.push_back(zustandsVector->data[i]);
     }
+    */
 
 }
 
