@@ -2,7 +2,7 @@
 #define LMS_STREET_OBJECT_MERGER
 
 #include "lms/module.h"
-#include "sensor_utils/car.h"
+#include "street_environment/car.h"
 #include "street_environment/street_environment.h"
 #include "street_environment/obstacle.h"
 #include "street_environment/crossing.h"

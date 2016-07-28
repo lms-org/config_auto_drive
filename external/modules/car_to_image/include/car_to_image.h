@@ -3,7 +3,7 @@
 
 #include "lms/module.h"
 #include "lms/extra/time.h"
-#include "sensor_utils/car.h"
+#include "street_environment/car.h"
 #include "lms/imaging/image.h"
 
 class CarToImage : public lms::Module {

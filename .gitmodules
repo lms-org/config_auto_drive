@@ -127,3 +127,6 @@
 [submodule "external/modules/pause_runtime"]
 	path = external/modules/pause_runtime
 	url = https://github.com/lms-org/pause_runtime
+[submodule "external/libraries/kalman_filters"]
+	path = external/libraries/kalman_filters
+	url = https://github.com/tum-phoenix/kalman_filters

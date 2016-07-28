@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "car_to_image.h"
 #include "lms/imaging/graphics.h"
-#include "sensor_utils/car.h"
+#include "street_environment/car.h"
 
 bool CarToImage::initialize() {
     car = readChannel<street_environment::Car>("CAR");

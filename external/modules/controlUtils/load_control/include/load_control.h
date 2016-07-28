@@ -2,7 +2,7 @@
 #define LOAD_CONTROL_H
 
 #include <lms/module.h>
-#include "sensor_utils/car.h"
+#include "street_environment/car.h"
 /**
  * @brief LMS module load_control
  **/

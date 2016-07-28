@@ -8,12 +8,18 @@
 #include "street_environment/road.h"
 #include "lms/math/lookup_table.h"
 
+
+struct LineX;
+
 namespace local_course {
+
 
 /**
  * @brief LMS service local_course
  **/
 class LocalCourse : public lms::Service {
+    LineX *lineX;
+
     MatlabKalman kalman;
     std::vector<lms::math::vertex2f> pointsToAdd;
     std::vector<lms::math::vertex2f> pointsAdded;

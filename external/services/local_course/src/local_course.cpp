@@ -1,13 +1,20 @@
 #include "local_course/local_course.h"
 
-namespace local_course {
+#include <filter/line_line_x.h>
+#include <unistd.h>
 
+namespace local_course {
 
 LocalCourse::LocalCourse():kalman(logger){
 
 }
 
 bool LocalCourse::init() {
+    lineX = new LineX();
+    lineX->init(8);
+    lineX->lineLength = 0.2;
+    lineX->fixX = true;
+    lineX->fixY = false;
     configsChanged();
     return true;
 }
@@ -30,10 +37,8 @@ void LocalCourse::configsChanged(){
 
 void LocalCourse::update(float dx, float dy, float dphi, float measurementUncertainty, float priorFactor){
     //remove outliers
-    street_environment::RoadLane lane = kalman.getOutput(); //calculate xy points of lane
-
-    if (++resetCounter > 40)
-    {
+    street_environment::RoadLane lane = getCourse(); //calculate xy points of lane
+    if (++resetCounter > 40){ //TODO HACK
 
         if (config().get<bool>("useThresholding", true))
         {
@@ -161,9 +166,14 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
         }
     }
 
-
-
     kalman.update(pointsToAdd,dx,dy,dphi, measurementUncertainty, priorFactor);
+    //Eigen::Matrix<double,Eigen::Dynamic,2> data(pointsToAdd.size(),2);
+    lineX->translate(dx,dy,dphi);
+    for(int i = 0; i < 50; i++){
+        for(int row = 0; row < (int)pointsToAdd.size(); row++){
+            lineX->update(Eigen::Vector2d(pointsToAdd[row].x,pointsToAdd[row].y));
+        }
+    }
     pointsAdded = pointsToAdd;
     pointsToAdd.clear();
 }
@@ -197,7 +207,14 @@ void LocalCourse::addPoint(const lms::math::vertex2f &p){
 
 
 street_environment::RoadLane LocalCourse::getCourse(){
-    return kalman.getOutput();
+    Eigen::Matrix<double,Eigen::Dynamic,2> data = lineX->toXY();
+
+    street_environment::RoadLane r;
+    for(int row = 0; row < data.rows(); row++){
+        r.points().push_back(lms::math::vertex2f(data(row,0),data(row,1)));
+    }
+    return r;
+    //return kalman.getOutput();
 }
 
 

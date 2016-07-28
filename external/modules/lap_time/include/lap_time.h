@@ -3,7 +3,7 @@
 
 #include <lms/module.h>
 #include "street_environment/start_line.h"
-#include "sensor_utils/car.h"
+#include "street_environment/car.h"
 
 /**
  * @brief LMS module lap_time

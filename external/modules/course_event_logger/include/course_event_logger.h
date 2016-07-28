@@ -2,7 +2,7 @@
 #define COURSE_EVENT_LOGGER_H
 
 #include <lms/module.h>
-#include "sensor_utils/car.h"
+#include "street_environment/car.h"
 #include <ostream>
 /**
  * @brief LMS module course_event_logger

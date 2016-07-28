@@ -3,7 +3,7 @@
 #include "street_environment/trajectory.h"
 #include "street_environment/road.h"
 #include "street_environment/street_environment.h"
-#include "sensor_utils/car.h"
+#include "street_environment/car.h"
 
 bool SocketDatatypeDefiner::initialize() {
     readChannel<street_environment::Trajectory>("TRAJECTORY_LINE"); //TODO change it to trajectory

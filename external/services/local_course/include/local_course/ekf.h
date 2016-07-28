@@ -128,13 +128,13 @@ public:
 
 protected:
     float partLength;
-    Control u;
-    Measurement z;
+    //Control u;
+    //Measurement z;
 
-    SystemModel sys;
-    MeasurementModel mm;
+    //SystemModel sys;
+    //MeasurementModel mm;
 
-    Filter filter;
+    //Filter filter;
     void computeMeasurement();
     void computeFilterStep();
     void initFilter();

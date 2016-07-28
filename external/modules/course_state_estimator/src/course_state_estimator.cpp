@@ -285,10 +285,9 @@ street_environment::RoadState CourseStateEstimator::getStateFromIndex(int index)
 }
 
 
-void CourseStateEstimator::update()
-{
+void CourseStateEstimator::update(){
 
-    if (config().get<bool>("useKalmanCurvature", true))
+    if (false)//TODO//config().get<bool>("useKalmanCurvature", true))
     {
         //update curvature
         float curv = 0.0;
