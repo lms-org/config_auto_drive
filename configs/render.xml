@@ -1,8 +1,0 @@
-<framework>
-    <if set="sdl">
-        <include src="render_sdl.xml"/>
-    </if>
-    <if notSet="sdl">
-        <include src="render_ogre.xml"/>
-    </if>
-</framework>

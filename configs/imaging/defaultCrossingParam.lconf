@@ -1,7 +1,0 @@
-boxDepthSearchLength = 10
-obstacleRightOffset = 0.1
-obstacleSobelThreshold = 120
-crossingStartDistance=0.35
-crossingMaxSearchDistance=2
-inlierThresholdRANSAC=4.0
-maxIterationsRANSAC=100
