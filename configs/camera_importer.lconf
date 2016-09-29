@@ -1,0 +1,23 @@
+#Default ps2 camera values
+device = /dev/video0
+width = 320
+height = 240
+format = YUYV
+framerate = 100
+
+# Special settings for V4L (Video for Linux)
+Auto Exposure = 0
+Brightness = 0
+Contrast = 60
+Camera Controls = 0
+Exposure = 100
+Gain, Automatic = 0
+Gain = 15
+Hue = 0
+Horizontal Flip = 1
+Power Line Frequency = 0
+Sharpness = 0
+Saturation = 64
+User Controls = 0
+Vertical Flip = 1
+White Balance, Automatic = 1
