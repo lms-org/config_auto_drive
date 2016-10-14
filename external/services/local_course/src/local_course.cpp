@@ -3,6 +3,7 @@
 #include <filter/line_line_x.h>
 #include <unistd.h>
 #include <filter/adam.h>
+#include <cmath>
 
 namespace local_course {
 
@@ -200,12 +201,12 @@ void LocalCourse::resetData(){
 
 void LocalCourse::addPoints(const std::vector<lms::math::vertex2f> &points){
     for(const lms::math::vertex2f &v :points){
-        if (!(isnan(v.x) || isnan(v.y)))  pointsToAdd.push_back(v);// TODO nan??
+        if (!(std::isnan(v.x) || std::isnan(v.y)))  pointsToAdd.push_back(v);// TODO nan??
     }
 }
 
 void LocalCourse::addPoint(const lms::math::vertex2f &p){
-    if (!(isnan(p.x) || isnan(p.y)))  pointsToAdd.push_back(p); // TODO nan??
+    if (!(std::isnan(p.x) || std::isnan(p.y)))  pointsToAdd.push_back(p); // TODO nan??
 }
 
 
