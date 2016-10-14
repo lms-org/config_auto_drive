@@ -7,6 +7,12 @@ Used for fast prototyping :)
  * Eigen: http://neuro.debian.net/pkgs/libeigen3-dev.html
  * Kalman:  https://github.com/mherb/kalman
  * sfml: http://www.sfml-dev.org/
+
+
+#Start commands
+ * Start from file `./lms -c mycam --flags files --enable-load /home/phibedy/CC2016/neue_daten/lmslog/2016-01-25T17-01-22Z-normale_runde`
+ * Start car `./lms -c new_car --flags sendData
+
  
 #Crosscompiling for odroid:
  * install arm-linux-gnueabihf

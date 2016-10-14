@@ -53,14 +53,6 @@
             <config src="camera_importer.lconf"/>
         </module>
         <module>
-            <name>ueye_importer</name>
-            <channelMapping from="CAMERA_IMAGE" to="IMAGE" />
-            <config src="camera/ueye_small.lconf" />
-            <config>
-                <initTimeout>2000</initTimeout>
-            </config>
-        </module>
-        <module>
             <name>image_converter</name>
             <channelMapping from="INPUT_IMAGE" to="IMAGE"/>
             <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE_PRE"/>
