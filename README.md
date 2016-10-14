@@ -11,7 +11,7 @@ Used for fast prototyping :)
 
 #Start commands
  * Start from file `./lms -c mycam --flags files --enable-load /home/phibedy/CC2016/neue_daten/lmslog/2016-01-25T17-01-22Z-normale_runde`
- * Start car `./lms -c new_car --flags sendData
+ * Start car `./lms -c new_car --flags sendData,sdl
 
  
 #Crosscompiling for odroid:
