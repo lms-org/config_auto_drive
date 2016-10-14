@@ -1,3 +1,5 @@
+
+        <!-- ./lms -c mycam --flags files --enable-load /home/phibedy/CC2016/neue_daten/lmslog/2016-01-25T17-01-22Z-normale_runde-->
 <framework>
         <service>
             <name>warp_service</name>
