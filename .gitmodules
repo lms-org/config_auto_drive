@@ -130,3 +130,6 @@
 [submodule "external/libraries/kalman_filters"]
 	path = external/libraries/kalman_filters
 	url = https://github.com/tum-phoenix/kalman_filters
+[submodule "external/modules/ximea_importer"]
+	path = external/modules/ximea_importer
+	url = https://github.com/lms-org/ximea_importer

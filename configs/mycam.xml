@@ -5,8 +5,8 @@
             <name>warp_service</name>
             <!-- camera/cali.lconf - new car -->
             <!-- camera/cali_cc15_auto.lconf - old car -->
-            <config src="camera/cali_cc2016_laeuft_bei_uns.lconf" />
-            <config src="camera/homography_cc2016_laeuft_bei_uns.lconf" />
+            <!--config src="camera/cali_cc2016_laeuft_bei_uns.lconf" /-->
+            <config src="camera/homography_ximea.lconf" />
         </service>
         <service>
             <name>AreaOfDetection</name>
