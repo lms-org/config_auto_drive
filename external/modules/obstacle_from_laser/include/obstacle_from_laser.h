@@ -16,7 +16,9 @@ public:
 private:
     lms::ReadDataChannel<lms::math::polyLine2f> points;
     lms::ReadDataChannel<street_environment::RoadLane> road;
+
     lms::WriteDataChannel<lms::math::polyLine2f> sortedPoints;
+    lms::WriteDataChannel<street_environment::EnvironmentObjects> env;
 };
 
 #endif // OBSTACLE_FROM_LASER_H
