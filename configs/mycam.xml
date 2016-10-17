@@ -14,4 +14,17 @@
             <config src="visible_areas.lconf"/>
         </service>
         <include src="image.xml"/>
+        <!-- Laserscanner -->
+        <modulesToEnable logLevel="WARN">
+            <module>laser_scanner</module>
+        </modulesToEnable>
+        <module>
+            <name>laser_scanner</name>
+            <config>
+                <x>0.09</x>
+                <y>0.05</y>
+                <channelMapping from="URG_DATA" to="URG_DATA"/>
+                <channelMapping from="URG_DATA_RAW" to="URG_DATA_RAW"/>
+            </config>
+        </module>
 </framework>

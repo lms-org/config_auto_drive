@@ -4,7 +4,6 @@
 #include "lms/module.h"
 #include "street_environment/street_environment.h"
 #include "street_environment/obstacle.h"
-#include "lms/type/module_config.h"
 #include "sensor_utils/distance_sensor.h"
 class StreetObstacleIRDetector : public lms::Module {
 public:
