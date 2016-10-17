@@ -9,4 +9,4 @@ set(HEADERS
 
 include_directories(include)
 add_library(course_state_estimator MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(course_state_estimator PRIVATE lmscore)
+target_link_libraries(course_state_estimator PRIVATE lmscore street_environment)
