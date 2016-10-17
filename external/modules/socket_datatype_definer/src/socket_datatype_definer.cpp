@@ -11,6 +11,7 @@ bool SocketDatatypeDefiner::initialize() {
     readChannel<street_environment::Car>("CAR");
     readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_OBSTACLE");
     readChannel<street_environment::RoadLane>("MIDDLE_LANE");
+    readChannel<lms::math::polyLine2f>("URG_DATA");
     return true;
 }
 

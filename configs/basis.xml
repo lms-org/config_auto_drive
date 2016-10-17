@@ -23,6 +23,7 @@
         <module logLevel="INFO">sobel_threshold_generator</module>
         <module logLevel="WARN">obstacle_to_local_course</module>
         <module logLevel="ERROR">course_state_estimator</module>
+        <module logLevel="WARN">obstacle_from_laser</module>
         <!--module logLevel="DEBUG">car_to_matlab</module-->
         <if set="sendData">
             <module logLevel="INFO">socket_data_sender</module>
@@ -67,7 +68,11 @@
         <name>sobel_threshold_generator</name>
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
     </module>
-    
+
+    <module>
+        <name>obstacle_from_laser</name>
+        <channelMapping from="POINTS" to="URG_DATA"/>
+    </module>
     <module>
         <name>street_obstacle_ir_detector</name>
         <config>
