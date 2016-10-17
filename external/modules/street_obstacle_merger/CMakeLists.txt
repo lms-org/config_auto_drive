@@ -9,4 +9,4 @@ set (HEADERS
 include_directories("include")
 
 add_library (street_obstacle_merger MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(street_obstacle_merger PRIVATE lmscore math_lib sensor_utils street_environment area_of_detection phoenix_CC2016_service)
+target_link_libraries(street_obstacle_merger PRIVATE lmscore math_lib lms_sensor_utils street_environment area_of_detection phoenix_CC2016_service)

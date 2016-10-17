@@ -178,7 +178,7 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
         }
     }
     lineX->state(lineX->state.rows()-1) = lineX->state(lineX->state.rows()-2);
-    logger.error("SO LANGE DAUERT ES: ")<<t.since();
+    //logger.error("SO LANGE DAUERT ES: ")<<t.since();
     pointsAdded = pointsToAdd;
     pointsToAdd.clear();
 }

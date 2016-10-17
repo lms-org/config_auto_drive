@@ -9,4 +9,4 @@ set(HEADERS
 
 include_directories(include)
 add_library(course_event_logger MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(course_event_logger PRIVATE lmscore sensor_utils)
+target_link_libraries(course_event_logger PRIVATE lmscore lms_sensor_utils)
