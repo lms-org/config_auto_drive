@@ -9,4 +9,4 @@ set (HEADERS
 include_directories("include")
 
 add_library (image_object_renderer MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(image_object_renderer PRIVATE lmscore imaging street_environment)
+target_link_libraries(image_object_renderer PRIVATE lmscore lms_imaging street_environment)

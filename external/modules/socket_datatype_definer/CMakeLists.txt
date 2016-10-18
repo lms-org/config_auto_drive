@@ -9,4 +9,4 @@ set(HEADERS
 
 include_directories(include)
 add_library(socket_datatype_definer MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(socket_datatype_definer PRIVATE lmscore lms_sensor_utils imaging street_environment math_lib)
+target_link_libraries(socket_datatype_definer PRIVATE lmscore lms_sensor_utils lms_imaging street_environment lms_math)

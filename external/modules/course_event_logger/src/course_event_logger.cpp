@@ -21,11 +21,12 @@ bool CourseEventLogger::deinitialize() {
 }
 
 bool CourseEventLogger::cycle() {
+    /* TODO
     for(std::string s : messaging()->receive("COURSE_EVENT")){
         //print s to x,y
         eventCsv<<car->position().x<<","<< car->position().y<<","<<s;
     }
     courseCsv<<car->position().x<<","<< car->position().y<<","<<car->velocity()<< "," <<car->targetSpeed() << std::endl;
-
+    */
     return true;
 }

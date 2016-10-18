@@ -12,12 +12,6 @@ MACRO(SUBDIRLIST result curdir)
   SET(${result} ${dirlist})
 ENDMACRO()
 
-set(LMS_STANDALONE FALSE)
-set(LMS_DIR_CONFIGS ${CMAKE_CURRENT_SOURCE_DIR}/configs)
-set(LMS_DIR_EXTERNAL ${CMAKE_CURRENT_BINARY_DIR}/external)
-set(LMS_DIR_MODULES ${CMAKE_CURRENT_BINARY_DIR}/external/modules)
-set(LMS_DIR_SERVICES ${CMAKE_CURRENT_BINARY_DIR}/external/services)
-
 if(POLICY CMP0042)
     # Set old MACOSX_RPATH policy on OS X
     cmake_policy(SET CMP0042 OLD)
@@ -32,9 +26,6 @@ endif()
 file(GLOB_RECURSE CONFIG_FILES_LCONF "**/*.lconf")
 file(GLOB_RECURSE CONFIG_FILES_XML "**/*.xml")
 add_custom_target(show_configs SOURCES ${CONFIG_FILES_LCONF} ${CONFIG_FILES_XML})
-
-#compile core
-add_subdirectory(LMS/lms)
 
 #Add shared headers
 file(GLOB_RECURSE SHARED_HEADER **/CMakeSharedHeaders.txt ${CMAKE_CURRENT_BINARY_DIR}/**/CMakeSharedHeaders.txt)
@@ -52,7 +43,10 @@ include_directories(usr/local/include)
 set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} usr/local/lib)
 endif()
 
+#add conan libs/includes
+set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${CMAKE_CURRENT_BINARY_DIR}/lib")
+include_directories("${CMAKE_CURRENT_BINARY_DIR}/include")
+link_directories(${CMAKE_LIBRARY_PATH}) #TODO why is this needed?
+
 #compile libs/modules
 add_subdirectory(external)
-
-add_subdirectory(LMS/lms/test)

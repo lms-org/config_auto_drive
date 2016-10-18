@@ -10,4 +10,4 @@ set (HEADERS
 include_directories("include")
 
 add_library (car_to_image MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(car_to_image PRIVATE lmscore math_lib lms_sensor_utils imaging)
+target_link_libraries(car_to_image PRIVATE lmscore lms_math lms_sensor_utils lms_imaging)

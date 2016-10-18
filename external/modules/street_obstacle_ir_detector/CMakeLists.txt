@@ -9,4 +9,4 @@ set (HEADERS
 include_directories("include")
 
 add_library (street_obstacle_ir_detector MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(street_obstacle_ir_detector PRIVATE lmscore math_lib imaging street_environment phoenix_CC2016_service local_course)
+target_link_libraries(street_obstacle_ir_detector PRIVATE lmscore lms_math lms_imaging street_environment phoenix_CC2016_service local_course)

@@ -2,7 +2,7 @@
 #define CAR_TO_IMAGE_H
 
 #include "lms/module.h"
-#include "lms/extra/time.h"
+#include "lms/time.h"
 #include "street_environment/car.h"
 #include "lms/imaging/image.h"
 

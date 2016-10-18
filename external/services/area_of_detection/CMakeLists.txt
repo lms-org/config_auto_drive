@@ -9,4 +9,4 @@ set(HEADERS
 
 include_directories(include)
 add_library(area_of_detection SHARED ${SOURCES} ${HEADERS})
-target_link_libraries(area_of_detection PRIVATE lmscore math_lib)
+target_link_libraries(area_of_detection PRIVATE lmscore lms_math)

@@ -9,4 +9,4 @@ set(HEADERS
 
 include_directories(include)
 add_library(obstacle_from_laser MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(obstacle_from_laser PRIVATE lmscore street_environment math_lib)
+target_link_libraries(obstacle_from_laser PRIVATE lmscore street_environment lms_math)

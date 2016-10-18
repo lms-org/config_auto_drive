@@ -3,7 +3,7 @@
 #if N_LIBRARIES is set, all directories except
 set(N_LIBRARIES ogre_binding kalman_filters ${EXCLUDES})
 #if COMPILE_AT_FIRST compiles those libs at first
-set(COMPILE_AT_FIRST googletest_lib cereal math_lib)
+set(COMPILE_AT_FIRST math_lib)
 
 if(APPLE)
     # Skip libs known to be not working on OS X

@@ -1,3 +1,3 @@
 #include "phoenix_CC2016_service/phoenix_CC2016_service.h"
 
-LMS_SERVICE_INTERFACE(phoenix_CC2016_service::Phoenix_CC2016Service)
+LMS_EXPORT_SERVICE_NS(phoenix_CC2016_service,Phoenix_CC2016Service)

@@ -12,4 +12,4 @@ set(HEADERS
 
 include_directories(include)
 add_library(sobel_threshold_generator MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(sobel_threshold_generator PRIVATE lmscore imaging)
+target_link_libraries(sobel_threshold_generator PRIVATE lmscore lms_imaging)
