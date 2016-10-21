@@ -1,0 +1,5 @@
+<lms>
+    <clock sleep="true" unit="hz" value="10"/>
+    <module name="pause_runtime" lib="pause_runtime" class="PauseRuntime"></module>
+</lms>
+
