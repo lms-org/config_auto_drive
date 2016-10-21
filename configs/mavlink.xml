@@ -1,4 +1,4 @@
-<framework>
+<lms>
     <modulesToEnable logLevel="WARN">
         <if notSet="files">
             <module>mavlink_usb_importer</module>
@@ -31,7 +31,7 @@
             <path>/dev/ttyACM0</path>
         </config>
         <config user="odroid">
-            <path>/dev/senseboard2016</path>
+            <path>/dev/senseboard</path>
         </config>
     </module>
     <module name="mavlink_to_data" lib="mavlink_to_data" class="MavlinkToData">
@@ -98,12 +98,10 @@
 
     <if set="mavlink_debug">
         <module name="mavlink_debug_out" lib="mavlink_debug" class="umavlinkudebug">
-            <name>mavlink_debug_out</name>
-            <realName>mavlink_debug</realName>
             <channelMapping from="CHANNEL" to="MAVLINK_OUT"/>
         </module>
         <module name="mavlink_debug_in" lib="mavlink_debug" class="umavlinkudebug">
             <channelMapping from="CHANNEL" to="MAVLINK_IN"/>
         </module>
     </if>
-</framework>
+</lms>
