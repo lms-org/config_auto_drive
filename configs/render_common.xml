@@ -17,6 +17,7 @@
         </config>
         <config name="URG_DATA">
             <attr>point</attr>
+            <crossLength>2</crossLength>
             <colorR>255</colorR>
             <colorG>125</colorG>
             <colorB>125</colorB>

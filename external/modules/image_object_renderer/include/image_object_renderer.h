@@ -33,7 +33,7 @@ private:
     std::vector<lms::ReadDataChannel<std::pair<lms::math::vertex2f,lms::math::vertex2f>>> toDrawVertex4f;
     void drawObstacle(const street_environment::Obstacle *obstacle);
     void drawPolyLine(const lms::math::polyLine2f *lane);
-    void drawVertex2f(const lms::math::vertex2f &v);
+    void drawVertex2f(const lms::math::vertex2f &v,int length = 5);
     void drawTrajectoryPoint(const street_environment::TrajectoryPoint &v);
     void drawObject(const street_environment::EnvironmentObject *eo,bool customColori);
     void drawRect(lms::math::Rect &r);

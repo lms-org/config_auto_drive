@@ -42,9 +42,10 @@ bool ImageObjectRenderer::cycle() {
         logger.debug("trying to draw: ")<< dO.name();
         bool customColor = setColor(dO.name());
         if(dO.castableTo<lms::math::polyLine2f>()){//lms::math::polyLine2f
+            int crossLength = config(dO.name()).get<int>("crossLength",2);
             if(config(dO.name()).get<std::string>("attr","") == "point"){
                 for(lms::math::vertex2f v: dO.getWithType<lms::math::polyLine2f>()->points()){
-                    drawVertex2f(v);
+                    drawVertex2f(v,crossLength);
                 }
             }else{
                 drawPolyLine(dO.getWithType<lms::math::polyLine2f>());
@@ -119,10 +120,10 @@ void ImageObjectRenderer::drawRect(float x, float y, float width, float height, 
         graphics->drawRect(x,y,width,height);
 }
 
-void ImageObjectRenderer::drawVertex2f(const lms::math::vertex2f &v){
+void ImageObjectRenderer::drawVertex2f(const lms::math::vertex2f &v, int length = 5){
     int y = -v.y*image->width()/5+image->width()/2;
     int x = v.x*image->height()/5;
-    graphics->drawCross(x,y,5);
+    graphics->drawCross(x,y,length);
 }
 
 void ImageObjectRenderer::drawTrajectoryPoint(const street_environment::TrajectoryPoint &v){
