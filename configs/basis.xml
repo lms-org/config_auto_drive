@@ -1,36 +1,5 @@
-<framework>
-
-<execution>
-    <!--clock sleep="true" unit="ms" value="100"/-->
-</execution>
-<logging>
-    <filter tagPrefix="LOCAL_COURSE_SERVICE" logLevel="ERROR"/>
-</logging>
-    <modulesToEnable>
-        <module logLevel="WARN">pause_runtime</module>
-        <module logLevel="WARN">image_hint_generator</module>
-        <module logLevel="ERROR">image_hint_transformer</module>
-        <module logLevel="WARN">image_hint_transformer_obstacle</module>
-        <module logLevel="WARN">lap_time</module>
-        <module logLevel="ERROR">image_hint_worker_lane</module>
-        <module logLevel="ERROR">image_hint_worker_obstacle</module>
-        <module logLevel="WARN">environment_predictor</module>
-        <module logLevel="WARN">trajectory_creator</module>
-        <module logLevel="ERROR">street_obstacle_ir_detector</module>
-        <module logLevel="WARN">trajectory_point_controller</module>
-        <module logLevel="WARN">image_proxy</module>
-        <module logLevel="WARN">street_obstacle_merger</module>
-        <module logLevel="INFO">sobel_threshold_generator</module>
-        <module logLevel="WARN">obstacle_to_local_course</module>
-        <module logLevel="ERROR">course_state_estimator</module>
-        <module logLevel="WARN">obstacle_from_laser</module>
-        <!--module logLevel="DEBUG">car_to_matlab</module-->
-        <if set="sendData">
-            <module logLevel="INFO">socket_data_sender</module>
-            <module logLevel="WARN">image_converter_scaledown</module>
-        </if>
-    </modulesToEnable>
-    <service>
+<lms>
+    <service name="PHOENIX_SERVICE" lib="phoenix_CC2016_service" class="Phoenix_CC2016Service">
         <name>PHOENIX_SERVICE</name>
         <realName>phoenix_CC2016_service</realName>
             <config>
@@ -38,9 +7,7 @@
                 <updateInMilliS>-1</updateInMilliS>
             </config>
     </service>
-    <service>
-        <name>LOCAL_COURSE_SERVICE</name>
-        <realName>local_course</realName>
+    <service name="LOCAL_COURSE_SERVICE" lib="local_course" class="LocalCourse">
         <config>
             <useThresholding>true</useThresholding>
             <thresholdLutX>0.0, 0.5, 1.5</thresholdLutX>
@@ -57,23 +24,19 @@
             <prior_fact>0</prior_fact>
         </config>
     </service>
-    <module>
-        <name>lap_time</name>
+    <module name="lap_time" lib="lap_time" class="LapTime">
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE"/>
     </module>
-    <module>
-        <name>pause_runtime</name>
+    <module name="pause_runtime" lib="pause_runtime" class="PauseRuntime">
     </module>
-    <module>
-        <name>sobel_threshold_generator</name>
+    <module name="sobel_threshold_generator" lib="sobel_threshold_generator" class="SobelThresholdGenerator">
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
     </module>
 
-    <module>
-        <name>obstacle_from_laser</name>
+    <module name="obstacle_from_laser" lib="obstacle_from_laser" class="ObstacleFromLaser">
         <channelMapping from="POINTS" to="URG_DATA"/>
     </module>
-    <module>
+    <!--module>
         <name>street_obstacle_ir_detector</name>
         <config>
             <obstacleMinDistance>0.10</obstacleMinDistance>
@@ -82,35 +45,15 @@
             <obstacleWidth>0.1</obstacleWidth>
         </config>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_RAW"/>
-    </module>
-    <module>
+    </module-->
+    <module name="street_obstacle_merger" lib="street_obstacle_merger" class="StreetObjectMerger">
         <name>street_obstacle_merger</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
         <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_OBSTACLE_RAW"/>
         <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_OBSTACLE"/>
         <config src="street_utils/obstacle.lconf"/>
     </module>
-    <module>
-        <name>car_to_matlab</name>
-    </module>
-    <module>
-        <name>image_converter_scaledown</name>
-        <realName>image_converter</realName>
-        <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
-        <channelMapping from="OUTPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
-        <config>
-            <scaleDown>4</scaleDown>
-        </config>
-    </module>
-    <module>
-        <name>socket_data_sender</name>
-        <config>
-            <ip>localhost</ip>
-            <port>65001</port>
-        </config>
-    </module>
-    <module>
-        <name>trajectory_point_controller</name>
+    <module name="trajectory_point_controller" lib="trajectory_point_controller" class="TrajectoryPointController">
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
             <!--MPC-controller-->
@@ -120,7 +63,7 @@
             <regelpunktSlope>0.1</regelpunktSlope>
             <distanceRegelpunkt>0.9</distanceRegelpunkt>
             <yawRateBoost>0.0</yawRateBoost>
-            <useMPCcontroller>1</useMPCcontroller> 
+            <useMPCcontroller>true</useMPCcontroller>
             <weight_y>20</weight_y>
             <weight_phi>5</weight_phi>
             <weight_steering_front>0.0001</weight_steering_front>
@@ -151,8 +94,7 @@
 
         </config>
     </module>
-    <module>
-        <name>image_hint_generator</name>
+    <module name="image_hint_generator" lib="image_hint_generator" class="ImageHintGenerator">
         <channelMapping priority="10" from="HINTS" to="HINTS"/>
         <channelMapping priority="10" from="HINTS_OBSTACLE" to="HINTS_OBSTACLE"/>
         <channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
@@ -170,11 +112,7 @@
         <config name="defaultObstacleParameter" src="imaging/defaultObstacleParam.lconf"/>
         <config name="defaultCrossingParameter" src="imaging/defaultCrossingParam.lconf"/>
     </module>
-    <module>
-        <name>sensor_tracker</name><!--Brauchen wir den noch?-->
-    </module>
-    <module>
-        <name>trajectory_creator</name>
+    <module name="trajectory_creator" lib="trajectory_creator" class="TrajectoryLineCreator">
         <channelMapping from="LINE" to="TRAJECTORY_LINE"/>
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
@@ -216,20 +154,14 @@
         <config src="street_utils/obstacle.lconf"/>
         <config src="trajectory_creator.lconf"/>
     </module>
-    <module>
-        <name>obstacle_to_local_course</name>
+    <module name="obstacle_to_local_course" lib="obstacle_to_local_course" class="ObstacleToLocalCourse">
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE"/>
         <config>
             <obstacleMinTrust>0.8</obstacleMinTrust>
             <virtualCrossingPoints>2</virtualCrossingPoints>
         </config>
     </module>
-    <module>
-        <name>environment_filter</name>
-        <channelMapping from="ENVIRONMENT_ItoGoXNPUT" to="ENVIRONMENT_ROAD_RAW"/>
-        <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_ROAD_FILTERED"/>
-    </module>
-    <module>
+    <module name="environment_predictor" lib="environment_predictor" class="EnvironmentPredictor">
         <name>environment_predictor</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
         <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_RAW"/>
@@ -244,53 +176,21 @@
             <translateEnvironment>false</translateEnvironment>
         </config>
     </module>
-    <module>
-        <name>image_hint_transformer</name>
+    <module name="image_hint_transformer" lib="image_hint_transformer" class="ImageHintTransformer">
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
     </module>
-    <module>
-        <name>image_hint_transformer_obstacle</name>
-        <realName>image_hint_transformer</realName>
+    <module name="image_hint_transformer_obstacle" lib="image_hint_transformer" class="ImageHintTransformer">
         <channelMapping priority="1" from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_RAW"/>
         <channelMapping from="HINTS" to="HINTS_OBSTACLE"/>
-
     </module>
-    <module>
-        <name>image_hint_worker_lane</name>
-        <realName>image_hint_worker</realName>
+    <module name="image_hint_worker_lane" lib="image_hint_worker" class="ImageHintWorker">
         <channelMapping priority="2" from="HINTS" to="HINTS"/>
     </module>
-    <module>
-        <name>image_hint_worker_obstacle</name>
-        <realName>image_hint_worker</realName>
+    <module name="image_hint_worker_obstacle" lib="image_hint_worker" class="ImageHintWorker">
         <channelMapping priority="2"  from="HINTS" to="HINTS_OBSTACLE"/>
         <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_OBSTACLE"/>
     </module>
-    <module>
-        <name>image_proxy</name>
-        <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE_PRE" />
-        <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE"/>
-        <config><!--IMAGE_CHANNEL-->
-            <displayMode>IMAGE_CHANNEL</displayMode>
-        </config>
-        <config user="phibedy">
-            <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150625-151241</directory>
-            <singleFile>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150519-164907/0000.pgm</singleFile>
-        </config>
-        <config user="hans">
-            <directory>/home/hans/phoenix/config_auto_drive/test_images/20150519-164907</directory>
-            <singleFile>/home/hans/phoenix/config_auto_drive/test_images/20150519-164907/0050.pgm</singleFile>
-        </config>
-        <config user="tobi">
-            <directory>/home/tobi/phoenix_code/repos/config_auto_drive/test_images/20150519-164907</directory>
-            <singleFile>/home/tobi/phoenix_code/repos/config_auto_drive/test_images/20150512-181426/0050.pgm</singleFile>
-        </config>
-        <config user="jochen">
-            <directory>/data/projects/tum.phoenix/code/config_auto_drive/test_images/20150519-164907</directory>
-            <singleFile>/data/projects/tum.phoenix/code/config_auto_drive/test_images/20150512-181426/0050.pgm</singleFile>
-        </config>
-    </module>
-    <module>
+    <module name="course_state_estimator" lib="course_state_estimator" class="CourseStateEstimator">
         <name>course_state_estimator</name>
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
@@ -309,5 +209,45 @@
             <useProbabilitiesStraight>true</useProbabilitiesStraight>
          </config>
     </module>
+    <if set="sendData">
+        <module name="image_converter_scaledown" lib="image_converter" class="ImageConverter">
+            <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
+            <channelMapping from="OUTPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
+            <config>
+                <scaleDown>4</scaleDown>
+            </config>
+        </module>
+        <module>
+            <name>socket_data_sender</name>
+            <config>
+                <ip>localhost</ip>
+                <port>65001</port>
+            </config>
+        </module>
+    </if>
     <include src="ego.xml"/>
-</framework>
+    <!--module>
+        <name>image_proxy</name>
+        <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE_PRE" />
+        <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE"/>
+        <config>
+            <displayMode>IMAGE_CHANNEL</displayMode>
+        </config>
+        <config user="phibedy">
+            <directory>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150625-151241</directory>
+            <singleFile>/home/phibedy/Dokumente/programmieren/c++/lms_repos/config_auto_drive/test_images/20150519-164907/0000.pgm</singleFile>
+        </config>
+        <config user="hans">
+            <directory>/home/hans/phoenix/config_auto_drive/test_images/20150519-164907</directory>
+            <singleFile>/home/hans/phoenix/config_auto_drive/test_images/20150519-164907/0050.pgm</singleFile>
+        </config>
+        <config user="tobi">
+            <directory>/home/tobi/phoenix_code/repos/config_auto_drive/test_images/20150519-164907</directory>
+            <singleFile>/home/tobi/phoenix_code/repos/config_auto_drive/test_images/20150512-181426/0050.pgm</singleFile>
+        </config>
+        <config user="jochen">
+            <directory>/data/projects/tum.phoenix/code/config_auto_drive/test_images/20150519-164907</directory>
+            <singleFile>/data/projects/tum.phoenix/code/config_auto_drive/test_images/20150512-181426/0050.pgm</singleFile>
+        </config>
+    </module-->
+</lms>

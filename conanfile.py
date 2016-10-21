@@ -9,4 +9,5 @@ class AutoDriveConan(ConanFile):
 
     def imports(self):
         self.copy("*.so",dst=".")
+        self.copy("bin/*",dst=".")
         self.copy("include/*",dst="")

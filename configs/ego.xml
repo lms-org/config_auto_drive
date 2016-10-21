@@ -1,10 +1,5 @@
-<framework>
-    <modulesToEnable logLevel="ERROR">
-        <module>ego_estimator</module>
-    </modulesToEnable>
-
-    <module>
-        <name>ego_estimator</name>
+<lms>
+    <module name="ego_estimator" lib="ego_estimator" class="EgoEstimator">
         <config>
             <!-- Setup system model noise covariances -->
             <!-- Choose std-devs to be about the maximum error in a time-step -->
@@ -30,4 +25,4 @@
         <channelMapping priority="100" from="CAR" to="CAR" />
     </module>
 
-</framework>
+</lms>

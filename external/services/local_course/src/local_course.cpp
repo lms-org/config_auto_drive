@@ -53,9 +53,9 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
             float lambda;
             float delta = 0.2; //length of a lane segment
 
-            for (int s = 0; s < lane.points().size(); ++s)
+            for (int s = 0; s < (int)lane.points().size(); ++s)
             {
-                for (int m = 0; m < pointsToAdd.size(); ++m)
+                for (int m = 0; m < (int) pointsToAdd.size(); ++m)
                 {
                     dst = pointsToAdd[m].distance(lane.points()[s]);
                     if (dst < std::get<1>(thresholdData.at(m)))
@@ -80,7 +80,7 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
 
             std::vector<int> indices;
 
-            for (int i = 0; i < thresholdData.size(); ++i)
+            for (int i = 0; i <  (int)thresholdData.size(); ++i)
             {
 
                 //thresholding
@@ -170,7 +170,7 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
 
     //kalman.update(pointsToAdd,dx,dy,dphi, measurementUncertainty, priorFactor);
     //Eigen::Matrix<double,Eigen::Dynamic,2> data(pointsToAdd.size(),2);
-    auto t = lms::Time::now();
+    //auto t = lms::Time::now();
     lineX->translate(dx,dy,dphi);
     for(int i = 0; i < 20; i++){
         for(int row = 0; row < (int)pointsToAdd.size(); row++){
@@ -243,8 +243,7 @@ float LocalCourse::thresholdFunction(float s)
 
 }
 
-void LocalCourse::distanceLinePoint(lms::math::vertex2f P, lms::math::vertex2f Q, lms::math::vertex2f M, float *dst, float *lambda)
-{
+void LocalCourse::distanceLinePoint(lms::math::vertex2f P, lms::math::vertex2f Q, lms::math::vertex2f M, float *dst, float *lambda){
     //calculate distance of M from the line connecting P and Q
     //lambda = 0, if the orthogonal line from PQ to M goes through P
     //lambda = 1, if the orthogonal line from PQ to M goes through Q
@@ -256,8 +255,6 @@ void LocalCourse::distanceLinePoint(lms::math::vertex2f P, lms::math::vertex2f Q
     lms::math::vertex2f S = P + V*(*lambda);
 
     *dst = sqrt((M.x-S.x)*(M.x-S.x) + (M.y-S.y)*(M.y-S.y));
-
-
 }
 
 } // namespace local_course

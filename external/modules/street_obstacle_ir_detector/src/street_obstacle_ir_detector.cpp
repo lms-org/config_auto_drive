@@ -40,10 +40,10 @@ bool StreetObstacleIRDetector::cycle() {
             //found some obstacles in reach
             std::shared_ptr<street_environment::Obstacle> obstacle(new street_environment::Obstacle());
             lms::math::vertex2f pos = lms::math::vertex2f(lidar->totalX(),lidar->totalY() - obstacleWidth/2);
-            obstacle->updatePosition(pos);
+            obstacle->addPoint(pos);
             obstacle->setTrust(config().get<float>("obstacleInitTrust",0.5));
             obstacle->width(obstacleWidth);
-            obstacle->viewDirection(lms::math::vertex2f(1,0));
+            //TODO obstacle->viewDirection(lms::math::vertex2f(1,0));
             env->objects.push_back(obstacle);
         }else{
             //no obstacle in reach

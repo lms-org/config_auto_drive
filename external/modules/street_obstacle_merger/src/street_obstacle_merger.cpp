@@ -53,12 +53,7 @@ bool StreetObjectMerger::cycle() {
     logger.debug("cycle")<<"translate old obstacles by: "<<car->movedDistance();
     //update old obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
-        obst->kalman(*middle,car->movedDistance());
-    }
-
-    //kalman new obstacles
-    for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesNew.objects){
-        obst->kalman(*middle,0);
+        obst->translate(car->deltaPosition().x,car->deltaPosition().y);
     }
 
     //merge new obstacles
@@ -94,10 +89,12 @@ bool StreetObjectMerger::cycle() {
     }
 
     //kalman merged new obstacles
+    /*
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesNew.objects){
         obst->kalman(*middle,0);
         //calculate the trust
     }
+    */
 
     logger.debug("cycle")<<"number of new obstacles (before merge)" << obstaclesNew.objects.size();
     //merge them
@@ -106,7 +103,7 @@ bool StreetObjectMerger::cycle() {
 
     //kalman obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
-        obst->kalman(*middle,0);
+        //TODO obst->kalman(*middle,0);
         if(fabs(obst->distanceOrth()) >0.4 && obst->trust() > 0.1){
             obst->setTrust(0.1);
         }
@@ -158,8 +155,11 @@ void StreetObjectMerger::merge(street_environment::EnvironmentObstacles &obstacl
                     street_environment::CrossingPtr cptr2 = std::static_pointer_cast<street_environment::Crossing>(obstNew);
                     cptr->blocked(cptr2->blocked());
                 }
-                obstOld->updatePosition(obstNew->position());
-                obstOld->viewDirection(obstNew->viewDirection());//ok
+                //TODO obstOld->updatePosition(obstNew->position());
+                obstOld->clearPoints();
+                obstOld->addPoint(obstNew->position());
+
+                //TODO obstOld->viewDirection(obstNew->viewDirection());//ok
                 obstOld->width(obstNew->width());
                 float newTrust = obstOld->trust() + obstNew->trust();
                 if(newTrust < 0)

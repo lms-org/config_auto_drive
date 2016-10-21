@@ -66,10 +66,9 @@ bool ObstacleFromLaser::cycle() {
             //found some obstacles in reach
             std::shared_ptr<street_environment::Obstacle> obstacle(new street_environment::Obstacle());
             lms::math::vertex2f pos = vb[vb.size()/2];
-            obstacle->updatePosition(pos);
+            obstacle->addPoint(pos);
             obstacle->setTrust(config().get<float>("obstacleInitTrust",0.8));
             obstacle->width(obstacleWidth);
-            obstacle->viewDirection(lms::math::vertex2f(1,0));
             env->objects.push_back(obstacle);
         }
     }

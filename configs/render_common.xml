@@ -1,13 +1,5 @@
-<framework>
-    <modulesToEnable logLevel="ERROR">
-        <module>image_object_renderer</module>
-        <module>image_converter_trans</module>
-        <!--module>image_renderer_global_car</module>
-        <module>car_to_image</module>
-        -->
-    </modulesToEnable>
-    <module>
-        <name>image_object_renderer</name>
+<lms>
+    <module name="image_object_renderer" lib="image_object_renderer" class="ImageObjectRenderer">
         <channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
         <config src="street_utils/obstacle.lconf"/>
         <config><!--URG_DATA -->
@@ -87,27 +79,11 @@
             <colorB>123</colorB>
         </config>
     </module>
-    <module>
-        <name>image_converter_trans</name>
-        <realName>image_converter</realName>
+    <module name="image_converter_trans" lib="image_converter" class="ImageConverter">
         <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="OUTPUT_IMAGE" to="TRANS_IMAGE"/>
         <config>
             <filter>imageV2C</filter>
         </config>
     </module>
-    <module>
-        <name>car_to_image</name>
-        <mainThread />
-        <channelMapping from="IMAGE" to = "GLOBAL_CAR_IMAGE"/>
-    </module>
-    <module>
-        <name>image_renderer_global_car</name>
-        <realName>image_renderer</realName>
-        <mainThread />
-        <channelMapping from="IMAGE" to="GLOBAL_CAR_IMAGE"/>
-        <config>
-            <WINDOW>GLOBAL_CAR</WINDOW>
-        </config>
-    </module>
-</framework>
+</lms>

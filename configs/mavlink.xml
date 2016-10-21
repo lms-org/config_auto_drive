@@ -9,29 +9,16 @@
             <module>mavlink_logger</module>
             <module>mavlink_csv_logger</module>
         </if>
-        <if set="mavlink_debug">
-            <module>mavlink_debug_out</module>
-            <module>mavlink_debug_in</module>
-        </if>
-        <if set="files">
-            <module>mavlink_player</module>
-        </if>
         <module>rgb_lights_controller</module>
     </modulesToEnable>
-
-    <service>
-        <name>USB_RESET</name>
-        <realName>usb_reset_service</realName>
+    <service name="USB_RESET" lib="usb_reset_service" class="UsbResetService">
         <config>
             <path>/usr/bin/usb-reset</path>
         </config>
     </service>
-    <service>
-        <name>TIMESTAMP_INTERPOLATOR</name>
-        <realName>timestamp_interpolator_service</realName>
+    <service name="TIMESTAMP_INTERPOLATOR" lib="timestamp_interpolator_service" class="TimestampInterpolatorService">
     </service>
-    <module>
-        <name>rgb_lights_controller</name>
+    <module name="rgb_lights_controller" lib="rgb_lights_controller" class="RgbLights">
         <channelMapping from="STREET_OBJECTS" to="ENVIRONMENT_OBSTACLE"/>
         <config>
             <pongSpeed>10</pongSpeed>
@@ -39,18 +26,7 @@
             <rainbowSpeed>2</rainbowSpeed>
         </config>
     </module>
-    <module>
-        <name>mavlink_debug_out</name>
-        <realName>mavlink_debug</realName>
-        <channelMapping from="CHANNEL" to="MAVLINK_OUT"/>
-    </module>
-    <module>
-        <name>mavlink_debug_in</name>
-        <realName>mavlink_debug</realName>
-        <channelMapping from="CHANNEL" to="MAVLINK_IN"/>
-    </module>
-    <module>
-        <name>mavlink_usb_importer</name>
+    <module name="mavlink_usb_importer" lib="mavlink_usb_importer" class="mavlink_usb_importer">
         <config>
             <path>/dev/ttyACM0</path>
         </config>
@@ -58,7 +34,7 @@
             <path>/dev/senseboard2016</path>
         </config>
     </module>
-    <module>
+    <module name="mavlink_to_data" lib="mavlink_to_data" class="MavlinkToData">
         <name>mavlink_to_data</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
         <config>
@@ -102,24 +78,32 @@
             <distance_2>TOF_REAR</distance_2>
         </config>
     </module>
-    <module>
-        <name>data_to_mavlink</name>
-    </module>
-    <module>
-        <name>mavlink_logger</name>
-        <realName>channel_logger</realName>
-        <config>
-            <dataChannels>MAVLINK_IN</dataChannels>
-        </config>
-    </module>
-    <module>
-        <name>mavlink_csv_logger</name>
-        <config user="odroid">
-            <channel>MAVLINK_IN</channel>
-        </config>
-    </module>
-    <module>
-        <name>mavlink_player</name>
-        <realName>channel_loader</realName>
-    </module>
+    <module name="data_to_mavlink" lib="data_to_mavlink" class="CarToMavlink"/>
+
+    <if set="mavlink_logger">
+        <module name="mavlink_logger" lib="channel_logger" class="">
+            <config>
+                <dataChannels>MAVLINK_IN</dataChannels>
+            </config>
+        </module>
+        <module name="mavlink_csv_logger" lib="mavlink_csv_logger" class="MavlinkCsvLogger">
+            <config user="odroid">
+                <channel>MAVLINK_IN</channel>
+            </config>
+        </module>
+    </if>
+    <if set="files">
+        <module name="mavlink_player" lib="channel_loader" class="ChannelLoader"/>
+    </if>
+
+    <if set="mavlink_debug">
+        <module name="mavlink_debug_out" lib="mavlink_debug" class="umavlinkudebug">
+            <name>mavlink_debug_out</name>
+            <realName>mavlink_debug</realName>
+            <channelMapping from="CHANNEL" to="MAVLINK_OUT"/>
+        </module>
+        <module name="mavlink_debug_in" lib="mavlink_debug" class="umavlinkudebug">
+            <channelMapping from="CHANNEL" to="MAVLINK_IN"/>
+        </module>
+    </if>
 </framework>

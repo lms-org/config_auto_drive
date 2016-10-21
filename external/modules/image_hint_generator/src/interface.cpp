@@ -1,9 +1,6 @@
 #include "image_hint_generator.h"
 
-extern "C" {
 
-void* getInstance() {
-    return new ImageHintGenerator();
-}
-
-}
+LMS_EXPORT_BEGIN
+LMS_EXPORT_MODULE(ImageHintGenerator)
+LMS_EXPORT_END
