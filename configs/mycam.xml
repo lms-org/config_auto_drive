@@ -6,13 +6,13 @@
             <config src="visible_areas.lconf"/>
         </service>
         <!-- Laserscanner -->
-        <module name="laser_scanner" lib="laser_scanner" class="LaserScanner">
+        <!--module name="laser_scanner" lib="laser_scanner" class="LaserScanner">
             <config>
                 <x>0.09</x>
                 <y>0.05</y>
             </config>
             <channelMapping from="URG_DATA" to="URG_DATA"/>
             <channelMapping from="URG_DATA_RAW" to="URG_DATA_RAW"/>
-        </module>
+        </module-->
         <include src="image.xml"/>
 </lms>

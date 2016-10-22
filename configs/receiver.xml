@@ -1,20 +1,10 @@
-<framework>
-    <execution>
-        <mainThread />
-    </execution>
-    <modulesToEnable>
-        <module logLevel="INFO">socket_data_receiver</module>
-        <module logLevel="ERROR">image_converter_scaleup</module>
-        <module logLevel="ERROR">socket_datatype_definer</module>
-    </modulesToEnable>
-    <service>
-        <name>warp_service</name>
+<lms>
+    <service name="warp_service" lib="warp_service" class="WarpService">
         <config src="camera/homography_ximea.lconf" />
     </service>
-    <module>
-        <name>socket_datatype_definer</name>
+    <module name="socket_datatype_definer" lib="socket_datatype_definer">
     </module>
-    <module>
+    <module name="socket_data_receiver" lib="socket_data_receiver" class="">
         <name>socket_data_receiver</name>
         <config>
             <dataChannels>URG_DATA,IMAGE_GREY_SCALE,CAR,TRAJECTORY_LINE,TRAJECTORY_POINT,ENVIRONMENT_OBSTACLE,MIDDLE_LANE</dataChannels>
@@ -36,4 +26,4 @@
         </config>
     </module>
     <include src="render.xml"/>
-</framework>
+</lms>
