@@ -1,5 +1,5 @@
 #include "sobel_threshold_generator.h"
-
+#include <cmath>
 
 bool SobelThresholdGenerator::initialize() {
 
