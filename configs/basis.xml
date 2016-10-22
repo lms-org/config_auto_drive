@@ -209,7 +209,7 @@
             <useProbabilitiesStraight>true</useProbabilitiesStraight>
          </config>
     </module>
-    <if set="sendData">
+    <!--if set="sendData"-->
         <module name="image_converter_scaledown" lib="image_converter" class="ImageConverter">
             <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
             <channelMapping from="OUTPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
@@ -217,14 +217,13 @@
                 <scaleDown>4</scaleDown>
             </config>
         </module>
-        <module>
-            <name>socket_data_sender</name>
+        <module name="socket_data_sender" lib="socket_data_sender" class="Sender">
             <config>
                 <ip>localhost</ip>
                 <port>65001</port>
             </config>
         </module>
-    </if>
+    <!--/if-->
     <include src="ego.xml"/>
     <!--module>
         <name>image_proxy</name>

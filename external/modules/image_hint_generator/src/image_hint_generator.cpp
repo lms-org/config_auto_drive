@@ -42,27 +42,27 @@ bool ImageHintGenerator::cycle() {
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
     //clear the gaussBuffer not necessary!
 
-        if(middleLane->type() != street_environment::RoadLaneType::MIDDLE){
-            logger.error("createHintsFromMiddleLane") << "middle is no middle lane!";
-            return true;
-        }
-        createHintsFromMiddleLane(*middleLane);
-        lms::ServiceHandle<phoenix_CC2016_service::Phoenix_CC2016Service> phoenixService = getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE");
-        if(phoenixService.isValid() && phoenixService->isValid()){
-            if(phoenixService->driveMode() == phoenix_CC2016_service::CCDriveMode::FMH){
-                lms::math::polyLine2f mid = middleLane->startAt(0.4);
-                if(config().get<bool>("searchForObstacles",false)){
-                    createHintForObstacle(mid);
-                }
-                if(config().get<bool>("searchForCrossing",false)){
-                    createHintForCrossing(mid);
-                }
-            }else{
-                logger.debug("cycle")<<"Not in FMH: "<<(int)phoenixService->driveMode();
+    if(middleLane->type() != street_environment::RoadLaneType::MIDDLE){
+        logger.error("createHintsFromMiddleLane") << "middle is no middle lane!";
+        return true;
+    }
+    createHintsFromMiddleLane(*middleLane);
+    lms::ServiceHandle<phoenix_CC2016_service::Phoenix_CC2016Service> phoenixService = getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE");
+    if(phoenixService.isValid() && phoenixService->isValid()){
+        if(phoenixService->driveMode() == phoenix_CC2016_service::CCDriveMode::FMH){
+            lms::math::polyLine2f mid = middleLane->startAt(0.4);
+            if(config().get<bool>("searchForObstacles",false)){
+                createHintForObstacle(mid);
+            }
+            if(config().get<bool>("searchForCrossing",false)){
+                createHintForCrossing(mid);
             }
         }else{
-            logger.debug("cycle")<<"PHOENIX_SERVICE isn't valid!";
+            logger.debug("cycle")<<"Not in FMH: "<<(int)phoenixService->driveMode();
         }
+    }else{
+        logger.debug("cycle")<<"PHOENIX_SERVICE isn't valid!";
+    }
 
     return true;
 }

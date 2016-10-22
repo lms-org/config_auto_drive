@@ -4,26 +4,20 @@
     </service>
     <module name="socket_datatype_definer" lib="socket_datatype_definer">
     </module>
-    <module name="socket_data_receiver" lib="socket_data_receiver" class="">
-        <name>socket_data_receiver</name>
+    <module name="socket_data_receiver" lib="socket_data_receiver" class="Receiver">
         <config>
             <dataChannels>URG_DATA,IMAGE_GREY_SCALE,CAR,TRAJECTORY_LINE,TRAJECTORY_POINT,ENVIRONMENT_OBSTACLE,MIDDLE_LANE</dataChannels>
             <ip>192.168.0.112</ip>
-            <!--ip>localhost</ip-->
+            <ip>localhost</ip>
             <port>65001</port>
         </config>
     </module>
-    <module>
-        <name>car_to_matlab</name>
-    </module>
-    <module>
-        <name>image_converter_scaleup</name>
-        <realName>image_converter</realName>
+    <module name="image_converter_scaleup" lib="image_converter" class="ImageConverter">
         <channelMapping from="INPUT_IMAGE" to="IMAGE_GREY_SCALE"/>
         <channelMapping from="OUTPUT_IMAGE" to="GREY_IMAGE"/>
         <config>
             <scaleUp>4</scaleUp>
         </config>
     </module>
-    <include src="render.xml"/>
+    <include src="render_sdl.xml"/>
 </lms>
