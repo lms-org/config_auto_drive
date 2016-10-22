@@ -120,7 +120,7 @@ void ImageObjectRenderer::drawRect(float x, float y, float width, float height, 
         graphics->drawRect(x,y,width,height);
 }
 
-void ImageObjectRenderer::drawVertex2f(const lms::math::vertex2f &v, int length = 5){
+void ImageObjectRenderer::drawVertex2f(const lms::math::vertex2f &v, int length){
     int y = -v.y*image->width()/5+image->width()/2;
     int x = v.x*image->height()/5;
     graphics->drawCross(x,y,length);
