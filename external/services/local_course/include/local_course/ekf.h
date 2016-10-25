@@ -1,6 +1,6 @@
 #ifndef LOCAL_COURSE_EKF_H
 #define LOCAL_COURSE_EKF_H
-#include <eigen3/Eigen/Eigen>
+#include <Eigen/Eigen>
 #include <kalman/ExtendedKalmanFilter.hpp>
 
 namespace lineKalman{
