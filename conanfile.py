@@ -11,3 +11,4 @@ class AutoDriveConan(ConanFile):
         self.copy("*.so",dst=".")
         self.copy("bin/*",dst=".")
         self.copy("include/*",dst="")
+        self.copy("Eigen/*",dst="include/")

@@ -2,13 +2,13 @@
     <service name="warp_service" lib="warp_service" class="WarpService">
         <config src="camera/homography_ximea.lconf" />
     </service>
-    <module name="socket_datatype_definer" lib="socket_datatype_definer">
+    <module name="socket_datatype_definer" lib="socket_datatype_definer" class="SocketDatatypeDefiner">
     </module>
     <module name="socket_data_receiver" lib="socket_data_receiver" class="Receiver">
         <config>
             <dataChannels>URG_DATA,IMAGE_GREY_SCALE,CAR,TRAJECTORY_LINE,TRAJECTORY_POINT,ENVIRONMENT_OBSTACLE,MIDDLE_LANE</dataChannels>
             <ip>192.168.0.112</ip>
-            <ip>localhost</ip>
+            <!--ip>localhost</ip-->
             <port>65001</port>
         </config>
     </module>
