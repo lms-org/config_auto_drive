@@ -1,3 +1,4 @@
+project(AUTO_DRIVE C CXX)
 cmake_minimum_required(VERSION 2.8)
 
 # This macro is used in external/modules and external/libraries CMakeLists
