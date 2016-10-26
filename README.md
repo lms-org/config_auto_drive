@@ -22,3 +22,17 @@ Used for fast prototyping :)
   * /user/arm-linux-gnueabihf/lib
   * /user/arm-linux-gnueabihf/include
  
+#How to install it:
+```
+pip install conan --upgrade
+conan remote add lms http://mineforce.de:9300
+git clone https://github.com/tum-phoenix/config_auto_drive
+cd config_auto_drive
+mkdir build
+cd build
+conan install .. --build=missing
+cmake ..
+make
+
+
+```
