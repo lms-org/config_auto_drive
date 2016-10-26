@@ -29,20 +29,25 @@ Used for fast prototyping :)
 //automake is needed for protobuffers
 sudo apt-get update
 sudo apt-get install python python-pip build-essential make git cmake automake
+
 //install conan
 sudo pip install conan
 //add remote to conan
 conan remote add lms http://mineforce.de:9300
+
 //go to your working direktory
 cd <your working direktory>
+
 //clone config_auto_drive
 git clone https://github.com/tum-phoenix/config_auto_drive
 cd config_auto_drive
 git submodule init
 git submodule update
-//build it
+
+//create build directory
 mkdir build
 cd build
+
 //install conan dependencies and build them if needed
 conan install .. --build=missing
 //compile it
