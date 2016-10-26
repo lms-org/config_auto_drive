@@ -53,6 +53,5 @@ conan install .. --build=missing
 //compile it
 cmake ..
 make -j<number of cores>
-
-
 ```
+If any error occur, please ask google first, if you are sure that you didn't do a mistake or you can't find a solution to your problem, please write an issue :)
