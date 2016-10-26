@@ -28,6 +28,8 @@ pip install conan --upgrade
 conan remote add lms http://mineforce.de:9300
 git clone https://github.com/tum-phoenix/config_auto_drive
 cd config_auto_drive
+git submodule init
+git submodule update
 mkdir build
 cd build
 conan install .. --build=missing
