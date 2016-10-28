@@ -9,4 +9,4 @@ set(HEADERS
 
 include_directories(include)
 add_library(set_control MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(set_control PRIVATE lmscore lms_sensor_utils)
+target_link_libraries(set_control PRIVATE lmscore lms_sensor_utils street_environment)
