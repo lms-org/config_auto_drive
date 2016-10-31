@@ -9,7 +9,7 @@ Used for fast prototyping :)
 //install basics
 //automake is needed for protobuffers
 sudo apt-get update
-sudo apt-get install python python-pip build-essential make git cmake automake
+sudo apt-get install python python-pip build-essential make git cmake automake libtool
 
 //install conan
 sudo pip install conan
