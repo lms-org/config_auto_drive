@@ -10,6 +10,7 @@ Used for fast prototyping :)
 //automake is needed for protobuffers
 sudo apt-get update
 sudo apt-get install python python-pip build-essential make git cmake automake libtool
+sudo apt-get install libsdl2-dev        #because sdl fails on mac
 
 //install conan
 sudo pip install conan
