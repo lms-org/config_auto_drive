@@ -97,13 +97,6 @@ bool MatlabKalman::update(std::vector<lms::math::vertex2f> points, float dx, flo
         my = emxCreate_real_T(0,0);
     }
 
-    /* TODO
-    if(car->getPrioState().state == street_environment::Car::StateType::IDLE){
-        //Auto steht an kreuzung, wir gehen davon aus, dass die Straße im Nahbereich gerade ist
-        prior_fact = config().get<float>("idle_prior_fact",1);
-    }
-    */
-
     //TODO don't limit changes
     float y0_before;
     float phi0_before;
@@ -153,13 +146,8 @@ street_environment::RoadLane MatlabKalman::getOutput(){
 }
 
 void MatlabKalman::createOutput(street_environment::RoadLane &output){
-    /*
     //clear points
-    logger.debug("convertZustandToLane ANFANG");
     output.points().clear();
-    logger.debug("convertZustandToLane ANFANG")<<1;
-    output.polarDarstellung.clear();
-    logger.debug("convertZustandToLane CLEARED OLD VALS");
 
     lms::math::vertex2f p1;
     p1.x = 0;
@@ -171,10 +159,6 @@ void MatlabKalman::createOutput(street_environment::RoadLane &output){
     //add points to lane
     output.points().push_back(p1);
     output.points().push_back(p2);
-    output.polarPartLength = partLength;
-    //add first two values
-    output.polarDarstellung.push_back(zustandsVector->data[0]);
-    output.polarDarstellung.push_back(zustandsVector->data[1]);
 
     for(int i = 2; i < partCount; i++){
         lms::math::vertex2f pi;
@@ -184,9 +168,8 @@ void MatlabKalman::createOutput(street_environment::RoadLane &output){
         pi.y = output.points()[i-1].y + partLength*sin(phi);
         output.points().push_back(pi);
         logger.debug("points: ")<<"krümmung: "<<zustandsVector->data[i]<< " ,dw "<<dw<<" ,x:  " <<pi.x << " ,y: "<<pi.y;
-        output.polarDarstellung.push_back(zustandsVector->data[i]);
     }
-    */
+
 
 }
 

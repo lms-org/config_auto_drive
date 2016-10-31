@@ -13,10 +13,6 @@ LocalCourse::LocalCourse():kalman(logger){
 
 bool LocalCourse::init() {
     lineX = new LineX();
-    lineX->init(8);
-    lineX->lineLength = 0.2;
-    lineX->fixX = true;
-    lineX->fixY = false;
     configsChanged();
     return true;
 }
@@ -26,7 +22,11 @@ void LocalCourse::destroy() {
 }
 
 void LocalCourse::configsChanged(){
-    kalman.configsChanged(config());
+    lineX->init(config().get<int>("elementCount",10));
+    lineX->state(1)=0.4; //set y-offset
+    lineX->lineLength = config().get<float>("elementLength",0.2);
+    lineX->fixX = config().get<float>("fixX",true);
+    lineX->fixY = config().get<float>("fixY",false);
 
     outlierStartingState = config().get<int>("outlierStartingPoint", 1);
     outlierPercentile = config().get<float>("outlierPercentile", 0.5);
@@ -36,14 +36,12 @@ void LocalCourse::configsChanged(){
     m_thresholdLookup.vy = config().getArray<float>("thresholdLutY");
 }
 
-
-void LocalCourse::update(float dx, float dy, float dphi, float measurementUncertainty, float priorFactor){
-    //remove outliers
+void LocalCourse::filterPoints(){
     street_environment::RoadLane lane = getCourse(); //calculate xy points of lane
-    if (++resetCounter > 40){ //TODO HACK
+    //remove first points if they are to far away (lazy init search)
+    if (++resetCounter > 40){
 
-        if (config().get<bool>("useThresholding", true))
-        {
+        if (config().get<bool>("useThresholding", true)){
 
             std::vector< std::tuple<int,float, float> > thresholdData;
             std::tuple<int,float, float>  d (0,1000.0, 0); //index, distance, lambda
@@ -167,18 +165,18 @@ void LocalCourse::update(float dx, float dy, float dphi, float measurementUncert
             }
         }
     }
+}
 
-    //kalman.update(pointsToAdd,dx,dy,dphi, measurementUncertainty, priorFactor);
-    //Eigen::Matrix<double,Eigen::Dynamic,2> data(pointsToAdd.size(),2);
-    //auto t = lms::Time::now();
+
+void LocalCourse::update(float dx, float dy, float dphi){
+    //remove outliers TODO move to other module/function!
     lineX->translate(dx,dy,dphi);
     for(int i = 0; i < 20; i++){
         for(int row = 0; row < (int)pointsToAdd.size(); row++){
             lineX->update(Eigen::Vector2d(pointsToAdd[row].x,pointsToAdd[row].y));
         }
     }
-    lineX->state(lineX->state.rows()-1) = lineX->state(lineX->state.rows()-2);
-    //logger.error("SO LANGE DAUERT ES: ")<<t.since();
+    //lineX->state(lineX->state.rows()-1) = lineX->state(lineX->state.rows()-2);
     pointsAdded = pointsToAdd;
     pointsToAdd.clear();
 }
@@ -193,9 +191,11 @@ std::vector<lms::math::vertex2f> LocalCourse::getPointsAdded(){
 
 
 void LocalCourse::resetData(){
-    resetCounter = 0;
+    //resetCounter = 0;
     pointsToAdd.clear();
-    kalman.resetData(config());
+    pointsAdded.clear();
+    configsChanged();
+    //kalman.resetData(config());
 }
 
 
@@ -225,19 +225,14 @@ street_environment::RoadLane LocalCourse::getCourse(){
 
 street_environment::RoadLane LocalCourse::getCourse(lms::Time time){
     (void)time;
+    logger.error("DOES NOT WORK");
+    LMS_EXCEPTION("NOT IMPLEMENTED YET!");
     //TODO
     street_environment::RoadLane r;
     return r;
 }
 
-float LocalCourse::thresholdFunction(float s)
-{
-    //s = arc length along lane model
-
-    //kegel
-    //float thresholdingSlope = config().get<float>("thresholdingSlope", 0.1/1.5);
-    //return s*thresholdingSlope;
-
+float LocalCourse::thresholdFunction(float s){
     //lut
     return m_thresholdLookup.linearSearch(s);
 

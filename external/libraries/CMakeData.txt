@@ -1,7 +1,7 @@
 #if LIBRARIES is set, only the given directories will be compiled 
 #set(LIBRARIES )
 #if N_LIBRARIES is set, all directories except
-set(N_LIBRARIES ogre_binding kalman_filters ${EXCLUDES})
+set(N_LIBRARIES ogre_binding ${EXCLUDES})
 #if COMPILE_AT_FIRST compiles those libs at first
 set(COMPILE_AT_FIRST math_lib)
 
