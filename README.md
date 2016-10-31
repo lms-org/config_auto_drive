@@ -25,6 +25,7 @@ git clone https://github.com/tum-phoenix/config_auto_drive
 cd config_auto_drive
 git submodule init
 git submodule update
+sudo ./external/modules/ximea_importer/ximea_driver/install #install ximea_driver
 
 //create build directory
 mkdir build
