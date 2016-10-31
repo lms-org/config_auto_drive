@@ -9,7 +9,8 @@ Used for fast prototyping :)
 //install basics
 //automake is needed for protobuffers
 sudo apt-get update
-sudo apt-get install python python-pip build-essential make git cmake automake
+sudo apt-get install python python-pip build-essential make git cmake automake libtool
+sudo apt-get install libsdl2-dev        #because sdl fails on mac
 
 //install conan
 sudo pip install conan
@@ -24,6 +25,7 @@ git clone https://github.com/tum-phoenix/config_auto_drive
 cd config_auto_drive
 git submodule init
 git submodule update
+sudo ./external/modules/ximea_importer/ximea_driver/install #install ximea_driver
 
 //create build directory
 mkdir build
