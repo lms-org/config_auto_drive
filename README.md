@@ -12,6 +12,9 @@ sudo apt-get update
 sudo apt-get install python python-pip build-essential make git cmake automake libtool
 sudo apt-get install libsdl2-dev        #because sdl fails on mac
 
+//set git password cache
+git config --global credential.helper "cache --timeout=3600"
+
 //install conan
 sudo pip install conan
 //add remote to conan
