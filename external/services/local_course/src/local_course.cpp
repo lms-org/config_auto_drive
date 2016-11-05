@@ -181,6 +181,7 @@ void LocalCourse::update(float dx, float dy, float dphi){
             exit(0);
         }
     }
+    logger.debug("update")<<"using "<<pointsToAdd.size()<<" points";
     for(int i = 0; i < 20; i++){
         for(int row = 0; row < (int)pointsToAdd.size(); row++){
             lineX->update(Eigen::Vector2d(pointsToAdd[row].x,pointsToAdd[row].y));
