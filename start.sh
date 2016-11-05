@@ -1,3 +1,1 @@
-export LMS_PATH="$PWD/build/lib"
-
-./build/bin/lms run "$PWD/configs/mycam.xml" --debug
+./build/bin/lms run ./configs/mycam.xml --debug -p ./build/lib
