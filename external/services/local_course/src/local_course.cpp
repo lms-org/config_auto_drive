@@ -23,7 +23,7 @@ void LocalCourse::destroy() {
 
 void LocalCourse::configsChanged(){
     lineX->init(config().get<int>("elementCount",10));
-    lineX->state(1)=0.4; //set y-offset
+    lineX->state(1)=config().get<float>("yOffset",0.2); //set y-offset
     lineX->lineLength = config().get<float>("elementLength",0.2);
     lineX->fixX = config().get<float>("fixX",true);
     lineX->fixY = config().get<float>("fixY",false);
