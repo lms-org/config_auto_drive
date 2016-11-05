@@ -28,9 +28,6 @@
     </module>
     <module name="mavlink_usb_importer" lib="mavlink_usb_importer" class="mavlink_usb_importer">
         <config>
-            <path>/dev/ttyACM0</path>
-        </config>
-        <config user="odroid">
             <path>/dev/senseboard</path>
         </config>
     </module>

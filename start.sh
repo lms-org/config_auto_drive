@@ -1,1 +1,1 @@
-./build/bin/lms run ./configs/mycam.xml --debug -p ./build/lib
+./build/bin/lms run ./configs/new_car.xml --debug -l ./build/lib -f norender
