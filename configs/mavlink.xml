@@ -28,7 +28,8 @@
     </module>
     <module name="mavlink_usb_importer" lib="mavlink_usb_importer" class="mavlink_usb_importer">
         <config>
-            <path>/dev/ttyACM0</path>
+            <!--path>/dev/ttyACM0</path-->
+            <path>/dev/senseboard</path>
         </config>
     </module>
     <module name="mavlink_to_data" lib="mavlink_to_data" class="MavlinkToData">
