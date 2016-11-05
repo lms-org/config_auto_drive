@@ -171,6 +171,7 @@ void LocalCourse::update(float dx, float dy, float dphi){
     for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
         if(std::isnan(lineX->state(i))){
             logger.error("update")<<"BEGIN: state is nan, index: "<<i;
+            sleep(1);
             exit(0);
         }
     }
@@ -178,6 +179,7 @@ void LocalCourse::update(float dx, float dy, float dphi){
     for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
         if(std::isnan(lineX->state(i))){
             logger.error("update")<<"AFTER TRANSLATION: state is nan, index: "<<i;
+            sleep(1);
             exit(0);
         }
     }
@@ -190,6 +192,7 @@ void LocalCourse::update(float dx, float dy, float dphi){
     for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
         if(std::isnan(lineX->state(i))){
             logger.error("update")<<"AFTER UPDATE: state is nan, index: "<<i;
+            sleep(1);
             exit(0);
         }
     }
