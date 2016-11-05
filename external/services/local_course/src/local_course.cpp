@@ -40,9 +40,7 @@ void LocalCourse::filterPoints(){
     street_environment::RoadLane lane = getCourse(); //calculate xy points of lane
     //remove first points if they are to far away (lazy init search)
     if (++resetCounter > 40){
-
         if (config().get<bool>("useThresholding", true)){
-
             std::vector< std::tuple<int,float, float> > thresholdData;
             std::tuple<int,float, float>  d (0,1000.0, 0); //index, distance, lambda
             thresholdData.assign(pointsToAdd.size(), d);
@@ -151,7 +149,7 @@ void LocalCourse::filterPoints(){
                 float maxDistance = outlierPercentileMultiplier*percVal;
 
 
-                for (int i = 0; i <data.size();)
+                for (int i = 0; i <(int)data.size();)
                 {
                     if (data[i].first >= outlierStartingState && data[i].second > maxDistance)
                     {
@@ -170,10 +168,25 @@ void LocalCourse::filterPoints(){
 
 void LocalCourse::update(float dx, float dy, float dphi){
     //remove outliers TODO move to other module/function!
+    for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
+        if(std::isnan(lineX->state(i))){
+            logger.error("update")<<"BEGIN: state is nan, index: "<<i;
+        }
+    }
     lineX->translate(dx,dy,dphi);
+    for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
+        if(std::isnan(lineX->state(i))){
+            logger.error("update")<<"AFTER TRANSLATION: state is nan, index: "<<i;
+        }
+    }
     for(int i = 0; i < 20; i++){
         for(int row = 0; row < (int)pointsToAdd.size(); row++){
             lineX->update(Eigen::Vector2d(pointsToAdd[row].x,pointsToAdd[row].y));
+        }
+    }
+    for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
+        if(std::isnan(lineX->state(i))){
+            logger.error("update")<<"AFTER UPDATE: state is nan, index: "<<i;
         }
     }
     //lineX->state(lineX->state.rows()-1) = lineX->state(lineX->state.rows()-2);
@@ -195,7 +208,6 @@ void LocalCourse::resetData(){
     pointsToAdd.clear();
     pointsAdded.clear();
     configsChanged();
-    //kalman.resetData(config());
 }
 
 
