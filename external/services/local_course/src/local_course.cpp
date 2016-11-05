@@ -7,7 +7,7 @@
 
 namespace local_course {
 
-LocalCourse::LocalCourse():kalman(logger){
+LocalCourse::LocalCourse(){
 
 }
 
@@ -199,14 +199,22 @@ void LocalCourse::resetData(){
 }
 
 
-void LocalCourse::addPoints(const std::vector<lms::math::vertex2f> &points){
+bool LocalCourse::addPoints(const std::vector<lms::math::vertex2f> &points){
+    bool ret = true;
     for(const lms::math::vertex2f &v :points){
-        if (!(std::isnan(v.x) || std::isnan(v.y)))  pointsToAdd.push_back(v);// TODO nan??
+        ret = addPoint(v) && ret;
     }
+    return ret;
 }
 
-void LocalCourse::addPoint(const lms::math::vertex2f &p){
-    if (!(std::isnan(p.x) || std::isnan(p.y)))  pointsToAdd.push_back(p); // TODO nan??
+bool LocalCourse::addPoint(const lms::math::vertex2f &p){
+    if (!(std::isnan(p.x) || std::isnan(p.y))) {
+        pointsToAdd.push_back(p);
+        return true;
+    }else{
+        logger.error("addPoint") <<"point is nan!";
+        return false;
+    }
 }
 
 

@@ -20,7 +20,6 @@ namespace local_course {
 class LocalCourse : public lms::Service {
     LineX *lineX;
 
-    MatlabKalman kalman;
     std::vector<lms::math::vertex2f> pointsToAdd;
     std::vector<lms::math::vertex2f> pointsAdded;
     int outlierStartingState;
@@ -37,8 +36,8 @@ public:
     void destroy() override;
 
     void update(float dx, float dy, float dphi);
-    void addPoints(const std::vector<lms::math::vertex2f> &points);
-    void addPoint(const lms::math::vertex2f &p);
+    bool addPoints(const std::vector<lms::math::vertex2f> &points);
+    bool addPoint(const lms::math::vertex2f &p);
     street_environment::RoadLane getCourse();
     street_environment::RoadLane getCourse(lms::Time time);
     void resetData();
