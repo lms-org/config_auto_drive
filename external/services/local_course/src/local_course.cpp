@@ -187,6 +187,7 @@ void LocalCourse::update(float dx, float dy, float dphi){
     for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
         if(std::isnan(lineX->state(i))){
             logger.error("update")<<"AFTER UPDATE: state is nan, index: "<<i;
+            LMS_EXCEPTION("KILL ME PLEASE");
         }
     }
     //lineX->state(lineX->state.rows()-1) = lineX->state(lineX->state.rows()-2);
