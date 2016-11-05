@@ -168,31 +168,35 @@ void LocalCourse::filterPoints(){
 
 void LocalCourse::update(float dx, float dy, float dphi){
     //remove outliers TODO move to other module/function!
+    /*
     for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
         if(std::isnan(lineX->state(i))){
             logger.error("update")<<"BEGIN: state is nan, index: "<<i;
             exit(0);
         }
     }
+    */
     lineX->translate(dx,dy,dphi);
+    /*
     for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
         if(std::isnan(lineX->state(i))){
             logger.error("update")<<"AFTER TRANSLATION: state is nan, index: "<<i;
             exit(0);
         }
     }
+    */
     logger.info("update")<<"using "<<pointsToAdd.size()<<" points";
-    for(int i = 0; i < 20; i++){
-        for(int row = 0; row < (int)pointsToAdd.size(); row++){
-            lineX->update(Eigen::Vector2d(pointsToAdd[row].x,pointsToAdd[row].y));
-        }
+    for(int row = 0; row < (int)pointsToAdd.size(); row++){
+        lineX->update(Eigen::Vector2d(pointsToAdd[row].x,pointsToAdd[row].y));
     }
+    /*
     for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
         if(std::isnan(lineX->state(i))){
             logger.error("update")<<"AFTER UPDATE: state is nan, index: "<<i;
             exit(0);
         }
     }
+    */
     //lineX->state(lineX->state.rows()-1) = lineX->state(lineX->state.rows()-2);
     pointsAdded = pointsToAdd;
     pointsToAdd.clear();
