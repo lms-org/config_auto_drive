@@ -30,9 +30,6 @@
         <config>
             <path>/dev/ttyACM0</path>
         </config>
-        <config user="odroid">
-            <path>/dev/senseboard</path>
-        </config>
     </module>
     <module name="mavlink_to_data" lib="mavlink_to_data" class="MavlinkToData">
         <name>mavlink_to_data</name>
