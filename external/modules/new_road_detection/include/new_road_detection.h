@@ -31,6 +31,7 @@ public:
     void configsChanged() override;
     lms::ReadDataChannel<lms::imaging::Image> image;
     lms::ReadDataChannel<street_environment::RoadLane> road;
+    lms::WriteDataChannel<lms::imaging::Image> debugImage;
     cv::Mat topView2cam;
     cv::Mat cam2topView;
     cv::Size topViewSize;

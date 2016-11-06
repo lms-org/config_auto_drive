@@ -1,10 +1,13 @@
 #include "new_road_detection.h"
 #include <lms/imaging/warp.h>
 #include <lms/math/curve.h>
+#include <lms/imaging/graphics.h>
 
 bool NewRoadDetection::initialize() {
     image = readChannel<lms::imaging::Image>("IMAGE");
     road = readChannel<street_environment::RoadLane>("ROAD");
+    debugImage = writeChannel<lms::imaging::Image>("DEBUG_IMAGE");
+
 
     configsChanged();
     return true;
@@ -15,10 +18,28 @@ bool NewRoadDetection::cycle() {
         logger.error("cycle")<<"image size is 0";
         return false;
     }
+    //TODO rectangle for neglecting areas
+
+    //TODO calculate threshold for each line
+    int threshold = config().get<int>("threshold",200);
+    float minLineWidthMul = config().get<float>("minLineWidthMul",0.5);
+    float maxLineWidthMul = config().get<float>("maxLineWidthMul",1.5);
+    float searchOffset = config().get<float>("searchOffset",0.1);
+
+    bool renderDebugImage = true;
+    lms::imaging::BGRAImageGraphics graphics(*debugImage);
+    if(renderDebugImage){
+        //Clear debug image
+        debugImage->resize(image->width(),image->height(),lms::imaging::Format::BGRA);
+        debugImage->fill(0);
+        lms::imaging::BGRAImageGraphics graphics(*debugImage);
+        graphics.setColor(lms::imaging::red);
+    }
+
     //create left/mid/right lane
     lms::math::polyLine2f mid = road->getWithDistanceBetweenPoints(config().get<float>("distanceBetweenSearchlines",0.2));
-    lms::math::polyLine2f left = mid.moveOrthogonal(0.4);
-    lms::math::polyLine2f right = mid.moveOrthogonal(-0.4);
+    lms::math::polyLine2f left = mid.moveOrthogonal(-0.4);
+    lms::math::polyLine2f right = mid.moveOrthogonal(0.4);
     if(mid.points().size() != left.points().size() || mid.points().size() != right.points().size()){
         logger.error("invalid midlane given!");
         return false;
@@ -27,20 +48,36 @@ bool NewRoadDetection::cycle() {
     std::vector<SearchLine> lines;
     std::vector<cv::Point2f> input;
     std::vector<cv::Point2f> output;
-    for(int i = 0; i< mid.points().size(); i++){
+    for(int i = 0; i< (int)mid.points().size(); i++){
         SearchLine l;
         l.w_start = left.points()[i];
         l.w_end = right.points()[i];
+        //check if the part is valid (middle should be always visible)
+        if(!image->inside(l.w_start.x,l.w_start.y)){
+            l.w_start = mid.points()[i];
+            if(!image->inside(l.w_end.x,l.w_end.y)){
+                continue;
+            }
+        }else if(!image->inside(l.w_end.x,l.w_end.y)){
+            l.w_end = mid.points()[i];
+        }
+
         input.emplace_back(l.w_start.x,l.w_start.y);
         input.emplace_back(l.w_end.x,l.w_end.y);
         lines.push_back(l);
     }
     //transform them in image-coordinates
     cv::perspectiveTransform(input,output,world2cam);
-    float searchOffset = config().get<float>("searchOffset",0.1);
     //set image-coordinates
     int i = 0;
+    //TODO keep them to reduce memory alloc.
+    std::vector<int> xv;
+    std::vector<int> yv;
+    std::vector<std::uint8_t> color;
     for(SearchLine &l:lines){
+        xv.clear();
+        yv.clear();
+        color.clear();
         l.i_start =lms::math::vertex2i((int)output[i].x,(int)output[i].y);
         i++;
         l.i_end = lms::math::vertex2i((int)output[i].x,(int)output[i].y);
@@ -48,21 +85,47 @@ bool NewRoadDetection::cycle() {
         //TODO get line
         //calculate the offset
         float iDist = l.i_start.distance(l.i_end);
-        float wDist = 0.8;
+        float wDist = l.w_start.distance(l.w_end);
         float pxlPerDist = iDist/wDist*searchOffset;
-        lms::math::vertex2i iDiff = (l.i_start-l.i_end).normalize();
-        lms::math::vertex2i startLine = l.i_start-iDiff*pxlPerDist;
-        lms::math::vertex2i endLine = l.i_end+iDiff*pxlPerDist;
-        std::vector<int> xv;
-        std::vector<int> yv;
+        lms::math::vertex2f iDiff = lms::math::vertex2f(l.i_start-l.i_end).normalize();
+        lms::math::vertex2f startLine = lms::math::vertex2f(l.i_start)+iDiff*pxlPerDist;
+        lms::math::vertex2f endLine = lms::math::vertex2f(l.i_end)-iDiff*pxlPerDist;
         //get all points in between
         lms::math::bresenhamLine(startLine.x,startLine.y,endLine.x,endLine.y,xv,yv);
-        std::vector<std::uint8_t> color;
         //get the color from the points
+        if(renderDebugImage)
+            graphics.setColor(lms::imaging::blue);
         for(int k = 0; k < (int)xv.size(); k++){
-            color.push_back(*(image->data()+xv[i]+yv[i]*image->width()));
+            const int x = xv[k];
+            const int y = yv[k];
+            if(!image->inside(x,y)){
+                color.push_back(0);
+                continue;
+            }
+            color.push_back(*(image->data()+x+y*image->width()));
+            if(renderDebugImage)
+                graphics.drawCross(x,y);
         }
-
+        //detect peaks
+        float pxlPeakWidth = iDist/wDist*0.02; //TODO to bad, calculate for each road line
+        int tCounter = 0;
+        if(renderDebugImage)
+            graphics.setColor(lms::imaging::red);
+        for(int k = 0; k < (int)color.size(); k++){
+            if(color[k]>threshold){
+                tCounter++;
+            }else{
+                if(tCounter > pxlPeakWidth*minLineWidthMul && tCounter < pxlPeakWidth*maxLineWidthMul){
+                    if(renderDebugImage){
+                        for(int j = 0; j<tCounter;j++){
+                            graphics.drawCross(xv[k-j],yv[k-j]);
+                        }
+                    }
+                    //TODO we found a valid point
+                }
+                tCounter = 0;
+            }
+        }
     }
 
     return true;

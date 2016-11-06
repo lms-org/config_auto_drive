@@ -1,7 +1,13 @@
 <lms>
     <module name="new_road_detection" lib="new_road_detection" class="NewRoadDetection">
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
+        <channelMapping from="ROAD" to="MIDDLE_LANE"/>
         <config>
+            <searchOffset>0.1</searchOffset>
+            <distanceBetweenSearchlines>0.2</distanceBetweenSearchlines>
+            <minLineWidthMul>0.3</minLineWidthMul>
+            <maxLineWidthMul>2</maxLineWidthMul>
+            <threshold>70</threshold>
             <cam2world>-1016.55,629.72,-140.546,-433.734,-19.2261,-295.753,-1.5413,-0.0750134,-0.22935</cam2world>
         </config>
     </module>
