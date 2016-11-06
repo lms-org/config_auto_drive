@@ -38,6 +38,10 @@ bool ImageHintGenerator::deinitialize() {
 bool ImageHintGenerator::cycle() {
     hintContainerLane->clear();
     hintContainerObstacle->clear();
+    if(target->width()*target->height() == 0){
+        logger.error("cycle")<<"Invalid image, size is 0";
+        return false;
+    }
     //set the gaussbuffer
     gaussBuffer->resize(target->width(),target->height(),lms::imaging::Format::GREY);
     //clear the gaussBuffer not necessary!

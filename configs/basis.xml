@@ -1,3 +1,4 @@
+
 <lms>
     <service name="PHOENIX_SERVICE" lib="phoenix_CC2016_service" class="Phoenix_CC2016Service">
         <name>PHOENIX_SERVICE</name>
@@ -100,8 +101,8 @@
         <channelMapping from="TARGET_IMAGE" to="GREY_IMAGE"/>
         <channelMapping priority="10" from="MIDDLE_LANE" to="MIDDLE_LANE"/>
         <config>
-            <searchForObstacles>true</searchForObstacles>
-            <searchForCrossing>true</searchForCrossing>
+            <searchForObstacles>false</searchForObstacles>
+            <searchForCrossing>false</searchForCrossing>
             <numerOfSegmentsLines>1</numerOfSegmentsLines>
             <maxSearchLength>4.0</maxSearchLength>
             <lineOffset>0.1</lineOffset>

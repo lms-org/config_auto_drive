@@ -1,9 +1,9 @@
 searchAngle = 0
 searchLength = 0
-sobelThreshold = 410
+sobelThreshold = 200
 verify = false
 preferVerify = false
-useBlackList = true
+useBlackList = false
 #Ohne karosserie
 blackList_x = 160
 blackList_y = 246
