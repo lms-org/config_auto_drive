@@ -1,0 +1,15 @@
+<lms>
+    <module name="new_road_detection" lib="new_road_detection" class="NewRoadDetection">
+        <channelMapping from="IMAGE" to="GREY_IMAGE"/>
+        <config>
+            <cam2world>-1016.55,629.72,-140.546,-433.734,-19.2261,-295.753,-1.5413,-0.0750134,-0.22935</cam2world>
+        </config>
+    </module>
+    <module name="image_converter_trans" lib="image_converter" class="ImageConverter">
+        <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
+        <channelMapping from="OUTPUT_IMAGE" to="IMAGE_TRANS"/>
+        <config>
+            <filter>imageV2C</filter>
+        </config>
+    </module>
+</lms>

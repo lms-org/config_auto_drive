@@ -80,7 +80,7 @@
             <colorB>123</colorB>
         </config>
     </module>
-    <module name="image_converter_trans" lib="image_converter" class="ImageConverter">
+    <module name="image_converter_trans_render" lib="image_converter" class="ImageConverter">
         <channelMapping from="INPUT_IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="OUTPUT_IMAGE" to="TRANS_IMAGE"/>
         <config>
