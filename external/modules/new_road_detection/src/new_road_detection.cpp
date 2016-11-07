@@ -26,7 +26,7 @@ bool NewRoadDetection::cycle() {
     float maxLineWidthMul = config().get<float>("maxLineWidthMul",1.5);
     float searchOffset = config().get<float>("searchOffset",0.1);
 
-    bool renderDebugImage = true;
+    bool renderDebugImage = config().get<bool>("renderDebugImage",false);
     lms::imaging::BGRAImageGraphics graphics(*debugImage);
     if(renderDebugImage){
         //Clear debug image

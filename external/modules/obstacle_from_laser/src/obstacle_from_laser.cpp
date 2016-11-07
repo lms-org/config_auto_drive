@@ -17,6 +17,11 @@ bool ObstacleFromLaser::cycle() {
     sortedPoints->points().clear();
     if(road->points().size() == 0){
         logger.warn("Road with no points!");
+        return true;
+    }
+    if(points->points().size() == 0){
+        logger.debug("cycle")<<"no points given!";
+        return true;
     }
     //check if the point is inside the car
     for(const lms::math::vertex2f &v:points->points()){

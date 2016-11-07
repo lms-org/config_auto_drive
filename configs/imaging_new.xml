@@ -8,6 +8,7 @@
             <minLineWidthMul>0.3</minLineWidthMul>
             <maxLineWidthMul>2</maxLineWidthMul>
             <threshold>70</threshold>
+            <renderDebugImage>false</renderDebugImage>
             <cam2world>-1016.55,629.72,-140.546,-433.734,-19.2261,-295.753,-1.5413,-0.0750134,-0.22935</cam2world>
         </config>
     </module>
