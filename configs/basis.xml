@@ -178,7 +178,7 @@
             </config>
         </module>
     </if>
-    <include src="ego.xml"/>
+    <!--include src="ego.xml"/-->
     <!--include src="imaging_old.xml"/-->
     <include src="imaging_new.xml"/>
 </lms>

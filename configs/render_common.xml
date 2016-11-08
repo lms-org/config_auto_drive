@@ -3,11 +3,23 @@
         <channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
         <config src="street_utils/obstacle.lconf"/>
         <config><!--URG_DATA -->
-            <envObjects>URG_DATA,SORTED_POINTS,MIDDLE_LANE,TRAJECTORY_LINE,ENVIRONMENT_OBSTACLE,TRAJECTORY_POINT,VISIBLE_AREAS,DEBUG_POINTS_RAW,DEBUG_POINTS</envObjects><!--DEBUG_TRAJECTORY, DEBUG_TRAJECTORY_2, -->
+            <envObjects>DEBUG_ALL_POINTS,DEBUG_VALID_POINTS,URG_DATA,SORTED_POINTS,MIDDLE_LANE,TRAJECTORY_LINE,ENVIRONMENT_OBSTACLE,TRAJECTORY_POINT,VISIBLE_AREAS,DEBUG_POINTS_RAW,DEBUG_POINTS</envObjects><!--DEBUG_TRAJECTORY, DEBUG_TRAJECTORY_2, -->
             <!--The default Color, TODO add colors for points, lines etc -->
             <colorR>255</colorR>
             <colorG>255</colorG>
             <colorB>0</colorB>
+        </config>
+        <config name="DEBUG_ALL_POINTS">
+        <attr>point</attr>
+        <colorR>255</colorR>
+        <colorG>125</colorG>
+        <colorB>255</colorB>
+        </config>
+        <config name="DEBUG_VALID_POINTS">
+        <attr>point</attr>
+        <colorR>255</colorR>
+        <colorG>0</colorG>
+        <colorB>0</colorB>
         </config>
         <config name="SORTED_POINTS">
             <attr>point</attr>

@@ -2,11 +2,15 @@
 #include <lms/imaging/warp.h>
 #include <lms/math/curve.h>
 #include <lms/imaging/graphics.h>
+#include <local_course/local_course.h>
 
 bool NewRoadDetection::initialize() {
     image = readChannel<lms::imaging::Image>("IMAGE");
     road = readChannel<street_environment::RoadLane>("ROAD");
+    output = writeChannel<street_environment::RoadLane>("ROAD_OUTPUT");
     debugImage = writeChannel<lms::imaging::Image>("DEBUG_IMAGE");
+    debugAllPoints = writeChannel<lms::math::polyLine2f>("DEBUG_ALL_POINTS");
+    debugValidPoints = writeChannel<lms::math::polyLine2f>("DEBUG_VALID_POINTS");
 
 
     configsChanged();
@@ -20,11 +24,12 @@ bool NewRoadDetection::cycle() {
     }
     //TODO rectangle for neglecting areas
 
-    //TODO calculate threshold for each line
-    int threshold = config().get<int>("threshold",200);
-    float minLineWidthMul = config().get<float>("minLineWidthMul",0.5);
-    float maxLineWidthMul = config().get<float>("maxLineWidthMul",1.5);
-    float searchOffset = config().get<float>("searchOffset",0.1);
+    //(TODO calculate threshold for each line)
+    const int threshold = config().get<int>("threshold",200);
+    const float minLineWidthMul = config().get<float>("minLineWidthMul",0.5);
+    const float maxLineWidthMul = config().get<float>("maxLineWidthMul",1.5);
+    const float searchOffset = config().get<float>("searchOffset",0.1);
+    const float laneWidthOffsetInMeter = config().get<float>("laneWidthOffsetInMeter",0.1);
 
     bool renderDebugImage = config().get<bool>("renderDebugImage",false);
     lms::imaging::BGRAImageGraphics graphics(*debugImage);
@@ -34,6 +39,8 @@ bool NewRoadDetection::cycle() {
         debugImage->fill(0);
         lms::imaging::BGRAImageGraphics graphics(*debugImage);
         graphics.setColor(lms::imaging::red);
+        debugAllPoints->points().clear();
+        debugValidPoints->points().clear();
     }
 
     //create left/mid/right lane
@@ -52,6 +59,9 @@ bool NewRoadDetection::cycle() {
         SearchLine l;
         l.w_start = left.points()[i];
         l.w_end = right.points()[i];
+        l.w_left = left.points()[i];
+        l.w_mid = mid.points()[i];
+        l.w_right = right.points()[i];
         //check if the part is valid (middle should be always visible)
         if(!image->inside(l.w_start.x,l.w_start.y)){
             l.w_start = mid.points()[i];
@@ -70,7 +80,7 @@ bool NewRoadDetection::cycle() {
     cv::perspectiveTransform(input,output,world2cam);
     //set image-coordinates
     int i = 0;
-    //TODO keep them to reduce memory alloc.
+    //keep them to reduce memory alloc.
     std::vector<int> xv;
     std::vector<int> yv;
     std::vector<std::uint8_t> color;
@@ -107,8 +117,9 @@ bool NewRoadDetection::cycle() {
                 graphics.drawCross(x,y);
         }
         //detect peaks
-        float pxlPeakWidth = iDist/wDist*0.02; //TODO to bad, calculate for each road line
+        float pxlPeakWidth = iDist/wDist*0.02; //TODO to bad, calculate for each road line (how should we use them for searching?
         int tCounter = 0;
+        std::vector<lms::math::vertex2f> foundPoints;
         if(renderDebugImage)
             graphics.setColor(lms::imaging::red);
         for(int k = 0; k < (int)color.size(); k++){
@@ -120,14 +131,101 @@ bool NewRoadDetection::cycle() {
                         for(int j = 0; j<tCounter;j++){
                             graphics.drawCross(xv[k-j],yv[k-j]);
                         }
+
+                        //we found a valid point
+                        //get the middle
+                        cv::Point2f mid(xv[k-tCounter/2],yv[k-tCounter/2]);
+                        //transform it in world coordinates
+                        std::vector<cv::Point2f> in;
+                        in.push_back(mid);
+                        std::vector<cv::Point2f> out;
+                        cv::perspectiveTransform(in,out,cam2world);
+                        //create lms vector for easier use
+                        lms::math::vertex2f wMid(out[0].x,out[0].y);
+                        //store it
+                        foundPoints.push_back(wMid);
                     }
-                    //TODO we found a valid point
                 }
                 tCounter = 0;
             }
         }
-    }
 
+        if(renderDebugImage){
+            for(lms::math::vertex2f &v:foundPoints)
+                debugAllPoints->points().push_back(v);
+        }
+        //filter
+        //filter points that are in poluted regions (for example the car itself)
+        //TODO
+        //remove points with bad distances
+        if(foundPoints.size() > 2){
+            std::vector<int> foundCounter;
+            foundCounter.resize(foundPoints.size(),0);
+            for(std::size_t fp = 0; fp < foundPoints.size(); fp++){
+                const lms::math::vertex2f &s = foundPoints[fp];
+                for(std::size_t test = fp+1; test <foundPoints.size(); test++){
+                    const lms::math::vertex2f &toTest  = foundPoints[test];
+                    float distance = toTest.distance(s);
+                    if((distance > 0.4-laneWidthOffsetInMeter && distance < 0.4 + laneWidthOffsetInMeter)|| (distance > 0.8-laneWidthOffsetInMeter && distance < 0.8+laneWidthOffsetInMeter)){
+                        foundCounter[test]++;
+                        foundCounter[fp]++;
+                    }
+                }
+            }
+            //filter, all valid points should have the same counter and have the highest number
+            int max = 0;
+            for(int c:foundCounter){
+                if(c > max){
+                    max = c;
+                }
+            }
+            std::vector<lms::math::vertex2f> validPoints;
+            for(int i = 0; i < (int)foundPoints.size(); i++){
+                if(foundCounter[i] >= max){
+                    validPoints.push_back(foundPoints[i]);
+                }
+            }
+            /*
+            if(validPoints.size() > 4){
+                validPoints.clear();
+            }
+            */
+            foundPoints = validPoints;
+        }
+        if(renderDebugImage){
+            for(lms::math::vertex2f &v:foundPoints)
+                debugValidPoints->points().push_back(v);
+        }
+
+        //Handle found points
+        lms::math::vertex2f diff;
+        std::vector<float> distances;
+        for(int i = 0; i < (int)foundPoints.size(); i++){
+            lms::math::vertex2f &wMind = foundPoints[i];
+            float distanceToLeft = wMind.distance(l.w_left);
+            float distanceToRight= wMind.distance(l.w_right);
+            float distanceToMid= wMind.distance(l.w_mid);
+            diff = (l.w_left-l.w_right).normalize();
+            if(distanceToLeft < distanceToMid && distanceToLeft < distanceToRight){
+                //left point
+                wMind-=-diff*0.4;
+                distances.push_back(distanceToLeft);
+            }else if(distanceToRight < distanceToMid ){
+                wMind+=diff*0.4;
+                distances.push_back(distanceToRight);
+            }else{
+                distances.push_back(distanceToMid);
+            }
+        }
+        std::vector<float> weights;
+        lms::ServiceHandle<local_course::LocalCourse> localCourse = getService<local_course::LocalCourse>("LOCAL_COURSE_SERVICE");
+        if(localCourse.isValid()){
+            localCourse->addPoints(foundPoints,weights);
+        }else{
+            logger.error("localCourse invalid!");
+            return false;
+        }
+    }
     return true;
 }
 
@@ -168,106 +266,12 @@ void NewRoadDetection::configsChanged(){
     pixels.emplace_back(topViewSize.width, topViewSize.height);
     pixels.emplace_back(topViewSize.width, 0);
     cv::Mat H = cv::findHomography(pixels, coordinates);
-
     //
+
     topView2cam = world2cam * H;
     cam2topView = topView2cam.inv();
 }
 
 bool NewRoadDetection::deinitialize() {
     return true;
-}
-
-
-void NewRoadDetection::test(){
-    //from http://romsteady.blogspot.de/2015/07/calculate-opencv-warpperspective-map.html
-    //DOES NOT WORK ATM
-
-    /*
-    cv::warpPerspective(image->convertToOpenCVMat(), topView, cam2topView, topViewSize,cv::INTER_NEAREST);
-    cv::imshow("homography_estimator_preview", topView);
-    cv::waitKey(1);
-    std::vector<cv::Point2f> input;
-    std::vector<cv::Point2f> output;
-    input.emplace_back(0,0);
-    cv::perspectiveTransform(input,output,world2cam);
-    cv::perspectiveTransform(input,output,cam2world);
-    logger.error("WASD")<<output.size()<< " "<<output[0].x << " "<<output[0].y;
-    */
-    //transform points http://docs.opencv.org/2.4/modules/core/doc/operations_on_arrays.html?highlight=perspective#perspectivetransform
-    //test();
-
-    cv::Mat sourceImage = image->convertToOpenCVMat();
-    cv::Mat destinationImage;
-
-    std::vector<cv::Point2f> destinationCorners;
-    destinationCorners.emplace_back(0, -1.500);
-    destinationCorners.emplace_back(0, 1.500);
-    destinationCorners.emplace_back(3.000, -1.500);
-    destinationCorners.emplace_back(3.000, 1.500);
-
-    //find homography
-    std::vector<cv::Point2f> originalCorners;
-    originalCorners.emplace_back(0, topViewSize.height);
-    originalCorners.emplace_back(0, 0);
-    originalCorners.emplace_back(topViewSize.width, topViewSize.height);
-    originalCorners.emplace_back(topViewSize.width, 0);
-
-    //from link
-    cv::Mat transformationMatrix = cv::getPerspectiveTransform(destinationCorners,originalCorners);
-
-    // Since the camera won't be moving, let's pregenerate the remap LUT
-    cv::Mat inverseTransMatrix;
-    cv::invert(transformationMatrix, inverseTransMatrix);
-
-    // Generate the warp matrix
-    cv::Mat map_x, map_y, srcTM;
-    srcTM = inverseTransMatrix.clone(); // If WARP_INVERSE, set srcTM to transformationMatrix
-
-    //TODO weiss nicht ob das stimmt
-    cv::Mat sourceFrame = sourceImage;
-
-
-    map_x.create(sourceFrame.size(), CV_32FC1);
-    map_y.create(sourceFrame.size(), CV_32FC1);
-
-    double M11, M12, M13, M21, M22, M23, M31, M32, M33;
-    M11 = srcTM.at<double>(0,0);
-    M12 = srcTM.at<double>(0,1);
-    M13 = srcTM.at<double>(0,2);
-    M21 = srcTM.at<double>(1,0);
-    M22 = srcTM.at<double>(1,1);
-    M23 = srcTM.at<double>(1,2);
-    M31 = srcTM.at<double>(2,0);
-    M32 = srcTM.at<double>(2,1);
-    M33 = srcTM.at<double>(2,2);
-
-    for (int y = 0; y < sourceFrame.rows; y++) {
-      double fy = (double)y;
-      for (int x = 0; x < sourceFrame.cols; x++) {
-        double fx = (double)x;
-        double w = ((M31 * fx) + (M32 * fy) + M33);
-        w = w != 0.0f ? 1.f / w : 0.0f;
-        float new_x = (float)((M11 * fx) + (M12 * fy) + M13) * w;
-        float new_y = (float)((M21 * fx) + (M22 * fy) + M23) * w;
-        map_x.at<float>(y,x) = new_x;
-        map_y.at<float>(y,x) = new_y;
-      }
-    }
-    cv::Mat transformation_x,transformation_y;
-    // This creates a fixed-point representation of the mapping resulting in ~4% CPU savings
-    transformation_x.create(sourceFrame.size(), CV_16SC2);
-    transformation_y.create(sourceFrame.size(), CV_16UC1);
-    cv::convertMaps(map_x, map_y, transformation_x, transformation_y, false);
-
-    // If the fixed-point representation causes issues, replace it with this code
-    //transformation_x = map_x.clone();
-    //transformation_y = map_y.clone();
-
-    //I then apply the map using a remap call:
-
-    cv::remap(sourceImage, destinationImage, transformation_x, transformation_y, CV_INTER_LINEAR);
-    cv::imshow("homography_estimator_preview", destinationImage);
-    cv::waitKey(1);
-
 }

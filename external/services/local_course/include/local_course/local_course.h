@@ -20,15 +20,14 @@ namespace local_course {
 class LocalCourse : public lms::Service {
     LineX *lineX;
 
+    //TODO one object for pointsToAdd and weights
     std::vector<lms::math::vertex2f> pointsToAdd;
+    std::vector<float> weights;
     std::vector<lms::math::vertex2f> pointsAdded;
     int outlierStartingState;
     float outlierPercentile;
     float outlierPercentileMultiplier;
     int resetCounter;
-
-    lms::math::LookupTable<float,lms::math::LookupTableOrder::ASC> m_thresholdLookup;
-    void filterPoints();
 
 public:
     LocalCourse();
@@ -37,15 +36,15 @@ public:
 
     void update(float dx, float dy, float dphi);
     bool addPoints(const std::vector<lms::math::vertex2f> &points);
+    bool addPoints(const std::vector<lms::math::vertex2f> &points,const std::vector<float> &weights);
     bool addPoint(const lms::math::vertex2f &p);
+    bool addPoint(const lms::math::vertex2f &p,const float &weight);
     street_environment::RoadLane getCourse();
     street_environment::RoadLane getCourse(lms::Time time);
     void resetData();
     void configsChanged() override;
     std::vector<lms::math::vertex2f> getPointsToAdd();
     std::vector<lms::math::vertex2f> getPointsAdded();
-    void distanceLinePoint(lms::math::vertex2f P, lms::math::vertex2f Q, lms::math::vertex2f M, float *dst, float *lambda);
-    float thresholdFunction(float s);
 };
 
 } // namespace local_course

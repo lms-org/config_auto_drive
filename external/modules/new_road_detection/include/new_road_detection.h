@@ -16,12 +16,34 @@
  * @brief LMS module new_road_detection
  **/
 class NewRoadDetection : public lms::Module {
+    //cam trafo
+    cv::Mat world2cam;
+    cv::Mat cam2world;
+
+    //Datachannels
+    lms::ReadDataChannel<lms::imaging::Image> image;
+    lms::ReadDataChannel<street_environment::RoadLane> road;
+    lms::WriteDataChannel<street_environment::RoadLane> output;
+    lms::WriteDataChannel<lms::imaging::Image> debugImage;
+    lms::WriteDataChannel<lms::math::polyLine2f> debugAllPoints;
+    lms::WriteDataChannel<lms::math::polyLine2f> debugValidPoints;
+
+    //for debugging
+    cv::Mat topView2cam;
+    cv::Mat cam2topView;
+    cv::Size topViewSize;
+    cv::Mat topView;
 
     struct SearchLine{
         lms::math::vertex2f w_start;
         lms::math::vertex2f w_end;
         lms::math::vertex2i i_start;
         lms::math::vertex2i i_end;
+
+
+        lms::math::vertex2f w_left;
+        lms::math::vertex2f w_mid;
+        lms::math::vertex2f w_right;
     };
 
 public:
@@ -29,19 +51,6 @@ public:
     bool deinitialize() override;
     bool cycle() override;
     void configsChanged() override;
-    lms::ReadDataChannel<lms::imaging::Image> image;
-    lms::ReadDataChannel<street_environment::RoadLane> road;
-    lms::WriteDataChannel<lms::imaging::Image> debugImage;
-    cv::Mat topView2cam;
-    cv::Mat cam2topView;
-    cv::Size topViewSize;
-    cv::Mat topView;
-
-
-    cv::Mat world2cam;
-    cv::Mat cam2world;
-
-    void test();
 };
 
 #endif // NEW_ROAD_DETECTION_H

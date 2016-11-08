@@ -2,9 +2,9 @@
     <module name="ximea_importer" lib="ximea_importer" class="XimeaImporter">
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
         <config>
-            <exposure>8000</exposure>
+            <exposure>9000</exposure>
             <fps>100</fps>
-            <gain>4</gain>
+            <gain>2</gain>
         </config>
     </module>
     <include src="basis.xml" />
