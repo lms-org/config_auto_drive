@@ -37,8 +37,7 @@ public:
     void update(float dx, float dy, float dphi);
     bool addPoints(const std::vector<lms::math::vertex2f> &points);
     bool addPoints(const std::vector<lms::math::vertex2f> &points,const std::vector<float> &weights);
-    bool addPoint(const lms::math::vertex2f &p);
-    bool addPoint(const lms::math::vertex2f &p,const float &weight);
+    bool addPoint(const lms::math::vertex2f &p,const float &weight = 1);
     street_environment::RoadLane getCourse();
     street_environment::RoadLane getCourse(lms::Time time);
     void resetData();

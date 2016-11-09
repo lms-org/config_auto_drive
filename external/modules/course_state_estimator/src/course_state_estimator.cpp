@@ -17,6 +17,12 @@ bool CourseStateEstimator::deinitialize() {
 
 bool CourseStateEstimator::cycle() {
 
+
+    if(road->points().size() <= 1){
+        logger.error("calculateCurvature")<<"Invalid road given!";
+        return false;
+    }
+
     observationProbability1 = config().get<float>("observationProbability1", 0.8);
     observationProbability2 = config().get<float>("observationProbability2", 0.7);
 

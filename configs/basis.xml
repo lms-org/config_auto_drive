@@ -129,21 +129,6 @@
             <virtualCrossingPoints>2</virtualCrossingPoints>
         </config>
     </module>
-    <module name="environment_predictor" lib="environment_predictor" class="EnvironmentPredictor">
-        <name>environment_predictor</name>
-        <channelMapping priority="10" from="CAR" to="CAR"/>
-        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_ROAD_RAW"/>
-        <channelMapping from="ROAD_OUTPUT" to="MIDDLE_LANE"/>
-        <config user="odroid">
-            <logPrefix>/home/odroid/data/env/env</logPrefix>
-            <r_fakt_min>15</r_fakt_min>
-            <r_fakt_max>50</r_fakt_max>
-            <r_fakt_maxVelocity>5.0</r_fakt_maxVelocity>
-        </config>
-        <config>
-            <translateEnvironment>false</translateEnvironment>
-        </config>
-    </module>
     <module name="course_state_estimator" lib="course_state_estimator" class="CourseStateEstimator">
         <name>course_state_estimator</name>
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>

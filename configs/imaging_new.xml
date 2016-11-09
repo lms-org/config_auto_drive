@@ -2,6 +2,7 @@
     <module name="new_road_detection" lib="new_road_detection" class="NewRoadDetection">
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
+        <channelMapping priority="10" from="CAR" to="CAR"/>
         <config>
             <searchOffset>0.1</searchOffset>
             <distanceBetweenSearchlines>0.1</distanceBetweenSearchlines>
@@ -11,6 +12,7 @@
             <laneWidthOffsetInMeter>0.1</laneWidthOffsetInMeter>
             <renderDebugImage>true</renderDebugImage>
             <cam2world>-1016.55,629.72,-140.546,-433.734,-19.2261,-295.753,-1.5413,-0.0750134,-0.22935</cam2world>
+            <translateEnvironment>false</translateEnvironment>
         </config>
     </module>
 </lms>

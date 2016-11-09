@@ -3,6 +3,7 @@
 
 #include <lms/module.h>
 #include <street_environment/road.h>
+#include <street_environment/car.h>
 
 
 #include <opencv2/calib3d/calib3d.hpp>
@@ -22,11 +23,14 @@ class NewRoadDetection : public lms::Module {
 
     //Datachannels
     lms::ReadDataChannel<lms::imaging::Image> image;
-    lms::ReadDataChannel<street_environment::RoadLane> road;
+    lms::WriteDataChannel<street_environment::RoadLane> road;
     lms::WriteDataChannel<street_environment::RoadLane> output;
     lms::WriteDataChannel<lms::imaging::Image> debugImage;
     lms::WriteDataChannel<lms::math::polyLine2f> debugAllPoints;
     lms::WriteDataChannel<lms::math::polyLine2f> debugValidPoints;
+    lms::WriteDataChannel<lms::math::polyLine2f> debugTranslatedPoints;
+
+    lms::ReadDataChannel<street_environment::Car> car;
 
     //for debugging
     cv::Mat topView2cam;
@@ -51,6 +55,7 @@ public:
     bool deinitialize() override;
     bool cycle() override;
     void configsChanged() override;
+    bool find();
 };
 
 #endif // NEW_ROAD_DETECTION_H

@@ -3,15 +3,18 @@
 #include <lms/math/curve.h>
 #include <lms/imaging/graphics.h>
 #include <local_course/local_course.h>
+#include <street_environment/car.h>
 
 bool NewRoadDetection::initialize() {
     image = readChannel<lms::imaging::Image>("IMAGE");
-    road = readChannel<street_environment::RoadLane>("ROAD");
-    output = writeChannel<street_environment::RoadLane>("ROAD_OUTPUT");
+    road = writeChannel<street_environment::RoadLane>("ROAD");
+    //output = writeChannel<street_environment::RoadLane>("ROAD_OUTPUT");
     debugImage = writeChannel<lms::imaging::Image>("DEBUG_IMAGE");
     debugAllPoints = writeChannel<lms::math::polyLine2f>("DEBUG_ALL_POINTS");
     debugValidPoints = writeChannel<lms::math::polyLine2f>("DEBUG_VALID_POINTS");
+    debugTranslatedPoints = writeChannel<lms::math::polyLine2f>("DEBUG_VALID_TRANSLATED_POINTS");
 
+    car = readChannel<street_environment::Car>("CAR"); //TODO create ego-estimation service
 
     configsChanged();
     return true;
@@ -22,6 +25,46 @@ bool NewRoadDetection::cycle() {
         logger.error("cycle")<<"image size is 0";
         return false;
     }
+    //if we have a round, try to find the line
+    if(road->points().size() > 1){
+        find(); //TODO use bool from find
+    }
+
+    float dx = 0;
+    float dy = 0;
+    float dPhi = 0;
+    //update the course
+    if(config().get<bool>("translateEnvironment",false)){
+        logger.info("translation")<<car->deltaPhi();
+        //localCourse->update(car->localDeltaPosition().x,car->localDeltaPosition().y,car->deltaPhi()); //TODO x and y translation produce bad results
+        double maxYawRate = 0.03;
+        dPhi = car->deltaPhi();
+        //TODO is there still a fail?
+        if (dPhi < -maxYawRate){
+            logger.error("invalid yawrate:")<<dPhi;
+            dPhi = -maxYawRate;
+        }else if (dPhi > maxYawRate){
+            logger.error("invalid yawrate:")<<dPhi;
+            dPhi = maxYawRate;
+        }
+    }
+
+    lms::ServiceHandle<local_course::LocalCourse> localCourse = getService<local_course::LocalCourse>("LOCAL_COURSE_SERVICE");
+    if(localCourse.isValid()){
+        logger.time("localCourse");
+        localCourse->update(dx,dy,dPhi);
+        *road = localCourse->getCourse();
+        logger.timeEnd("localCourse");
+
+    }else{
+        logger.error("localCourse invalid!");
+        return false;
+    }
+    return true;
+}
+
+bool NewRoadDetection::find(){
+
     //TODO rectangle for neglecting areas
 
     //(TODO calculate threshold for each line)
@@ -41,6 +84,7 @@ bool NewRoadDetection::cycle() {
         graphics.setColor(lms::imaging::red);
         debugAllPoints->points().clear();
         debugValidPoints->points().clear();
+        debugTranslatedPoints->points().clear();
     }
 
     //create left/mid/right lane
@@ -208,7 +252,7 @@ bool NewRoadDetection::cycle() {
             diff = (l.w_left-l.w_right).normalize();
             if(distanceToLeft < distanceToMid && distanceToLeft < distanceToRight){
                 //left point
-                wMind-=-diff*0.4;
+                wMind-=diff*0.4;
                 distances.push_back(distanceToLeft);
             }else if(distanceToRight < distanceToMid ){
                 wMind+=diff*0.4;
@@ -218,6 +262,15 @@ bool NewRoadDetection::cycle() {
             }
         }
         std::vector<float> weights;
+        for(const float &dist:distances){
+            //as distance is in meter, we multiply it by 100
+            weights.push_back(1/(dist+0.001)); //TODO hier etwas sinnvolles überlegen
+        }
+
+        if(renderDebugImage){
+            for(lms::math::vertex2f &v:foundPoints)
+                debugTranslatedPoints->points().push_back(v);
+        }
         lms::ServiceHandle<local_course::LocalCourse> localCourse = getService<local_course::LocalCourse>("LOCAL_COURSE_SERVICE");
         if(localCourse.isValid()){
             localCourse->addPoints(foundPoints,weights);
