@@ -40,7 +40,6 @@ void LocalCourse::configsChanged(){
 }
 
 void LocalCourse::update(float dx, float dy, float dphi){
-    bool useWeights = config().get<bool>("useWeights",false);
     /*
     for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
         if(std::isnan(lineX->state(i))){
@@ -49,6 +48,21 @@ void LocalCourse::update(float dx, float dy, float dphi){
         }
     }
     */
+    float combinePointMaxDistance = config().get<float>("combinePointMaxDistance",0);
+    if(combinePointMaxDistance > 0){
+        for(int i = 0; i < pointsToAdd.size(); i++){
+            for(int k = i+1;k < pointsToAdd.size(); k++){
+                if(pointsToAdd[i].distance(pointsToAdd[k]) < combinePointMaxDistance){
+                    pointsToAdd[i] = (pointsToAdd[i]+pointsToAdd[k])/2;
+                    //add weights
+                    weights[i] = weights[i]+weights[k];
+                    weights.erase(weights.begin()+k);
+                    pointsToAdd.erase(pointsToAdd.begin()+k);
+                }
+            }
+        }
+        //TODO remove points which a close togehter
+    }
     lineX->translate(dx,dy,dphi);
     /*
     for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
@@ -64,10 +78,7 @@ void LocalCourse::update(float dx, float dy, float dphi){
     }
     Eigen::Matrix<double,3,Eigen::Dynamic> input(3,pointsToAdd.size());
     for(int col = 0; col < (int)pointsToAdd.size(); col++){
-        float weight = 1;
-        if(useWeights){
-            weight = weights[col];
-        }
+        float weight = weights[col];
         input.col(col) = Eigen::Vector3d(pointsToAdd[col].x,pointsToAdd[col].y,weight);
     }
     lineX->update(input);

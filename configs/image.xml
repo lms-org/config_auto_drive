@@ -1,14 +1,29 @@
 <lms>
-    <module name="ximea_importer" lib="ximea_importer" class="XimeaImporter">
-        <channelMapping from="IMAGE" to="GREY_IMAGE"/>
-        <config>
-            <exposure>9000</exposure>
-            <fps>100</fps>
-            <gain>12</gain>
-        </config>
-    </module>
+    <if notSet="load">
+        <module name="ximea_importer" lib="ximea_importer" class="XimeaImporter">
+            <channelMapping from="IMAGE" to="GREY_IMAGE"/>
+            <config>
+                <exposure>9000</exposure>
+                <fps>100</fps>
+                <gain>12</gain>
+            </config>
+        </module>
+    </if>
     <include src="basis.xml" />
     <if notSet="norender">
         <include src="render_sdl.xml"/>
+    </if>
+    <if set="load">
+        <module name="image_loader" lib="image_loader" class="ImageLoader">
+            <channelMapping from="IMAGE" to="GREY_IMAGE"/>
+            <config>
+                <minCounter>200</minCounter>
+            </config>
+        </module>
+    </if>
+    <if set="save">
+        <module name="image_logger" lib="image_logger" class="ImageLogger">
+            <channelMapping from="IMAGE" to="GREY_IMAGE"/>
+        </module>
     </if>
 </lms>

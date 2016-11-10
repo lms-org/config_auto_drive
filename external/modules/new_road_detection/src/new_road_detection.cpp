@@ -55,6 +55,10 @@ bool NewRoadDetection::cycle() {
         localCourse->update(dx,dy,dPhi);
         *road = localCourse->getCourse();
         logger.timeEnd("localCourse");
+        bool renderDebugImage = config().get<bool>("renderDebugImage",false);
+        if(renderDebugImage){
+                debugTranslatedPoints->points() = localCourse->getPointsAdded();
+        }
 
     }else{
         logger.error("localCourse invalid!");
@@ -73,7 +77,7 @@ bool NewRoadDetection::find(){
     const float maxLineWidthMul = config().get<float>("maxLineWidthMul",1.5);
     const float searchOffset = config().get<float>("searchOffset",0.1);
     const float laneWidthOffsetInMeter = config().get<float>("laneWidthOffsetInMeter",0.1);
-
+    const bool useWeights = config().get<bool>("useWeights",false);
     bool renderDebugImage = config().get<bool>("renderDebugImage",false);
     lms::imaging::BGRAImageGraphics graphics(*debugImage);
     if(renderDebugImage){
@@ -175,7 +179,6 @@ bool NewRoadDetection::find(){
                         for(int j = 0; j<tCounter;j++){
                             graphics.drawCross(xv[k-j],yv[k-j]);
                         }
-
                         //we found a valid point
                         //get the middle
                         cv::Point2f mid(xv[k-tCounter/2],yv[k-tCounter/2]);
@@ -261,16 +264,21 @@ bool NewRoadDetection::find(){
                 distances.push_back(distanceToMid);
             }
         }
+
         std::vector<float> weights;
         for(const float &dist:distances){
             //as distance is in meter, we multiply it by 100
-            weights.push_back(1/(dist+0.001)); //TODO hier etwas sinnvolles überlegen
+            if(useWeights)
+                weights.push_back(1/(dist+0.001)); //TODO hier etwas sinnvolles überlegen
+            else
+                weights.push_back(1);
         }
-
+        /*
         if(renderDebugImage){
             for(lms::math::vertex2f &v:foundPoints)
                 debugTranslatedPoints->points().push_back(v);
         }
+        */
         lms::ServiceHandle<local_course::LocalCourse> localCourse = getService<local_course::LocalCourse>("LOCAL_COURSE_SERVICE");
         if(localCourse.isValid()){
             localCourse->addPoints(foundPoints,weights);

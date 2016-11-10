@@ -1,7 +1,4 @@
 <lms>
-<!--execution>
-    <clock sleep="false" unit="ms" value="20" watchDog="200"/>
-</execution-->
     <include src="mavlink.xml"/>
     <include src="mycam.xml"/>
     <!--include src="parking.xml" /-->

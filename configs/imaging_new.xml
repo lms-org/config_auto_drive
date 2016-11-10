@@ -4,15 +4,16 @@
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
         <channelMapping priority="10" from="CAR" to="CAR"/>
         <config>
-            <searchOffset>0.1</searchOffset>
+            <searchOffset>0.2</searchOffset>
             <distanceBetweenSearchlines>0.2</distanceBetweenSearchlines>
             <minLineWidthMul>0.5</minLineWidthMul>
             <maxLineWidthMul>3</maxLineWidthMul>
-            <threshold>120</threshold>
+            <threshold>100</threshold>
             <laneWidthOffsetInMeter>0.1</laneWidthOffsetInMeter>
             <renderDebugImage>true</renderDebugImage>
             <cam2world>-1016.55,629.72,-140.546,-433.734,-19.2261,-295.753,-1.5413,-0.0750134,-0.22935</cam2world>
             <translateEnvironment>false</translateEnvironment>
+            <useWeights>false</useWeights>
         </config>
     </module>
 </lms>
