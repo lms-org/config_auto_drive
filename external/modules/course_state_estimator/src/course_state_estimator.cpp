@@ -1,7 +1,6 @@
 #include "course_state_estimator.h"
 
 bool CourseStateEstimator::initialize() {
-    environment = readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT");
     roadStates= writeChannel<street_environment::RoadStates>("ROAD_STATES");
 
     road = readChannel<street_environment::RoadLane>("ROAD");  
@@ -41,26 +40,7 @@ bool CourseStateEstimator::cycle() {
     transition << 1-transitionProbability1,  0,                        transitionProbability3,
                   transitionProbability1,    1-transitionProbability2, 0,
                   0,                         transitionProbability2,   1-transitionProbability3;
-
-    for(street_environment::EnvironmentObjectPtr envPtr: environment->objects){
-        lms::math::polyLine2f allPoints;
-        if(envPtr->getType() == street_environment::RoadLane::TYPE){
-            street_environment::RoadLanePtr roadPtr = std::static_pointer_cast<street_environment::RoadLane>(envPtr);
-            if(roadPtr->points().size() == 0)
-                continue;
-            lms::math::vertex2f centerOfMass = lms::math::vertex2f(0,0);
-            for(const lms::math::vertex2f &v: roadPtr->points()){
-                centerOfMass =centerOfMass+ v;
-            }
-            centerOfMass = centerOfMass/roadPtr->points().size();
-
-            for(const lms::math::vertex2f &v: roadPtr->points()){
-                allPoints.points().push_back(v-centerOfMass);
-            }
-        }
-    }
     update();
-
 
     logger.debug("States:") << probabilityStates(0) << " " << probabilityStates(1) << " " << probabilityStates(2);
     Eigen::Vector3f probsStraight = CourseStateEstimator::emissionProbabilitiesStraight();
@@ -79,56 +59,15 @@ Eigen::Vector3f CourseStateEstimator::emissionProbabilitiesStraight()
     result << 1,1,1;
     result = result / result.sum();
 
-    float trustDistance = config().get<float>("trustDistance", 1);
-
     lms::math::polyLine2f allPointsTrusted;
-    lms::math::polyLine2f allPointsUntrusted;
-
-    int localCounter = 0;
-    bool flagCenter = false;
-
-    for(street_environment::EnvironmentObjectPtr envPtr: environment->objects){
-
-        if(envPtr->getType() == street_environment::RoadLane::TYPE){
-            street_environment::RoadLanePtr roadPtr = std::static_pointer_cast<street_environment::RoadLane>(envPtr);
-            if(roadPtr->points().size() == 0)
-                continue;
-
-            lms::math::vertex2f centerOfMass = lms::math::vertex2f(0,0);
-            flagCenter = false;
-            localCounter = 0;
-
-            for(const lms::math::vertex2f &v: roadPtr->points()){
-                if (v.x <= trustDistance)
-                {
-                    centerOfMass = centerOfMass+ v;
-                    flagCenter = true;
-                    localCounter++;
-                }
-            }
-            if (!flagCenter)
-            {
-                // not enough points
-                continue;
-            }
-
-
-            centerOfMass = centerOfMass/localCounter;
-
-            for(const lms::math::vertex2f &v: roadPtr->points()){
-                if (v.x <= trustDistance)
-                {
-                    //trusted point
-                    allPointsTrusted.points().push_back(v - centerOfMass);
-                }else
-                {
-                    allPointsUntrusted.points().push_back(v - centerOfMass);
-                }
-
-            }
-        }
+    lms::math::vertex2f centerOfMass = lms::math::vertex2f(0,0);
+    for(const lms::math::vertex2f &v: road->points()){
+        centerOfMass += v;
     }
-
+    centerOfMass /= road->points().size();
+    for(const lms::math::vertex2f &v:road->points()){
+        allPointsTrusted.points().push_back(v-centerOfMass);
+    }
 
     // construct cov matrix
     Eigen::Matrix2f covMat;
@@ -139,14 +78,6 @@ Eigen::Vector3f CourseStateEstimator::emissionProbabilitiesStraight()
     Eigen::Vector2f currentVec;
 
     int nPointsTrusted = allPointsTrusted.points().size();
-    int nPointsUntrusted = allPointsUntrusted.points().size();
-
-    if (nPointsTrusted+nPointsUntrusted < config().get<int>("minNumberPointsForStraightEstimation", 8))
-    {
-        logger.warn("number of points for straight estimation not enough");
-        return result;
-    }
-
     for (int i = 0; i < nPointsTrusted; i++)
     {
         currentVec(0) = allPointsTrusted.points()[i].x;
@@ -204,8 +135,6 @@ Eigen::Vector3f CourseStateEstimator::emissionProbabilitiesStraight()
     float distanceLocalPoint = 0;
 
     int numOutliersTrustedRegion = 0;
-    int numOutliersUntrustedRegion = 0;
-
     for (int i = 0; i < nPointsTrusted; i++)
     {
         currentVec(0) = allPointsTrusted.points()[i].x;
@@ -218,51 +147,21 @@ Eigen::Vector3f CourseStateEstimator::emissionProbabilitiesStraight()
             numOutliersTrustedRegion++;
         }
     }
-
-    for (int i = 0; i < nPointsUntrusted; i++)
-    {
-        currentVec(0) = allPointsUntrusted.points()[i].x;
-        currentVec(1) = allPointsUntrusted.points()[i].y;
-
-        distanceLocalPoint = fabs( normalVector.transpose() * currentVec );
-
-        if (distanceLocalPoint > distanceOutlier)
-        {
-            numOutliersUntrustedRegion++;
-        }
-    }
-
     // now the number of outliers is given
     // put distribution
 
     float fracOutliersSameProbTrustedRegion = config().get<float>("nOutliersSameProbTrustedRegion", 0.07);
-    float fracOutliersSameProbUntrustedRegion = config().get<float>("fracOutliersSameProbUntrustedRegion", 0.1);
-
-    if (nPointsTrusted < 1)
-    {
-        logger.warn("nPointsTrusted < 1");
-        return result;
-    }
-    if (nPointsUntrusted < 1)
-    {
-        logger.warn("nPointsUntrusted < 1");
-        return result;
-    }
 
     // calculate the ps with formula
     float pTrust = 1-powf(1/(1.f+nPointsTrusted), 1/(fracOutliersSameProbTrustedRegion*nPointsTrusted));
-    float pUntrusted = 1-powf(1/(1.f+nPointsUntrusted), 1/(fracOutliersSameProbUntrustedRegion*nPointsUntrusted));
 
     // claculate elementary probs
     float probStraightTrusted = pTrust*powf(1.f-pTrust, numOutliersTrustedRegion);
     float probCurveTrusted = 1/(nPointsTrusted+1.f);
-    float probStraightUntrusted = pUntrusted*powf(1.f-pUntrusted, numOutliersUntrustedRegion);
-    float probCurveUntrusted = 1/(nPointsUntrusted+1.f);
 
-    // assemble final probs vector
-    result(0) = probStraightTrusted * probStraightUntrusted;
-    result(1) = probStraightTrusted * probCurveUntrusted;
-    result(2) = probCurveTrusted * probCurveUntrusted;
+    result(0) = probStraightTrusted;
+    result(1) = probStraightTrusted;
+    result(2) = probCurveTrusted;
 
     result = result / result.sum();
 

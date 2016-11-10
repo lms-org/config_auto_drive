@@ -10,7 +10,6 @@
  * @brief LMS module course_state_estimator
  **/
 class CourseStateEstimator : public lms::Module {
-    lms::ReadDataChannel<street_environment::EnvironmentObjects> environment;
     lms::WriteDataChannel<street_environment::RoadStates> roadStates;
 public:
     bool initialize() override;
