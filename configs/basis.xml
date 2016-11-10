@@ -9,19 +9,12 @@
     </service>
     <service name="LOCAL_COURSE_SERVICE" lib="local_course" class="LocalCourse">
         <config>
-            <useThresholding>true</useThresholding>
-            <thresholdLutX>0.0, 0.5, 1.5</thresholdLutX>
-            <thresholdLutY>0.1, 0.1, 0.1</thresholdLutY>
-            <thresholdingSlope>0.08</thresholdingSlope>
-            <outlierStartingPoint>2</outlierStartingPoint>
-            <outlierPercentile>0.5</outlierPercentile>
-            <outlierPercentileMultiplier>3.0</outlierPercentileMultiplier>
-            <elementCount>10</elementCount>
-            <kovAbnahme>0.15</kovAbnahme>
-            <elementLength>0.2</elementLength>
-            <logState>false</logState>
-            <idle_prior_fact>10</idle_prior_fact>
-            <prior_fact>0</prior_fact>
+            <useFast>true</useFast>
+            <adamA>0.001</adamA>
+            <adamB1>0.9</adamB1>
+            <adamB2>0.999</adamB2>
+            <adamIterations>2</adamIterations><!--Damit kann man beliebig viel Rechenzeit belegen :)-->
+            <useWeights>false</useWeights>
         </config>
     </service>
     <module name="lap_time" lib="lap_time" class="LapTime">
@@ -31,13 +24,6 @@
     </module>
     <module name="obstacle_from_laser" lib="obstacle_from_laser" class="ObstacleFromLaser">
         <channelMapping from="POINTS" to="URG_DATA"/>
-    </module>
-    <module name="street_obstacle_merger" lib="street_obstacle_merger" class="StreetObjectMerger">
-        <name>street_obstacle_merger</name>
-        <channelMapping priority="10" from="CAR" to="CAR"/>
-        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_OBSTACLE_RAW"/>
-        <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_OBSTACLE"/>
-        <config src="street_utils/obstacle.lconf"/>
     </module>
     <module name="trajectory_point_controller" lib="trajectory_point_controller" class="TrajectoryPointController">
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
@@ -121,13 +107,6 @@
         </config>
         <config src="street_utils/obstacle.lconf"/>
         <config src="trajectory_creator.lconf"/>
-    </module>
-    <module name="obstacle_to_local_course" lib="obstacle_to_local_course" class="ObstacleToLocalCourse">
-        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE"/>
-        <config>
-            <obstacleMinTrust>0.8</obstacleMinTrust>
-            <virtualCrossingPoints>2</virtualCrossingPoints>
-        </config>
     </module>
     <module name="course_state_estimator" lib="course_state_estimator" class="CourseStateEstimator">
         <name>course_state_estimator</name>

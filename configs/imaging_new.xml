@@ -5,10 +5,10 @@
         <channelMapping priority="10" from="CAR" to="CAR"/>
         <config>
             <searchOffset>0.1</searchOffset>
-            <distanceBetweenSearchlines>0.1</distanceBetweenSearchlines>
-            <minLineWidthMul>0.1</minLineWidthMul>
-            <maxLineWidthMul>20</maxLineWidthMul>
-            <threshold>130</threshold>
+            <distanceBetweenSearchlines>0.2</distanceBetweenSearchlines>
+            <minLineWidthMul>0.5</minLineWidthMul>
+            <maxLineWidthMul>3</maxLineWidthMul>
+            <threshold>120</threshold>
             <laneWidthOffsetInMeter>0.1</laneWidthOffsetInMeter>
             <renderDebugImage>true</renderDebugImage>
             <cam2world>-1016.55,629.72,-140.546,-433.734,-19.2261,-295.753,-1.5413,-0.0750134,-0.22935</cam2world>

@@ -1,1 +1,1 @@
- ./build/bin/lms run ./configs/mycam.xml --debug -l ./build/lib -s --log info 
+ ./build/bin/lms run ./configs/mycam.xml --debug -l ./build/lib -s

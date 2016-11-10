@@ -13,6 +13,7 @@ LocalCourse::LocalCourse(){
 
 bool LocalCourse::init() {
     lineX = new LineX();
+    lineX->useFast = false;
     configsChanged();
     return true;
 }
@@ -27,14 +28,19 @@ void LocalCourse::configsChanged(){
     lineX->lineLength = config().get<float>("elementLength",0.2);
     lineX->fixX = config().get<float>("fixX",true);
     lineX->fixY = config().get<float>("fixY",false);
+    lineX->a = config().get<float>("adamA",0.001);
+    lineX->b1 = config().get<float>("adamB1",0.9);
+    lineX->b2 = config().get<float>("adamB2",0.999);
+    lineX->numerOfIterations = config().get<int>("adamIterations",1);
 
     outlierStartingState = config().get<int>("outlierStartingPoint", 1);
     outlierPercentile = config().get<float>("outlierPercentile", 0.5);
     outlierPercentileMultiplier = config().get<float>("outlierPercentileMultiplier", 3.0);
+    lineX->useFast = config().get<bool>("useFast",true);
 }
 
 void LocalCourse::update(float dx, float dy, float dphi){
-    //remove outliers TODO move to other module/function!
+    bool useWeights = config().get<bool>("useWeights",false);
     /*
     for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
         if(std::isnan(lineX->state(i))){
@@ -52,13 +58,17 @@ void LocalCourse::update(float dx, float dy, float dphi){
         }
     }
     */
-    logger.info("update")<<"using "<<pointsToAdd.size()<<" points";
+    logger.info("opt")<<"using "<<pointsToAdd.size()<<" points";
     if(pointsToAdd.size() == 0){
         return;
     }
-    Eigen::MatrixX2d input(2,pointsToAdd.size());
-    for(int row = 0; row < (int)pointsToAdd.size(); row++){
-        input.col(row) = Eigen::Vector3d(pointsToAdd[row].x,pointsToAdd[row].y,weights[row]);
+    Eigen::Matrix<double,3,Eigen::Dynamic> input(3,pointsToAdd.size());
+    for(int col = 0; col < (int)pointsToAdd.size(); col++){
+        float weight = 1;
+        if(useWeights){
+            weight = weights[col];
+        }
+        input.col(col) = Eigen::Vector3d(pointsToAdd[col].x,pointsToAdd[col].y,weight);
     }
     lineX->update(input);
     /*

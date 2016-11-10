@@ -10,6 +10,7 @@
             <config>
                 <x>0.09</x>
                 <y>0.05</y>
+                <printFront>false</printFront>
             </config>
             <channelMapping from="URG_DATA" to="URG_DATA"/>
             <channelMapping from="URG_DATA_RAW" to="URG_DATA_RAW"/>

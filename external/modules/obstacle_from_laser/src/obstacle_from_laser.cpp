@@ -5,7 +5,7 @@ bool ObstacleFromLaser::initialize() {
     points = readChannel<lms::math::polyLine2f> ("POINTS");
     sortedPoints = writeChannel<lms::math::polyLine2f>("SORTED_POINTS");
     road = readChannel<street_environment::RoadLane>("MIDDLE_LANE");
-    env = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT");
+    env = writeChannel<street_environment::EnvironmentObjects>("OBSTACLES_FOUND");
     return true;
 }
 
@@ -14,6 +14,8 @@ bool ObstacleFromLaser::deinitialize() {
 }
 
 bool ObstacleFromLaser::cycle() {
+    //clear old objects
+    env->objects.clear();
     sortedPoints->points().clear();
     if(road->points().size() == 0){
         logger.warn("Road with no points!");
@@ -25,7 +27,7 @@ bool ObstacleFromLaser::cycle() {
     }
     //check if the point is inside the car
     for(const lms::math::vertex2f &v:points->points()){
-        if(v.x < 0.1 && v.x>-0.1 && v.y < 0.05 && v.y > -0.1){
+        if(v.x < 0.25 && v.x>-0.1 && v.y < 0.1 && v.y > -0.1){
             continue;
         }
         float minDistance = 100;
@@ -55,6 +57,7 @@ bool ObstacleFromLaser::cycle() {
             lastPoint = sortedPoints->points()[i];
             blob.push_back(lastPoint);
         }else{
+            //TODO obstacle could be created here
             blobs.push_back(blob);
             blob.clear();
             lastPoint = sortedPoints->points()[i];
@@ -70,8 +73,10 @@ bool ObstacleFromLaser::cycle() {
         if((int)vb.size() >= minBlobElements){
             //found some obstacles in reach
             std::shared_ptr<street_environment::Obstacle> obstacle(new street_environment::Obstacle());
-            lms::math::vertex2f pos = vb[vb.size()/2];
-            obstacle->addPoint(pos);
+            for(const lms::math::vertex2f &v:vb){
+                obstacle->addPoint(v);
+            }
+            //TODO besserer create trust value
             obstacle->setTrust(config().get<float>("obstacleInitTrust",0.8));
             obstacle->width(obstacleWidth);
             env->objects.push_back(obstacle);
