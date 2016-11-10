@@ -170,7 +170,7 @@ bool NewRoadDetection::find(){
             if(color[k]>threshold){
                 tCounter++;
             }else{
-                if(tCounter > pxlPeakWidth*minLineWidthMul && tCounter < pxlPeakWidth*maxLineWidthMul){
+                if(tCounter - k != 0 && tCounter > pxlPeakWidth*minLineWidthMul && tCounter < pxlPeakWidth*maxLineWidthMul){
                     if(renderDebugImage){
                         for(int j = 0; j<tCounter;j++){
                             graphics.drawCross(xv[k-j],yv[k-j]);

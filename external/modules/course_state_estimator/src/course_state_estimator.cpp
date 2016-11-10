@@ -2,7 +2,6 @@
 
 bool CourseStateEstimator::initialize() {
     roadStates= writeChannel<street_environment::RoadStates>("ROAD_STATES");
-
     road = readChannel<street_environment::RoadLane>("ROAD");  
 
     probabilityStates << 1.0,1.0,1.0;
