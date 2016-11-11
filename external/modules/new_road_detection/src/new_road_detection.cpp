@@ -257,7 +257,7 @@ bool NewRoadDetection::find(){
     cv::perspectiveTransform(input,output,world2cam);
 
 
-    //TODO multithread the following part
+    //TODO multithread the following part (each line could be handled independently)
 
     //set image-coordinates
     int i = 0;
