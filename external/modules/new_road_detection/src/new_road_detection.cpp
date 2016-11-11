@@ -255,6 +255,10 @@ bool NewRoadDetection::find(){
     }
     //transform them in image-coordinates
     cv::perspectiveTransform(input,output,world2cam);
+
+
+    //TODO multithread the following part
+
     //set image-coordinates
     int i = 0;
     //keep them to reduce memory alloc.
