@@ -8,9 +8,11 @@
             <distanceBetweenSearchlines>0.2</distanceBetweenSearchlines>
             <minLineWidthMul>0.5</minLineWidthMul>
             <maxLineWidthMul>3</maxLineWidthMul>
-            <threshold>100</threshold>
+            <findBySobel>true</findBySobel>
+            <threshold>200</threshold>
+            <sobelThreshold>50</sobelThreshold>
             <laneWidthOffsetInMeter>0.1</laneWidthOffsetInMeter>
-            <renderDebugImage>true</renderDebugImage>
+            <renderDebugImage>false</renderDebugImage>
             <cam2world>-1016.55,629.72,-140.546,-433.734,-19.2261,-295.753,-1.5413,-0.0750134,-0.22935</cam2world>
             <translateEnvironment>false</translateEnvironment>
             <useWeights>false</useWeights>

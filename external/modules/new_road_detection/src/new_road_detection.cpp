@@ -66,10 +66,141 @@ bool NewRoadDetection::cycle() {
     }
     return true;
 }
+std::vector<lms::math::vertex2f> NewRoadDetection::findBySobel(const bool renderDebugImage, const std::vector<int> &xv,const std::vector<int> &yv, const float minLineWidthMul, const float maxLineWidthMul,const float iDist,const float wDist, const int threshold){
+    lms::imaging::BGRAImageGraphics graphics(*debugImage);
+    std::vector<lms::math::vertex2f> foundPoints;
+    bool foundLowHigh = false;
+    int pxlCounter = 0;
+    for(int k = 1; k < (int)xv.size()-1; k++){
+        const int xs = xv[k-1];
+        const int ys = yv[k-1];
+        const int x = xv[k];
+        const int y = yv[k];
+        const int xS = xv[k+1];
+        const int yS = yv[k+1];
+        //check if point is inside the image
+        if(!image->inside(xs,ys) || !image->inside(x,y) || !image->inside(xS,yS)){
+            continue;
+        }
+        if(renderDebugImage){
+            graphics.setColor(lms::imaging::blue);
+            graphics.drawCross(x,y);
+        }
+
+        int colors = *(image->data()+xs+ys*image->width());
+        int colorS = *(image->data()+xS+yS*image->width());
+        int sobel = colorS-colors;
+        //da wir von links nach rechts suchen ist positiver sobel ein dunkel-hell übergang
+        if(sobel > threshold){
+            if(!foundLowHigh){
+                foundLowHigh = true;
+                pxlCounter = 0;
+            }
+            if(renderDebugImage){
+                graphics.setColor(lms::imaging::green);
+                graphics.drawCross(x,y,3);
+            }
+        }else if(sobel < -threshold){ //hell-dunkel übergang
+            if(renderDebugImage){
+                graphics.setColor(lms::imaging::yellow);
+                graphics.drawCross(x,y,3);
+            }
+            //check if we found a lowHigh + highLow border
+            if(foundLowHigh){
+                //check if the points have the right distance
+                float pxlPeakWidth = iDist/wDist*0.02; //TODO to bad, calculate for each road line (how should we use them for searching?
+                if(pxlCounter > pxlPeakWidth*minLineWidthMul && pxlCounter < pxlPeakWidth*maxLineWidthMul){
+                    //we found a valid poit, mark it
+                    if(renderDebugImage){
+                        graphics.setColor(lms::imaging::red);
+                        for(int j = 0; j<pxlCounter;j++){
+                            graphics.drawCross(xv[k-j],yv[k-j]);
+                        }
+                    }
+                    //we found a valid point
+                    //get the middle
+                    cv::Point2f mid(xv[k-pxlCounter/2],yv[k-pxlCounter/2]);
+                    //transform it in world coordinates
+                    std::vector<cv::Point2f> in;
+                    in.push_back(mid);
+                    std::vector<cv::Point2f> out;
+                    cv::perspectiveTransform(in,out,cam2world);
+                    //create lms vector for easier use
+                    lms::math::vertex2f wMid(out[0].x,out[0].y);
+                    //store it
+                    foundPoints.push_back(wMid);
+                }
+            }
+            if(renderDebugImage && pxlCounter > 0){
+                graphics.setColor(lms::imaging::green);
+                graphics.drawCross(x,y);
+            }
+            pxlCounter = 0;
+            foundLowHigh = false;
+            //if not, we dont have to do anything
+        }
+        if(foundLowHigh){
+            pxlCounter++;
+        }
+    }
+    return foundPoints;
+}
+std::vector<lms::math::vertex2f> NewRoadDetection::findByBrightness(const bool renderDebugImage, const std::vector<int> &xv,const std::vector<int> &yv, const float minLineWidthMul, const float maxLineWidthMul,const float iDist,const float wDist, const int threshold){
+    lms::imaging::BGRAImageGraphics graphics(*debugImage);
+    std::vector<lms::math::vertex2f> foundPoints;
+    std::vector<int> color;
+    //get the color from the points
+    if(renderDebugImage)
+        graphics.setColor(lms::imaging::blue);
+    for(int k = 0; k < (int)xv.size(); k++){
+        const int x = xv[k];
+        const int y = yv[k];
+        if(!image->inside(x,y)){
+            color.push_back(0);
+            continue;
+        }
+        color.push_back(*(image->data()+x+y*image->width()));
+        if(renderDebugImage)
+            graphics.drawCross(x,y);
+    }
+    //detect peaks
+    float pxlPeakWidth = iDist/wDist*0.02; //TODO to bad, calculate for each road line (how should we use them for searching?
+    int tCounter = 0;
+    if(renderDebugImage)
+        graphics.setColor(lms::imaging::red);
+    for(int k = 0; k < (int)color.size(); k++){
+        if(color[k]>threshold){
+            tCounter++;
+        }else{
+            if(tCounter - k != 0 && tCounter > pxlPeakWidth*minLineWidthMul && tCounter < pxlPeakWidth*maxLineWidthMul){
+                if(renderDebugImage){
+                    for(int j = 0; j<tCounter;j++){
+                        graphics.drawCross(xv[k-j],yv[k-j]);
+                    }
+                }
+                //we found a valid point
+                //get the middle
+                cv::Point2f mid(xv[k-tCounter/2],yv[k-tCounter/2]);
+                //transform it in world coordinates
+                std::vector<cv::Point2f> in;
+                in.push_back(mid);
+                std::vector<cv::Point2f> out;
+                cv::perspectiveTransform(in,out,cam2world);
+                //create lms vector for easier use
+                lms::math::vertex2f wMid(out[0].x,out[0].y);
+                //store it
+                foundPoints.push_back(wMid);
+            }
+            tCounter = 0;
+        }
+    }
+    return foundPoints;
+}
 
 bool NewRoadDetection::find(){
 
     //TODO rectangle for neglecting areas
+    bool findPointsBySobel = config().get<bool>("findBySobel",true);
 
     //(TODO calculate threshold for each line)
     const int threshold = config().get<int>("threshold",200);
@@ -79,13 +210,11 @@ bool NewRoadDetection::find(){
     const float laneWidthOffsetInMeter = config().get<float>("laneWidthOffsetInMeter",0.1);
     const bool useWeights = config().get<bool>("useWeights",false);
     bool renderDebugImage = config().get<bool>("renderDebugImage",false);
-    lms::imaging::BGRAImageGraphics graphics(*debugImage);
+    int sobelThreshold = config().get<int>("sobelThreshold",200);
     if(renderDebugImage){
         //Clear debug image
         debugImage->resize(image->width(),image->height(),lms::imaging::Format::BGRA);
         debugImage->fill(0);
-        lms::imaging::BGRAImageGraphics graphics(*debugImage);
-        graphics.setColor(lms::imaging::red);
         debugAllPoints->points().clear();
         debugValidPoints->points().clear();
         debugTranslatedPoints->points().clear();
@@ -149,61 +278,23 @@ bool NewRoadDetection::find(){
         lms::math::vertex2f startLine = lms::math::vertex2f(l.i_start)+iDiff*pxlPerDist;
         lms::math::vertex2f endLine = lms::math::vertex2f(l.i_end)-iDiff*pxlPerDist;
         //get all points in between
-        lms::math::bresenhamLine(startLine.x,startLine.y,endLine.x,endLine.y,xv,yv);
-        //get the color from the points
-        if(renderDebugImage)
-            graphics.setColor(lms::imaging::blue);
-        for(int k = 0; k < (int)xv.size(); k++){
-            const int x = xv[k];
-            const int y = yv[k];
-            if(!image->inside(x,y)){
-                color.push_back(0);
-                continue;
-            }
-            color.push_back(*(image->data()+x+y*image->width()));
-            if(renderDebugImage)
-                graphics.drawCross(x,y);
-        }
-        //detect peaks
-        float pxlPeakWidth = iDist/wDist*0.02; //TODO to bad, calculate for each road line (how should we use them for searching?
-        int tCounter = 0;
+        lms::math::bresenhamLine(startLine.x,startLine.y,endLine.x,endLine.y,xv,yv); //wir suchen von links nach rechts!
+
+        //find points
         std::vector<lms::math::vertex2f> foundPoints;
-        if(renderDebugImage)
-            graphics.setColor(lms::imaging::red);
-        for(int k = 0; k < (int)color.size(); k++){
-            if(color[k]>threshold){
-                tCounter++;
-            }else{
-                if(tCounter - k != 0 && tCounter > pxlPeakWidth*minLineWidthMul && tCounter < pxlPeakWidth*maxLineWidthMul){
-                    if(renderDebugImage){
-                        for(int j = 0; j<tCounter;j++){
-                            graphics.drawCross(xv[k-j],yv[k-j]);
-                        }
-                        //we found a valid point
-                        //get the middle
-                        cv::Point2f mid(xv[k-tCounter/2],yv[k-tCounter/2]);
-                        //transform it in world coordinates
-                        std::vector<cv::Point2f> in;
-                        in.push_back(mid);
-                        std::vector<cv::Point2f> out;
-                        cv::perspectiveTransform(in,out,cam2world);
-                        //create lms vector for easier use
-                        lms::math::vertex2f wMid(out[0].x,out[0].y);
-                        //store it
-                        foundPoints.push_back(wMid);
-                    }
-                }
-                tCounter = 0;
-            }
+        if(findPointsBySobel){
+           foundPoints = findBySobel(renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,iDist,wDist,sobelThreshold);
+        }else{
+           foundPoints = findByBrightness(renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,iDist,wDist,threshold);
         }
 
         if(renderDebugImage){
             for(lms::math::vertex2f &v:foundPoints)
                 debugAllPoints->points().push_back(v);
         }
+
         //filter
-        //filter points that are in poluted regions (for example the car itself)
-        //TODO
+        //TODO filter points that are in poluted regions (for example the car itself)
         //remove points with bad distances
         if(foundPoints.size() > 2){
             std::vector<int> foundCounter;
@@ -232,11 +323,7 @@ bool NewRoadDetection::find(){
                     validPoints.push_back(foundPoints[i]);
                 }
             }
-            /*
-            if(validPoints.size() > 4){
-                validPoints.clear();
-            }
-            */
+            //TODO if we have more than 3 points we know that there is an error!
             foundPoints = validPoints;
         }
         if(renderDebugImage){
@@ -269,7 +356,7 @@ bool NewRoadDetection::find(){
         for(const float &dist:distances){
             //as distance is in meter, we multiply it by 100
             if(useWeights)
-                weights.push_back(1/(dist+0.001)); //TODO hier etwas sinnvolles überlegen
+                weights.push_back(1/(dist*100+0.001)); //TODO hier etwas sinnvolles überlegen
             else
                 weights.push_back(1);
         }
