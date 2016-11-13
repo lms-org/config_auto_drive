@@ -18,7 +18,7 @@
             <channelMapping from="IMAGE" to="GREY_IMAGE"/>
             <config>
                 <minCounter>0</minCounter>
-                <maxCounter>-1</maxCounter>
+                <maxCounter>1</maxCounter>
             </config>
         </module>
     </if>

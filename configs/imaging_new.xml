@@ -16,7 +16,7 @@
             <translateEnvironment>false</translateEnvironment>
             <useWeights>false</useWeights>
             <renderDebugImage>false</renderDebugImage>
-            <threads>1</threads>
+            <threads>4</threads>
         </config>
     </module>
 </lms>

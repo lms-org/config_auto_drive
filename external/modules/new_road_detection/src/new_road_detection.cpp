@@ -209,7 +209,9 @@ std::vector<lms::math::vertex2f> NewRoadDetection::findByBrightness(const bool r
 
 bool NewRoadDetection::find(){
     //clear old lines
+    logger.time("create lines");
     lines.clear();
+    linesToProcess = 0;
 
     //TODO rectangle for neglecting areas
 
@@ -265,7 +267,9 @@ bool NewRoadDetection::find(){
             conditionNewLine.notify_one();
         }
     }
+    logger.timeEnd("create lines");
 
+    logger.time("search");
     if(numThreads == 0) {
         // single threaded
         for(SearchLine &l:lines){
@@ -290,6 +294,7 @@ bool NewRoadDetection::find(){
             while(linesToProcess > 0) conditionLineProcessed.wait(lock);
         }
     }
+    logger.timeEnd("search");
     return true;
 }
 
