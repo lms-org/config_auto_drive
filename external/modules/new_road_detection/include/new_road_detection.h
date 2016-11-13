@@ -72,6 +72,8 @@ class NewRoadDetection : public lms::Module {
     std::list<SearchLine> lines;
 
     std::mutex mutex;
+    std::mutex debugAllPointsMutex;
+    std::mutex debugValidPointsMutex;
     std::vector<std::thread> threads;
     std::condition_variable conditionNewLine;
     std::condition_variable conditionLineProcessed;

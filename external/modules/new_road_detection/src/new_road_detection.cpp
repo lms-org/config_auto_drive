@@ -332,8 +332,9 @@ void NewRoadDetection::processSearchLine(const SearchLine &l) {
     }else{
        foundPoints = findByBrightness(renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,iDist,wDist,threshold);
     }
-    //TODO not threadsave
-    if(renderDebugImage){
+
+    if(renderDebugImage) {
+        std::unique_lock<std::mutex> lock(debugAllPointsMutex);
         for(lms::math::vertex2f &v:foundPoints)
             debugAllPoints->points().push_back(v);
     }
@@ -372,8 +373,8 @@ void NewRoadDetection::processSearchLine(const SearchLine &l) {
         foundPoints = validPoints;
     }
 
-    //TODO not threadsave
     if(renderDebugImage){
+        std::unique_lock<std::mutex> lock(debugValidPointsMutex);
         for(lms::math::vertex2f &v:foundPoints)
             debugValidPoints->points().push_back(v);
     }
