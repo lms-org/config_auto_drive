@@ -208,6 +208,8 @@ std::vector<lms::math::vertex2f> NewRoadDetection::findByBrightness(const bool r
 }
 
 bool NewRoadDetection::find(){
+    //clear old lines
+    lines.clear();
 
     //TODO rectangle for neglecting areas
 
