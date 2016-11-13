@@ -55,6 +55,14 @@
             <targetForcastLength>1.0</targetForcastLength>
             <weightSlope>2</weightSlope>
             <weightOffset>3</weightOffset>
+            <!-- pid controller -->
+            <PID_front_Kp>1</PID_front_Kp>
+            <PID_front_Ki>1</PID_front_Ki>
+            <PID_front_Kd>1</PID_front_Kd>
+
+            <PID_rear_Kp>1</PID_rear_Kp>
+            <PID_rear_Ki>1</PID_rear_Ki>
+            <PID_rear_Kd>1</PID_rear_Kd>
 
             <!--stop at crossing -->
             <!-- stop on crossing-->
