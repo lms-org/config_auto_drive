@@ -13,10 +13,29 @@
 #define USE_OPENCV
 #include <lms/imaging/image.h>
 
+#include <list>
+
+// for multithreading
+#include <mutex>
+#include <condition_variable>
+#include <thread>
+
 /**
  * @brief LMS module new_road_detection
  **/
 class NewRoadDetection : public lms::Module {
+    // configs
+    float searchOffset;
+    bool findPointsBySobel;
+    bool renderDebugImage;
+    float minLineWidthMul;
+    float maxLineWidthMul;
+    int threshold;
+    float laneWidthOffsetInMeter;
+    bool useWeights;
+    int sobelThreshold;
+    int numThreads; // 0 means single threaded
+
     //cam trafo
     cv::Mat world2cam;
     cv::Mat cam2world;
@@ -50,6 +69,12 @@ class NewRoadDetection : public lms::Module {
         lms::math::vertex2f w_right;
     };
 
+    std::list<SearchLine> lines;
+
+    std::mutex mutex;
+    std::vector<std::thread> threads;
+    std::condition_variable cond_var;
+    bool threadsRunning;
 public:
     bool init() override;
     void destroy() override;
@@ -77,6 +102,10 @@ public:
                      const float iDist,
                      const float wDist,
                      const int threshold);
+
+    void processSearchLine(const SearchLine &line);
+
+    void threadFunction();
 };
 
 #endif // NEW_ROAD_DETECTION_H

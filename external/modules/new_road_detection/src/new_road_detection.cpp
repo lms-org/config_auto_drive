@@ -210,17 +210,8 @@ std::vector<lms::math::vertex2f> NewRoadDetection::findByBrightness(const bool r
 bool NewRoadDetection::find(){
 
     //TODO rectangle for neglecting areas
-    bool findPointsBySobel = config().get<bool>("findBySobel",true);
 
     //(TODO calculate threshold for each line)
-    const int threshold = config().get<int>("threshold",200);
-    const float minLineWidthMul = config().get<float>("minLineWidthMul",0.5);
-    const float maxLineWidthMul = config().get<float>("maxLineWidthMul",1.5);
-    const float searchOffset = config().get<float>("searchOffset",0.1);
-    const float laneWidthOffsetInMeter = config().get<float>("laneWidthOffsetInMeter",0.1);
-    const bool useWeights = config().get<bool>("useWeights",false);
-    bool renderDebugImage = config().get<bool>("renderDebugImage",false);
-    int sobelThreshold = config().get<int>("sobelThreshold",200);
     if(renderDebugImage){
         //Clear debug image
         debugImage->resize(image->width(),image->height(),lms::imaging::Format::BGRA);
@@ -239,9 +230,6 @@ bool NewRoadDetection::find(){
         return false;
     }
     //get all lines
-    std::vector<SearchLine> lines;
-    std::vector<cv::Point2f> input;
-    std::vector<cv::Point2f> output;
     for(int i = 0; i< (int)mid.points().size(); i++){
         SearchLine l;
         l.w_start = left.points()[i];
@@ -259,139 +247,189 @@ bool NewRoadDetection::find(){
             l.w_end = mid.points()[i];
         }
 
+        std::vector<cv::Point2f> input;
+        std::vector<cv::Point2f> output;
         input.emplace_back(l.w_start.x,l.w_start.y);
         input.emplace_back(l.w_end.x,l.w_end.y);
-        lines.push_back(l);
+        //transform them in image-coordinates
+        cv::perspectiveTransform(input,output,world2cam);
+        l.i_start =lms::math::vertex2i((int)output[0].x,(int)output[0].y);
+        l.i_end = lms::math::vertex2i((int)output[1].x,(int)output[1].y);
+
+        {
+            std::unique_lock<std::mutex> lock(mutex);
+            lines.push_back(l);
+            cond_var.notify_one();
+        }
     }
-    //transform them in image-coordinates
-    cv::perspectiveTransform(input,output,world2cam);
 
-
-    //TODO multithread the following part (each line could be handled independently)
-
-    //set image-coordinates
-    int i = 0;
-    //keep them to reduce memory alloc.
-    std::vector<int> xv;
-    std::vector<int> yv;
-    std::vector<std::uint8_t> color;
-    for(SearchLine &l:lines){
-        xv.clear();
-        yv.clear();
-        color.clear();
-        l.i_start =lms::math::vertex2i((int)output[i].x,(int)output[i].y);
-        i++;
-        l.i_end = lms::math::vertex2i((int)output[i].x,(int)output[i].y);
-        i++;
-        //TODO get line
-        //calculate the offset
-        float iDist = l.i_start.distance(l.i_end);
-        float wDist = l.w_start.distance(l.w_end);
-        float pxlPerDist = iDist/wDist*searchOffset;
-        lms::math::vertex2f iDiff = lms::math::vertex2f(l.i_start-l.i_end).normalize();
-        lms::math::vertex2f startLine = lms::math::vertex2f(l.i_start)+iDiff*pxlPerDist;
-        lms::math::vertex2f endLine = lms::math::vertex2f(l.i_end)-iDiff*pxlPerDist;
-        //get all points in between
-        lms::math::bresenhamLine(startLine.x,startLine.y,endLine.x,endLine.y,xv,yv); //wir suchen von links nach rechts!
-
-        //find points
-        std::vector<lms::math::vertex2f> foundPoints;
-        if(findPointsBySobel){
-           foundPoints = findBySobel(renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,iDist,wDist,sobelThreshold);
-        }else{
-           foundPoints = findByBrightness(renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,iDist,wDist,threshold);
+    if(numThreads == 0) {
+        // single threaded
+        for(SearchLine &l:lines){
+            processSearchLine(l);
         }
+    } else {
+        // multi threaded
 
-        if(renderDebugImage){
-            for(lms::math::vertex2f &v:foundPoints)
-                debugAllPoints->points().push_back(v);
-        }
-
-        //filter
-        //TODO filter points that are in poluted regions (for example the car itself)
-        //remove points with bad distances
-        if(foundPoints.size() > 2){
-            std::vector<int> foundCounter;
-            foundCounter.resize(foundPoints.size(),0);
-            for(std::size_t fp = 0; fp < foundPoints.size(); fp++){
-                const lms::math::vertex2f &s = foundPoints[fp];
-                for(std::size_t test = fp+1; test <foundPoints.size(); test++){
-                    const lms::math::vertex2f &toTest  = foundPoints[test];
-                    float distance = toTest.distance(s);
-                    if((distance > 0.4-laneWidthOffsetInMeter && distance < 0.4 + laneWidthOffsetInMeter)|| (distance > 0.8-laneWidthOffsetInMeter && distance < 0.8+laneWidthOffsetInMeter)){
-                        foundCounter[test]++;
-                        foundCounter[fp]++;
-                    }
-                }
-            }
-            //filter, all valid points should have the same counter and have the highest number
-            int max = 0;
-            for(int c:foundCounter){
-                if(c > max){
-                    max = c;
-                }
-            }
-            std::vector<lms::math::vertex2f> validPoints;
-            for(int i = 0; i < (int)foundPoints.size(); i++){
-                if(foundCounter[i] >= max){
-                    validPoints.push_back(foundPoints[i]);
-                }
-            }
-            //TODO if we have more than 3 points we know that there is an error!
-            foundPoints = validPoints;
-        }
-        if(renderDebugImage){
-            for(lms::math::vertex2f &v:foundPoints)
-                debugValidPoints->points().push_back(v);
-        }
-
-        //Handle found points
-        lms::math::vertex2f diff;
-        std::vector<float> distances;
-        for(int i = 0; i < (int)foundPoints.size(); i++){
-            lms::math::vertex2f &wMind = foundPoints[i];
-            float distanceToLeft = wMind.distance(l.w_left);
-            float distanceToRight= wMind.distance(l.w_right);
-            float distanceToMid= wMind.distance(l.w_mid);
-            diff = (l.w_left-l.w_right).normalize();
-            if(distanceToLeft < distanceToMid && distanceToLeft < distanceToRight){
-                //left point
-                wMind-=diff*0.4;
-                distances.push_back(distanceToLeft);
-            }else if(distanceToRight < distanceToMid ){
-                wMind+=diff*0.4;
-                distances.push_back(distanceToRight);
-            }else{
-                distances.push_back(distanceToMid);
+        // initialize and start threads if not yet there
+        if(threads.size() == 0) {
+            threadsRunning = true;
+            for(int i = 0; i < numThreads; i++) {
+                threads.emplace_back([this] () {
+                    threadFunction();
+                });
             }
         }
 
-        std::vector<float> weights;
-        for(const float &dist:distances){
-            //as distance is in meter, we multiply it by 100
-            if(useWeights)
-                weights.push_back(1/(dist*100+0.001)); //TODO hier etwas sinnvolles überlegen
-            else
-                weights.push_back(1);
-        }
-        /*
-        if(renderDebugImage){
-            for(lms::math::vertex2f &v:foundPoints)
-                debugTranslatedPoints->points().push_back(v);
-        }
-        */
-        lms::ServiceHandle<local_course::LocalCourse> localCourse = getService<local_course::LocalCourse>("LOCAL_COURSE_SERVICE");
-        if(localCourse.isValid()){
-            localCourse->addPoints(foundPoints,weights);
-        }else{
-            logger.error("localCourse invalid!");
-            return false;
+        // wait till every search line was processed
+        {
+            std::unique_lock<std::mutex> lock(mutex);
+            while(!lines.empty()) cond_var.wait(lock);
         }
     }
     return true;
 }
 
+void NewRoadDetection::threadFunction() {
+    while(threadsRunning) {
+        SearchLine line;
+        {
+            std::unique_lock<std::mutex> lock(mutex);
+            while(threadsRunning && lines.empty()) cond_var.wait(lock);
+            if(lines.size() > 0) {
+                line = lines.front();
+                lines.pop_front();
+            }
+            if(! threadsRunning) {
+                break;
+            }
+        }
+        processSearchLine(line);
+    }
+}
+
+void NewRoadDetection::processSearchLine(const SearchLine &l) {
+    std::vector<int> xv;
+    std::vector<int> yv;
+    std::vector<std::uint8_t> color;
+    //TODO get line
+    //calculate the offset
+    float iDist = l.i_start.distance(l.i_end);
+    float wDist = l.w_start.distance(l.w_end);
+    float pxlPerDist = iDist/wDist*searchOffset;
+    lms::math::vertex2f iDiff = lms::math::vertex2f(l.i_start-l.i_end).normalize();
+    lms::math::vertex2f startLine = lms::math::vertex2f(l.i_start)+iDiff*pxlPerDist;
+    lms::math::vertex2f endLine = lms::math::vertex2f(l.i_end)-iDiff*pxlPerDist;
+    //get all points in between
+    lms::math::bresenhamLine(startLine.x,startLine.y,endLine.x,endLine.y,xv,yv); //wir suchen von links nach rechts!
+
+    //find points
+    std::vector<lms::math::vertex2f> foundPoints;
+    if(findPointsBySobel){
+       foundPoints = findBySobel(renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,iDist,wDist,sobelThreshold);
+    }else{
+       foundPoints = findByBrightness(renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,iDist,wDist,threshold);
+    }
+
+    if(renderDebugImage){
+        for(lms::math::vertex2f &v:foundPoints)
+            debugAllPoints->points().push_back(v);
+    }
+
+    //filter
+    //TODO filter points that are in poluted regions (for example the car itself)
+    //remove points with bad distances
+    if(foundPoints.size() > 2){
+        std::vector<int> foundCounter;
+        foundCounter.resize(foundPoints.size(),0);
+        for(std::size_t fp = 0; fp < foundPoints.size(); fp++){
+            const lms::math::vertex2f &s = foundPoints[fp];
+            for(std::size_t test = fp+1; test <foundPoints.size(); test++){
+                const lms::math::vertex2f &toTest  = foundPoints[test];
+                float distance = toTest.distance(s);
+                if((distance > 0.4-laneWidthOffsetInMeter && distance < 0.4 + laneWidthOffsetInMeter)|| (distance > 0.8-laneWidthOffsetInMeter && distance < 0.8+laneWidthOffsetInMeter)){
+                    foundCounter[test]++;
+                    foundCounter[fp]++;
+                }
+            }
+        }
+        //filter, all valid points should have the same counter and have the highest number
+        int max = 0;
+        for(int c:foundCounter){
+            if(c > max){
+                max = c;
+            }
+        }
+        std::vector<lms::math::vertex2f> validPoints;
+        for(int i = 0; i < (int)foundPoints.size(); i++){
+            if(foundCounter[i] >= max){
+                validPoints.push_back(foundPoints[i]);
+            }
+        }
+        //TODO if we have more than 3 points we know that there is an error!
+        foundPoints = validPoints;
+    }
+    if(renderDebugImage){
+        for(lms::math::vertex2f &v:foundPoints)
+            debugValidPoints->points().push_back(v);
+    }
+
+    //Handle found points
+    lms::math::vertex2f diff;
+    std::vector<float> distances;
+    for(int i = 0; i < (int)foundPoints.size(); i++){
+        lms::math::vertex2f &wMind = foundPoints[i];
+        float distanceToLeft = wMind.distance(l.w_left);
+        float distanceToRight= wMind.distance(l.w_right);
+        float distanceToMid= wMind.distance(l.w_mid);
+        diff = (l.w_left-l.w_right).normalize();
+        if(distanceToLeft < distanceToMid && distanceToLeft < distanceToRight){
+            //left point
+            wMind-=diff*0.4;
+            distances.push_back(distanceToLeft);
+        }else if(distanceToRight < distanceToMid ){
+            wMind+=diff*0.4;
+            distances.push_back(distanceToRight);
+        }else{
+            distances.push_back(distanceToMid);
+        }
+    }
+
+    std::vector<float> weights;
+    for(const float &dist:distances){
+        //as distance is in meter, we multiply it by 100
+        if(useWeights)
+            weights.push_back(1/(dist*100+0.001)); //TODO hier etwas sinnvolles überlegen
+        else
+            weights.push_back(1);
+    }
+    /*
+    if(renderDebugImage){
+        for(lms::math::vertex2f &v:foundPoints)
+            debugTranslatedPoints->points().push_back(v);
+    }
+    */
+    lms::ServiceHandle<local_course::LocalCourse> localCourse = getService<local_course::LocalCourse>("LOCAL_COURSE_SERVICE");
+    if(localCourse.isValid()){
+        localCourse->addPoints(foundPoints,weights);
+    }else{
+        logger.error("localCourse invalid!");
+        return;
+    }
+}
+
 void NewRoadDetection::configsChanged(){
+    // read config
+    searchOffset = config().get<float>("searchOffset",0.1);
+    findPointsBySobel = config().get<bool>("findBySobel",true);
+    renderDebugImage = config().get<bool>("renderDebugImage",false);
+    minLineWidthMul = config().get<float>("minLineWidthMul",0.5);
+    maxLineWidthMul = config().get<float>("maxLineWidthMul",1.5);
+    threshold = config().get<int>("threshold",200);
+    laneWidthOffsetInMeter = config().get<float>("laneWidthOffsetInMeter",0.1);
+    useWeights = config().get<bool>("useWeights",false);
+    sobelThreshold = config().get<int>("sobelThreshold",200);
+    numThreads = config().get<int>("threads",0);
 
     //used to convert pxl from the top-down-view to the camera-view
     world2cam.create(3,3,CV_64F);
@@ -434,4 +472,15 @@ void NewRoadDetection::configsChanged(){
     cam2topView = topView2cam.inv();
 }
 
-void NewRoadDetection::destroy() {}
+void NewRoadDetection::destroy() {
+    {
+        std::unique_lock<std::mutex> lock(mutex);
+        threadsRunning = false;
+        cond_var.notify_all();
+    }
+    for(auto &t : threads) {
+        if(t.joinable()) {
+            t.join();
+        }
+    }
+}
