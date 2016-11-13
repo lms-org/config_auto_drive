@@ -313,8 +313,7 @@ void NewRoadDetection::threadFunction() {
 void NewRoadDetection::processSearchLine(const SearchLine &l) {
     std::vector<int> xv;
     std::vector<int> yv;
-    std::vector<std::uint8_t> color;
-    //TODO get line
+
     //calculate the offset
     float iDist = l.i_start.distance(l.i_end);
     float wDist = l.w_start.distance(l.w_end);
@@ -332,7 +331,7 @@ void NewRoadDetection::processSearchLine(const SearchLine &l) {
     }else{
        foundPoints = findByBrightness(renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,iDist,wDist,threshold);
     }
-
+    //TODO not threadsave
     if(renderDebugImage){
         for(lms::math::vertex2f &v:foundPoints)
             debugAllPoints->points().push_back(v);
@@ -371,6 +370,8 @@ void NewRoadDetection::processSearchLine(const SearchLine &l) {
         //TODO if we have more than 3 points we know that there is an error!
         foundPoints = validPoints;
     }
+
+    //TODO not threadsave
     if(renderDebugImage){
         for(lms::math::vertex2f &v:foundPoints)
             debugValidPoints->points().push_back(v);
