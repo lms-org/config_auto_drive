@@ -259,7 +259,8 @@ bool NewRoadDetection::find(){
         {
             std::unique_lock<std::mutex> lock(mutex);
             lines.push_back(l);
-            cond_var.notify_one();
+            linesToProcess ++;
+            conditionNewLine.notify_one();
         }
     }
 
@@ -284,7 +285,7 @@ bool NewRoadDetection::find(){
         // wait till every search line was processed
         {
             std::unique_lock<std::mutex> lock(mutex);
-            while(!lines.empty()) cond_var.wait(lock);
+            while(linesToProcess > 0) conditionLineProcessed.wait(lock);
         }
     }
     return true;
@@ -295,7 +296,7 @@ void NewRoadDetection::threadFunction() {
         SearchLine line;
         {
             std::unique_lock<std::mutex> lock(mutex);
-            while(threadsRunning && lines.empty()) cond_var.wait(lock);
+            while(threadsRunning && lines.empty()) conditionNewLine.wait(lock);
             if(lines.size() > 0) {
                 line = lines.front();
                 lines.pop_front();
@@ -414,7 +415,12 @@ void NewRoadDetection::processSearchLine(const SearchLine &l) {
         localCourse->addPoints(foundPoints,weights);
     }else{
         logger.error("localCourse invalid!");
-        return;
+    }
+
+    {
+        std::unique_lock<std::mutex> lock(mutex);
+        linesToProcess --;
+        conditionLineProcessed.notify_all();
     }
 }
 
@@ -476,7 +482,7 @@ void NewRoadDetection::destroy() {
     {
         std::unique_lock<std::mutex> lock(mutex);
         threadsRunning = false;
-        cond_var.notify_all();
+        conditionNewLine.notify_all();
     }
     for(auto &t : threads) {
         if(t.joinable()) {
