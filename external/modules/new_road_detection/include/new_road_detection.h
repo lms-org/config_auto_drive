@@ -51,13 +51,32 @@ class NewRoadDetection : public lms::Module {
     };
 
 public:
-    bool initialize() override;
-    bool deinitialize() override;
+    bool init() override;
+    void destroy() override;
     bool cycle() override;
     void configsChanged() override;
+
     bool find();
-    std::vector<lms::math::vertex2f> findBySobel(const bool renderDebugImage, const std::vector<int> &xv,const std::vector<int> &yv, const float minLineWidthMul, const float maxLineWidthMul,const float iDist,const float wDist, const int threshold);
-    std::vector<lms::math::vertex2f> findByBrightness(const bool renderDebugImage, const std::vector<int> &xv,const std::vector<int> &yv, const float minLineWidthMul, const float maxLineWidthMul,const float iDist,const float wDist, const int threshold);
+
+    std::vector<lms::math::vertex2f>
+    findBySobel(const bool renderDebugImage,
+                const std::vector<int> &xv,
+                const std::vector<int> &yv,
+                const float minLineWidthMul,
+                const float maxLineWidthMul,
+                const float iDist,
+                const float wDist,
+                const int threshold);
+
+    std::vector<lms::math::vertex2f>
+    findByBrightness(const bool renderDebugImage,
+                     const std::vector<int> &xv,
+                     const std::vector<int> &yv,
+                     const float minLineWidthMul,
+                     const float maxLineWidthMul,
+                     const float iDist,
+                     const float wDist,
+                     const int threshold);
 };
 
 #endif // NEW_ROAD_DETECTION_H

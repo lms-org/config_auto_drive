@@ -5,7 +5,7 @@
 #include <local_course/local_course.h>
 #include <street_environment/car.h>
 
-bool NewRoadDetection::initialize() {
+bool NewRoadDetection::init() {
     image = readChannel<lms::imaging::Image>("IMAGE");
     road = writeChannel<street_environment::RoadLane>("ROAD");
     //output = writeChannel<street_environment::RoadLane>("ROAD_OUTPUT");
@@ -66,7 +66,17 @@ bool NewRoadDetection::cycle() {
     }
     return true;
 }
-std::vector<lms::math::vertex2f> NewRoadDetection::findBySobel(const bool renderDebugImage, const std::vector<int> &xv,const std::vector<int> &yv, const float minLineWidthMul, const float maxLineWidthMul,const float iDist,const float wDist, const int threshold){
+
+std::vector<lms::math::vertex2f> NewRoadDetection::findBySobel(
+        const bool renderDebugImage,
+        const std::vector<int> &xv,
+        const std::vector<int> &yv,
+        const float minLineWidthMul,
+        const float maxLineWidthMul,
+        const float iDist,
+        const float wDist,
+        const int threshold) {
+
     lms::imaging::BGRAImageGraphics graphics(*debugImage);
     std::vector<lms::math::vertex2f> foundPoints;
     bool foundLowHigh = false;
@@ -424,6 +434,4 @@ void NewRoadDetection::configsChanged(){
     cam2topView = topView2cam.inv();
 }
 
-bool NewRoadDetection::deinitialize() {
-    return true;
-}
+void NewRoadDetection::destroy() {}
