@@ -8,7 +8,7 @@
 #include "street_environment/crossing.h"
 #include "lms/math/math.h"
 
-class StreetObjectMerger : public lms::Module {
+class StreetObjectMaster : public lms::Module {
 public:
     bool initialize() override;
     bool deinitialize() override;
@@ -26,7 +26,7 @@ private:
     bool inVisibleArea(float x, float y);
 
     void getObstacles(const street_environment::EnvironmentObjects &env,street_environment::EnvironmentObstacles &output);
-    lms::ReadDataChannel<street_environment::EnvironmentObjects> envInput;
+    std::vector<lms::ReadDataChannel<street_environment::EnvironmentObjects>> envInput;
     lms::WriteDataChannel<street_environment::EnvironmentObjects> envOutput;
     lms::ReadDataChannel<street_environment::RoadLane> middle;
     lms::ReadDataChannel<street_environment::Car> car;

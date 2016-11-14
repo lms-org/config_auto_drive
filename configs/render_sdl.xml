@@ -6,7 +6,7 @@
         <channelMapping from="OUTPUT_IMAGE" to="IMAGE"/>
         <config>
             <title>GREY_IMAGE</title>
-            <channels>GREY_IMAGE,DEBUG_IMAGE,DEBUG_IMAGE_OBSTACLE</channels>
+            <channels>GREY_IMAGE,DEBUG_IMAGE,DEBUG_IMAGE_CROSSING</channels>
             <!--channels>GREY_IMAGE</channels-->
             <output>false</output>
         </config>

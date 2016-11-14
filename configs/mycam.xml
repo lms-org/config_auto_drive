@@ -1,5 +1,5 @@
 <lms>
-        <service name="warp_service" lib="warp_service" class="WarpService">
+        <service name="WARP_SERVICE" lib="warp_service" class="WarpService">
             <config src="camera/homography_ximea.lconf" />
         </service>
         <service name="AreaOfDetection" lib="area_of_detection" class="AreaOfDetection">

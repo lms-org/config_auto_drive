@@ -152,6 +152,15 @@
             </config>
         </module>
     </if>
+    <module name="street_obstacle_merger" lib="street_obstacle_merger" class="StreetObjectMaster">
+        <name>street_obstacle_merger</name>
+        <channelMapping priority="10" from="CAR" to="CAR"/>
+        <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MASTER"/>
+        <config src="street_utils/obstacle.lconf"/>
+        <config>
+            <environments>ENVIRONMENT</environments>
+        </config>
+    </module>
     <!--include src="ego.xml"/-->
     <!--include src="imaging_old.xml"/-->
     <include src="imaging_new.xml"/>

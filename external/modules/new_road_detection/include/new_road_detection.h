@@ -4,6 +4,7 @@
 #include <lms/module.h>
 #include <street_environment/road.h>
 #include <street_environment/car.h>
+#include <lms/imaging/transform_image.h>
 
 
 #include <opencv2/calib3d/calib3d.hpp>
@@ -35,6 +36,8 @@ class NewRoadDetection : public lms::Module {
     bool useWeights;
     int sobelThreshold;
     int numThreads; // 0 means single threaded
+
+    lms::imaging::Homography homo;
 
     //cam trafo
     cv::Mat world2cam;

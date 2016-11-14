@@ -4,8 +4,11 @@
 #include <lms/imaging/graphics.h>
 #include <local_course/local_course.h>
 #include <street_environment/car.h>
+#include <detection_utils.h>
+#include <warp_service/warp_service.h>
 
 bool NewRoadDetection::init() {
+
     image = readChannel<lms::imaging::Image>("IMAGE");
     road = writeChannel<street_environment::RoadLane>("ROAD");
     //output = writeChannel<street_environment::RoadLane>("ROAD_OUTPUT");
@@ -15,6 +18,7 @@ bool NewRoadDetection::init() {
     debugTranslatedPoints = writeChannel<lms::math::polyLine2f>("DEBUG_VALID_TRANSLATED_POINTS");
 
     car = readChannel<street_environment::Car>("CAR"); //TODO create ego-estimation service
+
 
     configsChanged();
     return true;
@@ -77,6 +81,10 @@ std::vector<lms::math::vertex2f> NewRoadDetection::findBySobel(
         const float wDist,
         const int threshold) {
 
+
+    return ::findBySobel(image.get(),debugImage.get(),renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,0.02,iDist,wDist,threshold,homo);
+    /*
+    std::vector<lms::math::vertex2f> foundPoints;
     lms::imaging::BGRAImageGraphics graphics(*debugImage);
     std::vector<lms::math::vertex2f> foundPoints;
     bool foundLowHigh = false;
@@ -154,6 +162,7 @@ std::vector<lms::math::vertex2f> NewRoadDetection::findBySobel(
         }
     }
     return foundPoints;
+    */
 }
 std::vector<lms::math::vertex2f> NewRoadDetection::findByBrightness(const bool renderDebugImage, const std::vector<int> &xv,const std::vector<int> &yv, const float minLineWidthMul, const float maxLineWidthMul,const float iDist,const float wDist, const int threshold){
     lms::imaging::BGRAImageGraphics graphics(*debugImage);
@@ -434,6 +443,13 @@ void NewRoadDetection::processSearchLine(const SearchLine &l) {
 }
 
 void NewRoadDetection::configsChanged(){
+    lms::ServiceHandle<warp_service::WarpService> warp = getService<warp_service::WarpService>("WARP_SERVICE");
+    if(!warp.isValid()){
+        logger.error("WARP SERVICE is invalid!");
+        exit(0);
+    }else{
+        homo = warp->getHomography();
+    }
     // read config
     searchOffset = config().get<float>("searchOffset",0.1);
     findPointsBySobel = config().get<bool>("findBySobel",true);

@@ -1,3 +1,3 @@
 #include "street_obstacle_merger.h"
 
-LMS_MODULE_INTERFACE(StreetObjectMerger)
+LMS_MODULE_INTERFACE(StreetObjectMaster)

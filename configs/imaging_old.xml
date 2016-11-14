@@ -49,13 +49,6 @@
             <translateEnvironment>false</translateEnvironment>
         </config>
     </module>
-    <module name="street_obstacle_merger" lib="street_obstacle_merger" class="StreetObjectMerger">
-        <name>street_obstacle_merger</name>
-        <channelMapping priority="10" from="CAR" to="CAR"/>
-        <channelMapping from="ENVIRONMENT_INPUT" to="ENVIRONMENT_OBSTACLE_RAW"/>
-        <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_OBSTACLE"/>
-        <config src="street_utils/obstacle.lconf"/>
-    </module>
     <module name="obstacle_to_local_course" lib="obstacle_to_local_course" class="ObstacleToLocalCourse">
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE"/>
         <config>

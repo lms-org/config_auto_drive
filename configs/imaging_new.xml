@@ -15,8 +15,22 @@
             <cam2world>-1016.55,629.72,-140.546,-433.734,-19.2261,-295.753,-1.5413,-0.0750134,-0.22935</cam2world>
             <translateEnvironment>false</translateEnvironment>
             <useWeights>false</useWeights>
-            <renderDebugImage>false</renderDebugImage>
+            <renderDebugImage>true</renderDebugImage>
             <threads>4</threads>
         </config>
+    </module>
+
+    <module name="crossing_detection" lib="new_road_detection" class="CrossingDetection">
+        <channelMapping from="IMAGE" to="GREY_IMAGE"/>
+        <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_CROSSING"/>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT"/>
+        <config>
+            <renderDebugImage>true</renderDebugImage>
+        </config>
+        <config name="defaultEPParameter" src="imaging/defaultEdgePointParam.lconf"/>
+        <config name="defaultLPParameter" src="imaging/defaultLinePointParam.lconf"/>
+        <config name="defaultLineParameter" src="imaging/defaultLineParam.lconf"/>
+        <config name="defaultObstacleParameter" src="imaging/defaultObstacleParam.lconf"/>
+        <config name="defaultCrossingParameter" src="imaging/defaultCrossingParam.lconf"/>
     </module>
 </lms>
