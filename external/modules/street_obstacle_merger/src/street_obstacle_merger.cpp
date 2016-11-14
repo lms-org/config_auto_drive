@@ -60,7 +60,7 @@ bool StreetObjectMaster::cycle() {
     logger.debug("cycle")<<"translate old obstacles by: "<<car->movedDistance();
     //update old obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
-        obst->translate(car->deltaPosition().x,car->deltaPosition().y);
+        obst->translate(-car->deltaPosition().x,-car->deltaPosition().y);
     }
 
     //merge new obstacles
