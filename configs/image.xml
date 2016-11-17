@@ -17,14 +17,52 @@
         <module name="image_loader" lib="image_loader" class="ImageLoader">
             <channelMapping from="IMAGE" to="GREY_IMAGE"/>
             <config>
-                <minCounter>200</minCounter>
+                <minCounter>0</minCounter>
                 <maxCounter>-1</maxCounter>
             </config>
         </module>
     </if>
+    <if set="load_car">
+        <!--module name="image_loader" lib="image_loader" class="ImageLoader">
+            <channelMapping from="IMAGE" to="GREY_IMAGE"/>
+            <config>
+                <minCounter>0</minCounter>
+                <maxCounter>-1</maxCounter>
+            </config>
+        </module-->
+        <module name="channel_loader_data" lib="channel_loader" class="ChannelLoader">
+            <config>
+                <dataChannels>URG_DATA,GREY_IMAGE,MAVLINK_IN</dataChannels>
+            </config>
+        </module>
+        <module name="data_to_mavlink" lib="data_to_mavlink" class="CarToMavlink"/>
+        <service name="TIMESTAMP_INTERPOLATOR" lib="timestamp_interpolator_service" class="TimestampInterpolatorService"/>
+    </if>
     <if set="save">
         <module name="image_logger" lib="image_logger" class="ImageLogger">
             <channelMapping from="IMAGE" to="GREY_IMAGE"/>
+        </module>
+        <module name="channel_logger_data" lib="channel_logger" class="ChannelLogger">
+            <config>
+                <dataChannels>URG_DATA,GREY_IMAGE,MAVLINK_IN</dataChannels>
+            </config>
+        </module>
+        <module name="channel_logger_car" lib="channel_logger" class="ChannelLogger">
+            <config>
+                <dataChannels>CAR</dataChannels>
+            </config>
+        </module>
+    </if>
+    <if set="save-car">
+        <module name="channel_logger_data" lib="channel_logger" class="ChannelLogger">
+            <config>
+                <dataChannels>URG_DATA,GREY_IMAGE,MAVLINK_IN</dataChannels>
+            </config>
+        </module>
+        <module name="channel_logger_car" lib="channel_logger" class="ChannelLogger">
+            <config>
+                <dataChannels>CAR</dataChannels>
+            </config>
         </module>
     </if>
 </lms>
