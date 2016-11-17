@@ -14,4 +14,4 @@ include_directories(include)
 add_library(new_road_detection MODULE ${SOURCES} ${HEADERS})
 
 
-target_link_libraries(new_road_detection PRIVATE lmscore local_course street_environment lms_imaging lms_imaging_detection)# ${CONAN_LIBS})# opencv_calib3d opencv_core opencv_highgui)
+target_link_libraries(new_road_detection PRIVATE lmscore local_course street_environment lms_imaging lms_imaging_detection phoenix_CC2016_service)# ${CONAN_LIBS})# opencv_calib3d opencv_core opencv_highgui)

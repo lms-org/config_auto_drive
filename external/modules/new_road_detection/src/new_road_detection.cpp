@@ -40,21 +40,24 @@ bool NewRoadDetection::cycle() {
     //update the course
     if(config().get<bool>("translateEnvironment",false)){
         logger.info("translation")<<car->deltaPhi();
-        //localCourse->update(car->localDeltaPosition().x,car->localDeltaPosition().y,car->deltaPhi()); //TODO x and y translation produce bad results
-        double maxYawRate = 0.03;
         dPhi = car->deltaPhi();
-        //TODO is there still a fail?
-        if (dPhi < -maxYawRate){
-            logger.error("invalid yawrate:")<<dPhi;
-            dPhi = -maxYawRate;
-        }else if (dPhi > maxYawRate){
-            logger.error("invalid yawrate:")<<dPhi;
-            dPhi = maxYawRate;
-        }
     }
 
     lms::ServiceHandle<local_course::LocalCourse> localCourse = getService<local_course::LocalCourse>("LOCAL_COURSE_SERVICE");
     if(localCourse.isValid()){
+        //TODO detect if the current path is invalid!
+        //check if we need to reset the environment
+        lms::ServiceHandle<phoenix_CC2016_service::Phoenix_CC2016Service> phoenixService = getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE");
+        if(!phoenixService.isValid()){
+            logger.error("Phoenix_CC2016Service invalid");
+            return false;
+        }
+        if(phoenixService->rcStateChanged() || phoenixService->driveModeChanged()){
+            //phoenixService->logRcStates();
+            localCourse->resetData();
+            logger.error("reset kalman");
+        }
+
         logger.time("localCourse");
         localCourse->update(dx,dy,dPhi);
         *road = localCourse->getCourse();
@@ -449,47 +452,6 @@ void NewRoadDetection::configsChanged(){
     useWeights = config().get<bool>("useWeights",false);
     sobelThreshold = config().get<int>("sobelThreshold",200);
     numThreads = config().get<int>("threads",0);
-    /*
-    //used to convert pxl from the top-down-view to the camera-view
-    world2cam.create(3,3,CV_64F);
-    std::vector<float> points = config().getArray<float>("cam2world");
-    if(points.size() != 9){
-        logger.error("invalid cam2world");
-        return;
-    }
-    int i = 0;
-    for(int r = 0; r < 3; r++) {
-        for(int c = 0; c < 3; c++) {
-            world2cam.at<double>(r, c) = points[i];
-            i++;
-        }
-    }
-    cam2world = world2cam.inv();
-
-
-    //create a "viewport" which should be seen
-    // Choose top-view image size
-    topViewSize = cv::Size(512, 512);
-
-    // Choose corner points (in real-world coordinates)
-    std::vector<cv::Point2f> coordinates;
-    coordinates.emplace_back(0, -1.500);
-    coordinates.emplace_back(0, 1.500);
-    coordinates.emplace_back(3.000, -1.500);
-    coordinates.emplace_back(3.000, 1.500);
-
-    //find homography
-    std::vector<cv::Point2f> pixels;
-    pixels.emplace_back(0, topViewSize.height);
-    pixels.emplace_back(0, 0);
-    pixels.emplace_back(topViewSize.width, topViewSize.height);
-    pixels.emplace_back(topViewSize.width, 0);
-    cv::Mat H = cv::findHomography(pixels, coordinates);
-    //
-
-    topView2cam = world2cam * H;
-    cam2topView = topView2cam.inv();
-    */
 }
 
 void NewRoadDetection::destroy() {
