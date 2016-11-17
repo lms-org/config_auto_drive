@@ -10,7 +10,7 @@
             <maxLineWidthMul>3</maxLineWidthMul>
             <findBySobel>true</findBySobel>
             <threshold>200</threshold>
-            <sobelThreshold>100</sobelThreshold>
+            <sobelThreshold>50</sobelThreshold>
             <laneWidthOffsetInMeter>0.1</laneWidthOffsetInMeter>
             <cam2world>-1016.55,629.72,-140.546,-433.734,-19.2261,-295.753,-1.5413,-0.0750134,-0.22935</cam2world>
             <translateEnvironment>false</translateEnvironment>

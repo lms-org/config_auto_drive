@@ -13,10 +13,10 @@
             <elementCount>6</elementCount>
             <elementLength>0.30</elementLength>
             <combinePointMaxDistance>0.02</combinePointMaxDistance>
-            <adamA>0.008</adamA>
+            <adamA>0.001</adamA>
             <adamB1>0.9</adamB1>
-            <adamB2>0.997</adamB2>
-            <adamIterations>2</adamIterations><!--Damit kann man beliebig viel Rechenzeit belegen :)-->
+            <adamB2>0.999</adamB2>
+            <adamIterations>6</adamIterations><!--Damit kann man beliebig viel Rechenzeit belegen :)-->
         </config>
     </service>
     <module name="lap_time" lib="lap_time" class="LapTime">
