@@ -35,9 +35,9 @@
             <penalty_y>10</penalty_y>
             <penalty_phi>10</penalty_phi>
             <penalty_frontAngle>1</penalty_frontAngle>
-            <penalty_rearAngle>1</penalty_rearAngle>
+            <penalty_rearAngle>0.1</penalty_rearAngle>
             <penalty_frontAngle_rate>50</penalty_frontAngle_rate>
-            <penalty_rearAngle_rate>50</penalty_rearAngle_rate>
+            <penalty_rearAngle_rate>25</penalty_rearAngle_rate>
             <!--MPC-controller-->
             <mpcLookupVelocityX>1.0, 2.5, 6.0</mpcLookupVelocityX>
             <mpcLookupVelocityY>1.0, 2.5, 5.0</mpcLookupVelocityY>
@@ -90,8 +90,8 @@
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
         <channelMapping priority="9" from="CAR" to="CAR"/>
         <config name="FMH">
-            <velocity_straight>4.5</velocity_straight>
-            <curve_maxVelocity>3.5</curve_maxVelocity>
+            <velocity_straight>2.5</velocity_straight>
+            <curve_maxVelocity>3.0</curve_maxVelocity>
             <curve_minVelocity>2.0</curve_minVelocity>
             <curveStraight_maxVelocity>3.0</curveStraight_maxVelocity>
             <curveStraight_minVelocity>2.0</curveStraight_minVelocity>
