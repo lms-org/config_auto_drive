@@ -30,6 +30,14 @@
     <module name="trajectory_point_controller" lib="trajectory_point_controller" class="TrajectoryPointController">
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
+            <type>mikMPC</type>
+            <link_length>0.1</link_length>
+            <penalty_y>10</penalty_y>
+            <penalty_phi>10</penalty_phi>
+            <penalty_frontAngle>1</penalty_frontAngle>
+            <penalty_rearAngle>1</penalty_rearAngle>
+            <penalty_frontAngle_rate>50</penalty_frontAngle_rate>
+            <penalty_rearAngle_rate>50</penalty_rearAngle_rate>
             <!--MPC-controller-->
             <mpcLookupVelocityX>1.0, 2.5, 6.0</mpcLookupVelocityX>
             <mpcLookupVelocityY>1.0, 2.5, 5.0</mpcLookupVelocityY>

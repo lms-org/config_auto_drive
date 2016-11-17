@@ -199,15 +199,9 @@ std::vector<lms::math::vertex2f> NewRoadDetection::findByBrightness(const bool r
                 }
                 //we found a valid point
                 //get the middle
-                cv::Point2f mid(xv[k-tCounter/2],yv[k-tCounter/2]);
-                //transform it in world coordinates
-                std::vector<cv::Point2f> in;
-                in.push_back(mid);
-                std::vector<cv::Point2f> out;
-                cv::perspectiveTransform(in,out,cam2world);
-                //create lms vector for easier use
-                lms::math::vertex2f wMid(out[0].x,out[0].y);
-                //store it
+                lms::math::vertex2i mid;
+                lms::math::vertex2f wMid;
+                homo.vt(mid,wMid);
                 foundPoints.push_back(wMid);
             }
             tCounter = 0;
@@ -260,15 +254,9 @@ bool NewRoadDetection::find(){
             l.w_end = mid.points()[i];
         }
 
-        std::vector<cv::Point2f> input;
-        std::vector<cv::Point2f> output;
-        input.emplace_back(l.w_start.x,l.w_start.y);
-        input.emplace_back(l.w_end.x,l.w_end.y);
         //transform them in image-coordinates
-        cv::perspectiveTransform(input,output,world2cam);
-        l.i_start =lms::math::vertex2i((int)output[0].x,(int)output[0].y);
-        l.i_end = lms::math::vertex2i((int)output[1].x,(int)output[1].y);
-
+        homo.vti(l.i_start,l.w_start);
+        homo.vti(l.i_end,l.w_end);
         {
             std::unique_lock<std::mutex> lock(mutex);
             lines.push_back(l);
@@ -445,8 +433,8 @@ void NewRoadDetection::processSearchLine(const SearchLine &l) {
 void NewRoadDetection::configsChanged(){
     lms::ServiceHandle<warp_service::WarpService> warp = getService<warp_service::WarpService>("WARP_SERVICE");
     if(!warp.isValid()){
-        logger.error("WARP SERVICE is invalid!");
-        exit(0);
+        logger.error("WARP SERVICE is invalid!")<<"shutting down!";
+        exit(0); //TODO shut down runtime
     }else{
         homo = warp->getHomography();
     }
@@ -461,7 +449,7 @@ void NewRoadDetection::configsChanged(){
     useWeights = config().get<bool>("useWeights",false);
     sobelThreshold = config().get<int>("sobelThreshold",200);
     numThreads = config().get<int>("threads",0);
-
+    /*
     //used to convert pxl from the top-down-view to the camera-view
     world2cam.create(3,3,CV_64F);
     std::vector<float> points = config().getArray<float>("cam2world");
@@ -501,6 +489,7 @@ void NewRoadDetection::configsChanged(){
 
     topView2cam = world2cam * H;
     cam2topView = topView2cam.inv();
+    */
 }
 
 void NewRoadDetection::destroy() {

@@ -5,13 +5,6 @@
 #include <street_environment/road.h>
 #include <street_environment/car.h>
 #include <lms/imaging/transform_image.h>
-
-
-#include <opencv2/calib3d/calib3d.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-
-#define USE_OPENCV
 #include <lms/imaging/image.h>
 
 #include <list>
@@ -38,11 +31,6 @@ class NewRoadDetection : public lms::Module {
     int numThreads; // 0 means single threaded
 
     lms::imaging::Homography homo;
-
-    //cam trafo
-    cv::Mat world2cam;
-    cv::Mat cam2world;
-
     //Datachannels
     lms::ReadDataChannel<lms::imaging::Image> image;
     lms::WriteDataChannel<street_environment::RoadLane> road;
@@ -53,12 +41,6 @@ class NewRoadDetection : public lms::Module {
     lms::WriteDataChannel<lms::math::polyLine2f> debugTranslatedPoints;
 
     lms::ReadDataChannel<street_environment::Car> car;
-
-    //for debugging
-    cv::Mat topView2cam;
-    cv::Mat cam2topView;
-    cv::Size topViewSize;
-    cv::Mat topView;
 
     struct SearchLine{
         lms::math::vertex2f w_start;
