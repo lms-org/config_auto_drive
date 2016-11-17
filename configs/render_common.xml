@@ -7,7 +7,7 @@
         <config src="street_utils/obstacle.lconf"/>
         <config><!--URG_DATA -->
             <envObjects>DEBUG_ALL_POINTS,DEBUG_VALID_POINTS,DEBUG_VALID_TRANSLATED_POINTS,URG_DATA,SORTED_POINTS,MIDDLE_LANE,TRAJECTORY_LINE,ENVIRONMENT_MASTER,TRAJECTORY_POINT</envObjects><!--DEBUG_TRAJECTORY, DEBUG_TRAJECTORY_2, -->
-            <envObjects>TRAJECTORY_DEBUG</envObjects>
+            <!--envObjects>TRAJECTORY_DEBUG</envObjects-->
             <!--The default Color, TODO add colors for points, lines etc -->
             <colorR>255</colorR>
             <colorG>255</colorG>

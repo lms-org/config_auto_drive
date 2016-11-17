@@ -93,14 +93,14 @@ void MainWindow::addPoint(const float x,const float y, const float theta){
     carRectAngleSeries->append(x-cos(theta)*lineLength,y-sin(theta)*lineLength);
     carRectAngleSeries->append(x+cos(theta)*lineLength,y+sin(theta)*lineLength);
 
-    scaleChart(positionChart,positionSeries);
+    scaleChart(positionChart,positionSeries,true);
 }
 
 
-void MainWindow::addVelocity(const float velocity){
+void MainWindow::addVelocity(const float velocity, const float targetVelocity){
     if(!collectData)
         return;
-    velocitySeries->append(velocitySeries->count(),velocity);
+    velocitySeries->append(velocitySeries->count(),targetVelocity);
     scaleChart(velocityChart,velocitySeries);
 }
 
@@ -117,7 +117,7 @@ void MainWindow::addSteering(const float front, const float rear){
 
 }
 
-void MainWindow::scaleChart(QtCharts::QChart *chart, std::vector<QtCharts::QSplineSeries*> series_){
+void MainWindow::scaleChart(QtCharts::QChart *chart, std::vector<QtCharts::QSplineSeries*> series_,const bool sameAxes){
     float xMin = std::numeric_limits<float>::max(); // everything is <= this
     float xMax = std::numeric_limits<float>::min(); // everything is >= this
     float yMin = std::numeric_limits<float>::max();
@@ -130,12 +130,18 @@ void MainWindow::scaleChart(QtCharts::QChart *chart, std::vector<QtCharts::QSpli
             yMax = qMax<float>(yMax, p.y());
         }
     }
+    if(sameAxes){
+        xMin = qMin<float>(xMin, yMin);
+        xMax = qMin<float>(xMax, yMax);
+        yMin = xMin;
+        yMax = xMax;
+    }
     chart->axisX()->setRange(xMin-1,xMax+1);
     chart->axisY()->setRange(yMin-1,yMax+1);
 
 }
 
-void MainWindow::scaleChart(QtCharts::QChart *chart, QtCharts::QSplineSeries *series){
+void MainWindow::scaleChart(QtCharts::QChart *chart, QtCharts::QSplineSeries *series, const bool sameAxes){
     float xMin = std::numeric_limits<float>::max(); // everything is <= this
     float xMax = std::numeric_limits<float>::min(); // everything is >= this
     float yMin = std::numeric_limits<float>::max();
@@ -145,6 +151,12 @@ void MainWindow::scaleChart(QtCharts::QChart *chart, QtCharts::QSplineSeries *se
         xMax = qMax<float>(xMax, p.x());
         yMin = qMin<float>(yMin, p.y());
         yMax = qMax<float>(yMax, p.y());
+    }
+    if(sameAxes){
+        xMin = qMin<float>(xMin, yMin);
+        xMax = qMin<float>(xMax, yMax);
+        yMin = xMin;
+        yMax = xMax;
     }
     chart->axisX()->setRange(xMin-1,xMax+1);
     chart->axisY()->setRange(yMin-1,yMax+1);
