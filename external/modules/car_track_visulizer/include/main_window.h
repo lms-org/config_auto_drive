@@ -29,6 +29,7 @@ public:
     QtCharts::QSplineSeries *positionSeries,*carRectAngleSeries;
     QtCharts::QChart *positionChart;
     QtCharts::QSplineSeries *velocitySeries;
+    QtCharts::QSplineSeries *targetVelocitySeries;
     QtCharts::QChart *velocityChart;
     QtCharts::QSplineSeries *steeringFrontSeries,*steeringRearSeries;
     QtCharts::QChart *steeringChart;

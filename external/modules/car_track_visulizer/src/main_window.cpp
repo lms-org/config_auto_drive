@@ -63,8 +63,12 @@ MainWindow::MainWindow(){
     //velocity
     velocityChart = new QtCharts::QChart();
     velocitySeries = new QtCharts::QSplineSeries();
-    velocityChart->legend()->hide();
+    velocitySeries->setName("current velocity");
+    targetVelocitySeries = new QtCharts::QSplineSeries();
+    targetVelocitySeries->setName("target velocity");
+    //velocityChart->legend()->hide();
     velocityChart->addSeries(velocitySeries);
+    velocityChart->addSeries(targetVelocitySeries);
     velocityChart->setTitle("velocity in m/s");
     velocityChart->createDefaultAxes();
     chartView = new QtCharts::QChartView(velocityChart);
@@ -100,8 +104,12 @@ void MainWindow::addPoint(const float x,const float y, const float theta){
 void MainWindow::addVelocity(const float velocity, const float targetVelocity){
     if(!collectData)
         return;
-    velocitySeries->append(velocitySeries->count(),targetVelocity);
-    scaleChart(velocityChart,velocitySeries);
+    velocitySeries->append(velocitySeries->count(),velocity);
+    targetVelocitySeries->append(targetVelocitySeries->count(),targetVelocity);
+    std::vector<QtCharts::QSplineSeries*> series_;
+    series_.push_back(velocitySeries);
+    series_.push_back(targetVelocitySeries);
+    scaleChart(velocityChart,series_);
 }
 
 void MainWindow::addSteering(const float front, const float rear){
