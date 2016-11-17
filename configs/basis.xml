@@ -32,24 +32,16 @@
         <config>
             <type>mikMPC</type>
             <link_length>0.1</link_length>
-            <penalty_y>100</penalty_y>
-            <penalty_phi>40</penalty_phi>
+            <penalty_y>50</penalty_y>
+            <penalty_phi>20</penalty_phi>
             <penalty_frontAngle>1</penalty_frontAngle>
-<<<<<<< HEAD
-            <penalty_rearAngle>0.1</penalty_rearAngle>
-            <penalty_frontAngle_rate>50</penalty_frontAngle_rate>
-            <penalty_rearAngle_rate>50</penalty_rearAngle_rate>
-            <max_lateral_acc>2</max_lateral_acc>
-            <node_MaxSpeed>1</node_MaxSpeed>
-=======
             <penalty_rearAngle>1</penalty_rearAngle>
-            <penalty_frontAngle_rate>10</penalty_frontAngle_rate>
-            <penalty_rearAngle_rate>10</penalty_rearAngle_rate>
+            <penalty_frontAngle_rate>200</penalty_frontAngle_rate>
+            <penalty_rearAngle_rate>100</penalty_rearAngle_rate>
             <max_lateral_acc>0.8</max_lateral_acc>
             <node_MaxSpeed>0.5</node_MaxSpeed>
->>>>>>> 12543f63b6c3d79deecd0288dc5813fac6142cd4
             <node_MinSpeed>0.5</node_MinSpeed>
-            <stagePrediction>0</stagePrediction>
+            <stagePrediction>2</stagePrediction>
             <!--MPC-controller-->
             <mpcLookupVelocityX>1.0, 2.5, 6.0</mpcLookupVelocityX>
             <mpcLookupVelocityY>1.0, 2.5, 5.0</mpcLookupVelocityY>
