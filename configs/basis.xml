@@ -42,6 +42,8 @@
             <node_MaxSpeed>0.5</node_MaxSpeed>
             <node_MinSpeed>0.5</node_MinSpeed>
             <stagePrediction>0</stagePrediction>
+            <front_angle_rate_Bound>1</front_angle_rate_Bound>
+            <rear_angle_rate_Bound>1</rear_angle_rate_Bound>
             <!--MPC-controller-->
             <mpcLookupVelocityX>1.0, 2.5, 6.0</mpcLookupVelocityX>
             <mpcLookupVelocityY>1.0, 2.5, 5.0</mpcLookupVelocityY>
