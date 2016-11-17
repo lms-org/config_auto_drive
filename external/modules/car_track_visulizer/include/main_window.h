@@ -22,8 +22,8 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    void scaleChart(QtCharts::QChart *chart, QtCharts::QSplineSeries *series);
-    void scaleChart(QtCharts::QChart *chart, std::vector<QtCharts::QSplineSeries*> series_);
+    void scaleChart(QtCharts::QChart *chart, QtCharts::QSplineSeries *series,const bool sameAxes = false);
+    void scaleChart(QtCharts::QChart *chart, std::vector<QtCharts::QSplineSeries*> series_,const bool sameAxes = false);
 public:
     MainWindow();
     QtCharts::QSplineSeries *positionSeries,*carRectAngleSeries;
@@ -35,7 +35,7 @@ public:
 
     QGroupBox *gridGroupBox;
     void addPoint(const float x,const float y,const float theta);
-    void addVelocity(const float velocity);
+    void addVelocity(const float velocity,const float targetVelocity);
     void addSteering(const float front, const float rear);
     bool collectData;
 
