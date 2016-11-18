@@ -1,5 +1,6 @@
 <lms>
     <if notSet="load">
+        <if notSet="load-car">
         <module name="ximea_importer" lib="ximea_importer" class="XimeaImporter">
             <channelMapping from="IMAGE" to="GREY_IMAGE"/>
             <config>
@@ -8,6 +9,7 @@
                 <gain>12</gain>
             </config>
         </module>
+        </if>
     </if>
     <include src="basis.xml" />
     <if notSet="norender">
@@ -22,7 +24,7 @@
             </config>
         </module>
     </if>
-    <if set="load_car">
+    <if set="load-car">
         <!--module name="image_loader" lib="image_loader" class="ImageLoader">
             <channelMapping from="IMAGE" to="GREY_IMAGE"/>
             <config>
@@ -35,6 +37,12 @@
                 <dataChannels>URG_DATA,GREY_IMAGE,MAVLINK_IN</dataChannels>
             </config>
         </module>
+        <!--module name="channel_loader_car" lib="channel_loader" class="ChannelLoader">
+            <config>
+                <fileName>car</fileName>
+                <dataChannels>CAR</dataChannels>
+            </config>
+        </module-->
         <module name="data_to_mavlink" lib="data_to_mavlink" class="CarToMavlink"/>
         <service name="TIMESTAMP_INTERPOLATOR" lib="timestamp_interpolator_service" class="TimestampInterpolatorService"/>
     </if>
@@ -47,11 +55,12 @@
                 <dataChannels>URG_DATA,GREY_IMAGE,MAVLINK_IN</dataChannels>
             </config>
         </module>
-        <module name="channel_logger_car" lib="channel_logger" class="ChannelLogger">
+        <!--module name="channel_logger_car" lib="channel_logger" class="ChannelLogger">
             <config>
+                <fileName>car</fileName>
                 <dataChannels>CAR</dataChannels>
             </config>
-        </module>
+        </module-->
     </if>
     <if set="save-car">
         <module name="channel_logger_data" lib="channel_logger" class="ChannelLogger">
@@ -61,6 +70,7 @@
         </module>
         <module name="channel_logger_car" lib="channel_logger" class="ChannelLogger">
             <config>
+                <fileName>car</fileName>
                 <dataChannels>CAR</dataChannels>
             </config>
         </module>
