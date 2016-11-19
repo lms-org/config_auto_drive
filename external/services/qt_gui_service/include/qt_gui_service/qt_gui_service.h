@@ -14,6 +14,8 @@ class QtGuiService : public lms::Service {
 
     QGuiApplication* guiApp;
     QApplication* app;
+    int argc;
+    char** argv;
 public:
     bool init() override;
     void destroy() override;

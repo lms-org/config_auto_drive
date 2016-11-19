@@ -1,3 +1,1 @@
-export LMS_PATH="$PWD/build/lib"
-
-./build/bin/lms run "$PWD/configs/receiver.xml" -s
+./build/bin/lms run ./configs/receiver.xml -l ./build/lib -s
