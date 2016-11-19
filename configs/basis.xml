@@ -13,10 +13,10 @@
             <elementCount>6</elementCount>
             <elementLength>0.30</elementLength>
             <combinePointMaxDistance>0.02</combinePointMaxDistance>
-            <adamA>0.001</adamA>
+            <adamA>0.008</adamA>
             <adamB1>0.9</adamB1>
-            <adamB2>0.999</adamB2>
-            <adamIterations>6</adamIterations><!--Damit kann man beliebig viel Rechenzeit belegen :)-->
+            <adamB2>0.993</adamB2>
+            <adamIterations>2</adamIterations><!--Damit kann man beliebig viel Rechenzeit belegen :)-->
         </config>
     </service>
     <module name="lap_time" lib="lap_time" class="LapTime">
@@ -30,7 +30,7 @@
     <module name="trajectory_point_controller" lib="trajectory_point_controller" class="TrajectoryPointController">
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
-            <type>mikMPC</type>
+            <!--type>mikMPC</type-->
             <link_length>0.1</link_length>
             <penalty_y>50</penalty_y>
             <penalty_phi>20</penalty_phi>
@@ -42,6 +42,9 @@
             <node_MaxSpeed>0.5</node_MaxSpeed>
             <node_MinSpeed>0.5</node_MinSpeed>
             <stagePrediction>2</stagePrediction>
+            <stagePrediction>0</stagePrediction>
+            <front_angle_rate_Bound>1</front_angle_rate_Bound>
+            <rear_angle_rate_Bound>1</rear_angle_rate_Bound>
             <!--MPC-controller-->
             <mpcLookupVelocityX>1.0, 2.5, 6.0</mpcLookupVelocityX>
             <mpcLookupVelocityY>1.0, 2.5, 5.0</mpcLookupVelocityY>
