@@ -162,7 +162,7 @@ void MainWindow::scaleChart(QtCharts::QChart *chart, QtCharts::QSplineSeries *se
     }
     if(sameAxes){
         xMin = qMin<float>(xMin, yMin);
-        xMax = qMin<float>(xMax, yMax);
+        xMax = qMax<float>(xMax, yMax);
         yMin = xMin;
         yMax = xMax;
     }

@@ -1,2 +1,2 @@
- ./build/bin/lms run ./configs/mycam.xml --log warn --debug -l ./build/lib -s --enable-load /home/phibedy/Desktop/logs/fast_round -f load-car
+ ./build/bin/lms run ./configs/mycam.xml --log debug --debug -l ./build/lib -s --enable-load /media/phibedy/Johannes/save_test -f load-car
 
