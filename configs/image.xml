@@ -11,7 +11,10 @@
         </module>
         </if>
     </if>
-    <include src="basis.xml" />
+
+    <if notSet="load-car">
+        <include src="basis.xml" />
+    </if>
     <if notSet="norender">
         <include src="render_sdl.xml"/>
     </if>
@@ -25,6 +28,7 @@
         </module>
     </if>
     <if set="load-car">
+    <include src="ego.xml"/>
         <!--module name="image_loader" lib="image_loader" class="ImageLoader">
             <channelMapping from="IMAGE" to="GREY_IMAGE"/>
             <config>
@@ -43,7 +47,52 @@
                 <dataChannels>CAR</dataChannels>
             </config>
         </module-->
-        <module name="data_to_mavlink" lib="data_to_mavlink" class="CarToMavlink"/>
+    <module name="obstacle_from_laser" lib="obstacle_from_laser" class="ObstacleFromLaser">
+        <channelMapping from="POINTS" to="URG_DATA"/>
+    </module>
+        <module name="mavlink_to_data" lib="mavlink_to_data" class="MavlinkToData">
+        <name>mavlink_to_data</name>
+        <channelMapping priority="10" from="CAR" to="CAR"/>
+        <config>
+            <!--
+            <sensor_timebase>fixed</sensor_timebase>
+            <sensor_timebase_tickrate>100</sensor_timebase_tickrate>
+            -->
+            <!-- IMU -->
+            <imu_0>IMU</imu_0>
+            <!-- VARIANCES (@1khz) -->
+            <imu_0_acc_cov_xx>0.5</imu_0_acc_cov_xx>
+            <imu_0_acc_cov_yy>1.5</imu_0_acc_cov_yy>
+            <imu_0_gyro_cov_zz>0.025</imu_0_gyro_cov_zz>
+
+            <!-- BIASES -->
+            <imu_0_acc_bias_x>0</imu_0_acc_bias_x>
+            <imu_0_acc_bias_y>0</imu_0_acc_bias_y>
+            <imu_0_acc_bias_z>0</imu_0_acc_bias_z>
+            <imu_0_gyro_bias_x>0</imu_0_gyro_bias_x>
+            <imu_0_gyro_bias_y>0</imu_0_gyro_bias_y>
+            <imu_0_gyro_bias_z>0</imu_0_gyro_bias_z>
+
+            <!-- HALL SENSOR -->
+            <odometer_0>HALL</odometer_0>
+            <odometer_0_velo_cov_xx>0.1</odometer_0_velo_cov_xx>
+
+            <!-- MOUSE FRONT -->
+            <odometer_1>MOTION_FRONT</odometer_1>
+            <!-- MOUSE REAR -->
+            <odometer_2>MOTION_REAR</odometer_2>
+
+            <!-- LIDAR -->
+            <distance_0>LIDAR</distance_0>
+            <LIDAR_x>0.14</LIDAR_x>
+            <LIDAR_y>-0.07</LIDAR_y>
+            <LIDAR_dir>-90</LIDAR_dir>
+            <!-- TOF FRONT -->
+            <distance_1>TOF_FRONT</distance_1>
+            <!-- TOF_REAR -->
+            <distance_2>TOF_REAR</distance_2>
+        </config>
+    </module>
         <service name="TIMESTAMP_INTERPOLATOR" lib="timestamp_interpolator_service" class="TimestampInterpolatorService"/>
     </if>
     <if set="save">
@@ -55,12 +104,12 @@
                 <dataChannels>URG_DATA,GREY_IMAGE,MAVLINK_IN</dataChannels>
             </config>
         </module>
-        <!--module name="channel_logger_car" lib="channel_logger" class="ChannelLogger">
+        <module name="channel_logger_car" lib="channel_logger" class="ChannelLogger">
             <config>
                 <fileName>car</fileName>
                 <dataChannels>CAR</dataChannels>
             </config>
-        </module-->
+        </module>
     </if>
     <if set="save-car">
         <module name="channel_logger_data" lib="channel_logger" class="ChannelLogger">
