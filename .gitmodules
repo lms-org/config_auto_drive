@@ -136,3 +136,15 @@
 [submodule "external/modules/image_object_renderer"]
 	path = external/modules/image_object_renderer
 	url = https://github.com/tum-phoenix/image_object_renderer
+[submodule "external/modules/hokuyo_lidar_importer"]
+	path = external/modules/hokuyo_lidar_importer
+	url = https://github.com/tum-phoenix/hokuyo_lidar_importer.git
+[submodule "external/modules/obstacles_from_points"]
+	path = external/modules/obstacles_from_points
+	url = https://github.com/tum-phoenix/obstacles_from_points.git
+[submodule "external/modules/road_analyzer"]
+	path = external/modules/road_analyzer
+	url = https://github.com/tum-phoenix/road_analyzer.git
+[submodule "external/modules/trajectory_from_roadmatrix"]
+	path = external/modules/trajectory_from_roadmatrix
+	url = https://github.com/tum-phoenix/trajectory_from_roadmatrix.git

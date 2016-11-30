@@ -4,6 +4,7 @@
     </module>
     <module name="pause_runtime" lib="pause_runtime" class="PauseRuntime">
     </module>
-    <include src="old_trajectory_creation.xml"/>
+    <!-- <include src="old_trajectory_creation.xml"/> -->
+    <include src="new_trajectory_creation.xml"/>
     <include src="trajectory_point_controller.xml"/>
 </lms>

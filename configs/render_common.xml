@@ -3,7 +3,7 @@
         <channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
         <config src="street_utils/obstacle.lconf"/>
         <config>
-            <envObjects>DEBUG_ALL_POINTS,DEBUG_VALID_POINTS,DEBUG_VALID_TRANSLATED_POINTS,MIDDLE_LANE,TRAJECTORY_LINE,ENVIRONMENT_MASTER,TRAJECTORY_POINT</envObjects><!--DEBUG_TRAJECTORY, DEBUG_TRAJECTORY_2, -->
+            <envObjects>ROADMATRIX,DEBUG_ALL_POINTS,DEBUG_VALID_POINTS,DEBUG_VALID_TRANSLATED_POINTS,MIDDLE_LANE,TRAJECTORY_LINE,ENVIRONMENT_MASTER,TRAJECTORY_POINT,HOKUYO_LIDAR_DATA,CULLED_HOKUYO_LIDAR_DATA,BOUNDED_OBSTACLES</envObjects><!--DEBUG_TRAJECTORY, DEBUG_TRAJECTORY_2, -->
             <!--envObjects>TRAJECTORY_DEBUG</envObjects-->
             <!--The default Color, TODO add colors for points, lines etc -->
             <colorR>255</colorR>
@@ -90,6 +90,21 @@
             <colorR>255</colorR>
             <colorG>0</colorG>
             <colorB>123</colorB>
+        </config>
+        <config name="HOKUYO_LIDAR_DATA">
+            <colorR>0</colorR>
+            <colorG>255</colorG>
+            <colorB>255</colorB>
+        </config>
+        <config name="CULLED_HOKUYO_LIDAR_DATA">
+            <colorR>255</colorR>
+            <colorG>0</colorG>
+            <colorB>0</colorB>
+        </config>
+         <config name="BOUNDED_OBSTACLES">
+            <colorR>0</colorR>
+            <colorG>0</colorG>
+            <colorB>255</colorB>
         </config>
     </module>
     <module name="image_converter_trans_render" lib="image_converter" class="ImageConverter">

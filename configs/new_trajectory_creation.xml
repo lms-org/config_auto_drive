@@ -1,0 +1,48 @@
+<lms>
+    <if set="start_lidar">
+        <module name="hokuyo_lidar_importer" lib="hokuyo_lidar_importer" class="HokuyoLidarImporter">
+            <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>
+            <channelMapping from="HOKUYO_LIDAR_DATA" to="HOKUYO_LIDAR_DATA"/>
+            <config>
+                <xOffsetFromOriginMeter>0.1</xOffsetFromOriginMeter>
+                <yOffsetFromOriginMeter>-0.1</yOffsetFromOriginMeter>
+                <startAtDeg>-119</startAtDeg>
+                <stopAtDeg>119</stopAtDeg>
+            </config>
+        </module>
+        <module name="obstacles_from_points" lib="obstacles_from_points" class="ObstaclesFromPoints">
+            <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>
+            <channelMapping from="POINT_CLOUD" to="HOKUYO_LIDAR_DATA"/>
+            <channelMapping from="CENTER_LINE" to="MIDDLE_LANE"/>
+            <channelMapping from="CULLED_POINT_CLOUD" to="CULLED_HOKUYO_LIDAR_DATA"/>
+            <channelMapping from="OBSTACLES" to="BOUNDED_OBSTACLES"/>
+            <config>
+                <laneWidthMeter>0.4</laneWidthMeter>
+                <obstacleDistanceThresholdMeter>0.04</obstacleDistanceThresholdMeter>
+                <obstaclePointThreshold>10</obstaclePointThreshold>
+            </config>
+        </module>
+    </if>
+    <module name="road_analyzer" lib="road_analyzer" class="RoadAnalyzer">
+        <channelMapping from="CENTER_LINE" to="MIDDLE_LANE"/>
+        <channelMapping from="NEW_OBSTACLES" to="NEW_HOKYUO_LIDAR_DATA"/>
+        <channelMapping from="OBSTACLES" to="BOUNDED_OBSTACLES"/>
+        <channelMapping from="ROADMATRIX" to="ROADMATRIX"/>
+        <config>
+            <laneWidthMeter>0.4</laneWidthMeter>
+            <cellsPerLane>4</cellsPerLane>
+            <cellLengthMeter>0.1</cellLengthMeter>
+        </config>
+    </module>
+    <module name="trajectory_from_roadmatrix" lib="trajectory_from_roadmatrix" class="TrajectoryFromRoadmatrix">
+        <channelMapping from="ROADMATRIX" to="ROADMATRIX"/>
+        <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
+        <config>
+            <carWidthMeter>0.2</carWidthMeter>
+            <obstacleClearanceLeftFrontMeter>1.5</obstacleClearanceLeftFrontMeter>
+            <obstacleClearanceRightFrontMeter>0.5</obstacleClearanceRightFrontMeter>
+            <obstacleClearanceLeftBackMeter>0.5</obstacleClearanceLeftBackMeter>
+            <obstacleClearanceRightBackMeter>0.5</obstacleClearanceRightBackMeter>
+        </config>
+    </module>
+</lms>
