@@ -24,5 +24,4 @@
         </config>
         <channelMapping priority="100" from="CAR" to="CAR" />
     </module>
-
 </lms>

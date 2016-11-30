@@ -1,0 +1,72 @@
+<lms>
+    <module name="course_state_estimator" lib="course_state_estimator" class="CourseStateEstimator">
+        <name>course_state_estimator</name>
+        <channelMapping from="ROAD" to="MIDDLE_LANE"/>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_ROAD_RAW"/>
+        <config>
+        <observationProbability1>0.6</observationProbability1>
+            <observationProbability2>0.7</observationProbability2>
+            <distance1>0.4</distance1>
+            <distance2>0.8</distance2>
+            <distance3>0.8</distance3>
+            <distance4>1.4</distance4>
+            <curvatureThreshold>0.2</curvatureThreshold>
+            <transitionProbabilityStraightToStraightCurve>0.002</transitionProbabilityStraightToStraightCurve>
+            <transitionProbabilityStraightCurveToCurve>0.002</transitionProbabilityStraightCurveToCurve>
+            <transitionProbabilityCurveToStraight>0.001</transitionProbabilityCurveToStraight>
+            <useKalmanCurvature>true</useKalmanCurvature>
+            <useProbabilitiesStraight>true</useProbabilitiesStraight>
+         </config>
+    </module>
+    <module name="street_obstacle_merger" lib="street_obstacle_merger" class="StreetObjectMaster">
+        <name>street_obstacle_merger</name>
+        <channelMapping priority="10" from="CAR" to="CAR"/>
+        <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MASTER"/>
+        <config src="street_utils/obstacle.lconf"/>
+        <config>
+            <environments>ENVIRONMENT</environments>
+        </config>
+    </module>
+    <module name="trajectory_creator" lib="trajectory_creator" class="TrajectoryLineCreator">
+        <channelMapping from="LINE" to="TRAJECTORY_LINE"/>
+        <channelMapping from="ROAD" to="MIDDLE_LANE"/>
+        <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
+        <channelMapping priority="9" from="CAR" to="CAR"/>
+        <config name="FMH">
+            <velocity_straight>2.5</velocity_straight>
+            <curve_maxVelocity>3.0</curve_maxVelocity>
+            <curve_minVelocity>2.0</curve_minVelocity>
+            <curveStraight_maxVelocity>3.0</curveStraight_maxVelocity>
+            <curveStraight_minVelocity>2.0</curveStraight_minVelocity>
+            <aOrthMax>2.5</aOrthMax>
+            <simpleTraj>true</simpleTraj>
+            <angleD>0.35</angleD>
+            <obstacleResolution>0.05</obstacleResolution>
+            <minDistanceBetweenTrajectoryPoints>0.2</minDistanceBetweenTrajectoryPoints>
+            <distanceObstacleBeforeChangeLine>1</distanceObstacleBeforeChangeLine>
+            <obstacleLength>0.7</obstacleLength>
+        </config>
+        <config name="FOH">
+            <velocity_straight>5.0</velocity_straight>
+            <curve_maxVelocity>2.8</curve_maxVelocity>
+            <curve_minVelocity>2.4</curve_minVelocity>
+            <curveStraight_maxVelocity>4.0</curveStraight_maxVelocity>
+            <curveStraight_minVelocity>2.8</curveStraight_minVelocity>
+            <aOrthMax>3.5</aOrthMax>
+            <simpleTraj>true</simpleTraj>
+            <angleD>0.35</angleD>
+            <obstacleResolution>0.05</obstacleResolution>
+            <minDistanceBetweenTrajectoryPoints>0.2</minDistanceBetweenTrajectoryPoints>
+            <distanceObstacleBeforeChangeLine>1</distanceObstacleBeforeChangeLine>
+            <obstacleLength>0.7</obstacleLength>
+        </config>
+        <config>
+          <obstacleResolution>0.05</obstacleResolution>
+          <minDistanceBetweenTrajectoryPoints>0.2</minDistanceBetweenTrajectoryPoints>
+          <obstacleSavetyDistance>1.0</obstacleSavetyDistance>
+          <simpleTraj>true</simpleTraj>
+        </config>
+        <config src="street_utils/obstacle.lconf"/>
+        <config src="trajectory_creator.lconf"/>
+    </module>
+</lms>

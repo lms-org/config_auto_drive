@@ -1,0 +1,22 @@
+<lms>
+    <if set="load_pgm">
+        <module name="image_loader" lib="image_loader" class="ImageLoader">
+            <channelMapping from="IMAGE" to="GREY_IMAGE"/>
+            <config>
+                <minCounter>0</minCounter>
+                <maxCounter>-1</maxCounter>
+            </config>
+        </module>
+    </if>
+    <module name="channel_loader_data" lib="channel_loader" class="ChannelLoader">
+        <config>
+            <dataChannels>GREY_IMAGE,MAVLINK_IN</dataChannels>
+        </config>
+    </module>
+<!--     module name="channel_loader_car" lib="channel_loader" class="ChannelLoader">
+        <config>
+            <fileName>car</fileName>
+            <dataChannels>CAR</dataChannels>
+        </config>
+    </module -->
+</lms>

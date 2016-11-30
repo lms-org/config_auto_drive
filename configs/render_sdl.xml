@@ -1,13 +1,11 @@
 <lms>
+    <service name="sdl_service" lib="lms_sdl_service" class="SdlService"/>
     <include src="render_common.xml"/>
-    <service name="sdl_service" lib="lms_sdl_service" class="SdlService">
-    </service>
     <module name="sdl_image_renderer_grey" lib="sdl_image_renderer" class="SdlImageRenderer">
         <channelMapping from="OUTPUT_IMAGE" to="IMAGE"/>
         <config>
             <title>GREY_IMAGE</title>
             <channels>GREY_IMAGE,DEBUG_IMAGE,DEBUG_IMAGE_CROSSING</channels>
-            <!--channels>GREY_IMAGE</channels-->
             <output>false</output>
         </config>
     </module>
