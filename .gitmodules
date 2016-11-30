@@ -133,9 +133,6 @@
 [submodule "external/modules/ximea_importer"]
 	path = external/modules/ximea_importer
 	url = https://github.com/lms-org/ximea_importer
-[submodule "external/modules/urg_laser_scanner"]
-	path = external/modules/urg_laser_scanner
-	url = https://github.com/lms-org/urg_laser_scanner
 [submodule "external/modules/image_object_renderer"]
 	path = external/modules/image_object_renderer
 	url = https://github.com/tum-phoenix/image_object_renderer
