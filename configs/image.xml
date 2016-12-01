@@ -6,7 +6,7 @@
             <config>
                 <exposure>9000</exposure>
                 <fps>100</fps>
-                <gain>12</gain>
+                <gain>6</gain>
             </config>
         </module>
         </if>
