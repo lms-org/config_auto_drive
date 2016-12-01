@@ -1,0 +1,20 @@
+<lms>
+    <if set="save_pgm">
+        <module name="image_logger" lib="image_logger" class="ImageLogger">
+            <channelMapping from="IMAGE" to="GREY_IMAGE"/>
+        </module>
+    </if>
+    <if set="save-car">
+        <module name="channel_logger_data" lib="channel_logger" class="ChannelLogger">
+            <config>
+                <dataChannels>GREY_IMAGE,MAVLINK_IN</dataChannels>
+            </config>
+        </module>
+        <module name="channel_logger_car" lib="channel_logger" class="ChannelLogger">
+            <config>
+                <fileName>car</fileName>
+                <dataChannels>CAR</dataChannels>
+            </config>
+        </module>
+    </if>
+</lms>

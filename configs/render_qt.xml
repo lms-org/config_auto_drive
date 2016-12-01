@@ -1,0 +1,6 @@
+<lms>
+    <service name="QT_GUI_SERVICE" lib="qt_gui_service" class="QtGuiService"/>
+    <module name="qt_gui_updater" lib="qt_gui_service" class="QtGuiServiceUpdater"/>
+    <module name="CarTrackVisulizer" lib="car_track_visulizer" class="CarTrackVisulizer"/>
+</lms>
+

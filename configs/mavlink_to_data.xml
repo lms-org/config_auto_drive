@@ -1,15 +1,5 @@
 <lms>
-    <service name="USB_RESET" lib="usb_reset_service" class="UsbResetService">
-        <config>
-            <path>/usr/bin/usb-reset</path>
-        </config>
-    </service>
-    <module name="mavlink_usb_importer" lib="mavlink_usb_importer" class="mavlink_usb_importer">
-        <config>
-            <!--path>/dev/ttyACM0</path-->
-            <path>/dev/senseboard</path>
-        </config>
-    </module>
+    <service name="TIMESTAMP_INTERPOLATOR" lib="timestamp_interpolator_service" class="TimestampInterpolatorService"/>
     <module name="mavlink_to_data" lib="mavlink_to_data" class="MavlinkToData">
         <name>mavlink_to_data</name>
         <channelMapping priority="10" from="CAR" to="CAR"/>
@@ -25,7 +15,6 @@
             <imu_0_acc_cov_xx>0.5</imu_0_acc_cov_xx>
             <imu_0_acc_cov_yy>1.5</imu_0_acc_cov_yy>
             <imu_0_gyro_cov_zz>0.025</imu_0_gyro_cov_zz>
-
             <!-- BIASES -->
             <imu_0_acc_bias_x>0</imu_0_acc_bias_x>
             <imu_0_acc_bias_y>0</imu_0_acc_bias_y>
@@ -33,16 +22,13 @@
             <imu_0_gyro_bias_x>0</imu_0_gyro_bias_x>
             <imu_0_gyro_bias_y>0</imu_0_gyro_bias_y>
             <imu_0_gyro_bias_z>0</imu_0_gyro_bias_z>
-
             <!-- HALL SENSOR -->
             <odometer_0>HALL</odometer_0>
             <odometer_0_velo_cov_xx>0.1</odometer_0_velo_cov_xx>
-
             <!-- MOUSE FRONT -->
             <odometer_1>MOTION_FRONT</odometer_1>
             <!-- MOUSE REAR -->
             <odometer_2>MOTION_REAR</odometer_2>
-
             <!-- LIDAR -->
             <distance_0>LIDAR</distance_0>
             <LIDAR_x>0.14</LIDAR_x>
@@ -54,6 +40,4 @@
             <distance_2>TOF_REAR</distance_2>
         </config>
     </module>
-    <module name="data_to_mavlink" lib="data_to_mavlink" class="CarToMavlink"/>
-    <service name="TIMESTAMP_INTERPOLATOR" lib="timestamp_interpolator_service" class="TimestampInterpolatorService"/>
 </lms>

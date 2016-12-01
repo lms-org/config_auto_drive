@@ -1,5 +1,0 @@
-<lms>
-    <include src="mavlink.xml"/>
-    <include src="mycam.xml"/>
-    <!--include src="parking.xml" /-->
-</lms>

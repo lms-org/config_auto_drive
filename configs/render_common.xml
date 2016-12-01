@@ -1,12 +1,9 @@
 <lms>
-    <module name= "qt_gui_updater" lib="qt_gui_service" class="QtGuiServiceUpdater"/>
-    <service name= "QT_GUI_SERVICE" lib="qt_gui_service" class="QtGuiService"/>
-    <module name="CarTrackVisualizer" lib="car_track_visualizer" class="CarTrackVisualizer"/>
     <module name="image_object_renderer" lib="image_object_renderer" class="ImageObjectRenderer">
         <channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
         <config src="street_utils/obstacle.lconf"/>
-        <config><!--URG_DATA -->
-            <envObjects>DEBUG_ALL_POINTS,DEBUG_VALID_POINTS,DEBUG_VALID_TRANSLATED_POINTS,URG_DATA,SORTED_POINTS,MIDDLE_LANE,TRAJECTORY_LINE,ENVIRONMENT_MASTER,TRAJECTORY_POINT</envObjects><!--DEBUG_TRAJECTORY, DEBUG_TRAJECTORY_2, -->
+        <config>
+            <envObjects>DEBUG_ALL_POINTS,DEBUG_VALID_POINTS,DEBUG_VALID_TRANSLATED_POINTS,MIDDLE_LANE,TRAJECTORY_LINE,ENVIRONMENT_MASTER,TRAJECTORY_POINT</envObjects><!--DEBUG_TRAJECTORY, DEBUG_TRAJECTORY_2, -->
             <!--envObjects>TRAJECTORY_DEBUG</envObjects-->
             <!--The default Color, TODO add colors for points, lines etc -->
             <colorR>255</colorR>
@@ -14,41 +11,28 @@
             <colorB>0</colorB>
         </config>
         <config name="TRAJECTORY_DEBUG">
-        <attr>point</attr>
-        <colorR>255</colorR>
-        <colorG>0</colorG>
-        <colorB>0</colorB>
-        </config>
-        <config name="DEBUG_ALL_POINTS">
-        <attr>point</attr>
-        <colorR>255</colorR>
-        <colorG>125</colorG>
-        <colorB>255</colorB>
-        </config>
-        <config name="DEBUG_VALID_TRANSLATED_POINTS">
-        <attr>point</attr>
-        <colorR>125</colorR>
-        <colorG>125</colorG>
-        <colorB>255</colorB>
-        </config>
-        <config name="DEBUG_VALID_POINTS">
-        <attr>point</attr>
-        <colorR>255</colorR>
-        <colorG>0</colorG>
-        <colorB>0</colorB>
-        </config>
-        <config name="SORTED_POINTS">
             <attr>point</attr>
             <colorR>255</colorR>
-            <colorG>125</colorG>
+            <colorG>0</colorG>
             <colorB>0</colorB>
         </config>
-        <config name="URG_DATA">
+        <config name="DEBUG_ALL_POINTS">
             <attr>point</attr>
-            <crossLength>2</crossLength>
             <colorR>255</colorR>
             <colorG>125</colorG>
-            <colorB>125</colorB>
+            <colorB>255</colorB>
+        </config>
+        <config name="DEBUG_VALID_TRANSLATED_POINTS">
+            <attr>point</attr>
+            <colorR>125</colorR>
+            <colorG>125</colorG>
+            <colorB>255</colorB>
+        </config>
+        <config name="DEBUG_VALID_POINTS">
+            <attr>point</attr>
+            <colorR>255</colorR>
+            <colorG>0</colorG>
+            <colorB>0</colorB>
         </config>
         <config name="DEBUG_POINTS">
             <attr>point</attr>

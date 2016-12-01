@@ -1,4 +1,7 @@
 <lms>
+    <service name="WARP_SERVICE" lib="warp_service" class="WarpService">
+        <config src="camera/homography_ximea.lconf" />
+    </service>
     <module name="new_road_detection" lib="new_road_detection" class="NewRoadDetection">
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
@@ -19,7 +22,6 @@
             <threads>4</threads>
         </config>
     </module>
-
     <module name="crossing_detection" lib="new_road_detection" class="CrossingDetection">
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_CROSSING"/>
