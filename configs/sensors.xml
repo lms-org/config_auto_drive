@@ -1,5 +1,5 @@
 <lms>
-    <!--service name="USB_RESET" lib="usb_reset_service" class="UsbResetService">
+    <service name="USB_RESET" lib="usb_reset_service" class="UsbResetService">
         <config>
             <path>/usr/bin/usb-reset</path>
         </config>
@@ -9,6 +9,6 @@
             <path>/dev/senseboard</path>
         </config>
     </module>
-    <module name="data_to_mavlink" lib="data_to_mavlink" class="CarToMavlink"/-->
+    <module name="data_to_mavlink" lib="data_to_mavlink" class="CarToMavlink"/>
     <include src="ximea_camera.xml"/>
 </lms>
