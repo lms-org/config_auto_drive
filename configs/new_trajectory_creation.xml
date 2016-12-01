@@ -4,8 +4,8 @@
             <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>
             <channelMapping from="HOKUYO_LIDAR_DATA" to="HOKUYO_LIDAR_DATA"/>
             <config>
-                <xOffsetFromOriginMeter>0.1</xOffsetFromOriginMeter>
-                <yOffsetFromOriginMeter>-0.1</yOffsetFromOriginMeter>
+                <xOffsetFromOriginMeter>0.06</xOffsetFromOriginMeter>
+                <yOffsetFromOriginMeter>0</yOffsetFromOriginMeter>
                 <startAtDeg>-119</startAtDeg>
                 <stopAtDeg>119</stopAtDeg>
             </config>
@@ -38,7 +38,7 @@
         <channelMapping from="ROADMATRIX" to="ROADMATRIX"/>
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
-            <carWidthMeter>0.2</carWidthMeter>
+            <carWidthMeter>0.4</carWidthMeter>
             <obstacleClearanceLeftFrontMeter>1.5</obstacleClearanceLeftFrontMeter>
             <obstacleClearanceRightFrontMeter>0.5</obstacleClearanceRightFrontMeter>
             <obstacleClearanceLeftBackMeter>0.5</obstacleClearanceLeftBackMeter>
