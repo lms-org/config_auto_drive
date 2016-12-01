@@ -1,11 +1,11 @@
 set(SOURCES
-    "src/car_track_visulizer.cpp"
+    "src/car_track_visualizer.cpp"
     "src/main_window.cpp"
     "src/interface.cpp"
 )
 
 set(HEADERS
-    "include/car_track_visulizer.h"
+    "include/car_track_visualizer.h"
     "include/main_window.h"
 )
 
@@ -23,5 +23,5 @@ find_package(Qt5Charts)
 
 
 include_directories(include)
-add_library(car_track_visulizer MODULE ${SOURCES} ${HEADERS})
-target_link_libraries(car_track_visulizer PRIVATE lmscore street_environment Qt5::Widgets Qt5::Charts Qt5Core)
+add_library(car_track_visualizer MODULE ${SOURCES} ${HEADERS})
+target_link_libraries(car_track_visualizer PRIVATE lmscore street_environment Qt5::Widgets Qt5::Charts Qt5Core)

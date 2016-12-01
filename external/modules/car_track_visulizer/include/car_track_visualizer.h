@@ -7,9 +7,9 @@
 /**
  * @brief LMS module car_track_visulizer
  **/
-class CarTrackVisulizer : public lms::Module {
+class CarTrackVisualizer : public lms::Module {
     MainWindow* window;
-    lms::ReadDataChannel<street_environment::Car> car;
+    lms::ReadDataChannel<street_environment::Car> car,car_ground_truth;
 public:
     bool initialize() override;
     bool deinitialize() override;

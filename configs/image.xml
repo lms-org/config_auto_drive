@@ -11,7 +11,6 @@
         </module>
         </if>
     </if>
-
     <if notSet="load-car">
         <include src="basis.xml" />
     </if>
@@ -28,23 +27,12 @@
         </module>
     </if>
     <if set="load-car">
-    <include src="ego.xml"/>
+    <!--include src="ego.xml"/-->
         <!--module name="image_loader" lib="image_loader" class="ImageLoader">
             <channelMapping from="IMAGE" to="GREY_IMAGE"/>
             <config>
                 <minCounter>0</minCounter>
                 <maxCounter>-1</maxCounter>
-            </config>
-        </module-->
-        <module name="channel_loader_data" lib="channel_loader" class="ChannelLoader">
-            <config>
-                <dataChannels>URG_DATA,GREY_IMAGE,MAVLINK_IN</dataChannels>
-            </config>
-        </module>
-        <!--module name="channel_loader_car" lib="channel_loader" class="ChannelLoader">
-            <config>
-                <fileName>car</fileName>
-                <dataChannels>CAR</dataChannels>
             </config>
         </module-->
     <module name="obstacle_from_laser" lib="obstacle_from_laser" class="ObstacleFromLaser">
@@ -94,34 +82,5 @@
         </config>
     </module>
         <service name="TIMESTAMP_INTERPOLATOR" lib="timestamp_interpolator_service" class="TimestampInterpolatorService"/>
-    </if>
-    <if set="save">
-        <module name="image_logger" lib="image_logger" class="ImageLogger">
-            <channelMapping from="IMAGE" to="GREY_IMAGE"/>
-        </module>
-        <module name="channel_logger_data" lib="channel_logger" class="ChannelLogger">
-            <config>
-                <dataChannels>URG_DATA,GREY_IMAGE,MAVLINK_IN</dataChannels>
-            </config>
-        </module>
-        <module name="channel_logger_car" lib="channel_logger" class="ChannelLogger">
-            <config>
-                <fileName>car</fileName>
-                <dataChannels>CAR</dataChannels>
-            </config>
-        </module>
-    </if>
-    <if set="save-car">
-        <module name="channel_logger_data" lib="channel_logger" class="ChannelLogger">
-            <config>
-                <dataChannels>URG_DATA,GREY_IMAGE,MAVLINK_IN</dataChannels>
-            </config>
-        </module>
-        <module name="channel_logger_car" lib="channel_logger" class="ChannelLogger">
-            <config>
-                <fileName>car</fileName>
-                <dataChannels>CAR</dataChannels>
-            </config>
-        </module>
     </if>
 </lms>

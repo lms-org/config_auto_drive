@@ -1,3 +1,3 @@
-#include "car_track_visulizer.h"
+#include "car_track_visualizer.h"
 
-LMS_MODULE_INTERFACE(CarTrackVisulizer)
+LMS_MODULE_INTERFACE(CarTrackVisualizer)

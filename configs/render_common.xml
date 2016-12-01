@@ -1,7 +1,7 @@
 <lms>
     <module name= "qt_gui_updater" lib="qt_gui_service" class="QtGuiServiceUpdater"/>
     <service name= "QT_GUI_SERVICE" lib="qt_gui_service" class="QtGuiService"/>
-    <module name="CarTrackVisulizer" lib="car_track_visulizer" class="CarTrackVisulizer"/>
+    <module name="CarTrackVisualizer" lib="car_track_visualizer" class="CarTrackVisualizer"/>
     <module name="image_object_renderer" lib="image_object_renderer" class="ImageObjectRenderer">
         <channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
         <config src="street_utils/obstacle.lconf"/>
