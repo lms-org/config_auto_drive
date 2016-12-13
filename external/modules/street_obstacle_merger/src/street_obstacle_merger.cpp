@@ -14,7 +14,7 @@ bool StreetObjectMaster::initialize() {
     }
 
     //We should have the roadlane and the car from the current cycle
-    car = readChannel<street_environment::Car>("CAR");
+    car = readChannel<street_environment::CarCommand>("CAR");
     middle = readChannel<street_environment::RoadLane>("MIDDLE_LANE");
 
     visibleAreasToDraw = writeChannel<std::vector<lms::math::Rect>>("VISIBLE_AREAS");
@@ -35,7 +35,7 @@ bool StreetObjectMaster::deinitialize() {
 }
 
 bool StreetObjectMaster::cycle() {
-    //reset obstacles
+    //reset obstacles TODO HACK, not nice at all
     if(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->rcStateChanged()){
         envOutput->objects.clear();
     }
@@ -52,13 +52,11 @@ bool StreetObjectMaster::cycle() {
     }
     getObstacles(*envOutput,obstaclesOld);
 
-    //TODO we could check the angle at the beginning checkAngle
-
     logger.debug("cycle")<<"number of new obstacles" << obstaclesNew.objects.size();
     logger.debug("cycle")<<"number of old obstacles" << obstaclesOld.objects.size();
 
     logger.debug("cycle")<<"translate old obstacles by: "<<car->movedDistance();
-    //update old obstacles
+    //translate old old obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
         obst->translate(-car->deltaPosition().x,-car->deltaPosition().y);
     }

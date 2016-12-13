@@ -10,7 +10,7 @@ bool CourseEventLogger::initialize() {
     eventCsv.open(dir +"events.csv");
 
     //data
-    car = readChannel<street_environment::Car>("CAR");
+    car = readChannel<street_environment::CarCommand>("CAR");
     return true;
 }
 

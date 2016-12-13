@@ -25,7 +25,7 @@ public:
 
 
 private:
-    lms::ReadDataChannel<street_environment::Car> car;
+    lms::ReadDataChannel<street_environment::CarCommand> car;
     socket_connection::SocketConnectionHandler *server;
 };
 

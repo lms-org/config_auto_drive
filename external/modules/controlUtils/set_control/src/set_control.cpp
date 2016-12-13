@@ -1,8 +1,8 @@
 #include "set_control.h"
 
 bool SetControl::initialize() {
-    carState = readChannel<street_environment::Car::State>("CAR_STATE");
-    car = writeChannel<street_environment::Car>("CAR");
+    carState = readChannel<street_environment::CarCommand::State>("CAR_STATE");
+    car = writeChannel<street_environment::CarCommand>("CAR");
     return true;
 }
 

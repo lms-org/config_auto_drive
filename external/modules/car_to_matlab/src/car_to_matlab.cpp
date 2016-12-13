@@ -6,7 +6,7 @@
 #include <sstream>
 
 bool CarToMatlab::initialize() {
-    car = readChannel<street_environment::Car>("CAR");
+    car = readChannel<street_environment::CarCommand>("CAR");
     server = new socket_connection::SocketConnectionHandler(logger);
     server->openPortForRequests(config().get<int>("port",55555));
     return true;

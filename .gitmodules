@@ -148,3 +148,6 @@
 [submodule "external/modules/trajectory_from_roadmatrix"]
 	path = external/modules/trajectory_from_roadmatrix
 	url = https://github.com/tum-phoenix/trajectory_from_roadmatrix.git
+[submodule "external/modules/visual_odometry_from_road"]
+	path = external/modules/visual_odometry_from_road
+	url = https://github.com/tum-phoenix/visual_odometry_from_road

@@ -7,8 +7,8 @@
  * @brief LMS module set_control
  **/
 class SetControl : public lms::Module {
- lms::WriteDataChannel<street_environment::Car> car;
- lms::ReadDataChannel<street_environment::Car::State> carState;
+ lms::WriteDataChannel<street_environment::CarCommand> car;
+ lms::ReadDataChannel<street_environment::CarCommand::State> carState;
 public:
     bool initialize() override;
     bool deinitialize() override;

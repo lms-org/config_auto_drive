@@ -40,7 +40,7 @@ class NewRoadDetection : public lms::Module {
     lms::WriteDataChannel<lms::math::polyLine2f> debugValidPoints;
     lms::WriteDataChannel<lms::math::polyLine2f> debugTranslatedPoints;
 
-    lms::ReadDataChannel<street_environment::Car> car;
+    lms::ReadDataChannel<street_environment::CarCommand> car;
 
     struct SearchLine{
         lms::math::vertex2f w_start;

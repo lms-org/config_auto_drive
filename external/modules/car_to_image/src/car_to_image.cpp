@@ -5,7 +5,7 @@
 #include "street_environment/car.h"
 
 bool CarToImage::initialize() {
-    car = readChannel<street_environment::Car>("CAR");
+    car = readChannel<street_environment::CarCommand>("CAR");
     image = writeChannel<lms::imaging::Image>("IMAGE");
     int imageWidth=1024;
     int imageHeight=1024;

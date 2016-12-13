@@ -17,7 +17,7 @@ bool NewRoadDetection::init() {
     debugValidPoints = writeChannel<lms::math::polyLine2f>("DEBUG_VALID_POINTS");
     debugTranslatedPoints = writeChannel<lms::math::polyLine2f>("DEBUG_VALID_TRANSLATED_POINTS");
 
-    car = readChannel<street_environment::Car>("CAR"); //TODO create ego-estimation service
+    car = readChannel<street_environment::CarCommand>("CAR"); //TODO create ego-estimation service
 
 
     configsChanged();

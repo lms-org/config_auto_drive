@@ -1,7 +1,7 @@
 #include "lap_time.h"
 bool LapTime::initialize() {
     environment = readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT");
-    car = readChannel<street_environment::Car>("CAR");
+    car = readChannel<street_environment::CarCommand>("CAR");
     start = lms::Time::ZERO;
     crossingStartLine = false;
     distanceDriven = 0;

@@ -7,7 +7,7 @@
  * @brief LMS module load_control
  **/
 class LoadControl : public lms::Module {
-    lms::WriteDataChannel<street_environment::Car::State> carState;
+    lms::WriteDataChannel<street_environment::CarCommand::State> carState;
 
 public:
     bool initialize() override;
