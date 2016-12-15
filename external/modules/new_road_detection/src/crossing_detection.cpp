@@ -77,7 +77,7 @@ bool CrossingDetection::find(){
             //trying to detect the stopline
             if(points.size() == 1){
                 middlePosition = points[0];
-                viewDirection = top-bot;//TODO we could also use the found points
+                viewDirection = (top-bot).normalize();//TODO we could also use the found points
                 //now we go one step to the left/right and check if we still can find a point
                 float offsetSide = 0.1;
                 float offsetAlong = 0.1;
@@ -128,10 +128,8 @@ bool CrossingDetection::find(){
         startline->setTrust(1);
         env->objects.push_back(startline);
     }else if(foundCrossing){
-        logger.error("FOUND A CROSSING")<<middlePosition;
         street_environment::CrossingPtr crossing(new street_environment::Crossing());
         crossing->addPoint(middlePosition);
-        logger.error("NEW POS A CROSSING")<<crossing->position();
         crossing->viewDirection(viewDirection);
         crossing->width(0.2);
         crossing->setTrust(1);

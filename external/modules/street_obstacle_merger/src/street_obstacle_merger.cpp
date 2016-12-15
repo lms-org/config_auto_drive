@@ -151,6 +151,7 @@ void StreetObjectMaster::merge(street_environment::EnvironmentObstacles &obstacl
                 if(obstOld->getType() == street_environment::Crossing::TYPE){
                     street_environment::CrossingPtr cptr = std::static_pointer_cast<street_environment::Crossing>(obstOld);
                     street_environment::CrossingPtr cptr2 = std::static_pointer_cast<street_environment::Crossing>(obstNew);
+                    cptr->viewDirection(cptr2->viewDirection());
                     cptr->blocked(cptr2->blocked());
                 }
                 //TODO obstOld->updatePosition(obstNew->position());
