@@ -2,8 +2,8 @@
 
 bool CarTrackVisualizer::initialize() {
     window = new MainWindow();
-    car = readChannel<street_environment::Car>("CAR");
-    car_ground_truth = readChannel<street_environment::Car>("CAR_GROUND_TRUTH");
+    car = readChannel<street_environment::CarCommand>("CAR");
+    car_ground_truth = readChannel<street_environment::CarCommand>("CAR_GROUND_TRUTH");
 
     return true;
 }
