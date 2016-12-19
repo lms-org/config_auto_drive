@@ -1,4 +1,43 @@
 <lms>
+    <module name="image_object_renderer_translate" lib="image_object_renderer" class="ImageObjectRenderer">
+        <channelMapping from="IMAGE" to="OBJECT_IMAGE_TRANSLATED"/>
+        <config src="street_utils/obstacle.lconf"/>
+        <config>
+            <envObjects>ROADMATRIX,MIDDLE_LANE,TRAJECTORY_LINE,HOKUYO_LIDAR_DATA,CULLED_HOKUYO_LIDAR_DATA,BOUNDED_OBSTACLES</envObjects>
+            <!--DEBUG_TRAJECTORY, DEBUG_TRAJECTORY_2, -->
+            <!--envObjects>HOKUYO_LIDAR_DATA,CULLED_HOKUYO_LIDAR_DATA,BOUNDED_OBSTACLES</envObjects-->
+            <!--The default Color, TODO add colors for points, lines etc -->
+            <colorR>255</colorR>
+            <colorG>255</colorG>
+            <colorB>0</colorB>
+            <translateX>0.8</translateX>
+        </config>
+        <config name="MIDDLE_LANE">
+            <colorR>255</colorR>
+            <colorG>255</colorG>
+            <colorB>255</colorB>
+        </config>
+        <config name="TRAJECTORY_LINE">
+            <colorR>255</colorR>
+            <colorG>255</colorG>
+            <colorB>0</colorB>
+        </config>
+        <config name="HOKUYO_LIDAR_DATA">
+            <colorR>0</colorR>
+            <colorG>255</colorG>
+            <colorB>255</colorB>
+        </config>
+            <config name="CULLED_HOKUYO_LIDAR_DATA">
+            <colorR>255</colorR>
+            <colorG>0</colorG>
+            <colorB>0</colorB>
+        </config>
+        <config name="BOUNDED_OBSTACLES">
+            <colorR>0</colorR>
+            <colorG>0</colorG>
+            <colorB>255</colorB>
+        </config>
+    </module>
     <module name="image_object_renderer" lib="image_object_renderer" class="ImageObjectRenderer">
         <channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
         <config src="street_utils/obstacle.lconf"/>
@@ -10,6 +49,7 @@
             <colorR>255</colorR>
             <colorG>255</colorG>
             <colorB>0</colorB>
+            <translateX>0</translateX>
         </config>
         <config name="TRAJECTORY_DEBUG">
             <attr>point</attr>
@@ -62,11 +102,6 @@
             <colorG>0</colorG>
             <colorB>0</colorB>
         </config>
-        <config name="MIDDLE_LANE">
-            <colorR>255</colorR>
-            <colorG>123</colorG>
-            <colorB>120</colorB>
-        </config>
         <config name="DEFAULT_OBSTACLE">
             <colorR>0</colorR>
             <colorG>0</colorG>
@@ -92,17 +127,27 @@
             <colorG>0</colorG>
             <colorB>123</colorB>
         </config>
+        <config name="MIDDLE_LANE">
+            <colorR>255</colorR>
+            <colorG>255</colorG>
+            <colorB>255</colorB>
+        </config>
+        <config name="TRAJECTORY_LINE">
+            <colorR>255</colorR>
+            <colorG>255</colorG>
+            <colorB>0</colorB>
+        </config>
         <config name="HOKUYO_LIDAR_DATA">
             <colorR>0</colorR>
             <colorG>255</colorG>
             <colorB>255</colorB>
         </config>
-        <config name="CULLED_HOKUYO_LIDAR_DATA">
+            <config name="CULLED_HOKUYO_LIDAR_DATA">
             <colorR>255</colorR>
             <colorG>0</colorG>
             <colorB>0</colorB>
         </config>
-         <config name="BOUNDED_OBSTACLES">
+        <config name="BOUNDED_OBSTACLES">
             <colorR>0</colorR>
             <colorG>0</colorG>
             <colorB>255</colorB>
