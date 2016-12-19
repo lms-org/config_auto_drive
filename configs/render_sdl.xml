@@ -9,6 +9,16 @@
             <output>false</output>
         </config>
     </module>
+    <module name="sdl_image_renderer_translate" lib="sdl_image_renderer" class="SdlImageRenderer">
+        <channelMapping from="OUTPUT_IMAGE" to="RENDER_TRANSLATE"/>
+        <config>
+            <title>TRAJECTORY_VIEWER</title>
+            <channels>OBJECT_IMAGE_TRANSLATED</channels>
+            <width>512</width>
+            <height>512</height>
+            <output>false</output>
+        </config>
+    </module>
     <module name="sdl_image_renderer_trans" lib="sdl_image_renderer" class="SdlImageRenderer">
         <channelMapping from="OUTPUT_IMAGE" to="RENDER_TRANS"/>
         <config>
