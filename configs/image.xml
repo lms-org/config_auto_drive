@@ -21,7 +21,7 @@
         <module name="image_loader" lib="image_loader" class="ImageLoader">
             <channelMapping from="IMAGE" to="GREY_IMAGE"/>
             <config>
-                <minCounter>200</minCounter>
+                <minCounter>0</minCounter>
                 <maxCounter>-1</maxCounter>
             </config>
         </module>

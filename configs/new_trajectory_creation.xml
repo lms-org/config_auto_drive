@@ -36,8 +36,8 @@
         <config>
             <laneWidth>0.4</laneWidth>
             <cellsPerLane>4</cellsPerLane>
-            <cellLength>0.1</cellLength>
-            <maxCellTranslate>5</maxCellTranslate>
+            <cellLength>0.01</cellLength>
+            <maxCellTranslate>10</maxCellTranslate>
         </config>
     </module>
     <module name="trajectory_from_roadmatrix" lib="trajectory_from_roadmatrix" class="TrajectoryFromRoadmatrix">

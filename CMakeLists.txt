@@ -1,5 +1,8 @@
 project(AUTO_DRIVE C CXX)
-cmake_minimum_required(VERSION 2.8)
+
+cmake_minimum_required(VERSION 2.8.12)
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 
 # This macro is used in external/modules and external/libraries CMakeLists
 MACRO(SUBDIRLIST result curdir)
