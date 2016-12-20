@@ -2,6 +2,18 @@
     <service name="WARP_SERVICE" lib="warp_service" class="WarpService">
         <config src="camera/homography_ximea.lconf" />
     </service>
+    <module name="simple_visual_odometry" lib="simple_visual_odometry" class="SimpleVisualOdometry">
+        <config>
+            <xmin>300</xmin>
+            <xmax>700</xmax>
+            <ymin>400</ymin>
+            <ymax>580</ymax>
+            <drawDebug>true</drawDebug>
+            <fastThreshold>80</fastThreshold>
+            <minFeatureCount>100</minFeatureCount>
+            <cam2world>-7.34321e-05,0.000640175,-0.780523,0.00147214,6.82574e-05,-0.990151,1.19912e-05,-0.00432448,1.20903</cam2world>
+        </config>
+    </module>
     <module name="new_road_detection" lib="new_road_detection" class="NewRoadDetection">
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>

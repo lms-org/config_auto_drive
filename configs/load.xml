@@ -8,11 +8,11 @@
             </config>
         </module>
     </if>
-    <module name="channel_loader_data" lib="channel_loader" class="ChannelLoader">
+    <!--module name="channel_loader_data" lib="channel_loader" class="ChannelLoader">
         <config>
             <dataChannels>GREY_IMAGE,MAVLINK_IN</dataChannels>
         </config>
-    </module>
+    </module-->
 <!--     module name="channel_loader_car" lib="channel_loader" class="ChannelLoader">
         <config>
             <fileName>car</fileName>
