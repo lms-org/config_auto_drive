@@ -3,6 +3,7 @@
         <config src="camera/homography_ximea.lconf" />
     </service>
     <module name="simple_visual_odometry" lib="simple_visual_odometry" class="SimpleVisualOdometry">
+        <channelMapping from="IMAGE" to="GREY_IMAGE"/>
         <config>
             <xmin>300</xmin>
             <xmax>700</xmax>
