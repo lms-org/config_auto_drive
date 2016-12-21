@@ -33,11 +33,12 @@
         <channelMapping from="CENTER_LINE" to="MIDDLE_LANE"/>
         <channelMapping from="OBSTACLES" to="BOUNDED_OBSTACLES"/>
         <channelMapping from="ROADMATRIX" to="ROADMATRIX"/>
+        <channelMapping from="NEGATIVE_CENTER_LINE" to="NEGATIVE_CENTER_LINE"/>
         <config>
             <laneWidth>0.4</laneWidth>
             <cellsPerLane>4</cellsPerLane>
             <cellLength>0.1</cellLength>
-            <maxCellTranslate>10</maxCellTranslate>
+            <maxTranslation>0.5</maxTranslation>
         </config>
     </module>
     <module name="trajectory_from_roadmatrix" lib="trajectory_from_roadmatrix" class="TrajectoryFromRoadmatrix">
