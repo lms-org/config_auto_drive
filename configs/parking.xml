@@ -43,7 +43,7 @@
                 <maxParkingSpaceSize>0.59</maxParkingSpaceSize>
 
                 <!-- Geschwindigkeiten -->
-                <velocitySearching>2.0</velocitySearching>
+                <velocitySearching>1.0</velocitySearching>
                 <velocityEntering>0.8</velocityEntering>
                 <velocityCorrecting>0.5</velocityCorrecting>
                 <decelerationStopping>0.0</decelerationStopping>
