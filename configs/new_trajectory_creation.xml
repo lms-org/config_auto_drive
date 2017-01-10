@@ -46,7 +46,7 @@
         <channelMapping from="ROADMATRIX" to="ROADMATRIX"/>
         <channelMapping priority="10" from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
-            <carWidthMeter>0.4</carWidthMeter>
+            <carWidthMeter>0.3</carWidthMeter>
             <obstacleClearanceLeftFrontMeter>1.0</obstacleClearanceLeftFrontMeter>
             <obstacleClearanceRightFrontMeter>0.5</obstacleClearanceRightFrontMeter>
             <obstacleClearanceLeftBackMeter>0.5</obstacleClearanceLeftBackMeter>
