@@ -63,7 +63,7 @@ void LocalCourse::update(float dx, float dy, float dphi){
         }
         //TODO remove points which a close togehter
     }
-    lineX->translate(dx,dy,dphi);
+    //TODO lineX->translate(dx,dy,dphi);
     /*
     for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
         if(std::isnan(lineX->state(i))){
@@ -82,6 +82,17 @@ void LocalCourse::update(float dx, float dy, float dphi){
         input.col(col) = Eigen::Vector3d(pointsToAdd[col].x,pointsToAdd[col].y,weight);
     }
     lineX->update(input);
+    //check the state
+    float maxAngle = config().get<float>("maxAngleInDeg",180/6)*M_PI/180;
+    for(int i = 3; i < lineX->state.rows()*lineX->state.cols(); i++){
+        if(std::fabs(lineX->state[i]) > maxAngle){
+            for(int l = i; l < lineX->state.rows()*lineX->state.cols(); l++){
+                lineX->state[l] = lineX->state[i-1];
+            }
+            break;
+        }
+
+    }
     /*
     for(int i = 0; i < lineX->state.rows()*lineX->state.cols(); i++){
         if(std::isnan(lineX->state(i))){
