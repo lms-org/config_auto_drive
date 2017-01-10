@@ -39,6 +39,7 @@
             <cellsPerLane>4</cellsPerLane>
             <cellLength>0.1</cellLength>
             <maxTranslation>0.5</maxTranslation>
+            <minDeltaXPose>0.01</minDeltaXPose>
         </config>
     </module>
     <module name="trajectory_from_roadmatrix" lib="trajectory_from_roadmatrix" class="TrajectoryFromRoadmatrix">
