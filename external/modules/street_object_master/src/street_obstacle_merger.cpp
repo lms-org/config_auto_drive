@@ -96,8 +96,32 @@ bool StreetObjectMaster::cycle() {
         }
         if(obst->getType() == street_environment::Crossing::TYPE || obst->getType() == street_environment::StartLine::TYPE){
             checkAngle(obst);
+            //check if a crossing is blocked
+            if(obst->getType() == street_environment::Crossing::TYPE){
+                std::shared_ptr<street_environment::Crossing> crossing = std::static_pointer_cast<street_environment::Crossing>(obst);
+                crossing->blocked(false);
+                lms::math::vertex2f crossingPos = crossing->position();
+                lms::math::vertex2f crossingView = crossing->viewDirection().normalize();
+                lms::math::Rect blockedRect;
+                lms::math::vertex2f pos = crossingPos+crossingView*0.4;
+                blockedRect.x = pos.x;
+                blockedRect.y = pos.y;
+                blockedRect.width = 1;
+                blockedRect.height = 0.5;
+                for(std::shared_ptr<street_environment::Obstacle> &obstBlock:obstaclesOld.objects){
+                    if(obstBlock->TYPE == street_environment::Obstacle::TYPE){
+                        if(blockedRect.contains(obstBlock->position().x,obstBlock->position().y)){
+                            //TODO trust value
+                            crossing->blocked(true);
+                            break;
+                        }
+                    }
+                }
+            }
+
         }
     }
+
 
     //create new env output
     createOutput(obstaclesOld);
