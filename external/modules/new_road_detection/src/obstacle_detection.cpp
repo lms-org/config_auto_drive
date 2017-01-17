@@ -71,7 +71,11 @@ void ObstacleDetection::configsChanged(){
 
 void ObstacleDetection::find(const lms::imaging::detection::StreetObstacle::StreetObstacleParam &sop,lms::imaging::BGRAImageGraphics &debugGraphics){
     lms::imaging::detection::StreetObstacle imageObstacle;
+#ifdef DRAW_DEBUG_USED
     if(imageObstacle.find(sop,debugGraphics)){
+#else
+    if(imageObstacle.find(sop)){
+#endif
         std::shared_ptr<street_environment::Obstacle> obstacleW(new street_environment::Obstacle());
         logger.debug(getName())<<"found obstacle pointCount: "<<&imageObstacle.results<<" "<<imageObstacle.results.size();
         for(const lms::imaging::detection::Line &line:imageObstacle.results){
