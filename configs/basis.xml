@@ -9,6 +9,7 @@
     <!--lidar obstacle detection -->
     <module name="obstacle_from_pointcloud" lib="obstacle_from_pointcloud" class="ObstacleFromPointCloud">
         <channelMapping from="POINT_CLOUD" to="POINT_CLOUD_OUT"/>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_LIDAR"/>
     </module>
     <module name="pointcloud_filter" lib="obstacle_from_pointcloud" class="PointCloudFilter">
         <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>
