@@ -2,8 +2,8 @@
     <module name="lap_time" lib="lap_time" class="LapTime">
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE"/>
     </module>
-    <!--module name="pause_runtime" lib="pause_runtime" class="PauseRuntime"-->
-    </module>
+    <!--module name="pause_runtime" lib="pause_runtime" class="PauseRuntime">
+    </module -->
     <include src="trajectory_creation.xml"/>
     <include src="trajectory_controller.xml"/>
 </lms>
