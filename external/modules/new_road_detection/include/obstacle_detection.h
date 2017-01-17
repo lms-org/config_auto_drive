@@ -1,5 +1,4 @@
-#ifndef PHX_CROSSING_DETECTION_H
-#define PHX_CROSSING_DETECTION_H
+#pragma once
 #include <lms/module.h>
 #include <lms/imaging/image.h>
 #include <lms/imaging/transform_image.h>
@@ -30,6 +29,3 @@ public:
     void find(const lms::imaging::detection::StreetObstacle::StreetObstacleParam &sop, lms::imaging::BGRAImageGraphics &debugGraphics);
 
 };
-
-
-#endif //PHX_CROSSING_DETECTION_H

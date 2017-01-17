@@ -4,3 +4,6 @@ minDistanceBetweenSearchPoints = 0.1
 sobelThreshold = 80
 minPointCount = 1
 boxDepthSearchLength= 40
+stepLengthMin = 2
+stepLengthMin = 10
+fixedSearchAngle = true

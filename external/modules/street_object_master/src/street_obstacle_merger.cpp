@@ -85,13 +85,13 @@ bool StreetObjectMaster::cycle() {
     //kalman obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
         //TODO obst->kalman(*middle,0);
-        if(fabs(obst->distanceOrth()) >0.4 && obst->trust() > 0.1){
+        if(fabs(distanceOrth(obst)) >0.4 && obst->trust() > 0.1){
             obst->setTrust(0.1);
         }
-        if(fabs(obst->distanceOrth()) > 0.6){
+        if(fabs(distanceOrth(obst)) > 0.6){
             obst->setTrust(0);
         }
-        if(fabs(obst->distanceTang()) > 2){
+        if(fabs(distanceTang(obst)) > 2){
             obst->setTrust(0);
         }
         if(obst->getType() == street_environment::Crossing::TYPE || obst->getType() == street_environment::StartLine::TYPE){
@@ -206,10 +206,10 @@ void StreetObjectMaster::checkAngle(street_environment::ObstaclePtr obst){
     for(int i = 1; i < static_cast<int>(middle->points().size()); i++){
         lms::math::vertex2f streetDir = middle->points()[i]-middle->points()[i-1];
         currentDis += streetDir.length();
-        if(currentDis > obst->distanceTang()){
+        if(currentDis > distanceTang(obst)){
             float deltaAngle = streetDir.angleBetween(obst->viewDirection());
             if(deltaAngle > maxAngleBetweenCrossingAndRoad){
-                logger.info("crossing/startline not trusted")<<"crossingDistance: "<<obst->distanceTang()<<" "<< currentDis<<" roadPos: "<<i << "angle to road: "<< deltaAngle<< " roadAngle: "<<streetDir.angle() << " crossingViewDir "<<obst->viewDirection();
+                logger.info("crossing/startline not trusted")<<"crossingDistance: "<<distanceTang(obst)<<" "<< currentDis<<" roadPos: "<<i << "angle to road: "<< deltaAngle<< " roadAngle: "<<streetDir.angle() << " crossingViewDir "<<obst->viewDirection();
                 obst->setTrust(0.0);
             }else{
                 break;
@@ -220,13 +220,13 @@ void StreetObjectMaster::checkAngle(street_environment::ObstaclePtr obst){
 
 float StreetObjectMaster::distanceTang(street_environment::ObstaclePtr obstacle){
     float t,o;
-    middle->distance(obstacle->position(),o,t);
+    middle->firstOrthogonalDistance(obstacle->position(),o,t);
     return t;
 }
 
 float StreetObjectMaster::distanceOrth(street_environment::ObstaclePtr obstacle){
     float t,o;
-    middle->distance(obstacle->position(),o,t);
+    middle->firstOrthogonalDistance(obstacle->position(),o,t);
     return o;
 
 }

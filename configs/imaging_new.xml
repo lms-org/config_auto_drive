@@ -42,10 +42,14 @@
         <config>
             <renderDebugImage>true</renderDebugImage>
         </config>
-        <config name="defaultEPParameter" src="imaging/defaultEdgePointParam.lconf"/>
-        <config name="defaultLPParameter" src="imaging/defaultLinePointParam.lconf"/>
-        <config name="defaultLineParameter" src="imaging/defaultLineParam.lconf"/>
+    </module>
+    <module name="obstacle_detection" lib="new_road_detection" class="ObstacleDetection">
+        <channelMapping from="IMAGE" to="GREY_IMAGE"/>
+        <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_OBSTACLE"/>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_NEW"/>
+        <config>
+            <renderDebugImage>true</renderDebugImage>
+        </config>
         <config name="defaultObstacleParameter" src="imaging/defaultObstacleParam.lconf"/>
-        <config name="defaultCrossingParameter" src="imaging/defaultCrossingParam.lconf"/>
     </module>
 </lms>

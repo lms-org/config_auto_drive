@@ -26,33 +26,39 @@ bool ObstacleDetection::cycle(){
     gaussBuffer->resize(image->width(),image->height(),lms::imaging::Format::GREY);
 
     env->objects.clear();
-    const lms::math::polyLine2f middle;
-
-    lms::imaging::detection::StreetObstacle::StreetObstacleParam sopRight;
-    lms::imaging::detection::StreetObstacle::StreetObstacleParam sopLeft;
-    sopRight.obstacleRight = true;
-    sopRight.edge = true;
-    sopRight.target = image.get();
-    sopRight.gaussBuffer = gaussBuffer;
-    sopRight.fromConfig(&config("defaultEPParameter"));
-    sopRight.fromConfig(&config("defaultLPParameter"));
-    sopRight.fromConfig(&config("defaultLineParameter"));
-    sopRight.fromConfig(&config("defaultObstacleParameter"));
+    //get the middle-line
+    lms::math::polyLine2f middle;
+    {
+        //we just want a curse and don't mind if it's from the last cycle
+        lms::ServiceHandle<local_course::LocalCourse> course = getService<local_course::LocalCourse>("LOCAL_COURSE_SERVICE");
+        if(course.isValid()){
+            middle = course->getCourse().getWithDistanceBetweenPoints(0.05);
+        }
+    }
+    if(middle.points().size() == 0){
+        logger.warn("No road given");
+        return false;
+    }
+    lms::imaging::detection::StreetObstacle::StreetObstacleParam sop;
+    sop.obstacleRight = true;
+    sop.edge = true;
+    sop.target = image.get();
+    sop.gaussBuffer = gaussBuffer;
+    sop.fromConfig(&config("defaultObstacleParameter"));
     for(const lms::math::vertex2f &v:middle.points()){
-        if(v.length() <= 0.4)
+        if(v.length() <= config().get<float>("obstacleMinDistance",0.4))
             continue;
-        sopRight.middleLine.points().push_back(v);
+        sop.middleLine.points().push_back(v);
     }
     lms::imaging::BGRAImageGraphics debugGraphics(*imageDebug);
     if(config().get<bool>("searchObstacleLeft",true)){
-        sopLeft.obstacleRight = true;
-        find(sopLeft,debugGraphics);
+        sop.obstacleRight = false;
+        find(sop,debugGraphics);
     }
 
     if(config().get<bool>("searchObstacleRight",true)){
-        sopLeft = sopRight;
-        sopLeft.obstacleRight = false;
-        find(sopLeft,debugGraphics);
+        sop.obstacleRight = true;
+        find(sop,debugGraphics);
     }
 
     return true;

@@ -19,13 +19,15 @@ bool LapTime::cycle() {
     for(street_environment::EnvironmentObjectPtr ptr:environment->objects){
         if(ptr->getType() == street_environment::StartLine::TYPE){
             street_environment::StartLinePtr startLine = std::static_pointer_cast<street_environment::StartLine>(ptr);
-            if(startLine->distanceTang() < 0){
+            /*
+            if(distanceTang(startLine) < 0){
                 if(!crossingStartLine){
                     crossedStartLine();
                 }
                 crossingStartLine = true;
                 return true;
             }
+            */
         }
     }
     //reset it
