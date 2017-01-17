@@ -2,9 +2,8 @@
 #include <street_environment/obstacle.h>
 
 bool ObstacleFromLaser::initialize() {
-    points = readChannel<lms::math::polyLine2f> ("POINTS");
-    sortedPoints = writeChannel<lms::math::polyLine2f>("SORTED_POINTS");
-    road = readChannel<street_environment::RoadLane>("MIDDLE_LANE");
+    newData = readChannel<bool>("NEW_DATA");
+    pointCloud = readChannel<lms::math::PointCloud2f>("POINT_CLOUD");
     env = writeChannel<street_environment::EnvironmentObjects>("OBSTACLES_FOUND");
     return true;
 }
@@ -16,51 +15,28 @@ bool ObstacleFromLaser::deinitialize() {
 bool ObstacleFromLaser::cycle() {
     //clear old objects
     env->objects.clear();
-    sortedPoints->points().clear();
-    if(road->points().size() == 0){
-        logger.warn("Road with no points!");
+    if(!*newData){
+        logger.debug("no new data");
         return true;
     }
-    if(points->points().size() == 0){
+    if(pointCloud->points().size() == 0){
         logger.debug("cycle")<<"no points given!";
         return true;
     }
-    //check if the point is inside the car
-    for(const lms::math::vertex2f &v:points->points()){
-        if(v.x < 0.25 && v.x>-0.1 && v.y < 0.1 && v.y > -0.1){
-            continue;
-        }
-        float minDistance = 100;
-        for(lms::math::vertex2f rp:road->points()){
-            float ndistance = rp.distance(v);
-            if(ndistance < minDistance){
-                minDistance = ndistance;
-            }
-        }
-        if(minDistance>0.4){
-            continue;
-        }
-        sortedPoints->points().push_back(v);
-    }
-
-    //check if there are valid points
-    if(sortedPoints->points().size() == 0)
-        return true;
 
     float blobMaxDistance = config().get<float>("blobMaxDistance",0.1);
     std::vector<std::vector<lms::math::vertex2f>> blobs;
     std::vector<lms::math::vertex2f> blob;
-    lms::math::vertex2f lastPoint = sortedPoints->points()[0];
+    lms::math::vertex2f lastPoint = pointCloud->points()[0];
     blob.push_back(lastPoint);
-    for(int i = 1; i < (int)sortedPoints->points().size();i++){
-        if(lastPoint.distance(sortedPoints->points()[i])<=blobMaxDistance){
-            lastPoint = sortedPoints->points()[i];
+    for(int i = 1; i < (int)pointCloud->points().size();i++){
+        if(lastPoint.distance(pointCloud->points()[i])<=blobMaxDistance){
+            lastPoint = pointCloud->points()[i];
             blob.push_back(lastPoint);
         }else{
-            //TODO obstacle could be created here
             blobs.push_back(blob);
             blob.clear();
-            lastPoint = sortedPoints->points()[i];
+            lastPoint = pointCloud->points()[i];
             blob.push_back(lastPoint);
         }
     }
@@ -82,7 +58,5 @@ bool ObstacleFromLaser::cycle() {
             env->objects.push_back(obstacle);
         }
     }
-
-    //TODO
     return true;
 }

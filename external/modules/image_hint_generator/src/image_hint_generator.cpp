@@ -129,8 +129,6 @@ void ImageHintGenerator::createHintForObstacle(const lms::math::polyLine2f &midd
         obstacleRight->parameter = sopRight;
         hintContainerObstacle->add(obstacleRight);
     }
-
-
 }
 
 void ImageHintGenerator::createHintsFromMiddleLane(const street_environment::RoadLane &middle){

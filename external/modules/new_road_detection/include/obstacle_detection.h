@@ -6,18 +6,20 @@
 #include <lms/math/polyline.h>
 
 #include <street_environment/crossing.h>
+#include "lms/imaging_detection/street_crossing.h"
+#include "lms/imaging_detection/street_obstacle.h"
 #include <street_environment/start_line.h>
+#include "lms/imaging/graphics.h"
 
-class CrossingDetection: public lms::Module {
+class ObstacleDetection: public lms::Module {
 
     lms::ReadDataChannel<lms::imaging::Image> image;
     lms::WriteDataChannel<lms::imaging::Image> imageDebug;
     lms::WriteDataChannel<street_environment::EnvironmentObjects> env;
-    //all points from the lidar
-    //lms::ReadDataChannel<lms::math::polyLine2f> points;
     bool renderDebugImage;
     lms::imaging::Homography homo;
     int threshold;
+    lms::imaging::Image* gaussBuffer;
 
 public:
     bool init() override;
@@ -25,7 +27,7 @@ public:
     bool cycle() override;
     void configsChanged() override;
 
-    bool find();
+    void find(const lms::imaging::detection::StreetObstacle::StreetObstacleParam &sop, lms::imaging::BGRAImageGraphics &debugGraphics);
 
 };
 

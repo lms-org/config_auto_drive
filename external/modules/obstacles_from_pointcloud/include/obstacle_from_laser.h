@@ -4,6 +4,7 @@
 #include <lms/module.h>
 #include <lms/math/polyline.h>
 #include <street_environment/road.h>
+#include <lms/math/point_cloud.h>
 
 /**
  * @brief LMS module obstacle_from_laser
@@ -14,10 +15,10 @@ public:
     bool deinitialize() override;
     bool cycle() override;
 private:
-    lms::ReadDataChannel<lms::math::polyLine2f> points;
+    lms::ReadDataChannel<bool> newData;
+    lms::ReadDataChannel<lms::math::PointCloud2f> pointCloud;
     lms::ReadDataChannel<street_environment::RoadLane> road;
 
-    lms::WriteDataChannel<lms::math::polyLine2f> sortedPoints;
     lms::WriteDataChannel<street_environment::EnvironmentObjects> env;
 };
 

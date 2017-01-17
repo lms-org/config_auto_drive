@@ -1,12 +1,14 @@
 set(SOURCES
     "src/new_road_detection.cpp"
     "src/crossing_detection.cpp"
+    "src/obstacle_detection.cpp"
     "src/interface.cpp"
 )
 
 set(HEADERS
     "include/new_road_detection.h"
     "include/crossing_detection.h"
+    "include/obstacle_detection.h"
     "include/detection_utils.h"
 )
 

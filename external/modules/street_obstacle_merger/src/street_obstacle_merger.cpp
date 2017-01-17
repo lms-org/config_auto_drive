@@ -8,13 +8,13 @@
 bool StreetObjectMaster::initialize() {
     envOutput = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_OUTPUT");
 
-    std::vector<std::string> envInputs = config().getArray<std::string>("environments");
+    std::vector<std::string> envInputs = config().getArray<std::string>("new_environments");
     for(const std::string &s:envInputs){
         envInput.push_back(readChannel<street_environment::EnvironmentObjects>(s));
     }
 
     //We should have the roadlane and the car from the current cycle
-    car = readChannel<street_environment::CarCommand>("CAR");
+    poseHistory = readChannel<lms::math::Pose2DHistory>("POSE2D_HISTORY");
     middle = readChannel<street_environment::RoadLane>("MIDDLE_LANE");
 
     visibleAreasToDraw = writeChannel<std::vector<lms::math::Rect>>("VISIBLE_AREAS");
@@ -51,49 +51,32 @@ bool StreetObjectMaster::cycle() {
         getObstacles(*envO,obstaclesNew);
     }
     getObstacles(*envOutput,obstaclesOld);
+    lms::math::Pose2D dPose = getDeltaPose();
 
     logger.debug("cycle")<<"number of new obstacles" << obstaclesNew.objects.size();
     logger.debug("cycle")<<"number of old obstacles" << obstaclesOld.objects.size();
 
-    logger.debug("cycle")<<"translate old obstacles by: "<<car->movedDistance();
+    logger.debug("cycle")<<"translate old obstacles by: "<<dPose.x << " "<<dPose.y;
     //translate old old obstacles
     for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
-        obst->translate(-car->deltaPosition().x,-car->deltaPosition().y);
+        obst->translate(dPose.x,dPose.y);
     }
 
     //merge new obstacles
     for(int i = 0; i < (int)obstaclesNew.objects.size(); i++){
         std::shared_ptr<street_environment::Obstacle>  obst1 = obstaclesNew.objects[i];
-        int findCounter = 0;
-        lms::math::vertex2f mergePos = obst1->position();
-        float orthMinRes = obst1->distanceOrth()-obst1->width()/2;
-        float orthMaxRes = obst1->distanceOrth()+obst1->width()/2;
         for(int k = i+1; k < (int)obstaclesNew.objects.size(); ){
             std::shared_ptr<street_environment::Obstacle>  obst2 = obstaclesNew.objects[k];
+            //TODO check if their bounding box
             if(obst1->match(*obst2)){
-                //TODO merge the points
-                findCounter++;
-                mergePos +=  obst2->position();
-                float orthMin = obst2->distanceOrth()-obst2->width()/2;
-                if(orthMin < orthMinRes){
-                    orthMinRes = orthMin;
-                }
-                float orthMax = obst2->distanceOrth()+obst2->width()/2;
-                if(orthMax > orthMaxRes){
-                    orthMaxRes = orthMax;
-                }
-                //remove it
+                //merge the points
+                obst1->addPoints(obst2->points());
                 obstaclesNew.objects.erase(obstaclesNew.objects.begin()+k);
             }else{
                 k++;
             }
         }
-        if(findCounter > 0){
-            mergePos=mergePos/findCounter;
-            obst1->width(orthMaxRes-orthMinRes);
-        }
     }
-
     logger.debug("cycle")<<"number of new obstacles (before merge)" << obstaclesNew.objects.size();
     //merge them
     merge(obstaclesNew,obstaclesOld);
@@ -130,6 +113,8 @@ void StreetObjectMaster::createOutput(street_environment::EnvironmentObstacles &
         if(obstaclesOld.objects[i]->trust() > 0){
             logger.debug("keep it")<<obstaclesOld.objects[i]->trust();
             envOutput->objects.push_back(obstaclesOld.objects[i]);
+        }else{
+            logger.debug("throwing away obstacle")<<obstaclesOld.objects[i]->trust();
         }
     }
 }
@@ -232,3 +217,31 @@ void StreetObjectMaster::checkAngle(street_environment::ObstaclePtr obst){
         }
     }
 }
+
+float StreetObjectMaster::distanceTang(street_environment::ObstaclePtr obstacle){
+    float t,o;
+    middle->distance(obstacle->position(),o,t);
+    return t;
+}
+
+float StreetObjectMaster::distanceOrth(street_environment::ObstaclePtr obstacle){
+    float t,o;
+    middle->distance(obstacle->position(),o,t);
+    return o;
+
+}
+
+lms::math::Pose2D StreetObjectMaster::getDeltaPose() {
+    lms::math::Pose2D oldPose, deltaPose;
+    if (poseHistory->getPose(lastUpdate.toFloat<std::milli, double>(),
+                             oldPose)) {
+        lms::math::CoordinateSystem2D coord(oldPose);
+        deltaPose = coord.transformTo(poseHistory->currentPose());
+    } else {
+        logger.warn("cycle") << "no valid pose found: "
+                             << lastUpdate.toFloat<std::milli, double>();
+    }
+    lastUpdate = lms::Time::now();
+    return deltaPose;
+}
+
