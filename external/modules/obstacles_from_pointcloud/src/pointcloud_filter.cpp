@@ -3,7 +3,7 @@
 
 bool PointCloudFilter::initialize() {
     newData = readChannel<bool>("NEW_DATA");
-    pointCloud = readChannel<lms::math::PointCloud2f>("POINT_CLOUD");
+    pointCloud = readChannel<lms::math::PointCloud2f>("POINT_CLOUD_IN");
     sortedPointCloud = writeChannel<lms::math::PointCloud2f>("POINT_CLOUD_OUT");
     return true;
 }

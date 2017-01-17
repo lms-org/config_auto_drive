@@ -9,15 +9,13 @@
 /**
  * @brief LMS module obstacle_from_laser
  **/
-class ObstacleFromLaser : public lms::Module {
+class ObstacleFromPointCloud : public lms::Module {
 public:
     bool initialize() override;
     bool deinitialize() override;
     bool cycle() override;
 private:
-    lms::ReadDataChannel<bool> newData;
     lms::ReadDataChannel<lms::math::PointCloud2f> pointCloud;
-    lms::ReadDataChannel<street_environment::RoadLane> road;
 
     lms::WriteDataChannel<street_environment::EnvironmentObjects> env;
 };

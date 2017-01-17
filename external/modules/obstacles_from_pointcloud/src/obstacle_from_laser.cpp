@@ -1,24 +1,19 @@
 #include "obstacle_from_laser.h"
 #include <street_environment/obstacle.h>
 
-bool ObstacleFromLaser::initialize() {
-    newData = readChannel<bool>("NEW_DATA");
+bool ObstacleFromPointCloud::initialize() {
     pointCloud = readChannel<lms::math::PointCloud2f>("POINT_CLOUD");
-    env = writeChannel<street_environment::EnvironmentObjects>("OBSTACLES_FOUND");
+    env = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT");
     return true;
 }
 
-bool ObstacleFromLaser::deinitialize() {
+bool ObstacleFromPointCloud::deinitialize() {
     return true;
 }
 
-bool ObstacleFromLaser::cycle() {
+bool ObstacleFromPointCloud::cycle() {
     //clear old objects
     env->objects.clear();
-    if(!*newData){
-        logger.debug("no new data");
-        return true;
-    }
     if(pointCloud->points().size() == 0){
         logger.debug("cycle")<<"no points given!";
         return true;

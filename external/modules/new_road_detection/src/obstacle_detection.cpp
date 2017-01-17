@@ -9,7 +9,7 @@ bool ObstacleDetection::init(){
     gaussBuffer = new lms::imaging::Image();
     imageDebug = writeChannel<lms::imaging::Image>("DEBUG_IMAGE");
     image = readChannel<lms::imaging::Image>("IMAGE");
-    env = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_OBSTACLE");
+    env = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT");
     configsChanged();
     return true;
 }

@@ -10,7 +10,7 @@ bool CrossingDetection::init(){
     image = readChannel<lms::imaging::Image>("IMAGE");
     imageDebug = writeChannel<lms::imaging::Image>("DEBUG_IMAGE");
     //points = readChannel<lms::math::polyLine2f> ("POINTS");
-    env = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_CROSSING");
+    env = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT");
     configsChanged();
     return true;
 }

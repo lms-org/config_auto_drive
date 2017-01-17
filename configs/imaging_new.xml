@@ -38,7 +38,7 @@
     <module name="crossing_detection" lib="new_road_detection" class="CrossingDetection">
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_CROSSING"/>
-        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT"/>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_CROSSING"/>
         <config>
             <renderDebugImage>true</renderDebugImage>
         </config>
@@ -46,7 +46,7 @@
     <module name="obstacle_detection" lib="new_road_detection" class="ObstacleDetection">
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_OBSTACLE"/>
-        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_NEW"/>
+        <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_CAM"/>
         <config>
             <renderDebugImage>true</renderDebugImage>
         </config>
