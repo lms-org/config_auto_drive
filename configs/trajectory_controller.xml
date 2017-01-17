@@ -1,5 +1,5 @@
 <lms>
-    <module name="trajectory_point_controller" lib="trajectory_point_controller" class="TrajectoryPointController">
+    <module name="trajectory_controller" lib="trajectory_point_controller" class="TrajectoryPointController">
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
             <!--type>mikMPC</type-->

@@ -10,5 +10,35 @@
         </config>
     </module>
     <module name="data_to_mavlink" lib="data_to_mavlink" class="CarToMavlink"/>
+    <if set="start_lidar">
+        <module name="hokuyo_lidar_importer" lib="hokuyo_lidar_importer" class="HokuyoLidarImporter">
+            <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>
+            <channelMapping from="HOKUYO_LIDAR_DATA" to="HOKUYO_LIDAR_DATA"/>
+            <config>
+                <xOffsetFromOriginMeter>0.06</xOffsetFromOriginMeter>
+                <yOffsetFromOriginMeter>0</yOffsetFromOriginMeter>
+                <startAtDeg>-119</startAtDeg>
+                <stopAtDeg>119</stopAtDeg>
+                <deviceFile>/dev/ttyACM1</deviceFile>
+            </config>
+        </module>
+        <module name="obstacles_from_points" lib="obstacles_from_points" class="ObstaclesFromPoints">
+            <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>
+            <channelMapping from="POINT_CLOUD" to="HOKUYO_LIDAR_DATA"/>
+            <channelMapping from="CENTER_LINE" to="MIDDLE_LANE"/>
+            <channelMapping from="CULLED_POINT_CLOUD" to="CULLED_HOKUYO_LIDAR_DATA"/>
+            <channelMapping from="OBSTACLES" to="BOUNDED_OBSTACLES"/>
+            <config>
+                <laneWidthMeter>0.4</laneWidthMeter>
+                <obstacleDistanceThresholdMeter>0.04</obstacleDistanceThresholdMeter>
+                <obstaclePointThreshold>10</obstaclePointThreshold>
+                <obstaclePointMinXOffsetFront>0.25</obstaclePointMinXOffsetFront>
+                <obstaclePointMinXOffsetBack>0.1</obstaclePointMinXOffsetBack>
+                <obstaclePointMinYOffsetLeft>0.1</obstaclePointMinYOffsetLeft>
+                <obstaclePointMinYOffsetRight>0.1</obstaclePointMinYOffsetRight>
+                <maxObstacleTranslate>0.6</maxObstacleTranslate>
+            </config>
+        </module>
+    </if>
     <include src="ximea_camera.xml"/>
 </lms>
