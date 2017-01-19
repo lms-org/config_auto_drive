@@ -8,8 +8,20 @@
     <include src="trajectory_controller.xml"/>
     <!--lidar obstacle detection -->
     <module name="obstacle_from_pointcloud" lib="obstacle_from_pointcloud" class="ObstacleFromPointCloud">
-        <channelMapping from="POINT_CLOUD" to="POINT_CLOUD_OUT"/>
+        <channelMapping from="POINT_CLOUD" to="POINT_CLOUD_FILTERED"/>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_LIDAR"/>
+        <config>
+        <minBlobElements>2</minBlobElements>
+        </config>
+    </module>
+    <module name="street_obstacle_master" lib="street_obstacle_merger" class="StreetObjectMaster">
+        <name>street_obstacle_merger</name>
+        <channelMapping priority="10" from="CAR" to="CAR"/>
+        <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MASTER"/>
+        <config src="street_utils/obstacle.lconf"/>
+        <config>
+            <input_environments>ENVIRONMENT_OBSTACLE_LIDAR,ENVIRONMENT_OBSTACLE_CAM,ENVIRONMENT_CROSSING</input_environments>
+        </config>
     </module>
     <module name="pointcloud_filter" lib="obstacle_from_pointcloud" class="PointCloudFilter">
         <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>

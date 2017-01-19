@@ -3,7 +3,7 @@
         <channelMapping from="IMAGE" to="OBJECT_IMAGE_TRANSLATED"/>
         <config src="street_utils/obstacle.lconf"/>
         <config>
-            <envObjects>ROADMATRIX,MIDDLE_LANE,TRAJECTORY_LINE,HOKUYO_LIDAR_DATA,CULLED_HOKUYO_LIDAR_DATA,BOUNDED_OBSTACLES,NEGATIVE_CENTER_LINE</envObjects>
+            <envObjects>ENVIRONMENT_MASTER,MIDDLE_LANE,TRAJECTORY_LINE,HOKUYO_LIDAR_DATA,POINT_CLOUD_FILTERED</envObjects>
             <!--DEBUG_TRAJECTORY, DEBUG_TRAJECTORY_2, -->
             <!--envObjects>HOKUYO_LIDAR_DATA,CULLED_HOKUYO_LIDAR_DATA,BOUNDED_OBSTACLES</envObjects-->
             <!--The default Color, TODO add colors for points, lines etc -->

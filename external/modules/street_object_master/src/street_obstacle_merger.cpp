@@ -8,7 +8,7 @@
 bool StreetObjectMaster::initialize() {
     envOutput = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_OUTPUT");
 
-    std::vector<std::string> envInputs = config().getArray<std::string>("new_environments");
+    std::vector<std::string> envInputs = config().getArray<std::string>("input_environments");
     for(const std::string &s:envInputs){
         envInput.push_back(readChannel<street_environment::EnvironmentObjects>(s));
     }
@@ -35,6 +35,10 @@ bool StreetObjectMaster::deinitialize() {
 }
 
 bool StreetObjectMaster::cycle() {
+    if(envInput.size() == 0){
+        logger.error("no input environments given!");
+        return false;
+    }
     //reset obstacles TODO HACK, not nice at all
     if(getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->rcStateChanged()){
         envOutput->objects.clear();
@@ -53,8 +57,8 @@ bool StreetObjectMaster::cycle() {
     getObstacles(*envOutput,obstaclesOld);
     lms::math::Pose2D dPose = getDeltaPose();
 
-    logger.debug("cycle")<<"number of new obstacles" << obstaclesNew.objects.size();
-    logger.debug("cycle")<<"number of old obstacles" << obstaclesOld.objects.size();
+    logger.debug("cycle")<<"number of new obstacles " << obstaclesNew.objects.size();
+    logger.debug("cycle")<<"number of old obstacles " << obstaclesOld.objects.size();
 
     logger.debug("cycle")<<"translate old obstacles by: "<<dPose.x << " "<<dPose.y;
     //translate old old obstacles

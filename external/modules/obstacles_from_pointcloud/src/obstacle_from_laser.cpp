@@ -36,7 +36,7 @@ bool ObstacleFromPointCloud::cycle() {
         }
     }
     blobs.push_back(blob); //add the last blob
-
+    logger.debug("cycle")<<"found "<<blobs.size()<<" blobs";
     int minBlobElements = config().get<int>("minBlobElements",5);
     float obstacleWidth = 0.3;
     //check found blobs
@@ -53,5 +53,6 @@ bool ObstacleFromPointCloud::cycle() {
             env->objects.push_back(obstacle);
         }
     }
+    logger.debug("cycle")<<"found "<<env->objects.size() <<" obstacles";
     return true;
 }

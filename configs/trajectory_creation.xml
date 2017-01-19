@@ -18,15 +18,6 @@
             <useProbabilitiesStraight>true</useProbabilitiesStraight>
          </config>
     </module>
-    <module name="street_obstacle_merger" lib="street_obstacle_merger" class="StreetObjectMaster">
-        <name>street_obstacle_merger</name>
-        <channelMapping priority="10" from="CAR" to="CAR"/>
-        <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MASTER"/>
-        <config src="street_utils/obstacle.lconf"/>
-        <config>
-            <environments>ENVIRONMENT_OBSTACLE_LIDAR,ENVIRONMENT_OBSTACLE_CAM,ENVIRONMENT_CROSSING</environments>
-        </config>
-    </module>
     <module name="trajectory_creator" lib="trajectory_creator" class="TrajectoryLineCreator">
         <channelMapping from="LINE" to="TRAJECTORY_LINE"/>
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>

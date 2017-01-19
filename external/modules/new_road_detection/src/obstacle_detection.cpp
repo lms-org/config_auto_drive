@@ -18,6 +18,14 @@ void ObstacleDetection::destroy(){
 }
 
 bool ObstacleDetection::cycle(){
+    if(image->width()*image->height() == 0){
+        logger.error("cycle")<<"image size is 0";
+        return false;
+    }
+    if(image->format() != lms::imaging::Format::GREY){
+        logger.error("cycle")<<"image has invalid format: "<<image->format();
+
+    }
     if(renderDebugImage){
         imageDebug->resize(image->width(),image->height(),lms::imaging::Format::BGRA);
         imageDebug->fill(0);
