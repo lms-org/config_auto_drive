@@ -11,7 +11,7 @@
         <channelMapping from="POINT_CLOUD" to="POINT_CLOUD_FILTERED"/>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_LIDAR"/>
         <config>
-        <minBlobElements>2</minBlobElements>
+        <minBlobElements>3</minBlobElements>
         </config>
     </module>
     <module name="street_obstacle_master" lib="street_obstacle_merger" class="StreetObjectMaster">

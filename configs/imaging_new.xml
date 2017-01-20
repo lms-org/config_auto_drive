@@ -43,7 +43,7 @@
             <renderDebugImage>true</renderDebugImage>
         </config>
     </module>
-    <module name="obstacle_detection" lib="new_road_detection" class="ObstacleDetection">
+    <!--module name="obstacle_detection" lib="new_road_detection" class="ObstacleDetection">
         <channelMapping from="IMAGE" to="GREY_IMAGE"/>
         <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_OBSTACLE"/>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_OBSTACLE_CAM"/>
@@ -51,5 +51,5 @@
             <renderDebugImage>true</renderDebugImage>
         </config>
         <config name="defaultObstacleParameter" src="imaging/defaultObstacleParam.lconf"/>
-    </module>
+    </module-->
 </lms>

@@ -167,12 +167,11 @@ void StreetObjectMaster::merge(street_environment::EnvironmentObstacles &obstacl
                     cptr->viewDirection(cptr2->viewDirection());
                     cptr->blocked(cptr2->blocked());
                 }
-                //TODO obstOld->updatePosition(obstNew->position());
-                obstOld->clearPoints();
-                obstOld->addPoint(obstNew->position());
 
-                //TODO obstOld->viewDirection(obstNew->viewDirection());//ok
-                obstOld->width(obstNew->width());
+                obstOld->clearPoints(); //TODO clear old points until we have a decrease points method
+                obstOld->addPoints(obstNew->points());
+
+                //calculate new trust value
                 float newTrust = obstOld->trust() + obstNew->trust();
                 if(newTrust < 0)
                     newTrust = 0;
