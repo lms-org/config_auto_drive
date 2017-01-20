@@ -190,9 +190,11 @@ void StreetObjectMaster::merge(street_environment::EnvironmentObstacles &obstacl
     //Decrease trust in obstacles that weren't found
     for(int i = 0; i < oldSize;i++){
         if(std::find(verifiedOld.begin(), verifiedOld.end(), i) == verifiedOld.end()){
+            /*
            if(!inVisibleArea(obstaclesOld.objects[i]->position().x,
                         obstaclesOld.objects[i]->position().y))
                continue;//obstacle can't be found
+               */
 
             //old obstacle wasn't found
             float dt = obstaclesOld.objects[i]->getDeltaTrust();

@@ -21,7 +21,7 @@
     <module name="trajectory_creator" lib="trajectory_creator" class="TrajectoryLineCreator">
         <channelMapping from="LINE" to="TRAJECTORY_LINE"/>
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
-        <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_OBSTACLE"/>
+        <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_MASTER"/>
         <channelMapping priority="9" from="CAR" to="CAR"/>
         <config name="FMH">
             <velocity_straight>2.5</velocity_straight>
