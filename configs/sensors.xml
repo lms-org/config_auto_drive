@@ -11,19 +11,18 @@
     </module-->
     <module name="data_to_mavlink" lib="data_to_mavlink" class="CarToMavlink"/>
     <if set="start_lidar">
-        <module name="hokuyo_lidar_importer" lib="hokuyo_lidar_importer" class="HokuyoLidarImporter">
+        <module name="laser_scanner" lib="laser_scanner" class="LaserScanner">
+            <channelMapping from="URG_DATA" to="HOKUYO_LIDAR_DATA"/>
             <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>
-            <channelMapping from="HOKUYO_LIDAR_DATA" to="HOKUYO_LIDAR_DATA"/>
             <config>
                 <xOffsetFromOriginMeter>0.06</xOffsetFromOriginMeter>
                 <yOffsetFromOriginMeter>0</yOffsetFromOriginMeter>
                 <startAtDeg>-119</startAtDeg>
                 <stopAtDeg>119</stopAtDeg>
+                <minIntensity>255</minIntensity>
                 <deviceFile>/dev/ttyACM0</deviceFile>
             </config>
         </module>
     </if>
     <include src="ximea_camera.xml"/>
-    <!--module name="laser_scanner" lib="laser_scanner" class="LaserScanner"/-->
-
 </lms>
