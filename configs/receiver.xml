@@ -6,7 +6,7 @@
     </module>
     <module name="socket_data_receiver" lib="socket_data_receiver" class="Receiver">
         <config>
-            <dataChannels>NEGATIVE_CENTER_LINE,HOKUYO_LIDAR_DATA,CULLED_HOKUYO_LIDAR_DATA,ROADMATRIX,IMAGE_GREY_SCALE,CAR,TRAJECTORY_LINE,TRAJECTORY_POINT,ENVIRONMENT_OBSTACLE,MIDDLE_LANE</dataChannels>
+            <dataChannels>HOKUYO_LIDAR_DATA,IMAGE_GREY_SCALE,CAR,TRAJECTORY_LINE,TRAJECTORY_POINT,ENVIRONMENT_MASTER,MIDDLE_LANE</dataChannels>
             <ip>192.168.0.112</ip>
             <!--ip>localhost</ip-->
             <port>65001</port>
