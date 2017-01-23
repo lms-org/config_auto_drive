@@ -2,7 +2,6 @@
 #include <street_environment/obstacle.h>
 
 bool PointCloudFilter::initialize() {
-    newData = readChannel<bool>("NEW_DATA");
     pointCloud = readChannel<lms::math::PointCloud2f>("POINT_CLOUD_IN");
     sortedPointCloud = writeChannel<lms::math::PointCloud2f>("POINT_CLOUD_OUT");
     return true;
@@ -13,6 +12,10 @@ bool PointCloudFilter::deinitialize() {
 }
 
 bool PointCloudFilter::cycle() {
+    if(!pointCloud.hasNewData()){
+        logger.debug("no new data available");
+        return true;
+    }
     sortedPointCloud->points().clear();
     //check if the point is inside the car
     for(const lms::math::vertex2f &v:pointCloud->points()){
@@ -33,5 +36,6 @@ bool PointCloudFilter::cycle() {
         */
         sortedPointCloud->points().push_back(v);
     }
+    sortedPointCloud.publish();
     return true;
 }

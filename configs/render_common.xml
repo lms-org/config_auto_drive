@@ -1,56 +1,9 @@
 <lms>
-    <module name="image_object_renderer_translate" lib="image_object_renderer" class="ImageObjectRenderer">
-        <channelMapping from="IMAGE" to="OBJECT_IMAGE_TRANSLATED"/>
-        <config src="street_utils/obstacle.lconf"/>
-        <config>
-            <envObjects>ENVIRONMENT_MASTER,MIDDLE_LANE,TRAJECTORY_LINE,HOKUYO_LIDAR_DATA,POINT_CLOUD_FILTERED</envObjects>
-            <!--DEBUG_TRAJECTORY, DEBUG_TRAJECTORY_2, -->
-            <!--envObjects>HOKUYO_LIDAR_DATA,CULLED_HOKUYO_LIDAR_DATA,BOUNDED_OBSTACLES</envObjects-->
-            <!--The default Color, TODO add colors for points, lines etc -->
-            <colorR>255</colorR>
-            <colorG>255</colorG>
-            <colorB>0</colorB>
-            <translateX>0.8</translateX>
-        </config>
-        <config name="MIDDLE_LANE">
-            <colorR>255</colorR>
-            <colorG>255</colorG>
-            <colorB>255</colorB>
-        </config>
-        <config name="NEGATIVE_CENTER_LINE">
-            <colorR>255</colorR>
-            <colorG>0</colorG>
-            <colorB>0</colorB>
-        </config>
-        <config name="TRAJECTORY_LINE">
-            <colorR>255</colorR>
-            <colorG>255</colorG>
-            <colorB>0</colorB>
-        </config>
-        <config name="HOKUYO_LIDAR_DATA">
-            <colorR>0</colorR>
-            <colorG>255</colorG>
-            <colorB>255</colorB>
-        </config>
-            <config name="CULLED_HOKUYO_LIDAR_DATA">
-            <colorR>255</colorR>
-            <colorG>0</colorG>
-            <colorB>0</colorB>
-        </config>
-        <config name="BOUNDED_OBSTACLES">
-            <colorR>0</colorR>
-            <colorG>0</colorG>
-            <colorB>255</colorB>
-        </config>
-    </module>
     <module name="image_object_renderer" lib="image_object_renderer" class="ImageObjectRenderer">
         <channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
         <config src="street_utils/obstacle.lconf"/>
         <config>
-            <envObjects>ROADMATRIX,DEBUG_ALL_POINTS,DEBUG_VALID_POINTS,DEBUG_VALID_TRANSLATED_POINTS,MIDDLE_LANE,TRAJECTORY_LINE,ENVIRONMENT_MASTER,TRAJECTORY_POINT,HOKUYO_LIDAR_DATA,CULLED_HOKUYO_LIDAR_DATA,BOUNDED_OBSTACLES</envObjects>
-            <!--DEBUG_TRAJECTORY, DEBUG_TRAJECTORY_2, -->
-            <!--envObjects>HOKUYO_LIDAR_DATA,CULLED_HOKUYO_LIDAR_DATA,BOUNDED_OBSTACLES</envObjects-->
-            <!--The default Color, TODO add colors for points, lines etc -->
+            <envObjects>HOKUYO_LIDAR_DATA,TRAJECTORY_LINE,TRAJECTORY_POINT,ENVIRONMENT_MASTER,MIDDLE_LANE</envObjects>
             <colorR>255</colorR>
             <colorG>255</colorG>
             <colorB>0</colorB>

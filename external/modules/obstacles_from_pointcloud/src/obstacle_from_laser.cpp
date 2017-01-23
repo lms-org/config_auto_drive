@@ -13,6 +13,10 @@ bool ObstacleFromPointCloud::deinitialize() {
 
 bool ObstacleFromPointCloud::cycle() {
     //clear old objects
+    if(!pointCloud.hasNewData()){
+        logger.debug("no new data available");
+        return true;
+    }
     env->objects.clear();
     if(pointCloud->points().size() == 0){
         logger.debug("cycle")<<"no points given!";

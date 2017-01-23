@@ -11,7 +11,7 @@ bool SocketDatatypeDefiner::initialize() {
     readChannel<street_environment::Trajectory>("TRAJECTORY_LINE"); //TODO change it to trajectory
     readChannel<street_environment::TrajectoryPoint>("TRAJECTORY_POINT");
     readChannel<street_environment::CarCommand>("CAR");
-    readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_OBSTACLE");
+    readChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_MASTER");
     readChannel<street_environment::RoadLane>("MIDDLE_LANE");
     readChannel<lms::math::polyLine2f>("NEGATIVE_CENTER_LINE");
     readChannel<street_environment::RoadMatrix>("ROADMATRIX");
