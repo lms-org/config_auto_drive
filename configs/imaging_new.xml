@@ -11,7 +11,7 @@
             <ymax>580</ymax>
             <drawDebug>true</drawDebug>
             <fastThreshold>80</fastThreshold>
-            <minFeatureCount>100</minFeatureCount>
+            <minFeatureCount>5</minFeatureCount>
             <cam2world>-7.34321e-05,0.000640175,-0.780523,0.00147214,6.82574e-05,-0.990151,1.19912e-05,-0.00432448,1.20903</cam2world>
         </config>
     </module>
@@ -21,7 +21,7 @@
         <channelMapping priority="10" from="CAR" to="CAR"/>
         <config>
             <searchOffset>0.2</searchOffset>
-            <distanceBetweenSearchlines>0.2</distanceBetweenSearchlines>
+            <distanceBetweenSearchlines>0.1</distanceBetweenSearchlines>
             <minLineWidthMul>0.5</minLineWidthMul>
             <maxLineWidthMul>3</maxLineWidthMul>
             <findBySobel>true</findBySobel>

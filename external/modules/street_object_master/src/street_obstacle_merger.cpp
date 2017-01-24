@@ -44,85 +44,97 @@ bool StreetObjectMaster::cycle() {
         envOutput->objects.clear();
     }
 
-    *visibleAreasToDraw = getService<area_of_detection::AreaOfDetection>("AreaOfDetection")->visibleAreas();
-
     //get vectors from environments
     street_environment::EnvironmentObstacles obstaclesNew;
     street_environment::EnvironmentObstacles obstaclesOld;
+    getObstacles(*envOutput,obstaclesOld);
 
+    //translate old obstacles
+    if(config().get<bool>("translate",false)){
+        lms::math::Pose2D dPose = getDeltaPose();
+        logger.debug("cycle")<<"translate old obstacles by: "<<dPose.x << " "<<dPose.y;
+        //translate old old obstacles
+        for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
+            obst->translate(dPose.x,dPose.y);
+        }
+
+    }
+
+    *visibleAreasToDraw = getService<area_of_detection::AreaOfDetection>("AreaOfDetection")->visibleAreas();
+
+    bool hasNewData = false;
     //collect all new found obstacles
     for(lms::ReadDataChannel<street_environment::EnvironmentObjects> &envO: envInput){
-        getObstacles(*envO,obstaclesNew);
+        if(envO.hasNewData()){
+            hasNewData = true;
+            getObstacles(*envO,obstaclesNew);
+        }
     }
-    getObstacles(*envOutput,obstaclesOld);
-    lms::math::Pose2D dPose = getDeltaPose();
 
     logger.debug("cycle")<<"number of new obstacles " << obstaclesNew.objects.size();
     logger.debug("cycle")<<"number of old obstacles " << obstaclesOld.objects.size();
 
-    logger.debug("cycle")<<"translate old obstacles by: "<<dPose.x << " "<<dPose.y;
-    //translate old old obstacles
-    for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
-        obst->translate(dPose.x,dPose.y);
-    }
-
-    //merge new obstacles
-    for(int i = 0; i < (int)obstaclesNew.objects.size(); i++){
-        std::shared_ptr<street_environment::Obstacle>  obst1 = obstaclesNew.objects[i];
-        for(int k = i+1; k < (int)obstaclesNew.objects.size(); ){
-            std::shared_ptr<street_environment::Obstacle>  obst2 = obstaclesNew.objects[k];
-            //TODO check if their bounding box
-            if(obst1->match(*obst2)){
-                //merge the points
-                obst1->addPoints(obst2->points());
-                obstaclesNew.objects.erase(obstaclesNew.objects.begin()+k);
-            }else{
-                k++;
+    if(!hasNewData){
+        logger.debug("no new obstacles to add!");
+        return true;
+    }else{
+        //merge new obstacles
+        for(int i = 0; i < (int)obstaclesNew.objects.size(); i++){
+            std::shared_ptr<street_environment::Obstacle>  obst1 = obstaclesNew.objects[i];
+            for(int k = i+1; k < (int)obstaclesNew.objects.size(); ){
+                std::shared_ptr<street_environment::Obstacle>  obst2 = obstaclesNew.objects[k];
+                //TODO check if their bounding box
+                if(obst1->match(*obst2)){
+                    //merge the points
+                    obst1->addPoints(obst2->points());
+                    obstaclesNew.objects.erase(obstaclesNew.objects.begin()+k);
+                }else{
+                    k++;
+                }
             }
         }
-    }
-    logger.debug("cycle")<<"number of new obstacles (before merge)" << obstaclesNew.objects.size();
-    //merge them
-    merge(obstaclesNew,obstaclesOld);
-    logger.debug("cycle")<<"number of obstacles (after merge)" << obstaclesOld.objects.size();
+        logger.debug("cycle")<<"number of new obstacles (before merge)" << obstaclesNew.objects.size();
+        //merge them
+        merge(obstaclesNew,obstaclesOld);
+        logger.debug("cycle")<<"number of obstacles (after merge)" << obstaclesOld.objects.size();
 
-    //kalman obstacles
-    for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
-        //TODO obst->kalman(*middle,0);
-        if(fabs(distanceOrth(obst)) >0.4 && obst->trust() > 0.1){
-            obst->setTrust(0.1);
-        }
-        if(fabs(distanceOrth(obst)) > 0.6){
-            obst->setTrust(0);
-        }
-        if(fabs(distanceTang(obst)) > 2){
-            obst->setTrust(0);
-        }
-        if(obst->getType() == street_environment::Crossing::TYPE || obst->getType() == street_environment::StartLine::TYPE){
-            checkAngle(obst);
-            //check if a crossing is blocked
-            if(obst->getType() == street_environment::Crossing::TYPE){
-                std::shared_ptr<street_environment::Crossing> crossing = std::static_pointer_cast<street_environment::Crossing>(obst);
-                crossing->blocked(false);
-                lms::math::vertex2f crossingPos = crossing->position();
-                lms::math::vertex2f crossingView = crossing->viewDirection().normalize();
-                lms::math::Rect blockedRect;
-                lms::math::vertex2f pos = crossingPos+crossingView*0.4;
-                blockedRect.x = pos.x;
-                blockedRect.y = pos.y;
-                blockedRect.width = 1;
-                blockedRect.height = 0.5;
-                for(std::shared_ptr<street_environment::Obstacle> &obstBlock:obstaclesOld.objects){
-                    if(obstBlock->TYPE == street_environment::Obstacle::TYPE){
-                        if(blockedRect.contains(obstBlock->position().x,obstBlock->position().y)){
-                            //TODO trust value
-                            crossing->blocked(true);
-                            break;
+        //kalman obstacles
+        for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
+            //TODO obst->kalman(*middle,0);
+            if(fabs(distanceOrth(obst)) >0.4 && obst->trust() > 0.1){
+                obst->setTrust(0.1);
+            }
+            if(fabs(distanceOrth(obst)) > 0.6){
+                obst->setTrust(0);
+            }
+            if(fabs(distanceTang(obst)) > 2){
+                obst->setTrust(0);
+            }
+            if(obst->getType() == street_environment::Crossing::TYPE || obst->getType() == street_environment::StartLine::TYPE){
+                checkAngle(obst);
+                //check if a crossing is blocked
+                if(obst->getType() == street_environment::Crossing::TYPE){
+                    std::shared_ptr<street_environment::Crossing> crossing = std::static_pointer_cast<street_environment::Crossing>(obst);
+                    crossing->blocked(false);
+                    lms::math::vertex2f crossingPos = crossing->position();
+                    lms::math::vertex2f crossingView = crossing->viewDirection().normalize();
+                    lms::math::Rect blockedRect;
+                    lms::math::vertex2f pos = crossingPos+crossingView*0.4;
+                    blockedRect.x = pos.x;
+                    blockedRect.y = pos.y;
+                    blockedRect.width = 1;
+                    blockedRect.height = 0.5;
+                    for(std::shared_ptr<street_environment::Obstacle> &obstBlock:obstaclesOld.objects){
+                        if(obstBlock->TYPE == street_environment::Obstacle::TYPE){
+                            if(blockedRect.contains(obstBlock->position().x,obstBlock->position().y)){
+                                //TODO trust value
+                                crossing->blocked(true);
+                                break;
+                            }
                         }
                     }
                 }
             }
-
         }
     }
 
