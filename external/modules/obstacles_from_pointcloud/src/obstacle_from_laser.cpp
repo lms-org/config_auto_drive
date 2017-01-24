@@ -58,5 +58,6 @@ bool ObstacleFromPointCloud::cycle() {
         }
     }
     logger.debug("cycle")<<"found "<<env->objects.size() <<" obstacles";
+    env.publish();
     return true;
 }
