@@ -127,6 +127,7 @@ bool CrossingDetection::find(){
         startline->width(0.2);
         startline->setTrust(1);
         env->objects.push_back(startline);
+        logger.debug("found startline");
     }else if(foundCrossing){
         street_environment::CrossingPtr crossing(new street_environment::Crossing());
         crossing->addPoint(middlePosition);
@@ -134,8 +135,10 @@ bool CrossingDetection::find(){
         crossing->width(0.2);
         crossing->setTrust(1);
         env->objects.push_back(crossing);
+        logger.debug("found crossing");
 
     }
+    env.publish();
     return true;
 }
 
