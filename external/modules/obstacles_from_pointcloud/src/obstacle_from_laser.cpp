@@ -54,6 +54,7 @@ bool ObstacleFromPointCloud::cycle() {
             //TODO besserer create trust value
             obstacle->setTrust(config().get<float>("obstacleInitTrust",0.8));
             obstacle->width(obstacleWidth);
+            obstacle->addSensor("LASER");
             env->objects.push_back(obstacle);
         }
     }

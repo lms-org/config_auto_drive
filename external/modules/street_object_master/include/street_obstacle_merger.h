@@ -19,7 +19,7 @@ private:
      * @param obstaclesNew
      * @param obstaclesOld
      */
-    void merge(street_environment::EnvironmentObstacles &obstaclesNew,street_environment::EnvironmentObstacles &obstaclesOld);
+    void merge(street_environment::EnvironmentObstacles &obstaclesNew,street_environment::EnvironmentObstacles &obstaclesOld,const std::set<std::string> &allSensorIds);
     void createOutput(street_environment::EnvironmentObstacles &obstaclesOld);
     float distanceTang(street_environment::ObstaclePtr obstacle);
     float distanceOrth(street_environment::ObstaclePtr obstacle);
@@ -31,7 +31,7 @@ private:
     lms::math::Pose2D getDeltaPose();
 
     void getObstacles(const street_environment::EnvironmentObjects &env,street_environment::EnvironmentObstacles &output);
-    std::vector<lms::ReadDataChannel<street_environment::EnvironmentObjects>> envInput;
+    std::vector<std::pair<lms::ReadDataChannel<street_environment::EnvironmentObjects>,std::set<std::string>>> envInput;
     lms::WriteDataChannel<street_environment::EnvironmentObjects> envOutput;
     lms::ReadDataChannel<street_environment::RoadLane> middle;
     lms::ReadDataChannel<lms::math::Pose2DHistory> poseHistory;

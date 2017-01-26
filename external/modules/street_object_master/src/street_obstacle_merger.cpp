@@ -4,13 +4,14 @@
 #include "street_environment/start_line.h"
 #include "area_of_detection/area_of_detection.h"
 #include "phoenix_CC2016_service/phoenix_CC2016_service.h"
+#include <utility>
 
 bool StreetObjectMaster::initialize() {
     envOutput = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT_OUTPUT");
 
     std::vector<std::string> envInputs = config().getArray<std::string>("input_environments");
     for(const std::string &s:envInputs){
-        envInput.push_back(readChannel<street_environment::EnvironmentObjects>(s));
+        envInput.push_back(std::make_pair(readChannel<street_environment::EnvironmentObjects>(s),std::set<std::string>()));
     }
 
     //We should have the roadlane and the car from the current cycle
@@ -64,10 +65,21 @@ bool StreetObjectMaster::cycle() {
 
     bool hasNewData = false;
     //collect all new found obstacles
-    for(lms::ReadDataChannel<street_environment::EnvironmentObjects> &envO: envInput){
-        if(envO.hasNewData()){
+    std::set<std::string> newSensors;
+    for(std::pair<lms::ReadDataChannel<street_environment::EnvironmentObjects>,std::set<std::string>> &envO: envInput){
+        //iteratore over all obstacles and collect all Sensors
+        for(street_environment::EnvironmentObjectPtr ptr:envO.first->objects){
+            for(const std::string &s:ptr->sensors()){
+                envO.second.insert(s);
+            }
+        }
+        //collect all possible sensors
+        if(envO.first.hasNewData()){
             hasNewData = true;
-            getObstacles(*envO,obstaclesNew);
+            getObstacles(*envO.first,obstaclesNew);
+            for(const std::string &s:envO.second){
+                newSensors.insert(s);
+            }
         }
     }
 
@@ -87,6 +99,7 @@ bool StreetObjectMaster::cycle() {
                 if(obst1->match(*obst2)){
                     //merge the points
                     obst1->addPoints(obst2->points());
+                    obst1->addSensors(obst2->sensors());
                     obstaclesNew.objects.erase(obstaclesNew.objects.begin()+k);
                 }else{
                     k++;
@@ -95,10 +108,10 @@ bool StreetObjectMaster::cycle() {
         }
         logger.debug("cycle")<<"number of new obstacles (before merge)" << obstaclesNew.objects.size();
         //merge them
-        merge(obstaclesNew,obstaclesOld);
+        merge(obstaclesNew,obstaclesOld,newSensors);
         logger.debug("cycle")<<"number of obstacles (after merge)" << obstaclesOld.objects.size();
 
-        //kalman obstacles
+        //calculate trust value
         for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
             //TODO obst->kalman(*middle,0);
             if(fabs(distanceOrth(obst)) >0.4 && obst->trust() > 0.1){
@@ -160,7 +173,7 @@ void StreetObjectMaster::createOutput(street_environment::EnvironmentObstacles &
 }
 
 
-void StreetObjectMaster::merge(street_environment::EnvironmentObstacles &obstaclesNew,street_environment::EnvironmentObstacles &obstaclesOld){
+void StreetObjectMaster::merge(street_environment::EnvironmentObstacles &obstaclesNew,street_environment::EnvironmentObstacles &obstaclesOld,const std::set<std::string> &allSensorIds){
     std::vector<int> verifiedOld;
     int oldSize = obstaclesOld.objects.size();
     //check if obstacles can be merged
@@ -190,6 +203,7 @@ void StreetObjectMaster::merge(street_environment::EnvironmentObstacles &obstacl
                 else if(newTrust > 1)
                     newTrust = 1;
                 obstOld->setTrust(newTrust);
+                obstOld->addSensors(obstNew->sensors());
                 verifiedOld.push_back(i);
                 break;
             }
@@ -199,9 +213,11 @@ void StreetObjectMaster::merge(street_environment::EnvironmentObstacles &obstacl
             obstaclesOld.objects.push_back(obstNew);
         }
     }
-    //Decrease trust in obstacles that weren't found
+    //Decrease trust in obstacles that weren't found but the sensor gave new measurements
     for(int i = 0; i < oldSize;i++){
         if(std::find(verifiedOld.begin(), verifiedOld.end(), i) == verifiedOld.end()){
+            //check if the sensor gave new measurements
+            obstaclesOld.objects[i]->detectedBySensors(allSensorIds);
             /*
            if(!inVisibleArea(obstaclesOld.objects[i]->position().x,
                         obstaclesOld.objects[i]->position().y))

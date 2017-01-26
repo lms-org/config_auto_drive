@@ -134,6 +134,7 @@ bool CrossingDetection::find(){
         crossing->viewDirection(viewDirection);
         crossing->width(0.2);
         crossing->setTrust(1);
+        crossing->addSensor("CAMERA");
         env->objects.push_back(crossing);
         logger.debug("found crossing");
 
