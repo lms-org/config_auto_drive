@@ -58,7 +58,6 @@ bool StreetObjectMaster::cycle() {
         for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
             obst->translate(dPose.x,dPose.y);
         }
-
     }
 
     *visibleAreasToDraw = getService<area_of_detection::AreaOfDetection>("AreaOfDetection")->visibleAreas();

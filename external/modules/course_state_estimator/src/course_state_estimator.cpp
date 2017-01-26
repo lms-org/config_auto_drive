@@ -198,7 +198,9 @@ void CourseStateEstimator::update(){
     mapObservations();
     probabilityStates = transition*probabilityStates;
     probabilityStates = probabilityStates.cwiseProduct(observation);
-    if (config().get<bool>("useProbabilitiesStraight", false)) probabilityStates = probabilityStates.cwiseProduct(emissionProbabilitiesStraight());
+    if (config().get<bool>("useProbabilitiesStraight", false)){
+        probabilityStates = probabilityStates.cwiseProduct(emissionProbabilitiesStraight());
+    }
     probabilityStates /= probabilityStates.sum();
 
 
@@ -210,7 +212,7 @@ void CourseStateEstimator::mapObservations()
     float curvature2 = calculateCurvature(distance3, distance4);
 
     //logger.debug("Curvature:") << curvature1 << "," << curvature2;
-
+    //calculate the state of the road
     Eigen::Vector2f p1(0.5,0.5);
     mapObservationProbability(curvature1, p1, observationProbability1);
 
@@ -236,16 +238,10 @@ void CourseStateEstimator::mapObservationProbability(const float& curvature, Eig
 }
 
 
-float CourseStateEstimator::calculateCurvature(float minDistance, float maxDistance)
-{
-
-    int nPointsRoad = road->points().size();
-    float lengthEnvModelSegment = 0.2; //TODO
-
+float CourseStateEstimator::calculateCurvature(float minDistance, float maxDistance){
     //check if environment model has needed range
-    float maxDistanceEnvModel =  lengthEnvModelSegment * (nPointsRoad-1);
-    if (maxDistance > maxDistanceEnvModel)
-    {
+    float maxDistanceEnvModel =  road->length();
+    if (maxDistance > maxDistanceEnvModel){
         logger.warn("max distance is bigger than max distance of environment model");
         maxDistance = maxDistanceEnvModel;
     }

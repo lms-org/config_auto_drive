@@ -10,6 +10,8 @@
  * @brief LMS module course_state_estimator
  **/
 class CourseStateEstimator : public lms::Module {
+    //first state is straight, second straight-curve, third curve
+    lms::ReadDataChannel<street_environment::RoadLane> road;
     lms::WriteDataChannel<street_environment::RoadStates> roadStates;
 public:
     bool initialize() override;
@@ -25,15 +27,13 @@ private:
     float observationProbability1;
     float observationProbability2;
     float curvatureThreshold;
-    //TODO entweder sinnvolle namen oder eine beschreibung dazu.
+    //distance1/2 is the first part of the road, distance 3/4 the second
     float distance1;
     float distance2;
     float distance3;
     float distance4;
 
     float curvaturePT1 = 0;
-
-    lms::ReadDataChannel<street_environment::RoadLane> road;
 
     void mapObservations();
     void update();//TODO toller Name
