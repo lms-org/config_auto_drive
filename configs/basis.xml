@@ -22,6 +22,19 @@
         <config>
             <input_environments>ENVIRONMENT_OBSTACLE_LIDAR,ENVIRONMENT_OBSTACLE_CAM,ENVIRONMENT_CROSSING</input_environments>
         </config>
+        <config name="CAMERA">
+            <x>0.4</x>
+            <y>-1</y>
+            <width>5</width>
+            <height>2</height>
+        </config>
+        <config name="LIDAR">
+            <!--random values as the lidar should see all relevant obstacles -->
+            <x>-100</x>
+            <y>-100</y>
+            <width>200</width>
+            <height>200</height>
+        </config>
     </module>
     <module name="pointcloud_filter" lib="obstacle_from_pointcloud" class="PointCloudFilter">
         <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>

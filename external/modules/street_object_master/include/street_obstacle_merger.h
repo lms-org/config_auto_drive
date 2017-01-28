@@ -25,7 +25,7 @@ private:
     float distanceOrth(street_environment::ObstaclePtr obstacle);
 
 
-    bool inVisibleArea(float x, float y);
+    bool inVisibleArea(const street_environment::ObstaclePtr obst);
 
     lms::Time lastUpdate;
     lms::math::Pose2D getDeltaPose();

@@ -4,6 +4,7 @@
 #include "street_environment/start_line.h"
 #include "area_of_detection/area_of_detection.h"
 #include "phoenix_CC2016_service/phoenix_CC2016_service.h"
+#include <limits>
 #include <utility>
 
 bool StreetObjectMaster::initialize() {
@@ -22,11 +23,23 @@ bool StreetObjectMaster::initialize() {
     return true;
 }
 
-bool StreetObjectMaster::inVisibleArea(float x, float y){
-    std::vector<lms::math::Rect> visibleAreas = getService<area_of_detection::AreaOfDetection>("AreaOfDetection")->visibleAreas();
-    for(lms::math::Rect& r:visibleAreas){
-        if(r.contains(x,y))
+bool StreetObjectMaster::inVisibleArea(const street_environment::ObstaclePtr obst){
+    for(const std::string &s:obst->sensors()){
+        //check if the sensor has a rectangle
+        lms::math::Rect r;
+        if(hasConfig(s)){
+            const lms::Config &c = config(s);
+            r.x = c.get<float>("x",-std::numeric_limits<float>::max()/2);
+            r.y = c.get<float>("y",-std::numeric_limits<float>::max()/2);
+            r.width = c.get<float>("width",std::numeric_limits<float>::max());
+            r.height = c.get<float>("height",std::numeric_limits<float>::max());
+            if(r.contains(obst->position().x,obst->position().y)){
+                return true;
+            }
+        }else{
+            logger.warn("inVisibleArea")<<"no config rect given for sensor: "<<s;
             return true;
+        }
     }
     return false;
 }
@@ -217,11 +230,9 @@ void StreetObjectMaster::merge(street_environment::EnvironmentObstacles &obstacl
         if(std::find(verifiedOld.begin(), verifiedOld.end(), i) == verifiedOld.end()){
             //check if the sensor gave new measurements
             obstaclesOld.objects[i]->detectedBySensors(allSensorIds);
-            /*
-           if(!inVisibleArea(obstaclesOld.objects[i]->position().x,
-                        obstaclesOld.objects[i]->position().y))
+           if(!inVisibleArea(obstaclesOld.objects[i])){
                continue;//obstacle can't be found
-               */
+           }
 
             //old obstacle wasn't found
             float dt = obstaclesOld.objects[i]->getDeltaTrust();
