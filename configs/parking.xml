@@ -31,7 +31,7 @@
                 <correctingDistances>0.06, 0.04, 0.03, 0.03, 0.02</correctingDistances>
 
                 <!-- SEARCHING -->
-                <searchingMiddleOffset>-0.3</searchingMiddleOffset>
+                <searchingMiddleOffset>-0.25</searchingMiddleOffset>
                 <medianFilterSize>5</medianFilterSize>
                 <searchingPhiFactor>0.0</searchingPhiFactor> <!-- Korrekturwinkel falls das Auto schräg anfährt-->
                 <lidarMeasurementsPerSecond>300</lidarMeasurementsPerSecond>
