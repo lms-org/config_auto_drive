@@ -56,7 +56,7 @@
                 <y0_worstCase>0.25</y0_worstCase>
                 <k>0.02</k> <!-- safety distance zur Ecke der zweiten Box-->
                 <d>0.125</d> <!-- safety distance zur ersten Box -->
-                <maxSteeringAngle>24</maxSteeringAngle> <!-- in Grad-->
+                <maxSteeringAngle>21</maxSteeringAngle> <!-- in Grad-->
 
                 <!-- CORRECTING -->
                 <correctingDistances>0.06, 0.04, 0.03, 0.03, 0.02</correctingDistances>
