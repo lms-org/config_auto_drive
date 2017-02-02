@@ -11,7 +11,7 @@
     <!--include src="imaging_old.xml"/-->
     <include src="imaging_new.xml"/>
     <include src="basis.xml"/>
-    <!--include src="parking.xml" /-->
+    <include src="parking.xml"/>
     <if set="save">
         <include src="save.xml"/>
     </if>
