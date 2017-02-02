@@ -16,7 +16,7 @@
             <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>
             <config>
                 <xOffsetFromOriginMeter>0.08</xOffsetFromOriginMeter>
-                <yOffsetFromOriginMeter>-0.4</yOffsetFromOriginMeter>
+                <yOffsetFromOriginMeter>-0.04</yOffsetFromOriginMeter>
                 <startAtDeg>-119</startAtDeg>
                 <stopAtDeg>119</stopAtDeg>
                 <minIntensity>255</minIntensity>
