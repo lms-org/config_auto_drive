@@ -1,35 +1,4 @@
 <lms>
-    <include src="mavlink.xml"/>
-
-
-    <service name="WARP_SERVICE" lib="warp_service" class="WarpService">
-        <config src="camera/homography_ximea.lconf" />
-    </service>
-    <service name="AreaOfDetection" lib="area_of_detection" class="AreaOfDetection">
-        <config src="visible_areas.lconf"/>
-    </service>
-    <service name="PHOENIX_SERVICE" lib="phoenix_CC2016_service" class="Phoenix_CC2016Service">
-        <name>PHOENIX_SERVICE</name>
-        <realName>phoenix_CC2016_service</realName>
-            <config>
-                <stateFromConfig>true</stateFromConfig>
-                <updateInMilliS>-1</updateInMilliS>
-            </config>
-    </service>
-    <service name="LOCAL_COURSE_SERVICE" lib="local_course" class="LocalCourse">
-        <config>
-            <useFast>true</useFast>
-            <elementCount>6</elementCount>
-            <elementLength>0.30</elementLength>
-            <combinePointMaxDistance>0.02</combinePointMaxDistance>
-            <adamA>0.008</adamA>
-            <adamB1>0.9</adamB1>
-            <adamB2>0.997</adamB2>
-            <adamIterations>2</adamIterations><!--Damit kann man beliebig viel Rechenzeit belegen :)-->
-        </config>
-    </service>
-
-
     <module lib="parking" class="Parking" name="parking">
             <channelMapping priority="20" from="CAR" to="CAR"/>
             <config>
