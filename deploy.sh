@@ -6,4 +6,4 @@ if [ -z "$1" ]; then
 fi
 
 (find build/lib -type f -iname "*.so*" ; find build/bin ; find configs ; find . -type f -iname "*.sh" ) \
-| rsync -v -u --files-from=- . "$1:~/deploy_auto_drive-$USER"
+| rsync -a -v -u --files-from=- . "$1:~/deploy_auto_drive-$USER"
