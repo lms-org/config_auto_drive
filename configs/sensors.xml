@@ -15,7 +15,7 @@
             <channelMapping from="URG_DATA" to="HOKUYO_LIDAR_DATA"/>
             <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>
             <config>
-                <xOffsetFromOriginMeter>0.06</xOffsetFromOriginMeter>
+                <xOffsetFromOriginMeter>0.08</xOffsetFromOriginMeter>
                 <yOffsetFromOriginMeter>0.3</yOffsetFromOriginMeter>
                 <startAtDeg>-119</startAtDeg>
                 <stopAtDeg>119</stopAtDeg>
