@@ -37,7 +37,6 @@
         </config>
     </module>
     <module name="pointcloud_filter" lib="obstacle_from_pointcloud" class="PointCloudFilter">
-        <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>
         <channelMapping from="POINT_CLOUD_IN" to="HOKUYO_LIDAR_DATA"/>
         <channelMapping from="POINT_CLOUD_OUT" to="POINT_CLOUD_FILTERED"/>
     </module>

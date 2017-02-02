@@ -16,7 +16,7 @@ bool SocketDatatypeDefiner::initialize() {
     readChannel<lms::math::polyLine2f>("NEGATIVE_CENTER_LINE");
     readChannel<street_environment::RoadMatrix>("ROADMATRIX");
     readChannel<lms::math::PointCloud2f>("HOKUYO_LIDAR_DATA");
-    readChannel<lms::math::PointCloud2f>("CULLED_HOKUYO_LIDAR_DATA");
+    readChannel<lms::math::PointCloud2f>("POINT_CLOUD_FILTERED");
     return true;
 }
 
