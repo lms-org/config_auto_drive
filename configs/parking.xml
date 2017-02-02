@@ -4,8 +4,8 @@
             <config>
 
                 <!-- line fit auf den Punkten der Mittellinie -->
-                <lineFitStartPoint>4</lineFitStartPoint>
-                <lineFitEndPoint>7</lineFitEndPoint>
+                <lineFitStartPoint>2</lineFitStartPoint>
+                <lineFitEndPoint>4</lineFitEndPoint>
 
                 <!-- Abmessungen einer validen Parklücke -->
                 <minParkingSpaceSize>0.50</minParkingSpaceSize>
