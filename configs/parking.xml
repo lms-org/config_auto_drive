@@ -29,6 +29,7 @@
 
                 <!-- CORRECTING -->
                 <correctingDistances>0.06, 0.04, 0.03, 0.03, 0.02</correctingDistances>
+                <obstacleDetectionAngle>20</obstacleDetectionAngle>
 
                 <!-- SEARCHING -->
                 <searchingMiddleOffset>-0.25</searchingMiddleOffset>
