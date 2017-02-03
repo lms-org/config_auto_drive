@@ -40,6 +40,7 @@
         <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_CROSSING"/>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_CROSSING"/>
         <config>
+            <threshold>30</threshold>
             <renderDebugImage>false</renderDebugImage>
         </config>
     </module>

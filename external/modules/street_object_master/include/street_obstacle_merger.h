@@ -35,7 +35,6 @@ private:
     lms::WriteDataChannel<street_environment::EnvironmentObjects> envOutput;
     lms::ReadDataChannel<street_environment::RoadLane> middle;
     lms::ReadDataChannel<lms::math::Pose2DHistory> poseHistory;
-    lms::WriteDataChannel<std::vector<lms::math::Rect>> visibleAreasToDraw;
 
     void checkAngle(street_environment::ObstaclePtr obst);
 

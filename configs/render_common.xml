@@ -3,7 +3,7 @@
         <channelMapping from="IMAGE" to="IMAGE_OBJECT_IMAGE"/>
         <config src="street_utils/obstacle.lconf"/>
         <config><!---- -->
-            <envObjects>HOKUYO_LIDAR_DATA,TRAJECTORY_LINE,TRAJECTORY_POINT,ENVIRONMENT_MASTER,MIDDLE_LANE</envObjects>
+            <envObjects>HOKUYO_LIDAR_DATA,TRAJECTORY_LINE,TRAJECTORY_POINT,ENVIRONMENT_MASTER,MIDDLE_LANE,CROSSING_RECTS</envObjects>
             <colorR>255</colorR>
             <colorG>255</colorG>
             <colorB>0</colorB>

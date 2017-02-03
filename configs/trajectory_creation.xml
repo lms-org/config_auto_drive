@@ -24,6 +24,7 @@
         <channelMapping from="ENVIRONMENT_OBSTACLE" to="ENVIRONMENT_MASTER"/>
         <channelMapping priority="9" from="CAR" to="CAR"/>
         <config name="FMH">
+            <maxStopTimeAtCrossing>20</maxStopTimeAtCrossing>
             <velocity_straight>2.5</velocity_straight>
             <curve_maxVelocity>3.0</curve_maxVelocity>
             <curve_minVelocity>2.0</curve_minVelocity>

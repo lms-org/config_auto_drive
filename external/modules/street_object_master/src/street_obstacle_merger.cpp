@@ -18,8 +18,6 @@ bool StreetObjectMaster::initialize() {
     //We should have the roadlane and the car from the current cycle
     poseHistory = readChannel<lms::math::Pose2DHistory>("POSE2D_HISTORY");
     middle = readChannel<street_environment::RoadLane>("MIDDLE_LANE");
-
-    visibleAreasToDraw = writeChannel<std::vector<lms::math::Rect>>("VISIBLE_AREAS");
     return true;
 }
 
@@ -75,8 +73,6 @@ bool StreetObjectMaster::cycle() {
         logger.debug("cycle")<<"not translating";
     }
 
-    *visibleAreasToDraw = getService<area_of_detection::AreaOfDetection>("AreaOfDetection")->visibleAreas();
-
     bool hasNewData = false;
     //collect all new found obstacles
     std::set<std::string> newSensors;
@@ -125,16 +121,19 @@ bool StreetObjectMaster::cycle() {
         merge(obstaclesNew,obstaclesOld,newSensors);
         logger.debug("cycle")<<"number of obstacles (after merge)" << obstaclesOld.objects.size();
 
+        const float maxOrthDistance = config().get<float>("maxOrthDistance",1);
+        const float maxTangDistance= config().get<float>("maxTangDistance",2.5);
+        const float streetWidth = config().get<float>("streetWidth",0.4);
         //calculate trust value
         for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
             //TODO obst->kalman(*middle,0);
-            if(fabs(distanceOrth(obst)) >0.4 && obst->trust() > 0.1){
+            if(fabs(distanceOrth(obst)) >streetWidth && obst->trust() > 0.1){
                 obst->setTrust(0.1);
             }
-            if(fabs(distanceOrth(obst)) > 0.6){
+            if(std::fabs(distanceOrth(obst)) > maxOrthDistance){
                 obst->setTrust(0);
             }
-            if(fabs(distanceTang(obst)) > 2){
+            if(std::fabs(distanceTang(obst)) > maxTangDistance){
                 obst->setTrust(0);
             }
             if(obst->getType() == street_environment::Crossing::TYPE || obst->getType() == street_environment::StartLine::TYPE){
@@ -143,16 +142,11 @@ bool StreetObjectMaster::cycle() {
                 if(obst->getType() == street_environment::Crossing::TYPE){
                     std::shared_ptr<street_environment::Crossing> crossing = std::static_pointer_cast<street_environment::Crossing>(obst);
                     crossing->blocked(false);
-                    lms::math::vertex2f crossingPos = crossing->position();
-                    lms::math::vertex2f crossingView = crossing->viewDirection().normalize();
-                    lms::math::Rect blockedRect;
-                    lms::math::vertex2f pos = crossingPos+crossingView*0.4;
-                    blockedRect.x = pos.x;
-                    blockedRect.y = pos.y;
-                    blockedRect.width = 1;
-                    blockedRect.height = 0.5;
+                    lms::math::Rect blockedRect = crossing->blockedRect();
                     for(std::shared_ptr<street_environment::Obstacle> &obstBlock:obstaclesOld.objects){
+                        logger.debug("rect blocking ")<<blockedRect.x<<" "<<blockedRect.y<<" "<<blockedRect.width<<" "<<blockedRect.height;
                         if(obstBlock->TYPE == street_environment::Obstacle::TYPE){
+                            logger.debug("obst blocking ")<<blockedRect.contains(obstBlock->position().x,obstBlock->position().y);
                             if(blockedRect.contains(obstBlock->position().x,obstBlock->position().y)){
                                 //TODO trust value
                                 crossing->blocked(true);
