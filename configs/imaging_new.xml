@@ -10,7 +10,7 @@
             <xmax>700</xmax>
             <ymin>400</ymin>
             <ymax>580</ymax>
-            <drawDebug>true</drawDebug>
+            <drawDebug>false</drawDebug>
             <fastThreshold>80</fastThreshold>
             <minFeatureCount>8</minFeatureCount>
             <cam2world>6.91075e-05,0.000776687,-0.993019,0.00162824,5.94808e-06,-1.04238,0.000265838,-0.00526268,1.5247</cam2world>
@@ -24,15 +24,14 @@
             <searchOffset>0.2</searchOffset>
             <distanceBetweenSearchlines>0.1</distanceBetweenSearchlines>
             <minLineWidthMul>0.5</minLineWidthMul>
-            <maxLineWidthMul>3</maxLineWidthMul>
+            <maxLineWidthMul>2</maxLineWidthMul>
             <findBySobel>true</findBySobel>
-            <threshold>200</threshold>
-            <sobelThreshold>50</sobelThreshold>
+            <threshold>50</threshold>
+            <sobelThreshold>20</sobelThreshold>
             <laneWidthOffsetInMeter>0.1</laneWidthOffsetInMeter>
-            <cam2world>-1016.55,629.72,-140.546,-433.734,-19.2261,-295.753,-1.5413,-0.0750134,-0.22935</cam2world>
             <translateEnvironment>false</translateEnvironment>
             <useWeights>false</useWeights>
-            <renderDebugImage>false</renderDebugImage>
+            <renderDebugImage>true</renderDebugImage>
             <threads>4</threads>
         </config>
     </module>

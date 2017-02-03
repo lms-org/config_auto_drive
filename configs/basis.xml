@@ -20,6 +20,7 @@
         <channelMapping from="ENVIRONMENT_OUTPUT" to="ENVIRONMENT_MASTER"/>
         <config src="street_utils/obstacle.lconf"/>
         <config>
+            <translate>true</translate>
             <input_environments>ENVIRONMENT_OBSTACLE_LIDAR,ENVIRONMENT_OBSTACLE_CAM,ENVIRONMENT_CROSSING</input_environments>
         </config>
         <config name="CAMERA">

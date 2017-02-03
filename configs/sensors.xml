@@ -13,10 +13,9 @@
     <if set="start_lidar">
         <module name="laser_scanner" lib="laser_scanner" class="LaserScanner">
             <channelMapping from="URG_DATA" to="HOKUYO_LIDAR_DATA"/>
-            <channelMapping from="NEW_DATA" to="NEW_HOKYUO_LIDAR_DATA"/>
             <config>
                 <xOffsetFromOriginMeter>0.08</xOffsetFromOriginMeter>
-                <yOffsetFromOriginMeter>-0.04</yOffsetFromOriginMeter>
+                <yOffsetFromOriginMeter>-0.05</yOffsetFromOriginMeter>
                 <startAtDeg>-119</startAtDeg>
                 <stopAtDeg>119</stopAtDeg>
                 <minIntensity>255</minIntensity>
