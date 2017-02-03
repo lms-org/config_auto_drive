@@ -4,7 +4,7 @@
         <config>
             <exposure>8000</exposure>
             <fps>100</fps>
-            <gain>4</gain>
+            <gain>12</gain>
         </config>
     </module>
 </lms>

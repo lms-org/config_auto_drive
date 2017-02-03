@@ -3,8 +3,8 @@
         <module name="image_loader" lib="image_loader" class="ImageLoader">
             <channelMapping from="IMAGE" to="GREY_IMAGE"/>
             <config>
-                <minCounter>950</minCounter>
-                <maxCounter>100</maxCounter>
+                <minCounter>200</minCounter>
+                <maxCounter>-1</maxCounter>
             </config>
         </module>
     </if>

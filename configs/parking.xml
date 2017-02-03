@@ -12,14 +12,14 @@
         <maxParkingSpaceSize>0.59</maxParkingSpaceSize>
 
         <!-- Geschwindigkeiten -->
-        <velocitySearching>2.0</velocitySearching>
-        <velocityEntering>0.9</velocityEntering>
-        <velocityCorrecting>0.8</velocityCorrecting>
+        <velocitySearching>1.0</velocitySearching>
+        <velocityEntering>0.8</velocityEntering>
+        <velocityCorrecting>0.5</velocityCorrecting>
         <decelerationStopping>0.0</decelerationStopping>
         <velocityApproaching>0.8</velocityApproaching>
 
         <!-- ENTERING -->
-        <xDistanceCorrection>-0.7</xDistanceCorrection> <!-- Korrektur für hohe Geschwindigkeiten beim Rückwärtsfahren -->
+        <xDistanceCorrection>-0.0</xDistanceCorrection> <!-- Korrektur für hohe Geschwindigkeiten beim Rückwärtsfahren -->
         <brakingDistanceUntilSteering>0.0</brakingDistanceUntilSteering>
         <alphaOffset>0.25</alphaOffset>
         <y0_worstCase>0.25</y0_worstCase>
