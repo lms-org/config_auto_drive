@@ -3,17 +3,16 @@
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
             <!--type>mikMPC</type-->
-            <link_length>0.1</link_length>
+            <link_length>0.05</link_length>
             <penalty_y>50</penalty_y>
-            <penalty_phi>20</penalty_phi>
+            <penalty_phi>100</penalty_phi>
             <penalty_frontAngle>1</penalty_frontAngle>
             <penalty_rearAngle>1</penalty_rearAngle>
-            <penalty_frontAngle_rate>200</penalty_frontAngle_rate>
-            <penalty_rearAngle_rate>100</penalty_rearAngle_rate>
+            <penalty_frontAngle_rate>100</penalty_frontAngle_rate>
+            <penalty_rearAngle_rate>200</penalty_rearAngle_rate>
             <max_lateral_acc>0.8</max_lateral_acc>
             <node_MaxSpeed>0.5</node_MaxSpeed>
             <node_MinSpeed>0.5</node_MinSpeed>
-            <stagePrediction>2</stagePrediction>
             <stagePrediction>0</stagePrediction>
             <front_angle_rate_Bound>1</front_angle_rate_Bound>
             <rear_angle_rate_Bound>1</rear_angle_rate_Bound>

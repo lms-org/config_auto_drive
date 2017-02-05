@@ -16,7 +16,7 @@
             <adamA>0.008</adamA>
             <adamB1>0.9</adamB1>
             <adamB2>0.993</adamB2>
-            <adamIterations>2</adamIterations><!--Damit kann man beliebig viel Rechenzeit belegen :)-->
+            <adamIterations>4</adamIterations><!--Damit kann man beliebig viel Rechenzeit belegen :)-->
         </config>
     </service>
     <service name="AreaOfDetection" lib="area_of_detection" class="AreaOfDetection">

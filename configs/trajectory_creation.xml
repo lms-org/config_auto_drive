@@ -25,12 +25,20 @@
         <channelMapping priority="9" from="CAR" to="CAR"/>
         <config name="FMH">
             <maxStopTimeAtCrossing>20</maxStopTimeAtCrossing>
+            <velocity_straight>5.5</velocity_straight>
+            <curve_maxVelocity>3.5</curve_maxVelocity>
+            <curve_minVelocity>2.8</curve_minVelocity>
+            <curveStraight_maxVelocity>4.0</curveStraight_maxVelocity>
+            <curveStraight_minVelocity>3.2</curveStraight_minVelocity>
+            <aOrthMax>3.5</aOrthMax>
+            <!--
             <velocity_straight>2.5</velocity_straight>
             <curve_maxVelocity>3.0</curve_maxVelocity>
             <curve_minVelocity>2.0</curve_minVelocity>
             <curveStraight_maxVelocity>3.0</curveStraight_maxVelocity>
             <curveStraight_minVelocity>2.0</curveStraight_minVelocity>
             <aOrthMax>2.5</aOrthMax>
+            -->
             <simpleTraj>true</simpleTraj>
             <angleD>0.35</angleD>
             <obstacleResolution>0.05</obstacleResolution>
@@ -39,11 +47,11 @@
             <obstacleLength>0.7</obstacleLength>
         </config>
         <config name="FOH">
-            <velocity_straight>5.0</velocity_straight>
-            <curve_maxVelocity>2.8</curve_maxVelocity>
-            <curve_minVelocity>2.4</curve_minVelocity>
+            <velocity_straight>5.5</velocity_straight>
+            <curve_maxVelocity>3.5</curve_maxVelocity>
+            <curve_minVelocity>2.8</curve_minVelocity>
             <curveStraight_maxVelocity>4.0</curveStraight_maxVelocity>
-            <curveStraight_minVelocity>2.8</curveStraight_minVelocity>
+            <curveStraight_minVelocity>3.2</curveStraight_minVelocity>
             <aOrthMax>3.5</aOrthMax>
             <simpleTraj>true</simpleTraj>
             <angleD>0.35</angleD>

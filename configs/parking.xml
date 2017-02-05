@@ -29,7 +29,7 @@
 
         <!-- CORRECTING -->
         <distanceToObstacleFront>0.32</distanceToObstacleFront>
-        <distanceToObstacleRear>0.20</distanceToObstacleRear>
+        <distanceToObstacleRear>0.10</distanceToObstacleRear>
         <correctingDistances>0.06, 0.04, 0.03, 0.03, 0.02</correctingDistances>
         <correctingDistances>0.06, 0.04</correctingDistances>
         <obstacleDetectionAngle>60</obstacleDetectionAngle>
