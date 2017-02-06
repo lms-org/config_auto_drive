@@ -16,8 +16,8 @@
             <config>
                 <xOffsetFromOriginMeter>0.08</xOffsetFromOriginMeter>
                 <yOffsetFromOriginMeter>-0.05</yOffsetFromOriginMeter>
-                <startAtDeg>-119</startAtDeg>
-                <stopAtDeg>119</stopAtDeg>
+                <startAtDeg>-5</startAtDeg>
+                <stopAtDeg>5</stopAtDeg>
                 <minIntensity>255</minIntensity>
                 <!--device_or_ip_name>/dev/ttyACM0</device_or_ip_name-->
                 <device_or_ip_name>/dev/hokuyo_lidar</device_or_ip_name>
