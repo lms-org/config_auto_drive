@@ -126,7 +126,6 @@ bool StreetObjectMaster::cycle() {
         const float streetWidth = config().get<float>("streetWidth",0.4);
         //calculate trust value
         for(std::shared_ptr<street_environment::Obstacle> &obst:obstaclesOld.objects){
-            //TODO obst->kalman(*middle,0);
             if(fabs(distanceOrth(obst)) >streetWidth && obst->trust() > 0.1){
                 obst->setTrust(0.1);
             }
@@ -148,7 +147,6 @@ bool StreetObjectMaster::cycle() {
                         if(obstBlock->TYPE == street_environment::Obstacle::TYPE){
                             logger.debug("obst blocking ")<<blockedRect.contains(obstBlock->position().x,obstBlock->position().y);
                             if(blockedRect.contains(obstBlock->position().x,obstBlock->position().y)){
-                                //TODO trust value
                                 crossing->blocked(true);
                                 break;
                             }
@@ -271,7 +269,7 @@ void StreetObjectMaster::checkAngle(street_environment::ObstaclePtr obst){
         currentDis += streetDir.length();
         if(currentDis > distanceTang(obst)){
             float deltaAngle = streetDir.angleBetween(obst->viewDirection());
-            if(deltaAngle > maxAngleBetweenCrossingAndRoad){
+            if(std::fabs(deltaAngle) > maxAngleBetweenCrossingAndRoad){
                 logger.info("crossing/startline not trusted")<<"crossingDistance: "<<distanceTang(obst)<<" "<< currentDis<<" roadPos: "<<i << "angle to road: "<< deltaAngle<< " roadAngle: "<<streetDir.angle() << " crossingViewDir "<<obst->viewDirection();
                 obst->setTrust(0.0);
             }else{

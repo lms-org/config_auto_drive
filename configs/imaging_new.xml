@@ -10,8 +10,8 @@
             <xmax>700</xmax>
             <ymin>400</ymin>
             <ymax>580</ymax>
-            <drawDebug>true</drawDebug>
-            <fastThreshold>20</fastThreshold>
+            <drawDebug>false</drawDebug>
+            <fastThreshold>50</fastThreshold>
             <minFeatureCount>8</minFeatureCount>
             <cam2world>6.91075e-05,0.000776687,-0.993019,0.00162824,5.94808e-06,-1.04238,0.000265838,-0.00526268,1.5247</cam2world>
         </config>
@@ -27,7 +27,7 @@
             <maxLineWidthMul>2</maxLineWidthMul>
             <findBySobel>true</findBySobel>
             <threshold>50</threshold>
-            <sobelThreshold>20</sobelThreshold>
+            <sobelThreshold>50</sobelThreshold>
             <laneWidthOffsetInMeter>0.1</laneWidthOffsetInMeter>
             <translateEnvironment>true</translateEnvironment>
             <useWeights>false</useWeights>

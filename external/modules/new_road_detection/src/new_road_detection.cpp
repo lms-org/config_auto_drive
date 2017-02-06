@@ -55,7 +55,7 @@ bool NewRoadDetection::cycle() {
         if(phoenixService->rcStateChanged() || phoenixService->driveModeChanged()){
             //phoenixService->logRcStates();
             localCourse->resetData();
-            logger.error("reset kalman");
+            logger.warn("reset kalman")<<"rcState or driveMode changed";
         }
 
         logger.time("localCourse");

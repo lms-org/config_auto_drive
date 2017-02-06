@@ -48,9 +48,9 @@
         </config>
         <config name="FOH">
             <velocity_straight>5.5</velocity_straight>
-            <curve_maxVelocity>3.5</curve_maxVelocity>
+            <curve_maxVelocity>4.5</curve_maxVelocity>
             <curve_minVelocity>2.8</curve_minVelocity>
-            <curveStraight_maxVelocity>4.0</curveStraight_maxVelocity>
+            <curveStraight_maxVelocity>4.5</curveStraight_maxVelocity>
             <curveStraight_minVelocity>3.2</curveStraight_minVelocity>
             <aOrthMax>3.5</aOrthMax>
             <simpleTraj>true</simpleTraj>
