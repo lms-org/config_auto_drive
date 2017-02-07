@@ -23,7 +23,7 @@
             <input_environments>ENVIRONMENT_OBSTACLE_LIDAR,ENVIRONMENT_OBSTACLE_CAM,ENVIRONMENT_CROSSING</input_environments>
         </config>
         <config name="CAMERA">
-            <x>0.4</x>
+            <x>0.75</x>
             <y>-1</y>
             <width>5</width>
             <height>2</height>

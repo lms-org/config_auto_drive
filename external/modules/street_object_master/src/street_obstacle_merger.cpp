@@ -148,6 +148,12 @@ bool StreetObjectMaster::cycle() {
                             logger.debug("obst blocking ")<<blockedRect.contains(obstBlock->position().x,obstBlock->position().y);
                             if(blockedRect.contains(obstBlock->position().x,obstBlock->position().y)){
                                 crossing->blocked(true);
+                                float newTrust = crossing->trust()*2;
+                                if(newTrust > 1)
+                                    newTrust = 1;
+                                if(newTrust < 0)
+                                    newTrust = 0;
+                                crossing->setTrust(newTrust);
                                 break;
                             }
                         }

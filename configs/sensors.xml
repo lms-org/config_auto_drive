@@ -4,11 +4,11 @@
             <path>/usr/bin/usb-reset</path>
         </config>
     </service>
-    <!--module name="mavlink_usb_importer" lib="mavlink_usb_importer" class="mavlink_usb_importer">
+    <module name="mavlink_usb_importer" lib="mavlink_usb_importer" class="mavlink_usb_importer">
         <config>
             <path>/dev/senseboard</path>
         </config>
-    </module-->
+    </module>
     <module name="data_to_mavlink" lib="data_to_mavlink" class="CarToMavlink"/>
     <if set="start_lidar">
         <module name="laser_scanner" lib="laser_scanner" class="LaserScanner">

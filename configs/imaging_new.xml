@@ -13,8 +13,7 @@
             <drawDebug>false</drawDebug>
             <fastThreshold>50</fastThreshold>
             <minFeatureCount>8</minFeatureCount>
-            <cam2world>6.91075e-05,0.000776687,-0.993019,0.00162824,5.94808e-06,-1.04238,0.000265838,-0.00526268,1.5247</cam2world>
-            <cam2world>-7.34321e-05,0.000640175,-0.780523,0.00147214,6.82574e-05,-0.990151,1.19912e-05,-0.00432448,1.20903</cam2world>
+            <cam2world>-4.01363e-06,0.00049125,-0.760979,0.00149399,2.0045e-05,-0.976056,0.000173859,-0.00526928,1.61375</cam2world>
         </config>
     </module>
     <module name="new_road_detection" lib="new_road_detection" class="NewRoadDetection">
@@ -22,7 +21,7 @@
         <channelMapping from="ROAD" to="MIDDLE_LANE"/>
         <channelMapping priority="10" from="CAR" to="CAR"/>
         <config>
-            <searchOffset>0.2</searchOffset>
+            <searchOffset>0.1</searchOffset>
             <distanceBetweenSearchlines>0.1</distanceBetweenSearchlines>
             <minLineWidthMul>0.5</minLineWidthMul>
             <maxLineWidthMul>2</maxLineWidthMul>
