@@ -14,6 +14,7 @@
             <fastThreshold>50</fastThreshold>
             <minFeatureCount>8</minFeatureCount>
             <cam2world>6.91075e-05,0.000776687,-0.993019,0.00162824,5.94808e-06,-1.04238,0.000265838,-0.00526268,1.5247</cam2world>
+            <cam2world>-7.34321e-05,0.000640175,-0.780523,0.00147214,6.82574e-05,-0.990151,1.19912e-05,-0.00432448,1.20903</cam2world>
         </config>
     </module>
     <module name="new_road_detection" lib="new_road_detection" class="NewRoadDetection">
@@ -29,7 +30,7 @@
             <threshold>50</threshold>
             <sobelThreshold>50</sobelThreshold>
             <laneWidthOffsetInMeter>0.1</laneWidthOffsetInMeter>
-            <translateEnvironment>true</translateEnvironment>
+            <translateEnvironment>false</translateEnvironment>
             <useWeights>false</useWeights>
             <renderDebugImage>false</renderDebugImage>
             <threads>4</threads>
@@ -40,8 +41,15 @@
         <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_CROSSING"/>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_CROSSING"/>
         <config>
-            <threshold>30</threshold>
-            <renderDebugImage>false</renderDebugImage>
+            <threshold>80</threshold>
+            <renderDebugImage>true</renderDebugImage>
+            <minLineWidthMul>0.2</minLineWidthMul>
+            <maxLineWidthMul>4</maxLineWidthMul>
+            <offsetSide>0.1</offsetSide>
+            <offsetAlong>0.2</offsetAlong>
+            <lineWidth>0.4</lineWidth>
+            <oppositeLineStart>0.6</oppositeLineStart>
+            <oppositeLineEnd>1.2</oppositeLineEnd>
         </config>
     </module>
     <!--module name="obstacle_detection" lib="new_road_detection" class="ObstacleDetection">

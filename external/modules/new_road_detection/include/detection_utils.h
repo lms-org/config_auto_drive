@@ -46,6 +46,7 @@ inline std::vector<lms::math::vertex2f> findBySobel(
         if(sobel > threshold){
             if(!foundLowHigh){
                 foundLowHigh = true;
+                //std::cout<<"crossing found lowHigh"<<std::endl;
                 pxlCounter = 0;
             }
             if(renderDebugImage){
@@ -61,6 +62,11 @@ inline std::vector<lms::math::vertex2f> findBySobel(
             if(foundLowHigh){
                 //check if the points have the right distance
                 float pxlPeakWidth = iDist/wDist*lineWidth; //TODO to bad, calculate for each road line (how should we use them for searching?
+                /*
+                std::cout<<"crossing found highLow: "<<pxlCounter<<" "<<pxlPeakWidth<<std::endl;
+                std::cout<<"crossing found max: "<<pxlPeakWidth*minLineWidthMul<<std::endl;
+                std::cout<<"crossing found min: "<<pxlPeakWidth*maxLineWidthMul<<std::endl;
+                */
                 if(pxlCounter > pxlPeakWidth*minLineWidthMul && pxlCounter < pxlPeakWidth*maxLineWidthMul){
                     //we found a valid poit, mark it
                     if(renderDebugImage){
@@ -74,6 +80,7 @@ inline std::vector<lms::math::vertex2f> findBySobel(
                     lms::math::vertex2f wMid;
                     trans.t(xv[k-pxlCounter/2],yv[k-pxlCounter/2],wMid.x,wMid.y);
                     foundPoints.push_back(wMid);
+                    //std::cout<<"crossing FOUND VALID CROSSING"<<std::endl;
                 }
             }
             if(renderDebugImage && pxlCounter > 0){

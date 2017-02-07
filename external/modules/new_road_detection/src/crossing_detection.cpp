@@ -45,20 +45,21 @@ bool CrossingDetection::find(){
         //we just want a curse and don't mind if it's from the last cycle
         lms::ServiceHandle<local_course::LocalCourse> course = getService<local_course::LocalCourse>("LOCAL_COURSE_SERVICE");
         if(course.isValid()){
-            line = course->getCourse().moveOrthogonal(0.2);
+            line = course->getCourse().getWithDistanceBetweenPoints(0.5).moveOrthogonal(0.2);
         }
     }
     if(line.points().size() == 0){
         logger.warn("No road given");
         return false;
     }
-    bool foundCrossing = false;
-    bool foundStartLine = false;
-    lms::math::vertex2f middlePosition;
-    lms::math::vertex2f viewDirection;
     //trying to find the stop-line
     std::vector<int> xv;
     std::vector<int> yv;
+    const float minLineWidthMul = config().get<float>("minLineWidthMul",0.2);
+    const float maxLineWidthMul = config().get<float>("maxLineWidthMul",2);
+    const float offsetSide = config().get<float>("offsetSide",0.1);
+    const float offsetAlong = config().get<float>("offsetAlong",0.1);
+    const float lineWidth = config().get<float>("lineWidth",0.04);
     for(std::size_t i = 1; i < line.points().size(); i++){
         const lms::math::vertex2f &bot = line.points()[i-1];
         lms::math::vertex2i iBot;
@@ -72,72 +73,71 @@ bool CrossingDetection::find(){
         float iDist = iBot.distance(iTop);
         float wDist = bot.distance(top);
         lms::math::bresenhamLine(iBot.x,iBot.y,iTop.x,iTop.y,xv,yv);
-        std::vector<lms::math::vertex2f> points = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,0.2,2,0.04,iDist,wDist,threshold,homo);
-        if(points.size() > 0){
-            //trying to detect the stopline
-            if(points.size() == 1){
-                middlePosition = points[0];
-                viewDirection = (top-bot).normalize();//TODO we could also use the found points
-                //now we go one step to the left/right and check if we still can find a point
-                float offsetSide = 0.1;
-                float offsetAlong = 0.1;
-                lms::math::vertex2f diff = top-bot;
-                diff = diff.normalize();
-                lms::math::vertex2f orth = diff.rotateClockwise90deg();
-                lms::math::vertex2f right = middlePosition+orth*offsetSide-diff*offsetAlong;
-                lms::math::vertex2f left = middlePosition-orth*offsetSide-diff*offsetAlong;
-                getXYfromPoint(right,right+diff*2*offsetAlong,xv,yv,homo);
-                std::vector<lms::math::vertex2f> pointsRight = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,0.2,2,0.04,iDist,wDist,threshold,homo);
-                getXYfromPoint(left,left+diff*2*offsetAlong,xv,yv,homo);
-                std::vector<lms::math::vertex2f> pointsLeft = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,0.2,2,0.04,iDist,wDist,threshold,homo);
-                if(pointsRight.size() != 1 && pointsLeft.size() != 1){
-                    //no crossing, something else
-                    break;
-                }
-                //check if it a crossing, not a startline
-                getXYfromPoint(middlePosition-orth*0.4-diff*offsetAlong,middlePosition-orth*0.4+diff*offsetAlong,xv,yv,homo);
-                std::vector<lms::math::vertex2f> pointsStartline = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,0.2,2,0.04,iDist,wDist,threshold,homo);
-                if(pointsStartline.size() != 0){
-                    //we found a start line
-                    foundStartLine = true;
-                    break;
-                }
+        //std::cout<<"crossing START middle"<<std::endl;
 
-                //trying to find oposite stop-line
-                //check if it a crossing, not a startline
-                getXYfromPoint(middlePosition-orth*0.4+diff*0.7,middlePosition-orth*0.4+diff*0.9,xv,yv,homo);
-                std::vector<lms::math::vertex2f> pointsOppositeStopline = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,0.1,1,0.04,iDist,wDist,threshold,homo);
-                if(pointsOppositeStopline.size() != 1){
-                    break;
-                }
-                foundCrossing = true;
+        std::vector<lms::math::vertex2f> points = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,lineWidth,iDist,wDist,threshold,homo);
+
+        //std::cout<<"crossing END middle "<<points.size()<<std::endl;
+        logger.debug("points") <<points.size();
+        if(points.size() ==1){
+            logger.debug("cycle") <<"found middle of right lane";
+        //trying to detect the stopline
+            const lms::math::vertex2f middlePosition = points[0];
+            const lms::math::vertex2f viewDirection = (top-bot).normalize();
+            //now we go one step to the left/right and check if we still can find a point
+            const lms::math::vertex2f orth = viewDirection.rotateClockwise90deg();
+            const lms::math::vertex2f right = middlePosition+orth*offsetSide-viewDirection*offsetAlong;
+            const lms::math::vertex2f left = middlePosition-orth*offsetSide-viewDirection*offsetAlong;
+            getXYfromPoint(right,right+viewDirection*2*offsetAlong,xv,yv,homo);
+            std::vector<lms::math::vertex2f> pointsRight = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,lineWidth,iDist,wDist,threshold,homo);
+            getXYfromPoint(left,left+viewDirection*2*offsetAlong,xv,yv,homo);
+            std::vector<lms::math::vertex2f> pointsLeft = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,lineWidth,iDist,wDist,threshold,homo);
+            if(pointsRight.size() != 1 && pointsLeft.size() != 1){
+                //no crossing, something else
+                logger.error("did not find left or fight lane")<<(int)(pointsRight.size())<<" "<<(int)(pointsLeft.size());
+                continue;
             }
-            break;
-        }
-    }
-    /*float orth;
-    float tang;
-    line.distance(middlePosition,orth,tang);
-    middlePosition = line.interpolateAtDistance(tang);*/
-    //Check if it blocked
-    if(foundStartLine){
-        street_environment::StartLinePtr startline(new street_environment::StartLine());
-        startline->addPoint(middlePosition);
-        startline->viewDirection(viewDirection);
-        startline->width(0.2);
-        startline->setTrust(1);
-        env->objects.push_back(startline);
-        logger.debug("found startline");
-    }else if(foundCrossing){
-        street_environment::CrossingPtr crossing(new street_environment::Crossing());
-        crossing->addPoint(middlePosition);
-        crossing->viewDirection(viewDirection);
-        crossing->width(0.2);
-        crossing->setTrust(1);
-        crossing->addSensor("CAMERA");
-        env->objects.push_back(crossing);
-        logger.debug("found crossing");
+            //check if it a crossing, not a startline
+            getXYfromPoint(middlePosition-orth*0.4-viewDirection*offsetAlong,middlePosition-orth*0.4+viewDirection*offsetAlong,xv,yv,homo);
+            std::vector<lms::math::vertex2f> pointsStartline = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,lineWidth,iDist,wDist,threshold,homo);
+            logger.debug("pointsStartline")<<pointsStartline.size();
+            if(pointsStartline.size() > 0){
+                //we found a start line
+                street_environment::StartLinePtr startline(new street_environment::StartLine());
+                startline->addSensor("CAMERA");
+                startline->addPoint(middlePosition);
+                startline->viewDirection(viewDirection);
+                startline->width(0.2);
+                startline->setTrust(1);
+                env->objects.push_back(startline);
+                logger.debug("found startline");
+                break;
+            }else if(pointsStartline.size() > 1){
+                logger.debug("invalid startline, to many points on the left");
+                continue;
+            }
 
+            //trying to find oposite stop-line
+            //check if it a crossing, not a startline
+            //starting at the middle of the left lane
+            const float oppositeLineStart=config().get<float>("oppositeLineStart",0.7);
+            const float oppositeLineEnd=config().get<float>("oppositeLineEnd",0.9);
+            getXYfromPoint(middlePosition-orth*0.4+viewDirection*oppositeLineStart,middlePosition-orth*0.4+viewDirection*oppositeLineEnd,xv,yv,homo);
+            std::vector<lms::math::vertex2f> pointsOppositeStopline = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,0.1,1,0.04,iDist,wDist,threshold,homo);
+            if(pointsOppositeStopline.size() == 1){
+                street_environment::CrossingPtr crossing(new street_environment::Crossing());
+                crossing->addPoint(middlePosition);
+                crossing->viewDirection(viewDirection);
+                crossing->width(0.2);
+                crossing->setTrust(1);
+                crossing->addSensor("CAMERA");
+                env->objects.push_back(crossing);
+                logger.debug("found crossing");
+                break;
+            }else{
+                logger.error("could not find opposite line!");
+            }
+        }
     }
     env.publish();
     return true;
