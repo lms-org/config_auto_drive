@@ -41,13 +41,13 @@
         <channelMapping from="DEBUG_IMAGE" to="DEBUG_IMAGE_CROSSING"/>
         <channelMapping from="ENVIRONMENT" to="ENVIRONMENT_CROSSING"/>
         <config>
-            <threshold>80</threshold>
+            <threshold>100</threshold>
             <renderDebugImage>true</renderDebugImage>
-            <minLineWidthMul>0.2</minLineWidthMul>
-            <maxLineWidthMul>4</maxLineWidthMul>
+            <minLineWidthMul>0.3</minLineWidthMul>
+            <maxLineWidthMul>3</maxLineWidthMul>
             <offsetSide>0.1</offsetSide>
             <offsetAlong>0.2</offsetAlong>
-            <lineWidth>0.4</lineWidth>
+            <lineWidth>0.04</lineWidth>
             <oppositeLineStart>0.6</oppositeLineStart>
             <oppositeLineEnd>1.2</oppositeLineEnd>
         </config>

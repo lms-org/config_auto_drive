@@ -39,13 +39,14 @@ void CrossingDetection::configsChanged(){
 
 }
 
+
 bool CrossingDetection::find(){
     lms::math::polyLine2f line;
     {
         //we just want a curse and don't mind if it's from the last cycle
         lms::ServiceHandle<local_course::LocalCourse> course = getService<local_course::LocalCourse>("LOCAL_COURSE_SERVICE");
         if(course.isValid()){
-            line = course->getCourse().getWithDistanceBetweenPoints(0.5).moveOrthogonal(0.2);
+            line = course->getCourse().getWithDistanceBetweenPoints(0.2).moveOrthogonal(0.2);
         }
     }
     if(line.points().size() == 0){
@@ -60,7 +61,7 @@ bool CrossingDetection::find(){
     const float offsetSide = config().get<float>("offsetSide",0.1);
     const float offsetAlong = config().get<float>("offsetAlong",0.1);
     const float lineWidth = config().get<float>("lineWidth",0.04);
-    for(std::size_t i = 1; i < line.points().size(); i++){
+    for(std::size_t i = 3; i < line.points().size(); i++){
         const lms::math::vertex2f &bot = line.points()[i-1];
         lms::math::vertex2i iBot;
         const lms::math::vertex2f &top = line.points()[i];
@@ -70,8 +71,8 @@ bool CrossingDetection::find(){
         if(!image->inside(iTop.x,iTop.y) || !image->inside(iBot.x,iBot.y)){
             continue;
         }
-        float iDist = iBot.distance(iTop);
-        float wDist = bot.distance(top);
+        const float iDist = iBot.distance(iTop);
+        const float wDist = bot.distance(top);
         lms::math::bresenhamLine(iBot.x,iBot.y,iTop.x,iTop.y,xv,yv);
         //std::cout<<"crossing START middle"<<std::endl;
 
@@ -88,6 +89,7 @@ bool CrossingDetection::find(){
             const lms::math::vertex2f orth = viewDirection.rotateClockwise90deg();
             const lms::math::vertex2f right = middlePosition+orth*offsetSide-viewDirection*offsetAlong;
             const lms::math::vertex2f left = middlePosition-orth*offsetSide-viewDirection*offsetAlong;
+            logger.debug("crossing search for left/right lane");
             getXYfromPoint(right,right+viewDirection*2*offsetAlong,xv,yv,homo);
             std::vector<lms::math::vertex2f> pointsRight = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,lineWidth,iDist,wDist,threshold,homo);
             getXYfromPoint(left,left+viewDirection*2*offsetAlong,xv,yv,homo);
@@ -98,6 +100,7 @@ bool CrossingDetection::find(){
                 continue;
             }
             //check if it a crossing, not a startline
+            logger.debug("crossing search for start lane");
             getXYfromPoint(middlePosition-orth*0.4-viewDirection*offsetAlong,middlePosition-orth*0.4+viewDirection*offsetAlong,xv,yv,homo);
             std::vector<lms::math::vertex2f> pointsStartline = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,lineWidth,iDist,wDist,threshold,homo);
             logger.debug("pointsStartline")<<pointsStartline.size();
@@ -143,37 +146,3 @@ bool CrossingDetection::find(){
     return true;
 }
 
-
-
-/*
-    gaussBuffer->resize(image->width(),image->height(), image->format());
-    gaussBuffer->fill(0);
-
-    lms::imaging::detection::StreetCrossing crossing;
-    lms::imaging::detection::StreetCrossing::StreetCrossingParam scp;
-    scp.target = image.get();
-    scp.gaussBuffer = gaussBuffer;
-    scp.fromConfig(&config("defaultEPParameter"));
-    scp.fromConfig(&config("defaultLPParameter"));
-    scp.fromConfig(&config("defaultLineParameter"));
-    scp.lineWidthMax = scp.lineWidthMax*2;
-    scp.boxDepthSearchLength = config("defaultCrossingParameter").get<float>("boxDepthSearchLength",20);
-    scp.obstacleRightOffset = config("defaultCrossingParameter").get<float>("obstacleRightOffset",0.1);
-    scp.obstacleSobelThreshold = config("defaultCrossingParameter").get<float>("obstacleSobelThreshold",100);
-    scp.boxPointsNeeded = config("boxPointsNeeded").get<float>("boxPointsNeeded",3);
-    scp.maxIterationsRANSAC = config("defaultCrossingParameter").get<int>("maxIterationsRANSAC",100);
-    scp.inlierThresholdRANSAC = config("defaultCrossingParameter").get<double>("inlierThresholdRANSAC",4.0);
-    scp.middleLine = line;
-    /*
-    for(int i = 0; i < (int)scp.middleLine.points().size();){
-        if(scp.middleLine.points()[i].length() < 0.3){
-            scp.middleLine.points().erase(scp.middleLine.points().begin()+i);
-        }else{
-            i++;
-        }
-    }
-
-    lms::imaging::BGRAImageGraphics graphics(*imageDebug.get());
-    crossing.find(scp,graphics);
-
-    */

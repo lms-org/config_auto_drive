@@ -4,6 +4,7 @@
 #include <lms/imaging/image.h>
 #include <lms/imaging/graphics.h>
 #include <lms/imaging/transform_image.h>
+#include <lms/logger.h>
 
 inline std::vector<lms::math::vertex2f> findBySobel(
         const lms::imaging::Image *image,
@@ -18,6 +19,7 @@ inline std::vector<lms::math::vertex2f> findBySobel(
         const float wDist,
         const int threshold,
         lms::imaging::Transformation &trans) {
+    //lms::logging::Logger logger("findBySobel");
 
     lms::imaging::BGRAImageGraphics graphics(*debugImage);
     std::vector<lms::math::vertex2f> foundPoints;
@@ -46,7 +48,7 @@ inline std::vector<lms::math::vertex2f> findBySobel(
         if(sobel > threshold){
             if(!foundLowHigh){
                 foundLowHigh = true;
-                //std::cout<<"crossing found lowHigh"<<std::endl;
+                //logger.debug("")<<"crossing found lowHigh"<<std::endl;
                 pxlCounter = 0;
             }
             if(renderDebugImage){
@@ -62,11 +64,11 @@ inline std::vector<lms::math::vertex2f> findBySobel(
             if(foundLowHigh){
                 //check if the points have the right distance
                 float pxlPeakWidth = iDist/wDist*lineWidth; //TODO to bad, calculate for each road line (how should we use them for searching?
-                /*
-                std::cout<<"crossing found highLow: "<<pxlCounter<<" "<<pxlPeakWidth<<std::endl;
-                std::cout<<"crossing found max: "<<pxlPeakWidth*minLineWidthMul<<std::endl;
-                std::cout<<"crossing found min: "<<pxlPeakWidth*maxLineWidthMul<<std::endl;
-                */
+
+                //logger.debug("")<<"crossing found highLow: "<<pxlCounter<<" "<<pxlPeakWidth;
+                //logger.debug("")<<"crossing found max: "<<pxlPeakWidth*maxLineWidthMul;
+                //logger.debug("")<<"crossing found min: "<<pxlPeakWidth*minLineWidthMul;
+
                 if(pxlCounter > pxlPeakWidth*minLineWidthMul && pxlCounter < pxlPeakWidth*maxLineWidthMul){
                     //we found a valid poit, mark it
                     if(renderDebugImage){
@@ -80,7 +82,7 @@ inline std::vector<lms::math::vertex2f> findBySobel(
                     lms::math::vertex2f wMid;
                     trans.t(xv[k-pxlCounter/2],yv[k-pxlCounter/2],wMid.x,wMid.y);
                     foundPoints.push_back(wMid);
-                    //std::cout<<"crossing FOUND VALID CROSSING"<<std::endl;
+                    //logger.debug("")<<"crossing FOUND VALID CROSSING";
                 }
             }
             if(renderDebugImage && pxlCounter > 0){
