@@ -15,49 +15,57 @@ Tip: HowTo change compiler in ubuntu: https://askubuntu.com/questions/466651/how
 Additionally we use Conan (https://conan.io/) to build some more libs (like openCV, ...) from source. This makes sure that we always have the correct version. We have our own Conan Server running at http://mineforce.de:9300
  
 # How to install
+1. install extra ubuntu packages
 ```
-// install extra ubuntu packages
 sudo apt-get update
 sudo apt-get install python python-pip build-essential make git cmake automake libtool libsdl2-dev gcc-4.8 g++-4.8 qt5-default
+```
 
-// install conan via pip
-sudo pip install conan
+2. install conan via pip
+`sudo pip install conan`
 
-// add remote to conan
-conan remote add lms http://mineforce.de:9300
+3. add remote to conan
+`conan remote add lms http://mineforce.de:9300`
 
-// go to your working direktory
-cd <your working direktory>
+4. go to your working direktory
+`cd <your working direktory>`
 
-// clone config_auto_drive
+5. clone config_auto_drive
+```
 git clone https://github.com/tum-phoenix/config_auto_drive
 cd config_auto_drive
+```
 
-// set up submodules
+6. set up submodules
+```
 git submodule init
 git submodule update
+```
 
-// set up extra submodule in trajectory controller (TODO: remove in future)
+7. set up extra submodule in trajectory controller (TODO: remove in future)
+```
 cd external/modules/trajectory_controller/
 git submodule init
 git submodule update
 cd ../../../
+```
 
-// install ximea_driver
-sudo ./external/modules/ximea_importer/ximea_driver/install 
+8. install ximea_driver
+`sudo external/modules/ximea_importer/ximea_driver/install` 
 
-// create build directory
+9. create build directory
+```
 mkdir build
 cd build
+```
+10. install conan dependencies and build them if needed (grab a coffee ☕)
+`conan install .. --build=missing`
 
-// install conan dependencies and build them if needed (grab a coffee ☕)
-conan install .. --build=missing
-
-// compile it
+11. compile it
+```
 cmake ..
 make -j<number of cores>
 ```
-
 
 
 # How to start it?
