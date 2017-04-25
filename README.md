@@ -58,7 +58,7 @@ cd ../../../
 mkdir build
 cd build
 ```
-10. install conan dependencies and build them if needed (grab a coffee ☕)
+10. install conan dependencies (grab a coffee ☕)
 `conan install .. --build=missing`
 
 11. compile it
