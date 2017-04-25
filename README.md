@@ -22,12 +22,15 @@ sudo apt-get install python python-pip build-essential make git cmake automake l
 ```
 
 2. install conan via pip
+
 `sudo pip install conan`
 
 3. add remote to conan
+
 `conan remote add lms http://mineforce.de:9300`
 
 4. go to your working direktory
+
 `cd <your working direktory>`
 
 5. clone config_auto_drive
@@ -51,6 +54,7 @@ cd ../../../
 ```
 
 8. install ximea_driver
+
 `sudo external/modules/ximea_importer/ximea_driver/install` 
 
 9. create build directory
@@ -59,6 +63,7 @@ mkdir build
 cd build
 ```
 10. install conan dependencies (grab a coffee ☕)
+
 `conan install .. --build=missing`
 
 11. compile it
