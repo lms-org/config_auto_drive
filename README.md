@@ -3,7 +3,7 @@ Configuration which includes all necessary configuration files and includes comp
 
 We use LMS (https://github.com/lms-org/lms) as Middleware Framework.
 
-We require some (ubuntu) packages:
+We require some packages:
 - basic build stuff
 - automake is needed for protobuffers
 - libsdl2 because of mac
@@ -12,14 +12,15 @@ We require some (ubuntu) packages:
 
 Tip: HowTo change compiler in ubuntu: https://askubuntu.com/questions/466651/how-do-i-use-the-latest-gcc-on-ubuntu
 
-Additionally we use Conan (https://conan.io/) to build some more libs (like openCV, ...) from source. This makes sure that we always have the correct version.
+Additionally we use Conan (https://conan.io/) to build some more libs (like openCV, ...) from source. This makes sure that we always have the correct version. We have our own Conan Server running at http://mineforce.de:9300
  
 # How to install
 ```
+// install extra ubuntu packages
 sudo apt-get update
 sudo apt-get install python python-pip build-essential make git cmake automake libtool libsdl2-dev gcc-4.8 g++-4.8 qt5-default
 
-// install conan
+// install conan via pip
 sudo pip install conan
 
 // add remote to conan
@@ -41,7 +42,7 @@ sudo ./external/modules/ximea_importer/ximea_driver/install
 mkdir build
 cd build
 
-// install conan dependencies and build them if needed
+// install conan dependencies and build them if needed (grab a coffee ☕)
 conan install .. --build=missing
 
 // compile it
