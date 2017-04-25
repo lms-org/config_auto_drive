@@ -1,47 +1,56 @@
-#config_auto_drive
-Configuration for testing image-algo, the corresponding environment-and trajectory-creation.
+# Main Configuration for TUM Phoenix Drive Software 
+Configuration which includes all necessary configuration files and includes components as git submodules.
 
-Used for fast prototyping :)
+We use LMS (https://github.com/lms-org/lms) as Middleware Framework.
+
+We require some packages:
+- basic build stuff
+- automake is needed for protobuffers
+- libsdl2 because of mac
+- qt because we have some fancy viz stuff going on
+- currently only support for specific compiler versions: gcc-4.8 and g++-4.8
+
+Tip: HowTo change compiler in ubuntu: https://askubuntu.com/questions/466651/how-do-i-use-the-latest-gcc-on-ubuntu
+
+Additionally we use Conan (https://conan.io/) to build some more libs (like openCV, ...) from source. This makes sure that we always have the correct version. We have our own Conan Server running at http://mineforce.de:9300
  
-#How to install it:
+# How to install
 ```
-
-//install basics
-//automake is needed for protobuffers
+// install extra ubuntu packages
 sudo apt-get update
-sudo apt-get install python python-pip build-essential make git cmake automake libtool
-sudo apt-get install libsdl2-dev        #because sdl fails on mac
+sudo apt-get install python python-pip build-essential make git cmake automake libtool libsdl2-dev gcc-4.8 g++-4.8 qt5-default
 
-//set git password cache
-git config --global credential.helper "cache --timeout=3600"
-
-//install conan
+// install conan via pip
 sudo pip install conan
-//add remote to conan
+
+// add remote to conan
 conan remote add lms http://mineforce.de:9300
 
-//go to your working direktory
+// go to your working direktory
 cd <your working direktory>
 
-//clone config_auto_drive
+// clone config_auto_drive
 git clone https://github.com/tum-phoenix/config_auto_drive
 cd config_auto_drive
 git submodule init
 git submodule update
-sudo ./external/modules/ximea_importer/ximea_driver/install #install ximea_driver
 
-//create build directory
+// install ximea_driver
+sudo ./external/modules/ximea_importer/ximea_driver/install 
+
+// create build directory
 mkdir build
 cd build
 
-//install conan dependencies and build them if needed
+// install conan dependencies and build them if needed (grab a coffee ☕)
 conan install .. --build=missing
-//compile it
+
+// compile it
 cmake ..
 make -j<number of cores>
 ```
-If any error occur, please ask google first, if you are sure that you didn't do a mistake or you can't find a solution to your problem, please write an issue :)
 
 
-#How to start it?
-Look at the `start.sh` script
+
+# How to start it?
+Look at the `*.sh` scripts
