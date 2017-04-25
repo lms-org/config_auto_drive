@@ -6,37 +6,44 @@ Used for fast prototyping :)
 #How to install it:
 ```
 
-//install basics
-//automake is needed for protobuffers
+// install basics
+// - automake is needed for protobuffers
+// - libsdl2 because of mac
+// - qt because we have some fancy viz stuff
+// - currently only support for gcc-4.8 and g++-4.8
+// => change compiler: https://askubuntu.com/questions/466651/how-do-i-use-the-latest-gcc-on-ubuntu
 sudo apt-get update
-sudo apt-get install python python-pip build-essential make git cmake automake libtool
-sudo apt-get install libsdl2-dev        #because sdl fails on mac
+sudo apt-get install python python-pip build-essential make git cmake automake libtool libsdl2-dev gcc-4.8 g++-4.8 qt5-default
 
-//set git password cache
+// set git password cache
 git config --global credential.helper "cache --timeout=3600"
 
-//install conan
+// install conan
 sudo pip install conan
-//add remote to conan
+
+// add remote to conan
 conan remote add lms http://mineforce.de:9300
 
-//go to your working direktory
+// go to your working direktory
 cd <your working direktory>
 
-//clone config_auto_drive
+// clone config_auto_drive
 git clone https://github.com/tum-phoenix/config_auto_drive
 cd config_auto_drive
 git submodule init
 git submodule update
-sudo ./external/modules/ximea_importer/ximea_driver/install #install ximea_driver
 
-//create build directory
+// install ximea_driver
+sudo ./external/modules/ximea_importer/ximea_driver/install 
+
+// create build directory
 mkdir build
 cd build
 
-//install conan dependencies and build them if needed
+// install conan dependencies and build them if needed
 conan install .. --build=missing
-//compile it
+
+// compile it
 cmake ..
 make -j<number of cores>
 ```
