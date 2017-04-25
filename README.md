@@ -32,8 +32,16 @@ cd <your working direktory>
 // clone config_auto_drive
 git clone https://github.com/tum-phoenix/config_auto_drive
 cd config_auto_drive
+
+// set up submodules
 git submodule init
 git submodule update
+
+// set up extra submodule in trajectory controller (TODO: remove in future)
+cd external/modules/trajectory_controller/
+git submodule init
+git submodule update
+cd ../../../
 
 // install ximea_driver
 sudo ./external/modules/ximea_importer/ximea_driver/install 
