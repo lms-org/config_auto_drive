@@ -9,7 +9,8 @@ We require some (ubuntu) packages:
 - libsdl2 because of mac
 - qt because we have some fancy viz stuff going on
 - currently only support for specific compiler versions: gcc-4.8 and g++-4.8
-=> change compiler in ubuntu: https://askubuntu.com/questions/466651/how-do-i-use-the-latest-gcc-on-ubuntu
+
+Tip: HowTo change compiler in ubuntu: https://askubuntu.com/questions/466651/how-do-i-use-the-latest-gcc-on-ubuntu
 
 Additionally we use Conan (https://conan.io/) to build some more libs (like openCV, ...) from source. This makes sure that we always have the correct version.
  
