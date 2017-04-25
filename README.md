@@ -15,9 +15,6 @@ Used for fast prototyping :)
 sudo apt-get update
 sudo apt-get install python python-pip build-essential make git cmake automake libtool libsdl2-dev gcc-4.8 g++-4.8 qt5-default
 
-// set git password cache
-git config --global credential.helper "cache --timeout=3600"
-
 // install conan
 sudo pip install conan
 
