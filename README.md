@@ -1,17 +1,20 @@
-#config_auto_drive
-Configuration for testing image-algo, the corresponding environment-and trajectory-creation.
+# Main Configuration for TUM Phoenix Drive Software 
+Configuration which includes all necessary configuration files and includes components as git submodules.
 
-Used for fast prototyping :)
+We use LMS (https://github.com/lms-org/lms) as Middleware Framework.
+
+We require some (ubuntu) packages:
+- basic build stuff
+- automake is needed for protobuffers
+- libsdl2 because of mac
+- qt because we have some fancy viz stuff going on
+- currently only support for specific compiler versions: gcc-4.8 and g++-4.8
+=> change compiler in ubuntu: https://askubuntu.com/questions/466651/how-do-i-use-the-latest-gcc-on-ubuntu
+
+Additionally we use Conan (https://conan.io/) to build some more libs (like openCV, ...) from source. This makes sure that we always have the correct version.
  
-#How to install it:
+# How to install
 ```
-
-// install basics
-// - automake is needed for protobuffers
-// - libsdl2 because of mac
-// - qt because we have some fancy viz stuff
-// - currently only support for gcc-4.8 and g++-4.8
-// => change compiler: https://askubuntu.com/questions/466651/how-do-i-use-the-latest-gcc-on-ubuntu
 sudo apt-get update
 sudo apt-get install python python-pip build-essential make git cmake automake libtool libsdl2-dev gcc-4.8 g++-4.8 qt5-default
 
@@ -44,8 +47,8 @@ conan install .. --build=missing
 cmake ..
 make -j<number of cores>
 ```
-If any error occur, please ask google first, if you are sure that you didn't do a mistake or you can't find a solution to your problem, please write an issue :)
 
 
-#How to start it?
-Look at the `start.sh` script
+
+# How to start it?
+Look at the `*.sh` scripts
