@@ -74,7 +74,7 @@ make -j<number of cores>
 12. add /dev/* symlinks for hokuyo lidar and senseboard
 ```
 echo 'ACTION=="add", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", SYMLINK+="senseboard"' | sudo tee /etc/udev/rules.d/98-senseboard.rules
-echo 'KERNEL=="ttyACM[0-9]*", SUBSYSTEM=="tty", SUBSYSTEMS=="usb", ATTRS{idVendor}=="15d1", ATTRS{idProduct}=="0000", SYMLINK+="hokuyo_lidar"' | sudo tee /etc/udev/rules.d/98-senseboard.rules
+echo 'KERNEL=="ttyACM[0-9]*", SUBSYSTEM=="tty", SUBSYSTEMS=="usb", ATTRS{idVendor}=="15d1", ATTRS{idProduct}=="0000", SYMLINK+="hokuyo_lidar"' | sudo tee /etc/udev/rules.d/97-hokuyo_lidar.rules
 ```
 
 
