@@ -75,6 +75,7 @@ make -j<number of cores>
 ```
 echo 'ACTION=="add", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", MODE="0666", SYMLINK+="senseboard"' | sudo tee /etc/udev/rules.d/98-senseboard.rules
 echo 'KERNEL=="ttyACM[0-9]*", SUBSYSTEM=="tty", SUBSYSTEMS=="usb", ATTRS{idVendor}=="15d1", ATTRS{idProduct}=="0000", MODE="0666", SYMLINK+="hokuyo_lidar"' | sudo tee /etc/udev/rules.d/97-hokuyo_lidar.rules
+sudo sed -i -e 's/ATTRS{idProduct}=="3001", GROUP="plugdev"/ATTRS{idProduct}=="3001", MODE="0666", GROUP="plugdev"/g' /etc/udev/rules.d/99-ximea.rules
 ```
 
 
