@@ -64,7 +64,7 @@ cd build
 ```
 10. install conan dependencies (grab a coffee ☕)
 
-`conan install .. --build=missing`
+`conan install .. --build=outdated,missing`
 
 11. compile it
 ```
