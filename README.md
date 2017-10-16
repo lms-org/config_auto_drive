@@ -73,7 +73,7 @@ preperations:
 
 then you are ready for:
 
-`conan install .. --build=outdated,missing`
+`conan install .. --build=outdated --build=missing`
 
 11. compile it
 ```
