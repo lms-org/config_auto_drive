@@ -62,9 +62,18 @@ cd ../../../
 mkdir build
 cd build
 ```
-10. install conan dependencies (grab a coffee ☕)
 
-`conan install .. --build=outdated,missing`
+10. install conan dependencies (grab a coffee ☕)
+preperations: 
+* make sure gcc-4.8 and g++-4.8 are installed.
+* in ~/.conan/profiles/default change the compiler to gcc and the version to 4.8
+* use following command to modify the systems compilers: 
+- `sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 100`
+- `sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 100`
+
+then you are ready for:
+
+`conan install .. --build=outdated --build=missing`
 
 11. compile it
 ```
