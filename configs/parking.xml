@@ -8,8 +8,8 @@
         <lineFitEndPoint>4</lineFitEndPoint>
 
         <!-- Abmessungen einer validen Parklücke -->
-        <minParkingSpaceSize>0.50</minParkingSpaceSize>
-        <maxParkingSpaceSize>0.59</maxParkingSpaceSize>
+        <minParkingSpaceSize>0.55</minParkingSpaceSize>
+        <maxParkingSpaceSize>0.80</maxParkingSpaceSize>
 
         <!-- Geschwindigkeiten -->
         <velocitySearching>2.0</velocitySearching>
@@ -21,22 +21,21 @@
         <!-- ENTERING -->
         <xDistanceCorrection>-0.7</xDistanceCorrection> <!-- Korrektur für hohe Geschwindigkeiten beim Rückwärtsfahren -->
         <brakingDistanceUntilSteering>0.0</brakingDistanceUntilSteering>
-        <alphaOffset>0.32</alphaOffset>
+        <alphaOffset>0.15</alphaOffset>
         <y0_worstCase>0.25</y0_worstCase>
         <k>0.02</k> <!-- safety distance zur Ecke der zweiten Box-->
-        <d>0.125</d> <!-- safety distance zur ersten Box -->
+        <d>0.06</d> <!-- safety distance zur ersten Box -->
         <maxSteeringAngle>21</maxSteeringAngle> <!-- in Grad-->
 
         <!-- CORRECTING -->
-        <distanceToObstacleFront>0.35</distanceToObstacleFront>
-        <distanceToObstacleRear>0.16</distanceToObstacleRear>
+        <distanceToObstacleFront>0.20</distanceToObstacleFront>
+        <distanceToObstacleRear>0.1</distanceToObstacleRear>
 
-        <correctingDistances>0.06, 0.04, 0.03, 0.03, 0.02</correctingDistances>
-        <correctingDistances>0.06, 0.04</correctingDistances>
+        <correctingDistances>0.02</correctingDistances>
         <obstacleDetectionAngle>10</obstacleDetectionAngle>
 
         <!-- SEARCHING -->
-        <searchingMiddleOffset>-0.25</searchingMiddleOffset>
+        <searchingMiddleOffset>-0.3</searchingMiddleOffset>
         <medianFilterSize>5</medianFilterSize>
         <searchingPhiFactor>0.0</searchingPhiFactor> <!-- Korrekturwinkel falls das Auto schräg anfährt-->
         <lidarMeasurementsPerSecond>300</lidarMeasurementsPerSecond>
