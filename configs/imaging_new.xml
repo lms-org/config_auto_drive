@@ -49,6 +49,7 @@
             <lineWidth>0.04</lineWidth>
             <oppositeLineStart>0.6</oppositeLineStart>
             <oppositeLineEnd>1.2</oppositeLineEnd>
+            <maxDistToStartline>0.7</maxDistToStartline> <!-- startline must be at least this far away before we switch to parking -->
         </config>
     </module>
     <!--module name="obstacle_detection" lib="new_road_detection" class="ObstacleDetection">

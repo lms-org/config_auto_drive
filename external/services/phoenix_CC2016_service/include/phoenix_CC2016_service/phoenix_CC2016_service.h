@@ -10,7 +10,7 @@ enum class RemoteControlState{
 
 };
 enum class CCDriveMode{
-    IDLE,PARKING, FOH, FMH
+    IDLE, PARKING, FOH, FMH, PARKING_START, PARKING_END
 };
 
 /**
@@ -37,6 +37,8 @@ public:
     int batteryVoltage() const;
     lms::Time lastUpdate() const;
     void updateFromConfig();
+
+    void setDriveMode(CCDriveMode mode);
 
     void logRcStates();
     /**

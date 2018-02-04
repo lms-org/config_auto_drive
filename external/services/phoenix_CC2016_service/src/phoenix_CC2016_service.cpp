@@ -47,6 +47,11 @@ RemoteControlState Phoenix_CC2016Service::rcState() const{
 CCDriveMode Phoenix_CC2016Service::driveMode() const{
     return m_driveMode;
 }
+
+void Phoenix_CC2016Service::setDriveMode(CCDriveMode mode){
+    m_driveMode = mode;
+}
+
 int Phoenix_CC2016Service::batteryVoltage() const{
     return m_batteryVoltage;
 }
