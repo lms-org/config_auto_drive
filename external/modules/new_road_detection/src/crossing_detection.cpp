@@ -5,6 +5,7 @@
 #include "detection_utils.h"
 #include "warp_service/warp_service.h"
 #include "lms/imaging_detection/street_crossing.h"
+#include "phoenix_CC2016_service/phoenix_CC2016_service.h"
 
 bool CrossingDetection::init(){
     image = readChannel<lms::imaging::Image>("IMAGE");
@@ -94,17 +95,37 @@ bool CrossingDetection::find(){
             std::vector<lms::math::vertex2f> pointsRight = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,lineWidth,iDist,wDist,threshold,homo);
             getXYfromPoint(left,left+viewDirection*2*offsetAlong,xv,yv,homo);
             std::vector<lms::math::vertex2f> pointsLeft = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,lineWidth,iDist,wDist,threshold,homo);
+
+
+
+
             if(pointsRight.size() != 1 && pointsLeft.size() != 1){
                 //no crossing, something else
-                logger.error("did not find left or fight lane")<<(int)(pointsRight.size())<<" "<<(int)(pointsLeft.size());
+                logger.info("did not find left or fight lane")<<(int)(pointsRight.size())<<" "<<(int)(pointsLeft.size());
                 continue;
             }
+
+
+
             //check if it a crossing, not a startline
             logger.debug("crossing search for start lane");
-            getXYfromPoint(middlePosition-orth*0.4-viewDirection*offsetAlong,middlePosition-orth*0.4+viewDirection*offsetAlong,xv,yv,homo);
-            std::vector<lms::math::vertex2f> pointsStartline = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,lineWidth,iDist,wDist,threshold,homo);
-            logger.debug("pointsStartline")<<pointsStartline.size();
-            if(pointsStartline.size() > 0){
+            getXYfromPoint(middlePosition-orth*0.42-viewDirection*offsetAlong,middlePosition-orth*0.42+viewDirection*offsetAlong,xv,yv,homo);
+
+
+
+
+            std::vector<lms::math::vertex2f> pointsStartline_left = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,lineWidth,iDist,wDist,threshold,homo);
+            logger.debug("pointsStartlineleft")<<pointsStartline_left.size();
+
+
+            getXYfromPoint(middlePosition-orth*0.3-viewDirection*offsetAlong,middlePosition-orth*0.3+viewDirection*offsetAlong,xv,yv,homo);
+
+            std::vector<lms::math::vertex2f> pointsStartline_right = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,minLineWidthMul,maxLineWidthMul,lineWidth,iDist,wDist,threshold,homo);
+            logger.debug("pointsStartlineright")<<pointsStartline_right.size();
+
+
+
+            if(pointsStartline_left.size() > 0 || pointsStartline_right.size() > 0){
                 //we found a start line
                 street_environment::StartLinePtr startline(new street_environment::StartLine());
                 startline->addSensor("CAMERA");
@@ -113,10 +134,22 @@ bool CrossingDetection::find(){
                 startline->width(0.2);
                 startline->setTrust(1);
                 env->objects.push_back(startline);
-                logger.debug("found startline");
+
+
+
+                logger.info("found startline. Set mode to parking") << middlePosition.x << " " << middlePosition.y;
+
+                double dist = sqrt(middlePosition.x * middlePosition.x + middlePosition.y *middlePosition.y );
+
+                if(dist < config().get<float>("maxDistToStartline",0.7) && phoenix_CC2016_service::CCDriveMode::FOH == getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->driveMode())
+                {
+                    getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->setDriveMode(phoenix_CC2016_service::CCDriveMode::PARKING_START);
+                }
+
+
                 break;
-            }else if(pointsStartline.size() > 1){
-                logger.debug("invalid startline, to many points on the left");
+            }else if(pointsStartline_left.size() > 1){
+                logger.info("invalid startline, to many points on the left");
                 continue;
             }
 
@@ -138,7 +171,7 @@ bool CrossingDetection::find(){
                 logger.debug("found crossing");
                 break;
             }else{
-                logger.error("could not find opposite line!");
+                logger.info("could not find opposite line!");
             }
         }
     }
