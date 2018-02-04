@@ -52,7 +52,7 @@
             <PID_Kp>2</PID_Kp>
             <PID_Ki>0</PID_Ki>
             <PID_Kd>0</PID_Kd>
-            <crossingSaftyZone>0.05</crossingSaftyZone>
+            <crossingSaftyZone>0.1</crossingSaftyZone>
             <maxVelocityCrossing>2.0</maxVelocityCrossing>
             <distanceToStop>2.0</distanceToStop>
             <stoppingDistance>0.35</stoppingDistance>

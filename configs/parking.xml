@@ -8,7 +8,7 @@
         <lineFitEndPoint>4</lineFitEndPoint>
 
         <!-- Abmessungen einer validen Parklücke -->
-        <minParkingSpaceSize>0.55</minParkingSpaceSize>
+        <minParkingSpaceSize>0.58</minParkingSpaceSize>
         <maxParkingSpaceSize>0.80</maxParkingSpaceSize>
 
         <!-- Geschwindigkeiten -->
@@ -21,7 +21,7 @@
         <!-- ENTERING -->
         <xDistanceCorrection>-0.7</xDistanceCorrection> <!-- Korrektur für hohe Geschwindigkeiten beim Rückwärtsfahren -->
         <brakingDistanceUntilSteering>0.0</brakingDistanceUntilSteering>
-        <alphaOffset>0.15</alphaOffset>
+        <alphaOffset>0.22</alphaOffset>
         <y0_worstCase>0.25</y0_worstCase>
         <k>0.02</k> <!-- safety distance zur Ecke der zweiten Box-->
         <d>0.06</d> <!-- safety distance zur ersten Box -->
@@ -31,13 +31,13 @@
         <distanceToObstacleFront>0.20</distanceToObstacleFront>
         <distanceToObstacleRear>0.1</distanceToObstacleRear>
 
-        <correctingDistances>0.02</correctingDistances>
+        <correctingDistances>0.04, 0.04</correctingDistances>
         <obstacleDetectionAngle>10</obstacleDetectionAngle>
 
         <!-- SEARCHING -->
-        <searchingMiddleOffset>-0.3</searchingMiddleOffset>
+        <searchingMiddleOffset>-0.29</searchingMiddleOffset>
         <medianFilterSize>5</medianFilterSize>
-        <searchingPhiFactor>0.0</searchingPhiFactor> <!-- Korrekturwinkel falls das Auto schräg anfährt-->
+        <searchingPhiFactor>-0.35</searchingPhiFactor> <!-- Korrekturwinkel falls das Auto schräg anfährt-->
         <lidarMeasurementsPerSecond>300</lidarMeasurementsPerSecond>
         <gradientThreshold>0.1</gradientThreshold> <!-- Für größere Werte wird eine Kante erkannt -->
         <maxDistanceLidar>0.75</maxDistanceLidar> <!-- Lidar cut-off distance -->
