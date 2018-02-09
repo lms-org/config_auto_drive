@@ -35,7 +35,7 @@ sudo apt-get install python python-pip build-essential make git cmake automake l
 
 5. clone config_auto_drive
 ```
-git clone https://github.com/tum-phoenix/config_auto_drive
+git clone https://github.com/lms-org/config_auto_drive
 cd config_auto_drive
 ```
 
