@@ -56,6 +56,7 @@
 
         <!-- PULLOUT: PULL BACK -->
         <driveBackwards>0.05</driveBackwards>
+        <driveBackwardsDynamic>0.05</driveBackwardsDynamic>
 
         <!-- PULLOUT: TURN LEFT -->
         <turnYaw>0.8</turnYaw>
