@@ -2,7 +2,7 @@
     <module name="trajectory_controller" lib="trajectory_point_controller" class="TrajectoryPointController">
         <channelMapping from="TRAJECTORY" to="TRAJECTORY_LINE"/>
         <config>
-            <!--type>mikMPC</type-->
+            <type>tobiMPC</type>
             <link_length>0.05</link_length>
             <penalty_y>50</penalty_y>
             <penalty_phi>100</penalty_phi>
