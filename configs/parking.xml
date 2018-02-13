@@ -9,7 +9,7 @@
 
         <!-- Abmessungen einer validen Parklücke -->
         <minParkingSpaceSize>0.60</minParkingSpaceSize>
-        <maxParkingSpaceSize>0.80</maxParkingSpaceSize>
+        <maxParkingSpaceSize>1</maxParkingSpaceSize>
 
         <!-- Geschwindigkeiten -->
         <velocitySearching>2.0</velocitySearching>
@@ -65,7 +65,7 @@
         <moveStraight>0.01</moveStraight>
 
         <!-- PULLOUT: TURN RIGHT -->
-        <turnYaw2>0.2</turnYaw2>
+        <turnYaw2>0.3</turnYaw2>
 
         <!-- weitere Parameter -->
         <distanceMidLidarX>-0.03</distanceMidLidarX> <!-- Abstand Lidar zu Mitte Fahrzeug in x-Richtung -->

@@ -25,4 +25,4 @@ echo "$(date) start lms" >> /tmp/boot.log
 
 # start LMS
 #su phoenix -l -c "cd /home/phoenix/deploy_auto_drive-phibedy && ./start.sh"
-cd /home/phoenix/deploy_auto_drive-phibedy && ./start.sh > /dev/null
+cd /home/phoenix/dev/config_auto_drive && ./start.sh > /dev/null
