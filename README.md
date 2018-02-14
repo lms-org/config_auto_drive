@@ -15,8 +15,8 @@ Tip: HowTo change compiler in ubuntu: https://askubuntu.com/questions/466651/how
 Additionally we use Conan (https://conan.io/) to build some more libs (like openCV, ...) from source. This makes sure that we always have the correct version. We have our own Conan Server running at http://mineforce.de:9300
  
 # Achievements
-* 1. place (BasicCup 2018)[https://wiki.ifr.ing.tu-bs.de/carolocup/carolo-cup-2018] (CaroloCup with old rulebook)
-* 3. place (Carolocup 2017)[https://wiki.ifr.ing.tu-bs.de/carolocup/carolo-cup-2017]
+* First place (BasicCup 2018)[https://wiki.ifr.ing.tu-bs.de/carolocup/carolo-cup-2018] (CaroloCup with old rulebook)
+* Third place (Carolocup 2017)[https://wiki.ifr.ing.tu-bs.de/carolocup/carolo-cup-2017]
 
 # How to install
 1. install extra ubuntu packages
