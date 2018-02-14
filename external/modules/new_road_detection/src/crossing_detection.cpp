@@ -159,7 +159,9 @@ bool CrossingDetection::find(){
             const float oppositeLineStart=config().get<float>("oppositeLineStart",0.7);
             const float oppositeLineEnd=config().get<float>("oppositeLineEnd",0.9);
             getXYfromPoint(middlePosition-orth*0.4+viewDirection*oppositeLineStart,middlePosition-orth*0.4+viewDirection*oppositeLineEnd,xv,yv,homo);
-            std::vector<lms::math::vertex2f> pointsOppositeStopline = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,0.1,1,0.04,iDist,wDist,threshold,homo);
+            std::vector<lms::math::vertex2f> pointsOppositeStopline = findBySobel(image.get(),imageDebug.get(),renderDebugImage,xv,yv,0.01,10,0.02,iDist,wDist,threshold,homo);
+
+
             if(pointsOppositeStopline.size() == 1){
                 street_environment::CrossingPtr crossing(new street_environment::Crossing());
                 crossing->addPoint(middlePosition);
@@ -171,7 +173,7 @@ bool CrossingDetection::find(){
                 logger.debug("found crossing");
                 break;
             }else{
-                logger.info("could not find opposite line!");
+                logger.info("could not find opposite line! Found points: ") << pointsOppositeStopline.size();
             }
         }
     }
