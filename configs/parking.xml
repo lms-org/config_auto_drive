@@ -75,7 +75,8 @@
         <carLength>0.36</carLength>
         <carWidth>0.25</carWidth>
         <ignoreDeltaYawBiggerThan>0.09</ignoreDeltaYawBiggerThan>
-
+        <maxparkingcounts>4</maxparkingcounts>
+        <maxparkingmeter>7</maxparkingmeter>
         <!-- DEBUG -->
         <debugPrintEdges>false</debugPrintEdges>
     </config>
