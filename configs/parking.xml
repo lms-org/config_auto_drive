@@ -8,7 +8,7 @@
         <lineFitEndPoint>4</lineFitEndPoint>
 
         <!-- Abmessungen einer validen Parklücke -->
-        <minParkingSpaceSize>0.60</minParkingSpaceSize>
+        <minParkingSpaceSize>0.65</minParkingSpaceSize>
         <maxParkingSpaceSize>1</maxParkingSpaceSize>
 
         <!-- Geschwindigkeiten -->
@@ -55,14 +55,14 @@
         <waitInFinished>50</waitInFinished>
 
         <!-- PULLOUT: PULL BACK -->
-        <driveBackwards>0.05</driveBackwards>
-        <driveBackwardsDynamic>0.05</driveBackwardsDynamic>
+        <driveBackwards>0.04</driveBackwards>
+        <driveBackwardsDynamic>0.04</driveBackwardsDynamic>
 
         <!-- PULLOUT: TURN LEFT -->
         <turnYaw>0.8</turnYaw>
 
         <!-- PULLOUT: MOVE STRAIGT -->
-        <moveStraight>0.01</moveStraight>
+        <moveStraight>0.03</moveStraight>
 
         <!-- PULLOUT: TURN RIGHT -->
         <turnYaw2>0.3</turnYaw2>
@@ -75,7 +75,7 @@
         <carLength>0.36</carLength>
         <carWidth>0.25</carWidth>
         <ignoreDeltaYawBiggerThan>0.09</ignoreDeltaYawBiggerThan>
-        <maxparkingcounts>4</maxparkingcounts>
+        <maxparkingcounts>5</maxparkingcounts>
         <maxparkingmeter>7</maxparkingmeter>
         <!-- DEBUG -->
         <debugPrintEdges>false</debugPrintEdges>
