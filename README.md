@@ -80,6 +80,7 @@ then you are ready for:
 `conan install .. --build=outdated --build=missing`
 
 11. turn on optimization (optional)
+
 You may want to turn on code optimization (its faster, but debug may not work).
 Add an optimization flag (e.g. `-O2`) in the [top level CMakeLists](https://github.com/lms-org/config_auto_drive/blob/master/CMakeLists.txt) to the `CMAKE_CXX_FLAGS` flags.
 
