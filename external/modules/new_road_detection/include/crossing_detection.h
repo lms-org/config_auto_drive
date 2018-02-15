@@ -19,6 +19,10 @@ class CrossingDetection: public lms::Module {
     lms::imaging::Homography homo;
     int threshold;
 
+    lms::Time startTime;
+
+    bool started;
+
 public:
     bool init() override;
     void destroy() override;

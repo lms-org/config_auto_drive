@@ -20,6 +20,8 @@ bool NewRoadDetection::init() {
     car = readChannel<street_environment::CarCommand>("CAR"); //TODO create ego-estimation service
 
 
+
+
     configsChanged();
     return true;
 }

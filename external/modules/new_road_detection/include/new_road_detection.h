@@ -64,6 +64,9 @@ class NewRoadDetection : public lms::Module {
     std::condition_variable conditionLineProcessed;
     bool threadsRunning;
     int linesToProcess;
+
+
+
 public:
     bool init() override;
     void destroy() override;

@@ -13,6 +13,7 @@ bool CrossingDetection::init(){
     //points = readChannel<lms::math::polyLine2f> ("POINTS");
     env = writeChannel<street_environment::EnvironmentObjects>("ENVIRONMENT");
     configsChanged();
+    started = false;
     return true;
 }
 
@@ -24,6 +25,17 @@ bool CrossingDetection::cycle(){
         imageDebug->resize(image->width(),image->height(),lms::imaging::Format::BGRA);
         imageDebug->fill(0);
     }
+
+
+    if(phoenix_CC2016_service::CCDriveMode::IDLE != getService<phoenix_CC2016_service::Phoenix_CC2016Service>("PHOENIX_SERVICE")->driveMode())
+    {
+        if(!started)
+        {
+            startTime = lms::Time::now();
+            started = true;
+        }
+    }
+
     env->objects.clear();
     find();
     return true;
@@ -163,14 +175,18 @@ bool CrossingDetection::find(){
 
 
             if(pointsOppositeStopline.size() == 1){
-                street_environment::CrossingPtr crossing(new street_environment::Crossing());
-                crossing->addPoint(middlePosition);
-                crossing->viewDirection(viewDirection);
-                crossing->width(0.2);
-                crossing->setTrust(1);
-                crossing->addSensor("CAMERA");
-                env->objects.push_back(crossing);
-                logger.debug("found crossing");
+
+                if(startTime.since() > lms::Time::fromMillis(2000))
+                {
+                    street_environment::CrossingPtr crossing(new street_environment::Crossing());
+                    crossing->addPoint(middlePosition);
+                    crossing->viewDirection(viewDirection);
+                    crossing->width(0.2);
+                    crossing->setTrust(1);
+                    crossing->addSensor("CAMERA");
+                    env->objects.push_back(crossing);
+                    logger.debug("found crossing");
+                }
                 break;
             }else{
                 logger.info("could not find opposite line! Found points: ") << pointsOppositeStopline.size();
