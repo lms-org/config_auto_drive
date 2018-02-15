@@ -79,12 +79,16 @@ then you are ready for:
 
 `conan install .. --build=outdated --build=missing`
 
-11. compile it
+11. turn on optimization (optional)
+You may want to turn on code optimization (its faster, but debug may not work).
+Add an optimization flag (e.g. `-O2`) in the [top level CMakeLists](https://github.com/lms-org/config_auto_drive/blob/master/CMakeLists.txt) to the `CMAKE_CXX_FLAGS` flags.
+
+12. compile it
 ```
 cmake ..
 make -j<number of cores>
 ```
-12. add /dev/* symlinks for hokuyo lidar and senseboard and change mode of ximea
+13. add /dev/* symlinks for hokuyo lidar and senseboard and change mode of ximea
 ```
 echo 'ACTION=="add", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", MODE="0666", SYMLINK+="senseboard"' | sudo tee /etc/udev/rules.d/98-senseboard.rules
 echo 'KERNEL=="ttyACM[0-9]*", SUBSYSTEM=="tty", SUBSYSTEMS=="usb", ATTRS{idVendor}=="15d1", ATTRS{idProduct}=="0000", MODE="0666", SYMLINK+="hokuyo_lidar"' | sudo tee /etc/udev/rules.d/97-hokuyo_lidar.rules
